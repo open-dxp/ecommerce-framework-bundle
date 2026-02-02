@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\PaymentManager:
+        arguments:
+            - '@opendxp_ecommerce.locator.payment_manager.provider'

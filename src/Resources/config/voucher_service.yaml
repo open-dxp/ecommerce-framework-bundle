@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\DefaultService:
+        arguments:
+            - '@OpenDxp\Localization\LocaleServiceInterface'
+            - '%opendxp_ecommerce.voucher_service.options%'
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\TokenManager\TokenManagerFactory:
+        arguments:
+            - '%opendxp_ecommerce.voucher_service.token_manager.mapping%'
+
+
+

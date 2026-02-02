@@ -1,0 +1,93 @@
+imports:
+    - { resource: ../doctrine_migrations.yaml }
+
+# Monolog Configuration
+monolog:
+    channels: ['opendxp_ecommerce_sql', 'opendxp_ecommerce_es', 'opendxp_ecommerce_findologic']
+    handlers:
+        update_payment:
+            type: stream
+            path: "%kernel.logs_dir%/update_payment.log"
+            level: debug
+            channels: [ 'update_payment' ]
+
+opendxp:
+    objects:
+        class_definitions:
+            data:
+                map:
+                    indexFieldSelection: OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ClassDefinition\IndexFieldSelection
+                    indexFieldSelectionCombo: OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ClassDefinition\IndexFieldSelectionCombo
+                    indexFieldSelectionField: OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ClassDefinition\IndexFieldSelectionField
+
+opendxp_ecommerce_framework:
+    cart_manager:
+        tenants:
+            default: ~
+
+    order_manager:
+        tenants:
+            default: ~
+
+    pricing_manager:
+        tenants:
+            default: ~
+
+        conditions:
+            Bracket: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Bracket
+            DateRange: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\DateRange
+            CartAmount: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CartAmount
+            CatalogProduct: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogProduct
+            CatalogCategory: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogCategory
+            Sold: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Sold
+            Sales: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Sales
+            ClientIp: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\ClientIp
+            VoucherToken: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\VoucherToken
+            Tenant: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Tenant
+            TargetGroup: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\TargetGroup
+        actions:
+            ProductDiscount: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\ProductDiscount
+            CartDiscount: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\CartDiscount
+            Gift: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\Gift
+            FreeShipping: \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\FreeShipping
+
+    price_systems:
+        default:
+            id: OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem
+
+    availability_systems:
+        default:
+            id: OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystem
+
+    checkout_manager:
+        tenants:
+            default: ~
+
+    index_service:
+        tenants:
+            default: ~
+
+    filter_service:
+        tenants:
+            default: ~
+
+    voucher_service:
+        token_managers:
+            mapping:
+                VoucherTokenTypePattern: \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\TokenManager\Pattern
+                VoucherTokenTypeSingle: \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\TokenManager\Single
+
+    tracking_manager:
+        trackers:
+            enhanced_ecommerce:
+                id: OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\EnhancedEcommerce
+                enabled: false
+            universal_ecommerce:
+                id: OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\UniversalEcommerce
+                enabled: false
+            ecommerce:
+                id: OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\Ecommerce
+                enabled: false
+            tag_manager:
+                id: OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\GoogleTagManager
+                enabled: false

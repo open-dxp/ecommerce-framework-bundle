@@ -1,0 +1,31 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    #
+    # CART MANAGER
+    #
+    # Predefined core cart manager implementations. Options for cart and price calculator factories will be set from
+    # configuration.
+    #
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\MultiCartManager:
+        arguments:
+            - '@opendxp_ecommerce.environment'
+            - '@?'
+            - '@?'
+            - '@opendxp_ecommerce.locator.order_manager'
+            - '@logger'
+        tags:
+            - { name: monolog.logger, channel: opendxp_ecommerce }
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartFactory:
+        arguments:
+            $options: []
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculatorFactory:
+        arguments:
+            $modificatorConfig: []
+            $options: []

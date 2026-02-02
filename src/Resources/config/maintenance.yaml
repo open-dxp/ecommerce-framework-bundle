@@ -1,0 +1,8 @@
+services:
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Maintenance\CleanupPendingOrdersTask:
+        tags:
+            - { name: opendxp.maintenance.task, type: ecommerce_pending_orders }
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Maintenance\CleanupVouchersTask:
+        tags:
+            - { name: opendxp.maintenance.task, type: ecommerce_vouchers }

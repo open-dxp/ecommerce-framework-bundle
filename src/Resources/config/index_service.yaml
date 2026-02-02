@@ -1,0 +1,31 @@
+imports:
+    - { resource: index_service_synonym_providers.yaml }
+    - { resource: index_service_configs_workers.yaml }
+
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    #
+    # PRODUCT INDEX
+    #
+
+    # workers will be injected by compiler pass
+    OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\IndexService:
+        arguments:
+            - '@opendxp_ecommerce.environment'
+            - []
+            - '%opendxp_ecommerce.index_service.default_tenant%'
+
+    # index update service
+    OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\IndexUpdateService: ~
+
+    # auto-register all core getters as service
+    OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Getter\:
+        resource: '../../IndexService/Getter'
+
+    # auto-register all core interpreters as service
+    OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\:
+        resource: '../../IndexService/Interpreter'

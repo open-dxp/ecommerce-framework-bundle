@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - GNU General Public License version 3 (GPLv3)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ */
+
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData\Listing;
+
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData;
+
+/**
+ * @internal
+ *
+ * @property CartCheckoutData\Listing $model
+ */
+class Dao extends \OpenDxp\Model\Listing\Dao\AbstractDao
+{
+    public function load(): array
+    {
+        $items = [];
+
+        $cartCheckoutDataItems = $this->db->fetchAllAssociative(
+            'SELECT cartid, `key` FROM '
+            . \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData\Dao::TABLE_NAME
+            . $this->getCondition() . $this->getOrder() . $this->getOffsetLimit(),
+            $this->model->getConditionVariables(),
+            $this->model->getConditionVariableTypes(),
+        );
+
+        foreach ($cartCheckoutDataItems as $item) {
+            $items[] = \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData::getByKeyCartId($item['key'], $item['cartid']);
+        }
+        $this->model->setCartCheckoutDataItems($items);
+
+        return $items;
+    }
+
+    public function getTotalCount(): int
+    {
+        try {
+            return (int)$this->db->fetchOne(
+                'SELECT COUNT(*) FROM `'
+                . \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData\Dao::TABLE_NAME
+                . '`' . $this->getCondition(),
+                $this->model->getConditionVariables(),
+                $this->model->getConditionVariableTypes(),
+            );
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+}

@@ -1,0 +1,37 @@
+<div id="cleanup-reservations" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body-content">
+                <div class="fa-pull-right">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <h3>{{ ('bundle_ecommerce_voucherservice_modal_cleanup-reservations-headline')|trans([],'admin') }}</h3>
+                <form class="form-horizontal js-cleanup-reservations-modal-form"
+                      action="{{ path('opendxp_ecommerce_backend_voucher_cleanup-reservations', urlParams) }}" method="post">
+                    <div class="row">
+                        <div class="col col-sm-6">
+                            <input type="hidden" name="csrfToken" value="{{ opendxp_csrf.getCsrfToken(app.request.session) }}">
+
+                            <div class="mb-3" style="margin-top: 20px">
+                                <div class="col col-sm-12">
+                                    <label for="duration">{{ ('bundle_ecommerce_voucherservice_modal_cleanup-reservations-olderthan-x-minutes')|trans([],'admin')  }}</label>
+                                    <input type="number" name="duration" id="duration" class="form-control text-center" min="0" value ="5"/>
+                                </div>
+                                <input type="hidden" name="id" value="{{ app.request.get('id') }}">
+                            </div>
+                        </div>
+                        <div class="col col-sm-6">
+                            <div class="text-start">
+                                <p>{{ 'bundle_ecommerce_voucherservice_modal_cleanup-reservations-infotext'|trans([],'admin') }}</p>
+                            </div>
+                            <button type="submit" class="btn btn-primary js-loading"
+                                    data-msg="Cleaning up Tokens, please wait.">{{ 'bundle_ecommerce_voucherservice_modal_cleanup-reservations-submit'|trans([],'admin') }}
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'bundle_ecommerce_voucherservice_modal_cancel'|trans([],'admin') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

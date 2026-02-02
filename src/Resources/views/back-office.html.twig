@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>{% block ecommerce_title %}Ecommerce Framework Back Office{% endblock %}</title>
+
+        {{ encore_entry_script_tags('bootstrap', null, 'opendxpEcommerceFramework') }}
+        {{ encore_entry_link_tags('bootstrap', null, 'opendxpEcommerceFramework') }}
+
+        {{ encore_entry_script_tags('flatpickr', null, 'opendxpEcommerceFramework') }}
+        {{ encore_entry_link_tags('flatpickr', null, 'opendxpEcommerceFramework') }}
+
+        {{ encore_entry_script_tags('leaflet', null, 'opendxpEcommerceFramework') }}
+        {{ encore_entry_link_tags('leaflet', null, 'opendxpEcommerceFramework') }}
+
+        {% apply spaceless %}
+            {% do opendxp_head_link().appendStylesheet(asset('/bundles/opendxpecommerceframework/vendor/bootstrap4/css/bootstrap.css')) %}
+            {% do opendxp_head_link().appendStylesheet('/bundles/opendxpecommerceframework/vendor/fontawesome/css/fontawesome-all.min.css') %}
+            {% do opendxp_head_link().appendStylesheet(asset('/bundles/opendxpecommerceframework/css/back-office.css')) %}
+            {% do opendxp_head_script().prependFile(asset('/bundles/opendxpecommerceframework/vendor/bootstrap4/js/bootstrap-native-v4.min.js')) %}
+        {% endapply %}
+
+        {% block head_stylesheets %}
+            {{ opendxp_head_link() }}
+        {% endblock %}
+
+        {% block head_ie_stylesheets %}
+            <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+        {% endblock %}
+
+        <link rel="icon" type="image/png" href="/bundles/opendxpadmin/img/favicon/favicon-32x32.png"/>
+    </head>
+    <body>
+    {% block body %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+            <div class="container">
+                <a href="#" class="navbar-brand"><span class="fa fa-shopping-cart"></span> Ecommerce Framework Back Office</a>
+
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto">
+                        {% set user = opendxpUser %}
+                        {% set currentRouteName = app.request.get('_route') %}
+                        {% set arrActions = [] %}
+
+                        {% if (user.isAllowed('bundle_ecommerce_back-office_order')) %}
+                            {% set arrActions = arrActions|merge({'order': ['list']}) %}
+                        {% endif %}
+                        {% for controller,actions in arrActions %}
+                            {% for action in actions %}
+                                {% set route = "opendxp_ecommerce_backend_admin-" ~ controller ~ "_" ~ action %}
+                                <li class="nav-item {{ (currentRouteName == route ? 'active' : '') }}">
+                                    <a class="nav-link" href="{{ path(route) }}">{{ ('bundle_ecommerce.back-office.' ~ controller ~ '-' ~ action)|trans([],'admin') }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="main-content container">
+            {{ block('content') }}
+        </div>
+    {% endblock %}
+
+
+    <!-- Modal / Popup -->
+    <div class="modal" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="actionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div id="modal-content" class="modal-content"></div>
+        </div>
+    </div>
+
+    {# output scripts added before #}
+    {% block scripts %}
+        {{ opendxp_head_script() }}
+    {% endblock %}
+
+    <script {{ opendxp_csp.getNonceHtmlAttribute()|raw }}>
+        const opendxp = parent.opendxp;
+        const popups = document.getElementsByClassName('popup-modal');
+        for (let i = 0; i < popups.length; i++) {
+            const element = popups[i];
+
+            element.onclick = function (e) {
+                e.preventDefault();
+                const xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        const actionModal = document.getElementById('actionModal');
+                        const modal = new bootstrap.Modal(actionModal);
+
+                        modal._element.innerHTML = `
+                            <div class="modal-dialog">
+                                <div id="modal-content" class="modal-content">${this.response}</div>
+                            </div>
+                        `;
+
+                        modal.show();
+                    }
+                };
+
+                xhttp.open("GET", (this).getAttribute('href'), true);
+                xhttp.send();
+            };
+
+        }
+        L.Icon.Default.imagePath = '/bundles/opendxpecommerceframework/build/ecommerceFramework/images/';
+    </script>
+
+    </body>
+</html>

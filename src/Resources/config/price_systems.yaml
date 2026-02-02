@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    #
+    # PRICE SYSTEMS
+    #
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem:
+        arguments:
+            - '@opendxp_ecommerce.locator.pricing_manager'
+            - '@opendxp_ecommerce.environment'

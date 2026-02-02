@@ -1,0 +1,19 @@
+services:
+    #
+    # FILTER SERVICE FILTER TYPES
+    #
+    # Defined in an extra file as we can't define parent/child definitions in a file with _defaults
+    #
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType:
+        class: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType
+        abstract: true
+        public: false
+        arguments:
+            - '@translator'
+            - '@opendxp.templating.engine.delegating'
+            - '@request_stack'
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\:
+        resource: '../../FilterService/FilterType'
+        parent: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType

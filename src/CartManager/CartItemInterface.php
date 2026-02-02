@@ -1,0 +1,103 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - GNU General Public License version 3 (GPLv3)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ */
+
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
+
+use OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilityInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractSetProductEntry;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInfoInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
+
+/**
+ * Interface for cart item implementations of online shop framework
+ */
+interface CartItemInterface
+{
+    public function getProduct(): CheckoutableInterface;
+
+    public function getCount(): int;
+
+    public function getItemKey(): string;
+
+    public function setProduct(CheckoutableInterface $product): void;
+
+    public function setCount(int $count): void;
+
+    public function setCart(CartInterface $cart): void;
+
+    public function getCart(): ?CartInterface;
+
+    /**
+     * @return CartItemInterface[]
+     */
+    public function getSubItems(): array;
+
+    /**
+     * @param CartItemInterface[] $subItems
+     *
+     */
+    public function setSubItems(array $subItems): void;
+
+    public function getPrice(): PriceInterface;
+
+    public function getTotalPrice(): PriceInterface;
+
+    public function getPriceInfo(): PriceInfoInterface;
+
+    public function setComment(string $comment): void;
+
+    public function getComment(): string;
+
+    /**
+     * @return AbstractSetProductEntry[]
+     */
+    public function getSetEntries(): array;
+
+    public function getAvailabilityInfo(): AvailabilityInterface;
+
+    /**
+     * @static
+     *
+     *
+     */
+    public static function getByCartIdItemKey(int|string $cartId, string $itemKey, string $parentKey = ''): ?CartItemInterface;
+
+    /**
+     * @static
+     *
+     */
+    public static function removeAllFromCart(int|string $cartId): void;
+
+    public function save(): void;
+
+    public function setAddedDate(\DateTime $date = null): void;
+
+    public function getAddedDate(): \DateTime;
+
+    /**
+     * @return int unix timestamp
+     */
+    public function getAddedDateTimestamp(): int;
+
+    public function setAddedDateTimestamp(int $time): void;
+
+    /**
+     * get item name
+     *
+     */
+    public function getName(): string;
+}

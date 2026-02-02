@@ -1,0 +1,41 @@
+{
+  "entrypoints": {
+    "flatpickr": {
+      "js": [
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/runtime.js",
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/527.js",
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/flatpickr.js"
+      ],
+      "css": [
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/flatpickr.css"
+      ]
+    },
+    "bootstrap": {
+      "js": [
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/runtime.js",
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/897.js",
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/bootstrap.js"
+      ],
+      "css": [
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/897.css"
+      ]
+    },
+    "voucher": {
+      "js": [
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/runtime.js",
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/261.js",
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/voucher.js"
+      ]
+    },
+    "leaflet": {
+      "js": [
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/runtime.js",
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/243.js",
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/leaflet.js"
+      ],
+      "css": [
+        "/bundles/opendxpecommerceframework/build/ecommerceFramework/leaflet.css"
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+<head>
+    {{ encore_entry_script_tags('bootstrap', null, 'opendxpEcommerceFramework') }}
+    {{ encore_entry_link_tags('bootstrap', null, 'opendxpEcommerceFramework') }}
+
+    {{ encore_entry_script_tags('flatpickr', null, 'opendxpEcommerceFramework') }}
+    {{ encore_entry_link_tags('flatpickr', null, 'opendxpEcommerceFramework') }}
+
+    {{ encore_entry_script_tags('voucher', null, 'opendxpEcommerceFramework') }}
+    {{ encore_entry_link_tags('voucher', null, 'opendxpEcommerceFramework') }}
+
+    {% apply spaceless %}
+        {% do opendxp_head_link().appendStylesheet(asset('/bundles/opendxpecommerceframework/vendor/bootstrap4/css/bootstrap.css')) %}
+        {% do opendxp_head_link().appendStylesheet(asset('/bundles/opendxpecommerceframework/vendor/flatpickr.min.css')) %}
+        {% do opendxp_head_link().appendStylesheet('/bundles/opendxpecommerceframework/vendor/fontawesome/css/fontawesome-all.min.css') %}
+        {% do opendxp_head_link().appendStylesheet(asset('/bundles/opendxpecommerceframework/css/voucherservice/style.css')) %}
+        {% do opendxp_head_script().prependFile(asset('/bundles/opendxpecommerceframework/vendor/bootstrap4/js/bootstrap-native-v4.min.js')) %}
+        {% do opendxp_head_script().appendFile(asset('/bundles/opendxpecommerceframework/vendor/chart.min.js')) %}
+        {% do opendxp_head_script().appendFile(asset('/bundles/opendxpecommerceframework/vendor/flatpickr.min.js')) %}
+        {% do opendxp_head_script().appendFile(asset('/bundles/opendxpecommerceframework/js/voucherservice/voucherSeriesTabScript.js')) %}
+    {% endapply %}
+
+    {% block head_stylesheets %}
+        {{ opendxp_head_link() }}
+    {% endblock %}
+</head>
+<body>
+    {# output scripts added before #}
+    {% block scripts %}
+        {{ opendxp_head_script() }}
+    {% endblock %}
+    {% set colors = {
+        'used': "#F7355B",
+        'free': "#47BFBD",
+        'reserved': "#FDC45B"}
+    %}
+    {{ block('content') }}
+</body>

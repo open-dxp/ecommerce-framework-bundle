@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Factory:
+        arguments:
+            - '@service_container'
+            - '@opendxp_ecommerce.locator.cart_manager'
+            - '@opendxp_ecommerce.locator.order_manager'
+            - '@opendxp_ecommerce.locator.pricing_manager'
+            - '@opendxp_ecommerce.locator.price_system'
+            - '@opendxp_ecommerce.locator.availability_system'
+            - '@opendxp_ecommerce.locator.checkout_manager.factory'
+            - '@opendxp_ecommerce.locator.checkout_manager.commit_order_processor'
+            - '@opendxp_ecommerce.locator.filter_service'

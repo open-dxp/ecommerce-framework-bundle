@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\EventListener\IndexUpdateListener:
+        tags:
+            - { name: monolog.logger, channel: opendxp_ecommerce_indexupdater }
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\EventListener\Frontend\TrackingCodeFlashMessageListener: ~
+    OpenDxp\Bundle\EcommerceFrameworkBundle\EventListener\SessionBagListener: ~
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\EventListener\Frontend\TrackingCodeSubscriber: ~

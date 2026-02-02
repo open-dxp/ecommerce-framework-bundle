@@ -1,0 +1,945 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - GNU General Public License version 3 (GPLv3)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ */
+
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\V7;
+
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItemInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\EnvironmentInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerItemEvent;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Event\OrderManagerEvents;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\OrderUpdateNotPossibleException;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrderItem;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderAgentFactoryInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderAgentInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\Exception\ProviderNotFoundException;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\StatusInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\V7\Payment\RecurringPaymentInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxEntry;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PriceInfoInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\VoucherServiceInterface;
+use OpenDxp\File;
+use OpenDxp\Logger;
+use OpenDxp\Model\DataObject\AbstractObject;
+use OpenDxp\Model\DataObject\Fieldcollection;
+use OpenDxp\Model\DataObject\Fieldcollection\Data\PricingRule;
+use OpenDxp\Model\DataObject\Folder;
+use OpenDxp\Model\DataObject\Listing\Concrete;
+use OpenDxp\Model\DataObject\Service;
+use OpenDxp\Model\FactoryInterface;
+use OpenDxp\Tool;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+class OrderManager implements OrderManagerInterface
+{
+    protected EnvironmentInterface $environment;
+
+    protected OrderAgentFactoryInterface $orderAgentFactory;
+
+    protected VoucherServiceInterface $voucherService;
+
+    protected ?FactoryInterface $modelFactory = null;
+
+    protected array $options;
+
+    protected ?Folder $orderParentFolder = null;
+
+    protected string $customerClassName;
+
+    protected string $orderClassName;
+
+    protected string $orderItemClassName;
+
+    protected EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(
+        EnvironmentInterface $environment,
+        OrderAgentFactoryInterface $orderAgentFactory,
+        VoucherServiceInterface $voucherService,
+        EventDispatcherInterface $eventDispatcher,
+        FactoryInterface $modelFactory,
+        array $options = []
+    ) {
+        $this->eventDispatcher = $eventDispatcher;
+
+        $this->environment = $environment;
+        $this->orderAgentFactory = $orderAgentFactory;
+        $this->voucherService = $voucherService;
+        $this->modelFactory = $modelFactory;
+
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+
+        $this->processOptions($resolver->resolve($options));
+    }
+
+    protected function processOptions(array $options): void
+    {
+        $this->customerClassName = $options['customer_class'];
+        $this->orderClassName = $options['order_class'];
+        $this->orderItemClassName = $options['order_item_class'];
+        $this->options = $options;
+    }
+
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
+        $classProperties = ['customer_class', 'order_class', 'order_item_class', 'list_class', 'list_item_class'];
+
+        $resolver->setRequired($classProperties);
+
+        $resolver->setDefaults([
+            'customer_class' => '\\OpenDxp\\Model\\DataObject\\Customer',
+            'order_class' => '\\OpenDxp\\Model\\DataObject\\OnlineShopOrder',
+            'order_item_class' => '\\OpenDxp\\Model\\DataObject\\OnlineShopOrderItem',
+            'list_class' => Listing::class,
+            'list_item_class' => Listing\Item::class,
+            'parent_order_folder' => '/order/%Y/%m/%d',
+            'order_parent_path' => '/order/*YY*',
+        ]);
+
+        foreach ($classProperties as $classProperty) {
+            $resolver->setAllowedTypes($classProperty, 'string');
+        }
+    }
+
+    /**
+     *
+     *
+     * @throws \Exception
+     *
+     */
+    public function getOrCreateOrderFromCart(CartInterface $cart): AbstractOrder
+    {
+        $order = $this->getOrderFromCart($cart);
+
+        $event = new OrderManagerEvent($cart, $order, $this);
+        $this->eventDispatcher->dispatch($event, OrderManagerEvents::PRE_GET_OR_CREATE_ORDER_FROM_CART);
+        $order = $event->getOrder();
+
+        // no order found, create new one
+        if (empty($order)) {
+            $tempOrdernumber = $this->createOrderNumber();
+
+            $order = $this->getNewOrderObject();
+
+            $order->setParent($this->getOrderParentFolder());
+            $order->setCreationDate(time());
+            $order->setKey(File::getValidFilename($tempOrdernumber));
+            $order->setPublished(true);
+
+            $order->setOrdernumber($tempOrdernumber);
+            $order->setOrderdate(new Carbon());
+
+            $cartId = $this->createCartId($cart);
+            if (strlen($cartId) > 190) {
+                throw new \Exception('CartId cannot be longer than 190 characters');
+            }
+
+            $order->setCartId($cartId);
+        }
+
+        // check if pending payment. if one, do not update order from cart
+
+        $cartIsLockedDueToPayments = $this->cartHasPendingPayments($cart);
+        $orderNeedsUpdate = $this->orderNeedsUpdate($cart, $order);
+
+        $event = new OrderManagerEvent($cart, $order, $this, [
+            'cartIsLockedDueToPayments' => $cartIsLockedDueToPayments,
+            'orderNeedsUpdate' => $orderNeedsUpdate,
+        ]);
+        $this->eventDispatcher->dispatch($event, OrderManagerEvents::PRE_UPDATE_ORDER);
+
+        $cartIsLockedDueToPayments = $event->getArgument('cartIsLockedDueToPayments');
+        $orderNeedsUpdate = $event->getArgument('orderNeedsUpdate');
+
+        if ($orderNeedsUpdate && $cartIsLockedDueToPayments) {
+            throw new OrderUpdateNotPossibleException('Order cannot be updated from cart due to pending payments. Cancel payment or recreate order.');
+        }
+
+        if (!$orderNeedsUpdate) {
+            return $order;
+        }
+
+        // update order from cart
+        $order->setTotalPrice($cart->getPriceCalculator()->getGrandTotal()->getGrossAmount()->asString());
+        $order->setTotalNetPrice($cart->getPriceCalculator()->getGrandTotal()->getNetAmount()->asString());
+        $order->setSubTotalPrice($cart->getPriceCalculator()->getSubTotal()->getAmount()->asString());
+        $order->setSubTotalNetPrice($cart->getPriceCalculator()->getSubTotal()->getNetAmount()->asString());
+        $order->setTaxInfo($this->buildTaxArray($cart->getPriceCalculator()->getGrandTotal()->getTaxEntries()));
+
+        $modificationItems = new Fieldcollection();
+        foreach ($cart->getPriceCalculator()->getPriceModifications() as $name => $modification) {
+            $modificationItem = new Fieldcollection\Data\OrderPriceModifications();
+            $modificationItem->setName($modification->getDescription() ? $modification->getDescription() : $name);
+            $modificationItem->setAmount($modification->getGrossAmount()->asString());
+            $modificationItem->setNetAmount($modification->getNetAmount()->asString());
+
+            if ($rule = $modification->getRule()) {
+                $modificationItem->setPricingRuleId($rule->getId());
+            } else {
+                $modificationItem->setPricingRuleId(null);
+            }
+
+            $modificationItems->add($modificationItem);
+        }
+
+        $order->setPriceModifications($modificationItems);
+        $order->setCartHash($this->calculateCartHash($cart));
+
+        $order = $this->setCurrentCustomerToOrder($order);
+
+        // set order currency
+        $currency = $cart->getPriceCalculator()->getGrandTotal()->getCurrency();
+        $order->setCurrency($currency->getShortName());
+
+        $order->save(['versionNote' => 'OrderManager::getOrCreateOrderFromCart - save order to add items.']);
+
+        // for each cart item and cart sub item create corresponding order items
+        $orderItems = $this->applyOrderItems($cart->getItems(), $order);
+        $order->setItems($orderItems);
+
+        $this->applyVoucherTokens($order, $cart);
+
+        // for each gift item create corresponding order item
+        $orderGiftItems = $this->applyOrderItems($cart->getGiftItems(), $order, true);
+        $order->setGiftItems($orderGiftItems);
+
+        $order = $this->applyCustomCheckoutDataToOrder($cart, $order);
+        $order->save(['versionNote' => 'OrderManager::getOrCreateOrderFromCart - final save.']);
+
+        $this->cleanupZombieOrderItems($order);
+
+        $this->eventDispatcher->dispatch(new OrderManagerEvent($cart, $order, $this), OrderManagerEvents::POST_UPDATE_ORDER);
+
+        return $order;
+    }
+
+    public function orderNeedsUpdate(CartInterface $cart, AbstractOrder $order): bool
+    {
+        return $this->calculateCartHash($cart) !== $order->getCartHash();
+    }
+
+    protected function calculateCartHash(CartInterface $cart): int
+    {
+        $hashString = '';
+
+        $hashString .= $cart->getPriceCalculator()->getGrandTotal()->getAmount()->asString();
+        $hashString .= $cart->getItemCount();
+        $hashString .= $cart->getItemAmount();
+        $hashString .= count($cart->getGiftItems());
+        $hashString .= implode($cart->getVoucherTokenCodes());
+
+        return crc32($hashString);
+    }
+
+    /**
+     *
+     *
+     * @throws \Exception
+     */
+    public function getOrderFromCart(CartInterface $cart): ?AbstractOrder
+    {
+        $cartId = $this->createCartId($cart);
+
+        $orderList = $this->buildOrderList();
+        $orderList->setCondition('cartId = ? AND IFNULL(successorOrder__id , "") = ""', [$cartId]);
+
+        /** @var AbstractOrder[] $orders */
+        $orders = $orderList->load();
+        if (count($orders) > 1) {
+            throw new \Exception("No unique order found for $cartId.");
+        }
+
+        if (count($orders) === 1) {
+            return $orders[0];
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     *
+     * @throws \Exception
+     */
+    public function recreateOrder(CartInterface $cart): AbstractOrder
+    {
+        $sourceOrder = $this->getOrderFromCart($cart);
+
+        if ($sourceOrder) {
+            $tokens = $sourceOrder->getVoucherTokens();
+            $tokenVersionNote = '';
+
+            //create new order object
+            $tempOrdernumber = $this->createOrderNumber();
+            $order = $this->getNewOrderObject();
+
+            $order->setParent($sourceOrder->getParent());
+            $order->setCreationDate(time());
+            $order->setKey(File::getValidFilename($tempOrdernumber));
+            $order->setPublished(true);
+
+            $order->setOrdernumber($tempOrdernumber);
+            $order->setOrderdate(new Carbon());
+            $order->setCartId($sourceOrder->getCartId());
+
+            if ($tokens && $sourceOrder->getOrderState() != AbstractOrder::ORDER_STATE_COMMITTED) {
+                $tokenVersionNote = ' Token previously added but removed: ';
+                foreach ($tokens as $token) {
+                    $this->voucherService->removeAppliedTokenFromOrder($token, $sourceOrder);
+                    $tokenVersionNote .= '"' . $token->getToken() . '"';
+                }
+            }
+
+            $order->save(['versionNote' => 'OrderManager::recreateOrder.']);
+
+            $sourceOrder->setSuccessorOrder($order);
+            $sourceOrder->save([
+                'versionNote' => 'OrderManager::recreateOrder - save successor order.'. $tokenVersionNote,
+            ]);
+        }
+
+        return $this->getOrCreateOrderFromCart($cart);
+    }
+
+    /**
+     *
+     *
+     * @throws \Exception
+     */
+    public function recreateOrderBasedOnSourceOrder(AbstractOrder $sourceOrder): AbstractOrder
+    {
+        $tempOrdernumber = $this->createOrderNumber();
+        $order = clone $sourceOrder;
+
+        $order->setId(null);
+        $order->setParent($sourceOrder->getParent());
+        $order->setCreationDate(time());
+        $order->setKey(File::getValidFilename($tempOrdernumber));
+        $order->setPublished(true);
+
+        $order->setOrdernumber($tempOrdernumber);
+        $order->setOrderdate(new Carbon());
+        $order->setCartId($sourceOrder->getCartId());
+
+        $order->save(['versionNote' => 'OrderManager::recreateOrderBasedOnSourceOrder - initial save.']);
+
+        $sourceOrder->setSuccessorOrder($order);
+        $sourceOrder->save(['versionNote' => 'OrderManager::recreateOrderBasedOnSourceOrder - save successor order.']);
+
+        $order->setItems($this->cloneItems($sourceOrder->getItems(), $order));
+        $order->setGiftItems($this->cloneItems($sourceOrder->getGiftItems(), $order));
+        $order->save(['versionNote' => 'OrderManager::recreateOrderBasedOnSourceOrder - final save.']);
+
+        return $order;
+    }
+
+    protected function cloneItems(array $sourceItems, AbstractOrder $newOrder): array
+    {
+        $items = [];
+        foreach ($sourceItems as $sourceItem) {
+            $newItem = clone $sourceItem;
+            $newItem->setId(null);
+
+            $newItem->setParent($newOrder);
+            $newItem->setSubItems($this->cloneItems($sourceItem->getSubItems(), $newOrder));
+            $newItem->save();
+
+            $items[] = $newItem;
+        }
+
+        return $items;
+    }
+
+    /**
+     *
+     *
+     * @throws \Exception
+     */
+    public function cartHasPendingPayments(CartInterface $cart): bool
+    {
+        $order = $this->getOrderFromCart($cart);
+        if ($order) {
+            if ($order->getOrderState() == AbstractOrder::ORDER_STATE_PAYMENT_PENDING) {
+                return true;
+            }
+
+            $orderAgent = $this->createOrderAgent($order);
+            $paymentInfo = $orderAgent->getCurrentPendingPaymentInfo();
+
+            if ($paymentInfo) {
+                if ($paymentInfo->getPaymentState() == AbstractOrder::ORDER_STATE_PAYMENT_PENDING) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     *
+     * @throws \Exception
+     */
+    protected function createOrderItem(CartItemInterface $item, AbstractObject $parent, bool $isGiftItem = false): AbstractOrderItem
+    {
+        $key = $this->buildOrderItemKey($item, $isGiftItem);
+
+        $orderItemList = $this->buildOrderItemList();
+        $orderItemList->setCondition('parentId = ? AND `key` = ?', [$parent->getId(), $key]);
+
+        /** @var AbstractOrderItem[] $orderItems */
+        $orderItems = $orderItemList->load();
+        if (count($orderItems) > 1) {
+            throw new \Exception("No unique order item found for $key.");
+        }
+
+        if (count($orderItems) == 1) {
+            $orderItem = $orderItems[0];
+        } else {
+            $orderItem = $this->getNewOrderItemObject();
+            $orderItem->setParent($parent);
+            $orderItem->setPublished(true);
+            $orderItem->setKey($key);
+        }
+
+        $product = $item->getProduct();
+        $orderItem->setAmount($item->getCount());
+        $orderItem->setProduct($product);
+        if ($product instanceof CheckoutableInterface) {
+            $orderItem->setProductName($product->getOSName());
+            $orderItem->setProductNumber($product->getOSProductNumber());
+        }
+        $orderItem->setComment($item->getComment());
+
+        $price = Decimal::zero();
+        $netPrice = Decimal::zero();
+
+        if (!$isGiftItem && is_object($item->getTotalPrice())) {
+            $price = $item->getTotalPrice()->getGrossAmount();
+            $netPrice = $item->getTotalPrice()->getNetAmount();
+        }
+
+        // TODO refine how amount is passed to order item (asNumeric? asString?)
+        $orderItem->setTotalPrice($price->asString());
+        $orderItem->setTotalNetPrice($netPrice->asString());
+        $orderItem->setTaxInfo($this->buildTaxArray($item->getTotalPrice()->getTaxEntries()));
+
+        if (!$isGiftItem) {
+            // save active pricing rules
+            $priceInfo = $item->getPriceInfo();
+            if ($priceInfo instanceof PriceInfoInterface && method_exists($orderItem, 'setPricingRules')) {
+                $priceRules = new Fieldcollection();
+                foreach ($priceInfo->getRules() as $rule) {
+                    if ($rule->hasProductActions()) {
+                        $priceRule = new PricingRule();
+                        $priceRule->setRuleId($rule->getId());
+
+                        foreach (Tool::getValidLanguages() as $language) {
+                            $priceRule->setName($rule->getLabel($language), $language);
+                        }
+
+                        $priceRules->add($priceRule);
+                    }
+                }
+
+                $orderItem->setPricingRules($priceRules);
+                $orderItem->save();
+            }
+        }
+
+        $event = new OrderManagerItemEvent($item, $isGiftItem, $orderItem);
+        $this->eventDispatcher->dispatch($event, OrderManagerEvents::POST_CREATE_ORDER_ITEM);
+
+        return $event->getOrderItem();
+    }
+
+    protected function buildOrderItemKey(CartItemInterface $item, bool $isGiftItem = false): string
+    {
+        $itemKey = File::getValidFilename(sprintf(
+            '%s_%s%s',
+            $item->getProduct()->getId(),
+            $item->getItemKey(),
+            $isGiftItem ? '_gift' : ''
+        ));
+
+        $event = new OrderManagerItemEvent($item, $isGiftItem, null, ['itemKey' => $itemKey]);
+        $this->eventDispatcher->dispatch($event, OrderManagerEvents::BUILD_ORDER_ITEM_KEY);
+
+        return $event->getArgument('itemKey');
+    }
+
+    protected function buildModelClass(string $className, array $params = []): mixed
+    {
+        if (null === $this->modelFactory) {
+            throw new \RuntimeException('Model factory is not set. Please either configure the order manager service to be autowired or add a call to setModelFactory');
+        }
+
+        return $this->modelFactory->build($className, $params);
+    }
+
+    public function createOrderList(): OrderListInterface
+    {
+        /** @var OrderListInterface $orderList */
+        $orderList = new $this->options['list_class'];
+        $orderList->setItemClassName($this->options['list_item_class']);
+
+        return $orderList;
+    }
+
+    public function createOrderAgent(AbstractOrder $order): OrderAgentInterface
+    {
+        return $this->orderAgentFactory->createAgent($order);
+    }
+
+    public function setCustomerClass(string $classname): void
+    {
+        $this->customerClassName = $classname;
+    }
+
+    /**
+     * @return string $classname
+     */
+    protected function getCustomerClassName(): string
+    {
+        return $this->customerClassName;
+    }
+
+    public function setOrderClass(string $classname): void
+    {
+        $this->orderClassName = $classname;
+    }
+
+    protected function getOrderClassName(): string
+    {
+        return $this->orderClassName;
+    }
+
+    public function setOrderItemClass(string $classname): void
+    {
+        $this->orderItemClassName = $classname;
+    }
+
+    protected function getOrderItemClassName(): string
+    {
+        return $this->orderItemClassName;
+    }
+
+    /**
+     *
+     * @throws \Exception
+     */
+    public function setParentOrderFolder(int|Folder $orderParentFolder): void
+    {
+        if ($orderParentFolder instanceof Folder) {
+            $this->orderParentFolder = $orderParentFolder;
+        } elseif (is_numeric($orderParentFolder)) {
+            $folder = Folder::getById($orderParentFolder);
+
+            if ($folder) {
+                $this->orderParentFolder = $folder;
+            } else {
+                throw new \InvalidArgumentException(sprintf('Folder with ID "%s" was not found', $orderParentFolder));
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            'Invalid argument for parent order folder. Expected either int or Folder, but got %s',
+            is_object($orderParentFolder) ? get_class($orderParentFolder) : gettype($orderParentFolder)
+        ));
+    }
+
+    /**
+     *
+     * @throws \Exception
+     */
+    protected function getOrderParentFolder(): Folder
+    {
+        // processing config and setting options
+        // BC Layer to check if the newer config is properly set, otherwise use the former one
+        if (empty($this->orderParentFolder)) {
+            if ($this->options['order_parent_path']) {
+                $parentFolderOption = (string)$this->options['order_parent_path'];
+
+                // The asterisks must be either 0 or be in pairs to be a valid
+                if (substr_count($parentFolderOption, '*') % 2 !== 0) {
+                    throw new \InvalidArgumentException('Invalid parent order folder path. Please make sure that the path is properly formatted.');
+                }
+
+                $pattern = '/\*([^\*]+)\*/';
+                $parentFolderPath = preg_replace_callback($pattern, function ($matches) {
+                    return CarbonImmutable::now()->isoFormat($matches[1]);
+                }, $parentFolderOption);
+
+            } else {
+                trigger_deprecation(
+                    'open-dxp/ecommerce-framework-bundle',
+                    '1.0',
+                    'Please use `order_parent_path` instead of `parent_order_folder`, as strftime() is deprecated.'
+                );
+
+                $parentFolderOption = (string)$this->options['parent_order_folder'];
+                $parentFolderPath = strftime($parentFolderOption, time());
+            }
+
+            if (is_numeric($parentFolderOption)) {
+                $parentFolderId = (int)$parentFolderOption;
+            } else {
+                $p = Service::createFolderByPath($parentFolderPath);
+                $parentFolderId = $p->getId();
+                unset($p);
+            }
+
+            $this->orderParentFolder = Folder::getById($parentFolderId);
+        }
+
+        return $this->orderParentFolder;
+    }
+
+    /**
+     * returns cart id for order object
+     *
+     *
+     */
+    protected function createCartId(CartInterface $cart): string
+    {
+        return get_class($cart) . '_' . $cart->getId();
+    }
+
+    /**
+     *
+     * @throws \Exception
+     */
+    protected function cleanupZombieOrderItems(AbstractOrder $order): void
+    {
+        $validItemIds = [];
+        foreach ($order->getItems() ?: [] as $item) {
+            $validItemIds[] = $item->getId();
+        }
+        foreach ($order->getGiftItems() ?: [] as $giftItem) {
+            $validItemIds[] = $giftItem->getId();
+        }
+
+        $orderItemChildren = $order->getChildren();
+        foreach ($orderItemChildren as $orderItemChild) {
+            if ($orderItemChild instanceof AbstractOrderItem) {
+                if (!in_array($orderItemChild->getId(), $validItemIds)) {
+                    if (!$orderItemChild->getDependencies()->getRequiredBy(null, 1)) {
+                        $orderItemChild->delete();
+                    } else {
+                        Logger::info('orderItem ('.$orderItemChild->getId().') was not removed because it still has remaining dependencies');
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @throws \Exception
+     */
+    protected function applyOrderItems(array $items, AbstractOrder $order, bool $giftItems = false): array
+    {
+        $orderItems = [];
+        foreach ($items as $item) {
+            $orderItem = $this->createOrderItem($item, $order, $giftItems);
+
+            $orderSubItems = [];
+            $subItems = $item->getSubItems();
+            if (!empty($subItems)) {
+                foreach ($subItems as $subItem) {
+                    $orderSubItem = $this->createOrderItem($subItem, $orderItem, $giftItems);
+                    $orderSubItem->save();
+
+                    $orderSubItems[] = $orderSubItem;
+                }
+            }
+
+            $orderItem->setSubItems($orderSubItems);
+            $orderItem->save();
+
+            $orderItems[] = $orderItem;
+        }
+
+        return $orderItems;
+    }
+
+    protected function applyVoucherTokens(AbstractOrder $order, CartInterface $cart): void
+    {
+        $voucherTokens = $cart->getVoucherTokenCodes();
+        if (is_array($voucherTokens)) {
+            $flippedVoucherTokens = array_flip($voucherTokens);
+
+            if ($tokenObjects = $order->getVoucherTokens()) {
+                foreach ($tokenObjects as $tokenObject) {
+                    if (!array_key_exists($tokenObject->getToken(), $flippedVoucherTokens)) {
+                        //remove applied tokens which are not in the cart anymore
+                        $this->voucherService->removeAppliedTokenFromOrder($tokenObject, $order);
+                    } else {
+                        //if token already in token objects, nothing has to be done
+                        //but remove it from $flippedVoucherTokens so they don't get added again
+                        unset($flippedVoucherTokens[$tokenObject->getToken()]);
+                    }
+                }
+            }
+
+            //add new tokens - which are the remaining entries of $flippedVoucherTokens
+            foreach ($flippedVoucherTokens as $code => $x) {
+                $this->voucherService->applyToken((string)$code, $cart, $order);
+            }
+        }
+    }
+
+    /**
+     * hook to save individual data into order object
+     *
+     *
+     */
+    protected function applyCustomCheckoutDataToOrder(CartInterface $cart, AbstractOrder $order): AbstractOrder
+    {
+        return $order;
+    }
+
+    /**
+     * hook to set customer into order
+     * default implementation gets current customer from environment and sets it into order
+     *
+     *
+     */
+    protected function setCurrentCustomerToOrder(AbstractOrder $order): AbstractOrder
+    {
+        // sets customer to order - if available
+        $customerClassName = $this->getCustomerClassName();
+        if (@Tool::classExists($customerClassName)) {
+            $customer = $customerClassName::getById($this->environment->getCurrentUserId());
+            $order->setCustomer($customer);
+        }
+
+        return $order;
+    }
+
+    /**
+     * hook for creating order number - can be overwritten
+     *
+     */
+    protected function createOrderNumber(): string
+    {
+        return uniqid('ord_');
+    }
+
+    /**
+     *
+     * @throws \Exception
+     */
+    protected function getNewOrderObject(): AbstractOrder
+    {
+        $orderClassName = $this->getOrderClassName();
+        if (!Tool::classExists($orderClassName)) {
+            throw new \Exception('Order Class' . $orderClassName . ' does not exist.');
+        }
+
+        return $this->buildModelClass($orderClassName);
+    }
+
+    /**
+     * Get list of valid source orders to perform recurring payment on.
+     *
+     *
+     *
+     * @throws \Exception
+     * @throws ProviderNotFoundException
+     */
+    public function getRecurringPaymentSourceOrderList(string $customerId, RecurringPaymentInterface $paymentProvider, string $paymentMethod = null, string $orderId = ''): Concrete
+    {
+        $orders = $this->buildOrderList();
+        $orders->addConditionParam('customer__id = ?', $customerId);
+        $orders->addConditionParam('orderState IS NOT NULL');
+
+        // Check if provider is registered
+        $paymentProviderName = $paymentProvider->getName();
+        Factory::getInstance()->getPaymentManager()->getProvider(strtolower($paymentProviderName));
+
+        if ($orderId) {
+            $orders->setCondition("oo_id = '{$orderId}'");
+        }
+
+        // Apply provider specific condition
+        $paymentProvider->applyRecurringPaymentCondition($orders, ['paymentMethod' => $paymentMethod]);
+
+        if (empty($orders->getOrderKey())) {
+            $orders->setOrderKey('creationDate');
+            $orders->setOrder('DESC');
+        }
+
+        return $orders;
+    }
+
+    /**
+     * Get source order for performing recurring payment
+     *
+     *
+     * @return \Pimcore\Model\DataObject\Concrete|null|false
+     *
+     * @throws \Exception
+     */
+    public function getRecurringPaymentSourceOrder(string $customerId, RecurringPaymentInterface $paymentProvider, string $paymentMethod = null): bool|\OpenDxp\Model\DataObject\Concrete|null
+    {
+        if (!$paymentProvider->isRecurringPaymentEnabled()) {
+            return null;
+        }
+
+        $orders = $this->getRecurringPaymentSourceOrderList($customerId, $paymentProvider, $paymentMethod);
+        $orders->setLimit(1);
+
+        return $orders->current();
+    }
+
+    /**
+     *
+     *
+     * @throws \Exception
+     */
+    public function isValidOrderForRecurringPayment(AbstractOrder $order, RecurringPaymentInterface $payment, string $customerId = ''): bool
+    {
+        $orders = $this->getRecurringPaymentSourceOrderList($customerId, $payment, null, (string)$order->getId());
+
+        return !empty($orders->current());
+    }
+
+    /**
+     *
+     * @throws \Exception
+     */
+    protected function getNewOrderItemObject(): AbstractOrderItem
+    {
+        $orderItemClassName = $this->getOrderItemClassName();
+        if (!Tool::classExists($orderItemClassName)) {
+            throw new \Exception('OrderItem Class' . $orderItemClassName . ' does not exist.');
+        }
+
+        return $this->buildModelClass($orderItemClassName);
+    }
+
+    /**
+     * @param TaxEntry[] $taxItems
+     *
+     */
+    protected function buildTaxArray(array $taxItems): array
+    {
+        $taxArray = [];
+        foreach ($taxItems as $taxEntry) {
+            $taxArray[] = [
+                $taxEntry->getEntry()->getName(),
+                $taxEntry->getPercent() . '%',
+                $taxEntry->getAmount()->asString(),
+            ];
+        }
+
+        return $taxArray;
+    }
+
+    /**
+     * Build list class name, try namespaced first and fall back to legacy naming
+     *
+     *
+     *
+     * @throws \Exception
+     */
+    protected function buildListClassName(string $className): string
+    {
+        $listClassName = sprintf('%s\\Listing', $className);
+        if (!Tool::classExists($listClassName)) {
+            $listClassName = sprintf('%s_List', $className);
+            if (!Tool::classExists($listClassName)) {
+                throw new \Exception(sprintf('Class %s does not exist.', $listClassName));
+            }
+        }
+
+        return $listClassName;
+    }
+
+    /**
+     * Build class name for order list
+     *
+     *
+     * @throws \Exception
+     */
+    protected function buildOrderListClassName(): string
+    {
+        return $this->buildListClassName($this->getOrderClassName());
+    }
+
+    /**
+     * Build class name for order item list
+     *
+     *
+     * @throws \Exception
+     */
+    protected function buildOrderItemListClassName(): string
+    {
+        return $this->buildListClassName($this->getOrderItemClassName());
+    }
+
+    /**
+     * Build order listing
+     *
+     *
+     * @throws \Exception
+     */
+    public function buildOrderList(): Concrete
+    {
+        $orderListClass = $this->buildOrderListClassName();
+
+        return $this->buildModelClass($orderListClass);
+    }
+
+    /**
+     * Build order item listing
+     *
+     *
+     * @throws \Exception
+     */
+    public function buildOrderItemList(): Concrete
+    {
+        $orderItemListClass = $this->buildOrderItemListClassName();
+
+        return $this->buildModelClass($orderItemListClass);
+    }
+
+    public function getOrderByPaymentStatus(StatusInterface $paymentStatus): ?AbstractOrder
+    {
+        //this call is needed in order to really load most updated object from cache or DB (otherwise it could be loaded from process)
+        \OpenDxp::collectGarbage();
+
+        $orderId = explode('~', $paymentStatus->getInternalPaymentId());
+        $orderId = $orderId[1];
+        $orderClass = $this->getOrderClassName();
+
+        return $orderClass::getById($orderId);
+    }
+}

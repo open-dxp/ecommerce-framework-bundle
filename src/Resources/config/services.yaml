@@ -1,0 +1,24 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    #
+    # INSTALLER
+    #
+
+    opendxp.ecommerceframework.installer: '@OpenDxp\Bundle\EcommerceFrameworkBundle\Tools\Installer'
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Tools\Installer:
+        arguments:
+            $bundle: "@=service('kernel').getBundle('OpenDxpEcommerceFrameworkBundle')"
+
+    #
+    # CONTROLLERS
+    #
+
+    # auto-register all controllers as services
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Controller\:
+        resource: '../../Controller'
+        public: true
+        tags: ['controller.service_arguments']

@@ -1,0 +1,21 @@
+imports:
+    - { resource: filter_service_filter_types.yaml }
+
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    #
+    # FILTER SERVICE
+    #
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterService:
+        arguments:
+            - '@OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterGroupHelper'
+            - []
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterGroupHelper: ~
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\ListHelper: ~

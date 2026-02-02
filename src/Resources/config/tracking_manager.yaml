@@ -1,0 +1,31 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingManager: ~
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder: ~
+
+    #
+    # TRACKERS
+    #
+    # Predefined core trackers. The item builder can be overwritten via config (see extension).
+    #
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\EnhancedEcommerce:
+        arguments:
+            $trackingItemBuilder: '@OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder'
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\Ecommerce:
+        arguments:
+            $trackingItemBuilder: '@OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder'
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\UniversalEcommerce:
+        arguments:
+            $trackingItemBuilder: '@OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder'
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\GoogleTagManager:
+        arguments:
+            $trackingItemBuilder: '@OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder'
+

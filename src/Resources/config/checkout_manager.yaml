@@ -1,0 +1,39 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    #
+    # CHECKOUT MANAGER
+    #
+    # Predefined core checkout manager implementations. Undefined arguments (order manager, commit order processor,
+    # options, payment manager, ...) will be set from config.
+    #
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\CheckoutManagerFactory:
+        arguments:
+            - '@opendxp_ecommerce.environment'
+            - '@opendxp_ecommerce.locator.order_manager'
+            - '@opendxp_ecommerce.locator.checkout_manager.commit_order_processor'
+            - [] # checkout steps
+            - '@?' # payment provider
+            - [] # options
+            - '@?'
+            - '@event_dispatcher'
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CommitOrderProcessor:
+        arguments:
+            - '@Symfony\Component\Lock\LockFactory'
+            - '@opendxp_ecommerce.locator.order_manager'
+            - '@event_dispatcher'
+            - '@OpenDxp\Log\ApplicationLogger'
+            - [] # options
+        calls:
+            - [setLogger, ['@logger']]
+        tags:
+            - { name: monolog.logger, channel: opendxp_ecommerce }
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\ThrowExceptionStrategy:
+    OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\CancelPaymentOrRecreateOrderStrategy: ~
+    OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\AlwaysRecreateOrderStrategy: ~

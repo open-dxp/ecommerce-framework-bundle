@@ -1,0 +1,159 @@
+---
+bundle_ecommerce_mainmenu: Online Shop
+bundle_ecommerce_pricing_rule: Preisregel
+bundle_ecommerce_pricing_rules: Preisregeln
+bundle_ecommerce_pricing_config_behavior: Verhalten
+bundle_ecommerce_pricing_config_additiv: Additiv
+bundle_ecommerce_pricing_config_stopExecute: Letzte Regel
+bundle_ecommerce_pricing_config_condition_daterange: Datumsbereich
+bundle_ecommerce_pricing_config_condition_cart_amount: Warenkorbwert
+bundle_ecommerce_pricing_config_condition_products: Produkte
+bundle_ecommerce_pricing_config_condition_token: Token
+bundle_ecommerce_pricing_config_condition_sales: "Verk\xE4ufe"
+bundle_ecommerce_pricing_config_condition_sold: Verkauft
+bundle_ecommerce_pricing_config_condition_sold_count: Anzahl verkauft
+bundle_ecommerce_pricing_config_condition_sold_count_cart: Anzahl Warenkorb
+bundle_ecommerce_pricing_config_condition_voucherToken: Gutschein
+bundle_ecommerce_pricing_config_condition_tenant: Anbieter
+bundle_ecommerce_pricing_config_condition_targetgroup: Zielgruppe
+bundle_ecommerce_pricing_config_condition_targetgroup_threshold: Schwellenwert
+bundle_ecommerce_pricing_config_action_gift: Geschenk
+bundle_ecommerce_pricing_config_action_cart_discount: Warenkorbrabatt
+bundle_ecommerce_pricing_config_action_cart_discount_percent: Rabatt in %
+bundle_ecommerce_pricing_config_action_cart_discount_amount: Absoluter Rabatt
+bundle_ecommerce_pricing_config_action_product_discount: Produktrabatt
+bundle_ecommerce_pricing_config_action_product_discount_percent: Rabatt in %
+bundle_ecommerce_pricing_config_action_product_discount_amount: Absoluter Rabatt
+bundle_ecommerce_pricing_config_action_free_shipping: Kostenlose Lieferung
+bundle_ecommerce_pricing_rule_add: "Preisregel hinzuf\xFCgen"
+bundle_ecommerce_pricing_rule_error: Fehler beim Erstellen der Preisregel
+bundle_ecommerce_clear_config_cache: "Konfigurationscache l\xF6schen"
+bundle_ecommerce_back-office_order: Back Office - Bestellungen
+bundle_ecommerce_vouchertoolkit_tab: Gutscheindetails
+bundle_ecommerce_order_tab: Bestellungsdetails
+bundle_ecommerce.back-office.order: Bestellung
+bundle_ecommerce.back-office.order-list: Bestellungen
+bundle_ecommerce.back-office.order-list.filter-date.from: Datum von
+bundle_ecommerce.back-office.order-list.filter-date.to: Bis heute
+bundle_ecommerce.back-office.order-list.filter-order: Bestellung
+bundle_ecommerce.back-office.order-list.filter-pricing-rules: Preisbildungsregel
+bundle_ecommerce.back-office.order-list.filter-product-type: Produkttyp
+bundle_ecommerce.back-office.order-list.result-count: Ergebnisse
+bundle_ecommerce.back-office.order-list.total-orders: "Auftr\xE4ge insgesamt"
+bundle_ecommerce.back-office.order-list.search.button: Suche
+bundle_ecommerce.back-office.order-list.search.placeholder: Suche
+bundle_ecommerce.back-office.order.address.delivery: Lieferadresse
+bundle_ecommerce.back-office.order.address.invoice: Adresse der Rechnung
+bundle_ecommerce.back-office.order.cart-taxes: Warenkorb Steuern
+bundle_ecommerce.back-office.order.cancel.item: Posten stornieren
+bundle_ecommerce.back-office.order.commit: Auftrag erstellt
+bundle_ecommerce.back-office.order.complaint.item: Beschwerdegegenstand
+bundle_ecommerce.back-office.order.customer-account.created: Erstellt
+bundle_ecommerce.back-office.order.customer-account.email: E-Mail
+bundle_ecommerce.back-office.order.customer-account.orderCount: "Anzahl der Auftr\xE4ge"
+bundle_ecommerce.back-office.order.customer.account: Konto
+bundle_ecommerce.back-office.order.date: Datum
+bundle_ecommerce.back-office.order.history.itemcancel: gestrichen
+bundle_ecommerce.back-office.order.history.itemchangeamount: "Betrag ge\xE4ndert"
+bundle_ecommerce.back-office.order.history.itemcomplaint: Beschwerde
+bundle_ecommerce.back-office.order.item-cancel: Abbrechen
+bundle_ecommerce.back-office.order.item-cancel.message: Nachricht
+bundle_ecommerce.back-office.order.item-complaint: Beschweren Sie sich
+bundle_ecommerce.back-office.order.item-complaint.message: Nachricht
+bundle_ecommerce.back-office.order.item-edit: bearbeiten
+bundle_ecommerce.back-office.order.item-edit.message: Nachricht
+bundle_ecommerce.back-office.order.order-items: Artikel
+bundle_ecommerce.back-office.order.payment.history: Zahlungsverhalten
+bundle_ecommerce.back-office.order.gifts: Geschenkartikel
+bundle_ecommerce.back-office.order.price.total: Gesamtpreis
+bundle_ecommerce.back-office.order.price.unit: Preis pro Einheit
+bundle_ecommerce.back-office.order.product: Produkt
+bundle_ecommerce.back-office.order.quantity: Menge
+bundle_ecommerce.back-office.order.set-status.item: Postenstatus setzen
+bundle_ecommerce.back-office.save: Speichern Sie
+bundle_ecommerce_voucherservice_apply-filter-button: Filter anwenden
+bundle_ecommerce_voucherservice_assign-config: Konfiguration zuweisen
+bundle_ecommerce_voucherservice_cleanup-button: Bereinigung
+bundle_ecommerce_voucherservice_cleanup-reservations-button: Reservierungen bereinigen
+bundle_ecommerce_voucherservice_export-button: CSV Export
+bundle_ecommerce_voucherservice_filter-from-date: Erstellen von
+bundle_ecommerce_voucherservice_filter-headline: Filtern nach
+bundle_ecommerce_voucherservice_filter-length: "L\xE4nge"
+bundle_ecommerce_voucherservice_filter-to-date: bis
+bundle_ecommerce_voucherservice_filter-token: Token
+bundle_ecommerce_voucherservice_filter-usages: Verwendungen
+bundle_ecommerce_voucherservice_generate-button: Generieren
+bundle_ecommerce_voucherservice_modal_assign-headline: Konfiguration auf Tokens anwenden
+bundle_ecommerce_voucherservice_modal_assign-infotext: Token Einstellungen werden
+  upgedated. Bitte haben Sie einen Moment Geduld.
+bundle_ecommerce_voucherservice_modal_assign-submit: Anwenden
+bundle_ecommerce_voucherservice_modal_cancel: Abbrechen
+bundle_ecommerce_voucherservice_modal_cleanup-both-checkbox: Beide
+bundle_ecommerce_voucherservice_modal_cleanup-headline: Token nach Bedingung entfernen
+bundle_ecommerce_voucherservice_modal_cleanup-infotext: 'MIT VORSICHT BENUTZEN: Die
+  Bereinigung entfernt Token in Ihrer Serie, um die Leistung beim Erstellen neuer
+  Token zu verbessern.'
+bundle_ecommerce_voucherservice_modal_cleanup-loadingtext: "Bitte warten Sie, die
+  Tokens werden gerade aufger\xE4umt."
+bundle_ecommerce_voucherservice_modal_cleanup-older-than: "\xC4lter als"
+bundle_ecommerce_voucherservice_modal_cleanup-reservations-headline: Reservierungen
+  entfernen
+bundle_ecommerce_voucherservice_modal_cleanup-reservations-infotext: "Die Bereinigung
+  entfernt Token-Reservierungen, die \xE4lter als die angegebene Dauer sind."
+bundle_ecommerce_voucherservice_modal_cleanup-reservations-olderthan-x-minutes: "\xC4lter
+  als x Minuten"
+bundle_ecommerce_voucherservice_modal_cleanup-reservations-submit: Bereinigen
+bundle_ecommerce_voucherservice_modal_cleanup-submit-button: Tokens entfernen
+bundle_ecommerce_voucherservice_modal_cleanup-unused-checkbox: Unbenutzt
+bundle_ecommerce_voucherservice_modal_cleanup-used-checkbox: Benutzt
+bundle_ecommerce_voucherservice_modal_generate-headline: Neue Token erstellen
+bundle_ecommerce_voucherservice_modal_generate-infotext: Codes werden erstellt. Bitte
+  haben Sie etwas Geduld, dies kann einige Minuten dauern.
+bundle_ecommerce_voucherservice_modal_generate-submit-button: Generieren
+bundle_ecommerce_voucherservice_msg-error-cleanup-checkbox-missing: "Sie m\xFCssen
+  Tokens ausw\xE4hlen die Sie entfernen wollen."
+bundle_ecommerce_voucherservice_msg-error-cleanup-reservations: Fehler, Reservierungen
+  konnten nicht bereinigt werden.
+bundle_ecommerce_voucherservice_msg-error-cleanup-reservations-duration-missing: "Bitte
+  geben Sie eine Dauer f\xFCr die Bereinigung der Reservierungen an."
+bundle_ecommerce_voucherservice_msg-error-config-missing: "Sie m\xFCssen die Konfigurationen
+  angeben und speichern, bevor Sie den Gutschein-Token-Manager verwenden."
+bundle_ecommerce_voucherservice_msg-error-generation: "Token-Generierung nicht m\xF6glich,
+  bitte passen Sie Ihre Parameter in der Registerkarte \"Bearbeiten\" an, oder bereinigen
+  Sie Ihre Token."
+bundle_ecommerce_voucherservice_msg-error-overwrite-single: "Mit diesem Vorgang \xFCberschreiben
+  Sie Ihr aktuelles Einzel-Token, bitte \xFCberpr\xFCfen Sie Ihre Einstellungen!"
+bundle_ecommerce_voucherservice_msg-error-required-missing: Erforderliches Feld fehlt.
+bundle_ecommerce_voucherservice_msg-error-token-noresult: Es konnten keine Token gefunden
+  werden.
+bundle_ecommerce_voucherservice_msg-error-unknown: Fehler, etwas ist schiefgelaufen.
+bundle_ecommerce_voucherservice_msg-success-cleanup: Token wurden erfolgreich bereinigt.
+bundle_ecommerce_voucherservice_msg-success-cleanup-reservations: Reservierungen wurden
+  erfolgreich bereinigt.
+bundle_ecommerce_voucherservice_msg-success-generation: Token wurde erfolgreich erstellt.
+bundle_ecommerce_voucherservice_paging-next: Weiter
+bundle_ecommerce_voucherservice_paging-previous: "Zur\xFCck"
+bundle_ecommerce_voucherservice_result-text: Ergebnisse gefunden
+bundle_ecommerce_voucherservice_settings-count: Anzahl
+bundle_ecommerce_voucherservice_settings-exampletoken: Beispieltoken
+bundle_ecommerce_voucherservice_settings-length: "L\xE4nge"
+bundle_ecommerce_voucherservice_settings-max-usages: Maximale Verwendungen
+bundle_ecommerce_voucherservice_settings-prefix: "Pr\xE4fix"
+bundle_ecommerce_voucherservice_settings-token: Token
+bundle_ecommerce_voucherservice_tab-manager: Manager
+bundle_ecommerce_voucherservice_tab-manager-headline: Gutschein-Token-Manager
+bundle_ecommerce_voucherservice_tab-statistics: Statistik
+bundle_ecommerce_voucherservice_tab-statistics-headline: Daten und Statistik
+bundle_ecommerce_voucherservice_table-date: Erstellungsdatum
+bundle_ecommerce_voucherservice_table-length: "L\xE4nge"
+bundle_ecommerce_voucherservice_table-token: Token
+bundle_ecommerce_voucherservice_table-usages: Verwendungen
+bundle_ecommerce_voucherservice_token-free: Frei
+bundle_ecommerce_voucherservice_token-overall: Gesamt
+bundle_ecommerce_voucherservice_token-overview-headline: "Token \xDCbersicht"
+bundle_ecommerce_voucherservice_token-reserved: Reserviert
+bundle_ecommerce_voucherservice_token-statistic-headline: Token Statistik
+bundle_ecommerce_voucherservice_token-used: Benutzt
+bundle_ecommerce_voucherservice_tokens-per-page: Tokens pro Seite
+bundle_ecommerce_voucherservice_usage-headline: Verwendungsstatistik
+...

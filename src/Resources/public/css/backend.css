@@ -1,0 +1,51 @@
+/**
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - GNU General Public License version 3 (GPLv3)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ * @license    http://www.pimcore.org/license     GPLv3 and PCL
+ */
+
+
+.bundle_ecommerce_nav_icon_shopping_cart{
+    background-color: var(--color-white) !important;
+    background-image: none !important;
+    mask: url(/bundles/opendxpadmin/img/material-icons/outline-shopping_cart-24px.svg) center/24px no-repeat !important;
+    -webkit-mask: url(/bundles/opendxpadmin/img/material-icons/outline-shopping_cart-24px.svg) center/24x no-repeat !important;
+    mask-size: 24px 24px;
+    -webkit-mask-size: 24px 24px;
+}
+
+.opendxp_icon_indexFieldSelectionField {
+    background: url("/bundles/opendxpadmin/img/flat-color-icons/empty_filter.svg") no-repeat center center !important;
+}
+
+.opendxp_icon_indexFieldSelectionCombo {
+    background: url("/bundles/opendxpadmin/img/flat-color-icons/tree_select.svg") no-repeat scroll center center transparent !important;
+}
+
+.opendxp_icon_indexFieldSelection {
+    background: url("/bundles/opendxpadmin/img/flat-color-icons/filled_filter.svg") no-repeat center center !important;
+}
+
+
+.opendxp_icon_data_group_ecommerce {
+    background: url("/bundles/opendxpadmin/img/flat-color-icons/shopping-cart.svg") center center no-repeat !important;
+}
+
+.bundle_ecommerce_clear_config_cache {
+    background: url("/bundles/opendxpadmin/img/flat-color-icons/flash_on.svg") center center no-repeat !important;
+}
+
+.bundle_ecommerce_back-office_order {
+    background: url("/bundles/opendxpadmin/img/flat-color-icons/tachometer.svg") center center no-repeat !important;
+}
+
+.plugin_voucherservice_icon {
+    background: url("/bundles/opendxpadmin/img/flat-color-icons/diamond.svg") center center no-repeat !important;
+}

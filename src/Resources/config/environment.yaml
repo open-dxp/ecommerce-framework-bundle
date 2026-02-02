@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    #
+    # ENVIRONMENT
+    #
+    # Predefined core environment implementations. Options will be set from configuration.
+    #
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\EnvironmentInterface: '@opendxp_ecommerce.environment'
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\Environment:
+        arguments:
+            $options: '%opendxp_ecommerce.environment.options%'
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\SessionEnvironment:
+        arguments:
+            $options: '%opendxp_ecommerce.environment.options%'

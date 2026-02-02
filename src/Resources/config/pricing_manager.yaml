@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    #
+    # PRICING MANAGER
+    #
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManager:
+        arguments:
+            $conditionMapping: '%opendxp_ecommerce.pricing_manager.condition_mapping%'
+            $actionMapping: '%opendxp_ecommerce.pricing_manager.action_mapping%'

@@ -1,0 +1,12 @@
+_opendxp_ecommerce_backend:
+    resource: "@OpenDxpEcommerceFrameworkBundle/Controller/"
+    type:     attribute
+    prefix:   /admin/ecommerceframework
+    options:
+        expose: true
+
+_opendxp_ecommerce_findologic:
+  path: /ecommerceframework/findologic-export
+  defaults: { _controller: OpenDxp\Bundle\EcommerceFrameworkBundle\Controller\FindologicController::exportAction }
+  options:
+      expose: true

@@ -1,0 +1,180 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - GNU General Public License version 3 (GPLv3)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ */
+
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Controller;
+
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Event\AdminEvents;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
+use OpenDxp\Controller\KernelControllerEventInterface;
+use OpenDxp\Controller\Traits\JsonHelperTrait;
+use OpenDxp\Controller\UserAwareController;
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+/**
+ * Class IndexController
+ *
+ * @internal
+ */
+#[Route('/index')]
+class IndexController extends UserAwareController implements KernelControllerEventInterface
+{
+    use JsonHelperTrait;
+
+    public function onKernelControllerEvent(ControllerEvent $event): void
+    {
+        $this->checkPermission('bundle_ecommerce_back-office_order');
+    }
+
+    #[Route('/get-filter-groups', name: 'opendxp_ecommerceframework_index_getfiltergroups', methods: ['GET'])]
+    public function getFilterGroupsAction(): JsonResponse
+    {
+        $indexService = Factory::getInstance()->getIndexService();
+        $tenants = Factory::getInstance()->getAllTenants();
+
+        $filterGroups = $indexService->getAllFilterGroups();
+        if ($tenants) {
+            foreach ($tenants as $tenant) {
+                $filterGroups = array_merge($filterGroups, $indexService->getAllFilterGroups($tenant));
+            }
+        }
+
+        $data = [];
+        if ($filterGroups) {
+            sort($filterGroups);
+            foreach ($filterGroups as $group) {
+                $data[$group] = ['data' => $group];
+            }
+        }
+
+        return $this->jsonResponse(['data' => array_values($data)]);
+    }
+
+    #[Route('/get-values-for-filter-field', name: 'opendxp_ecommerceframework_index_getvaluesforfilterfield', methods: ['GET'])]
+    public function getValuesForFilterFieldAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
+    {
+        try {
+            $data = [];
+            $factory = Factory::getInstance();
+
+            if ($request->get('field')) {
+                if ($request->get('tenant')) {
+                    Factory::getInstance()->getEnvironment()->setCurrentAssortmentTenant($request->get('tenant'));
+                }
+
+                $indexService = $factory->getIndexService();
+                $filterService = $factory->getFilterService();
+
+                $columnGroup = '';
+                $filterGroups = $indexService->getAllFilterGroups();
+                foreach ($filterGroups as $filterGroup) {
+                    $fields = $indexService->getIndexAttributesByFilterGroup($filterGroup);
+                    foreach ($fields as $field) {
+                        if ($field == $request->get('field')) {
+                            $columnGroup = $filterGroup;
+
+                            break 2;
+                        }
+                    }
+                }
+
+                $factory->getEnvironment()->setCurrentAssortmentSubTenant(null);
+                $productList = $factory->getIndexService()->getProductListForCurrentTenant();
+                $helper = $filterService->getFilterGroupHelper();
+                $data = $helper->getGroupByValuesForFilterGroup($columnGroup, $productList, $request->get('field'));
+            }
+
+            $event = new GenericEvent(null, ['data' => $data, 'field' => $request->get('field')]);
+            $eventDispatcher->dispatch($event, AdminEvents::GET_VALUES_FOR_FILTER_FIELD_PRE_SEND_DATA);
+            $data = $event->getArgument('data');
+
+            return $this->jsonResponse(['data' => array_values($data)]);
+        } catch (\Exception $e) {
+            return $this->jsonResponse(['message' => $e->getMessage()]);
+        }
+    }
+
+    #[Route('/get-fields', name: 'opendxp_ecommerceframework_index_getfields', methods: ['GET'])]
+    public function getFieldsAction(Request $request, EventDispatcherInterface $eventDispatcher, TranslatorInterface $translator): JsonResponse
+    {
+        $indexService = Factory::getInstance()->getIndexService();
+
+        if ($request->get('filtergroup')) {
+            $filtergroups = $request->get('filtergroup');
+
+            $indexColumns = [];
+            foreach ($filtergroups as $filtergroup) {
+                $indexColumns = array_merge($indexColumns, $indexService->getIndexAttributesByFilterGroup($filtergroup, $request->get('tenant')));
+            }
+        } else {
+            if ($request->get('show_all_fields') == 'true') {
+                $indexColumns = $indexService->getIndexAttributes(false, $request->get('tenant'));
+            } else {
+                $indexColumns = $indexService->getIndexAttributes(true, $request->get('tenant'));
+            }
+        }
+
+        if (!$indexColumns) {
+            $indexColumns = [];
+        }
+
+        $fields = [];
+
+        if ($request->get('add_empty') == 'true') {
+            $fields[' '] = ['key' => '', 'name' => '(' . $translator->trans('empty', [], 'messages') . ')'];
+        }
+
+        foreach ($indexColumns as $c) {
+            $fields[$c] = ['key' => $c, 'name' => $translator->trans($c, [], 'admin')];
+        }
+
+        if ($request->get('specific_price_field') == 'true') {
+            $fields[ProductListInterface::ORDERKEY_PRICE] = [
+                'key' => ProductListInterface::ORDERKEY_PRICE,
+                'name' => $translator->trans(ProductListInterface::ORDERKEY_PRICE, [], 'admin'),
+            ];
+        }
+
+        ksort($fields);
+
+        $event = new GenericEvent(null, ['data' => $fields]);
+        $eventDispatcher->dispatch($event, AdminEvents::GET_INDEX_FIELD_NAMES_PRE_SEND_DATA);
+        $data = $event->getArgument('data');
+
+        return $this->jsonResponse(['data' => array_values($data)]);
+    }
+
+    #[Route('/get-all-tenants', name: 'opendxp_ecommerceframework_index_getalltenants', methods: ['GET'])]
+    public function getAllTenantsAction(TranslatorInterface $translator): JsonResponse
+    {
+        $tenants = Factory::getInstance()->getAllTenants();
+        $data = [];
+
+        if ($tenants) {
+            foreach ($tenants as $tenant) {
+                $data[] = ['key' => $tenant, 'name' => $translator->trans($tenant, [], 'admin')];
+            }
+        }
+
+        return $this->jsonResponse(['data' => $data]);
+    }
+}

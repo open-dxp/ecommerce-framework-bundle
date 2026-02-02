@@ -1,0 +1,25 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\AgentFactory:
+        arguments:
+            - '@opendxp_ecommerce.environment'
+            - '@opendxp_ecommerce.payment_manager'
+            - '@event_dispatcher'
+            - []
+        calls:
+            - [ setLogger, [ '@logger' ] ]
+        tags:
+            - { name: monolog.logger, channel: update_payment }
+
+    OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\V7\OrderManager:
+        arguments:
+            - '@opendxp_ecommerce.environment'
+            - '@?'
+            - '@opendxp_ecommerce.voucher_service'
+            - '@event_dispatcher'
+            - '@OpenDxp\Model\FactoryInterface'
+            - []
