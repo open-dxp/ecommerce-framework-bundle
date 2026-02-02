@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\OpenSearch;
 
-use OpenSearch\Client;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\OpenSearch;
@@ -25,6 +24,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductList
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OpenSearch\AbstractOpenSearch as Worker;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
+use OpenSearch\Client;
 
 abstract class AbstractOpenSearch implements ProductListInterface
 {

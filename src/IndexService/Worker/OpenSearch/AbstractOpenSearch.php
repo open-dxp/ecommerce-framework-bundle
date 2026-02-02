@@ -18,7 +18,6 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OpenSearch
 
 use Doctrine\DBAL\Connection;
 use Exception;
-use OpenSearch\Client;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\OpenSearch;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\SearchConfigInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\RelationInterpreterInterface;
@@ -28,6 +27,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Db;
 use OpenDxp\Logger;
 use OpenDxp\Model\Tool\TmpStore;
+use OpenSearch\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
