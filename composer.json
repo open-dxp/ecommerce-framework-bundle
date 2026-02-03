@@ -10,7 +10,8 @@
       "*": "dist"
     },
     "allow-plugins": {
-      "php-http/discovery": false
+      "php-http/discovery": false,
+      "symfony/runtime": true
     }
   },
   "prefer-stable": true,
@@ -31,7 +32,8 @@
     "phpstan/phpstan-symfony": "^2.0.9",
     "open-dxp/elasticsearch-client-bundle": "^1.0.0",
     "open-dxp/opensearch-client-bundle": "^1.0.0",
-    "symfony/dotenv": "^7.4"
+    "symfony/dotenv": "^7.4",
+    "symfony/runtime": "^7.4"
   },
   "suggest": {
     "elasticsearch/elasticsearch": "Required for Elastic Search service",
