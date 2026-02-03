@@ -9,7 +9,7 @@
 > It is not affiliated with, endorsed by, or sponsored by Pimcore GmbH.   
 > Original credits: [Pimcore GmbH](https://www.pimcore.com)
 
-**OpenDXP Admin Bundle is based on the Pimcore® Community Edition and remains licensed under GPLv3.**
+**OpenDXP E-Commerce Framework is based on the Pimcore® Community Edition and remains licensed under GPLv3.**
 
 ***
 
