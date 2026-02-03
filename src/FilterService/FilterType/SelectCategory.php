@@ -2,20 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType;
 
+use Exception;
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Db;
@@ -26,9 +28,7 @@ use OpenDxp\Model\Element\ElementInterface;
 class SelectCategory extends AbstractFilterType
 {
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
@@ -59,7 +59,7 @@ class SelectCategory extends AbstractFilterType
             }
         }
 
-        $request = \OpenDxp::getContainer()->get('request_stack')->getCurrentRequest();
+        $request = OpenDxp::getContainer()->get('request_stack')->getCurrentRequest();
 
         return [
             'hideFilter' => $filterDefinition->getRequiredFilterField() && empty($currentFilter[$filterDefinition->getRequiredFilterField()]),
@@ -77,7 +77,6 @@ class SelectCategory extends AbstractFilterType
 
     /**
      * @param FilterCategory $filterDefinition
-     *
      */
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {

@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Command\IndexService;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\IndexService;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Console\Traits\Parallelization;
@@ -77,7 +78,7 @@ class BootstrapCommand extends AbstractIndexServiceCommand
         $indexService = $this->initIndexService($input);
 
         if (!$createOrUpdateIndexStructure && !$updateIndex) {
-            throw new \Exception('At least one option (--create-or-update-index-structure or --update-index) needs to be given');
+            throw new Exception('At least one option (--create-or-update-index-structure or --update-index) needs to be given');
         }
 
         if ($createOrUpdateIndexStructure) {

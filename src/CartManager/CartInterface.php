@@ -2,20 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
 
+use DateTime;
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractSetProductEntry;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\PricingManagerTokenInformation;
@@ -84,8 +86,6 @@ interface CartInterface
 
     /**
      * updates count of specific cart item
-     *
-     *
      */
     public function updateItemCount(string $itemKey, int $count): mixed;
 
@@ -110,7 +110,6 @@ interface CartInterface
 
     /**
      * clears all items of cart
-     *
      */
     public function clear(): void;
 
@@ -118,7 +117,6 @@ interface CartInterface
      * calculates amount of items in cart
      *
      * @param string $countSubItems - use one of COUNT_MAIN_ITEMS_ONLY, COUNT_MAIN_OR_SUB_ITEMS, COUNT_MAIN_AND_SUB_ITEMS
-     *
      */
     public function getItemAmount(string $countSubItems = self::COUNT_MAIN_ITEMS_ONLY): int;
 
@@ -126,19 +124,16 @@ interface CartInterface
      * counts items in cart (does not consider item amount)
      *
      * @param string $countSubItems - use one of COUNT_MAIN_ITEMS_ONLY, COUNT_MAIN_OR_SUB_ITEMS, COUNT_MAIN_AND_SUB_ITEMS
-     *
      */
     public function getItemCount(string $countSubItems = self::COUNT_MAIN_ITEMS_ONLY): int;
 
     /**
-     *
      * @return CartItemInterface[]
      */
     public function getRecentlyAddedItems(int $count): array;
 
     /**
      * returns price calculator of cart
-     *
      */
     public function getPriceCalculator(): CartPriceCalculatorInterface;
 
@@ -154,44 +149,37 @@ interface CartInterface
     /**
      * Set custom checkout data for cart.
      * can be used for delivery information, ...
-     *
      */
     public function setCheckoutData(string $key, string $data): void;
 
     /**
      * Get custom checkout data for cart with given key.
-     *
-     *
      */
     public function getCheckoutData(string $key): ?string;
 
     /**
      * get name of cart.
-     *
      */
     public function getName(): string;
 
     /**
      * set name of cart.
-     *
-     *
      */
     public function setName(string $name): void;
 
     /**
      * returns if cart is bookable.
      * default implementation checks if all products of cart a bookable.
-     *
      */
     public function getIsBookable(): bool;
 
-    public function getCreationDate(): \DateTime;
+    public function getCreationDate(): DateTime;
 
-    public function setCreationDate(\DateTime $creationDate = null): void;
+    public function setCreationDate(DateTime $creationDate = null): void;
 
-    public function getModificationDate(): ?\DateTime;
+    public function getModificationDate(): ?DateTime;
 
-    public function setModificationDate(\DateTime $modificationDate = null): void;
+    public function setModificationDate(DateTime $modificationDate = null): void;
 
     /**
      * sorts all items in cart according to a given callback function
@@ -203,20 +191,16 @@ interface CartInterface
 
     /**
      * saves cart
-     *
      */
     public function save(): void;
 
     /**
      * deletes cart
-     *
      */
     public function delete(): void;
 
     /**
      * @static
-     *
-     *
      */
     public static function getById(int $id): ?CartInterface;
 
@@ -230,9 +214,7 @@ interface CartInterface
     public static function getAllCartsForUser(int $userId): array;
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function addVoucherToken(string $token): bool;
 

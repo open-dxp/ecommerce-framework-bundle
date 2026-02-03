@@ -2,20 +2,23 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7;
 
+use DateInterval;
+use DateTime;
+use Exception;
 use OpenDxp\Bundle\ApplicationLoggerBundle\ApplicationLogger;
 use OpenDxp\Bundle\ApplicationLoggerBundle\FileObject;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\CommitOrderProcessorInterface;
@@ -105,7 +108,7 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
         // this needs to be in a try-catch block
         try {
             $paymentStatus = $paymentProvider->handleResponse($paymentResponseParams);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Logger::err((string) $e);
 
             //create payment status with error message and cancelled payment
@@ -124,8 +127,6 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
     }
 
     /**
-     *
-     *
      * @throws UnsupportedException
      */
     public function handlePaymentResponseAndCommitOrderPayment(StatusInterface|array $paymentResponseParams, PaymentInterface $paymentProvider): AbstractOrder
@@ -173,10 +174,8 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
     }
 
     /**
-     *
-     *
      * @throws UnsupportedException|PaymentNotSuccessfulException
-     * @throws \Exception
+     * @throws Exception
      */
     public function commitOrderPayment(StatusInterface $paymentStatus, PaymentInterface $paymentProvider, AbstractOrder $sourceOrder = null): AbstractOrder
     {
@@ -201,7 +200,7 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
             $message = 'No order found for payment status: ' . print_r($paymentStatus, true);
             $this->logger->error($message);
 
-            throw new \Exception($message);
+            throw new Exception($message);
         }
 
         $orderAgent = $orderManager->createOrderAgent($order);
@@ -249,7 +248,6 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
     /**
      * Method for applying additional data to the order object based on payment information
      * Called in commitOrderPayment() just after updatePayment on OrderAgent is called
-     *
      */
     protected function applyAdditionalDataToOrder(AbstractOrder $order, StatusInterface $paymentStatus, PaymentInterface $paymentProvider): void
     {
@@ -267,7 +265,7 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
 
         try {
             $this->sendConfirmationMail($order);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Error during sending confirmation e-mail: ' . $e);
         }
 
@@ -278,7 +276,6 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
 
     /**
      * Implementation-specific processing of order, must be implemented in subclass (e.g. sending order to ERP-system)
-     *
      */
     protected function processOrder(AbstractOrder $order): void
     {
@@ -308,12 +305,12 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function cleanUpPendingOrders(): void
     {
-        $dateTime = new \DateTime();
-        $dateTime->sub(new \DateInterval('PT1H'));
+        $dateTime = new DateTime();
+        $dateTime->sub(new DateInterval('PT1H'));
         $timestamp = $dateTime->getTimestamp();
 
         $orderManager = $this->orderManagers->getOrderManager();

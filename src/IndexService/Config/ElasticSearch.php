@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config;
 
+use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\EnvironmentInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\Definition\Attribute;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\RelationInterpreterInterface;
@@ -30,7 +31,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * Default configuration for elastic search as product index implementation.
- *
  */
 class ElasticSearch extends AbstractConfig implements MockupConfigInterface, ElasticSearchConfigInterface
 {
@@ -44,7 +44,6 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
 
     /**
      * contains the mapping for the fields in Elasticsearch
-     *
      */
     protected array $fieldMapping = [
         'id' => 'system.id',
@@ -67,8 +66,6 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
     protected iterable $synonymProviders = [];
 
     /**
-     *
-     *
      * @param SynonymProviderInterface[] $synonymProviders
      */
     public function __construct(
@@ -113,7 +110,7 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
             }
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'The search attribute "%s" in product index tenant "%s" is not defined as attribute',
             $searchAttribute,
             $this->tenantName
@@ -233,8 +230,6 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
 
     /**
      * checks, if product should be in index for current tenant
-     *
-     *
      */
     public function inIndex(IndexableInterface $object): bool
     {
@@ -254,8 +249,6 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
 
     /**
      * populates index for tenant relations based on gived data
-     *
-     *
      */
     public function updateSubTenantEntries(mixed $objectId, mixed $subTenantData, mixed $subObjectId = null): void
     {
@@ -265,7 +258,6 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
 
     /**
      * returns condition for current subtenant
-     *
      */
     public function getSubTenantCondition(): array
     {
@@ -279,7 +271,7 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof DefaultElasticSearchWorker) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Worker must be an instance of %s',
                 DefaultElasticSearchWorker::class
             ));
@@ -290,8 +282,6 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
 
     /**
      * creates object mockup for given data
-     *
-     *
      */
     public function createMockupObject(int $objectId, array $data, array $relations): DefaultMockup
     {
@@ -301,8 +291,6 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
     /**
      * Gets object mockup by id, can consider subIds and therefore return e.g. an array of values
      * always returns a object mockup if available
-     *
-     *
      */
     public function getObjectMockupById(int $objectId): ?IndexableInterface
     {

@@ -3,21 +3,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce;
 
 use Codeception\Stub;
+use PHPUnit_Framework_MockObject_Stub;
 use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
 use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping;
@@ -109,7 +110,7 @@ class CartTaxManagementTest extends EcommerceTestCase
     {
         $sessionBag = $this->buildSession()->getBag(SessionBagListener::ATTRIBUTE_BAG_CART);
 
-        /** @var SessionCart|\PHPUnit_Framework_MockObject_Stub $cart */
+        /** @var SessionCart|PHPUnit_Framework_MockObject_Stub $cart */
         $cart = Stub::construct(SessionCart::class, [], [
             'getSessionBag' => function () use ($sessionBag) {
                 return $sessionBag;

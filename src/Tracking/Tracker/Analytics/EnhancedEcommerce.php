@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics;
@@ -49,7 +49,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 {
     /**
      * Dependencies to include before any tracking actions
-     *
      */
     protected array $dependencies = ['ec'];
 
@@ -71,7 +70,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * Track product view
-     *
      */
     public function trackProductView(ProductInterface $product): void
     {
@@ -91,7 +89,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * Track product view
-     *
      */
     public function trackProductImpression(ProductInterface $product, string $list = 'default'): void
     {
@@ -114,7 +111,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * Track product action add
-     *
      */
     public function trackProductActionAdd(ProductInterface $product, float|int $quantity = 1): void
     {
@@ -129,7 +125,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * Track product remove from cart
-     *
      */
     public function trackProductActionRemove(ProductInterface $product, float|int $quantity = 1): void
     {
@@ -152,7 +147,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * Track start checkout with first step
-     *
      */
     public function trackCheckout(CartInterface $cart): void
     {
@@ -197,7 +191,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * Track checkout complete
-     *
      */
     public function trackCheckoutComplete(AbstractOrder $order): void
     {
@@ -245,7 +238,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * @param ProductAction[] $items
-     *
      */
     protected function buildCheckoutCompleteCalls(Transaction $transaction, array $items): array
     {
@@ -261,8 +253,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
      * Transform transaction into classic analytics data array
      *
      * @note city, state, country were dropped as they were optional and never used
-     *
-     *
      */
     protected function transformTransaction(Transaction $transaction): array
     {
@@ -290,8 +280,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * Transform product action into enhanced data object
-     *
-     *
      */
     protected function transformProductAction(ProductAction $item): array
     {
@@ -313,8 +301,6 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
 
     /**
      * Transform product action into enhanced data object
-     *
-     *
      */
     protected function transformProductImpression(ProductImpression $item): array
     {

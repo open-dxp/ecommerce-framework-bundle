@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config;
 
+use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\DefaultMysql as DefaultMysqlWorker;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
@@ -70,8 +71,6 @@ class DefaultMysql extends AbstractConfig implements MysqlConfigInterface
 
     /**
      * populates index for tenant relations based on gived data
-     *
-     *
      */
     public function updateSubTenantEntries(mixed $objectId, mixed $subTenantData, mixed $subObjectId = null): void
     {
@@ -81,7 +80,7 @@ class DefaultMysql extends AbstractConfig implements MysqlConfigInterface
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof DefaultMysqlWorker) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Worker must be an instance of %s',
                 DefaultMysqlWorker::class
             ));

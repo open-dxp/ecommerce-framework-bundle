@@ -2,25 +2,28 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition;
 
+use const E_USER_WARNING;
+use Error;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\ConditionInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\EnvironmentInterface;
 use OpenDxp\Model\DataObject\Concrete;
+use ReflectionProperty;
 
 class CatalogProduct extends AbstractObjectListCondition implements CatalogProductInterface
 {
@@ -130,7 +133,6 @@ class CatalogProduct extends AbstractObjectListCondition implements CatalogProdu
 
     /**
      * @param AbstractProduct[] $products
-     *
      */
     public function setProducts(array $products): CatalogProductInterface
     {
@@ -163,7 +165,7 @@ class CatalogProduct extends AbstractObjectListCondition implements CatalogProdu
                     $backtrace[0]['file'],
                     $backtrace[0]['line'],
                 ),
-                \E_USER_WARNING,
+                E_USER_WARNING,
             );
 
             $result = null;
@@ -175,10 +177,10 @@ class CatalogProduct extends AbstractObjectListCondition implements CatalogProdu
         $caller = $backtrace[1]['class'];
         if (!($caller === $this::class
             || is_subclass_of($caller, $this::class)
-            || $caller === \ReflectionProperty::class
-            || is_subclass_of($caller, \ReflectionProperty::class)
+            || $caller === ReflectionProperty::class
+            || is_subclass_of($caller, ReflectionProperty::class)
         )) {
-            throw new \Error(sprintf(
+            throw new Error(sprintf(
                 'Cannot access protected property %s::$%s in %s:%s',
                 $this::class,
                 $name,

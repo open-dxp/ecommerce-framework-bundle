@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\OpenSearch;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\OpenSearch;
@@ -41,13 +42,11 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Timeout for a request in seconds
-     *
      */
     protected int $timeout = 10;
 
     /**
      * Name of the index
-     *
      */
     protected string $indexName = '';
 
@@ -94,7 +93,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
     /**
      * contains a mapping from productId => array Index
      * useful when you have to merge child products to there parent and you don't want to iterate each time over the list
-     *
      */
     protected array $productPositionMap = [];
 
@@ -145,7 +143,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Returns the Mapping of the productId => position
-     *
      */
     public function getProductPositionMap(): array
     {
@@ -175,7 +172,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Reset condition for fieldname
-     *
      */
     public function resetCondition(string $fieldname): void
     {
@@ -186,7 +182,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Adds relation condition to product list
-     *
      */
     public function addRelationCondition(string $fieldname, string|array $condition): void
     {
@@ -223,7 +218,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Reset query condition for fieldname
-     *
      */
     public function resetQueryCondition(string $fieldname): void
     {
@@ -234,7 +228,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Adds price condition to product list
-     *
      */
     public function addPriceCondition(float $from = null, float $to = null): void
     {
@@ -258,8 +251,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * sets order direction
-     *
-     *
      */
     public function setOrder(string $order): void
     {
@@ -269,7 +260,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * gets order direction
-     *
      */
     public function getOrder(): ?string
     {
@@ -284,7 +274,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
      * Array of field names
      * Array of arrays (field name, direction)
      * Array containing your sort configuration [self::ADVANCED_SORT => <sort_config as array>]
-     *
      */
     public function setOrderKey(array|string $orderKey): void
     {
@@ -305,8 +294,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Pass -1 to enable the unlimited scroll request
-     *
-     *
      */
     public function setLimit(int $limit): void
     {
@@ -370,7 +357,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
      *
      * @return IndexableInterface[]
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function load(): array
     {
@@ -413,7 +400,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Returns the Opensearch query parameters
-     *
      */
     public function getQuery(): array
     {
@@ -472,7 +458,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * First case: no price filtering and no price sorting
-     *
      */
     protected function loadWithoutPriceFilterWithoutPriceSorting(): array
     {
@@ -499,7 +484,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
      * Second case: no price filtering but price sorting
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function loadWithoutPriceFilterWithPriceSorting(): array
     {
@@ -529,7 +514,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
         } elseif (count($priceSystemArrays) == 0) {
             //nothing to do
         } else {
-            throw new \Exception('Not implemented yet - multiple pricing systems are not supported yet');
+            throw new Exception('Not implemented yet - multiple pricing systems are not supported yet');
         }
 
         $raws = [];
@@ -545,28 +530,26 @@ abstract class AbstractOpenSearch implements ProductListInterface
      * Third case: price filtering but no price sorting
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function loadWithPriceFilterWithoutPriceSorting(): array
     {
-        throw new \Exception('Not implemented yet');
+        throw new Exception('Not implemented yet');
     }
 
     /**
      * Forth case: price filtering and price sorting
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function loadWithPriceFilterWithPriceSorting(): array
     {
-        throw new \Exception('Not implemented yet');
+        throw new Exception('Not implemented yet');
     }
 
     /**
      * build the complete query
-     *
-     *
      */
     protected function buildQuery(array $params, array $boolFilters, array $queryFilters, string $variantMode = null): array
     {
@@ -606,8 +589,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * builds system conditions
-     *
-     *
      */
     protected function buildSystemConditions(array $boolFilters): array
     {
@@ -631,8 +612,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * builds relation conditions of user specific query conditions
-     *
-     *
      */
     protected function buildRelationConditions(array $boolFilters, array $excludedFieldnames): array
     {
@@ -653,8 +632,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * builds filter condition of user specific conditions
-     *
-     *
      */
     protected function buildFilterConditions(array $boolFilters, array $excludedFieldnames): array
     {
@@ -675,8 +652,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * builds query condition of query filters
-     *
-     *
      */
     protected function buildQueryConditions(array $queryFilters, array $excludedFieldnames): array
     {
@@ -710,8 +685,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * loads element by id
-     *
-     *
      */
     protected function loadElementById(int $elementId): ?\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\DefaultMockup
     {
@@ -737,8 +710,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -749,13 +720,12 @@ abstract class AbstractOpenSearch implements ProductListInterface
     }
 
     /**
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function prepareGroupByValuesWithConfig(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true, array $aggregationConfig = []): void
     {
         if ($this->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
-            throw new \Exception('Custom sub aggregations are not supported for variant mode VARIANT_MODE_INCLUDE_PARENT_OBJECT');
+            throw new Exception('Custom sub aggregations are not supported for variant mode VARIANT_MODE_INCLUDE_PARENT_OBJECT');
         }
 
         if ($fieldname) {
@@ -771,8 +741,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupByRelationValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -785,8 +753,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -796,7 +762,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * resets all set prepared group by values
-     *
      */
     public function resetPreparedGroupByValues(): void
     {
@@ -810,7 +775,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -822,7 +787,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -834,7 +799,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupByRelationValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -843,8 +808,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * checks if group by values are loaded and returns them
-     *
-     *
      */
     protected function doGetGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -874,7 +837,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
      *   1 - get general filter (= filter of fields don't need to be considered in group by values or where fieldnameShouldBeExcluded set to false)
      *   2 - for each group by value create a own aggregation section with all other group by filters added
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function doLoadGroupByValues(): void
     {
@@ -997,8 +960,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * process the result array from elasticsearch
-     *
-     *
      */
     protected function processResult(array $result): void
     {
@@ -1026,8 +987,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
     /**
      * Deep search for buckets in result aggregations array, as the structure of the result array
      * may differ dependent on the used aggregations (i.e. date filters, nested aggr, ...)
-     *
-     *
      */
     protected function searchForBuckets(array $aggregations): array
     {
@@ -1053,8 +1012,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     /**
      * Recursively convert aggregation data (sub-aggregations possible)
-     *
-     *
      */
     protected function convertBucketValues(array $bucket): array
     {
@@ -1173,7 +1130,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
      *
      * @param int $offset Page offset
      * @param int $itemCountPerPage Number of items per page
-     *
      */
     public function getItems(int $offset, int $itemCountPerPage): array
     {
@@ -1214,7 +1170,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
      *
      * @return float the score returned by OpenSearch.
      *
-     * @throws \Exception if loadFromSource mode is not true.
+     * @throws Exception if loadFromSource mode is not true.
      */
     public function getScoreFromLoadedList(int $productId): float
     {

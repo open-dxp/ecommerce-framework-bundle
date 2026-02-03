@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager;
 
+use ArrayIterator;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 
 abstract class AbstractOrderList implements OrderListInterface
@@ -30,7 +31,7 @@ abstract class AbstractOrderList implements OrderListInterface
 
     protected string $orderState = AbstractOrder::ORDER_STATE_COMMITTED;
 
-    protected ?\ArrayIterator $list = null;
+    protected ?ArrayIterator $list = null;
 
     protected string $itemClassName;
 
@@ -83,7 +84,7 @@ abstract class AbstractOrderList implements OrderListInterface
             // load
             $conn = \OpenDxp\Db::getConnection();
             $queryBuilder = $this->getQueryBuilder();
-            $this->list = new \ArrayIterator($conn->fetchAllAssociative((string) $queryBuilder, $queryBuilder->getParameters(), $queryBuilder->getParameterTypes()));
+            $this->list = new ArrayIterator($conn->fetchAllAssociative((string) $queryBuilder, $queryBuilder->getParameters(), $queryBuilder->getParameterTypes()));
             $this->rowCount = (int)$conn->fetchOne('SELECT FOUND_ROWS()');
         }
 

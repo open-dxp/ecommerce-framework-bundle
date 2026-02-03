@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Filter;
 
+use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListFilterInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListInterface;
 
@@ -29,7 +30,6 @@ class Payment implements OrderListFilterInterface
 
     /**
      * Allowed origin values
-     *
      */
     protected array $allowedValues = [
         self::PAYMENT_STATE_OK,
@@ -39,7 +39,7 @@ class Payment implements OrderListFilterInterface
     public function __construct(string $paymentState)
     {
         if (!in_array($paymentState, $this->allowedValues)) {
-            throw new \InvalidArgumentException('Invalid filter value');
+            throw new InvalidArgumentException('Invalid filter value');
         }
 
         $this->value = $paymentState;

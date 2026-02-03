@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle;
@@ -46,7 +46,6 @@ class Environment implements EnvironmentInterface
      *
      * This value will not be stored into the session and is only valid for current process
      * set with setCurrentCheckoutTenant('tenant', false');
-     *
      */
     protected ?string $currentTransientCheckoutTenant = null;
 
@@ -180,7 +179,6 @@ class Environment implements EnvironmentInterface
 
     /**
      * sets current assortment tenant which is used for indexing and product lists
-     *
      */
     public function setCurrentAssortmentTenant(?string $tenant): void
     {
@@ -191,7 +189,6 @@ class Environment implements EnvironmentInterface
 
     /**
      * gets current assortment tenant which is used for indexing and product lists
-     *
      */
     public function getCurrentAssortmentTenant(): ?string
     {
@@ -202,7 +199,6 @@ class Environment implements EnvironmentInterface
 
     /**
      * sets current assortment sub tenant which is used for indexing and product lists
-     *
      */
     public function setCurrentAssortmentSubTenant(?string $subTenant): void
     {
@@ -213,7 +209,6 @@ class Environment implements EnvironmentInterface
 
     /**
      * gets current assortment tenant which is used for indexing and product lists
-     *
      */
     public function getCurrentAssortmentSubTenant(): ?string
     {
@@ -241,7 +236,6 @@ class Environment implements EnvironmentInterface
 
     /**
      * gets current assortment tenant which is used for cart and checkout manager
-     *
      */
     public function getCurrentCheckoutTenant(): ?string
     {
@@ -252,7 +246,6 @@ class Environment implements EnvironmentInterface
 
     /**
      * gets current system locale
-     *
      */
     public function getSystemLocale(): ?string
     {

@@ -2,21 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order;
 
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\AbstractOrderList;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListFilterInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListInterface;
@@ -52,7 +53,6 @@ class Listing extends AbstractOrderList implements OrderListInterface
 
     /**
      * get query builder
-     *
      */
     public function getQueryBuilder(): DoctrineQueryBuilder
     {
@@ -85,7 +85,6 @@ class Listing extends AbstractOrderList implements OrderListInterface
     }
 
     /**
-     *
      * @return $this
      */
     public function setLimit(int $limit, int $offset = 0): static
@@ -195,10 +194,9 @@ class Listing extends AbstractOrderList implements OrderListInterface
     }
 
     /**
-     *
      * @return $this
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function joinCustomer(string $classId): static
     {
@@ -261,7 +259,6 @@ class Listing extends AbstractOrderList implements OrderListInterface
     }
 
     /**
-     *
      * @return $this
      */
     public function addCondition(string $condition, string $value = null): static

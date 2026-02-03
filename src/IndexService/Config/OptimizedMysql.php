@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config;
 
+use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\AbstractMockupCacheWorker;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OptimizedMysql as OptimizedMysqlWorker;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface;
@@ -28,8 +29,6 @@ class OptimizedMysql extends DefaultMysql implements MockupConfigInterface
 {
     /**
      * creates object mockup for given data
-     *
-     *
      */
     public function createMockupObject(int $objectId, array $data, array $relations): DefaultMockup
     {
@@ -39,8 +38,6 @@ class OptimizedMysql extends DefaultMysql implements MockupConfigInterface
     /**
      * Gets object mockup by id, can consider subIds and therefore return e.g. an array of values
      * always returns a object mockup if available
-     *
-     *
      */
     public function getObjectMockupById(int $objectId): DefaultMockup
     {
@@ -53,7 +50,7 @@ class OptimizedMysql extends DefaultMysql implements MockupConfigInterface
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof OptimizedMysqlWorker) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Worker must be an instance of %s',
                 OptimizedMysqlWorker::class
             ));

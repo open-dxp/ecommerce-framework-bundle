@@ -2,21 +2,23 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker;
 
 use Doctrine\DBAL\Connection;
+use Exception;
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\MysqlConfigInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\RelationInterpreterInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
@@ -92,9 +94,9 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
 
         foreach ($subObjectIds as $subObjectId => $object) {
             if ($object->getOSDoIndexProduct() && $this->tenantConfig->inIndex($object)) {
-                $a = \OpenDxp::inAdmin();
+                $a = OpenDxp::inAdmin();
                 $b = DataObject::doGetInheritedValues();
-                \OpenDxp::unsetAdminMode();
+                OpenDxp::unsetAdminMode();
                 DataObject::setGetInheritedValues(true);
                 $hidePublishedMemory = DataObject::doHideUnpublished();
                 DataObject::setHideUnpublished(false);
@@ -176,20 +178,20 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
                         if (isset($data[$attribute->getName()]) && is_array($data[$attribute->getName()])) {
                             $data[$attribute->getName()] = $this->convertArray($data[$attribute->getName()]);
                         }
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         Logger::err('Exception in IndexService: ' . $e);
                     }
                 }
 
                 if ($a) {
-                    \OpenDxp::setAdminMode();
+                    OpenDxp::setAdminMode();
                 }
                 DataObject::setGetInheritedValues($b);
                 DataObject::setHideUnpublished($hidePublishedMemory);
 
                 try {
                     $this->mySqlHelper->doInsertData($data);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Logger::warn('Error during updating index table: ' . $e);
                 }
 
@@ -198,7 +200,7 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
                     foreach ($relationData as $rd) {
                         $this->db->insert($this->tenantConfig->getRelationTablename(), $rd);
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Logger::warn('Error during updating index relation table: ' . $e);
                 }
             } else {
@@ -206,13 +208,13 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
 
                 try {
                     $this->db->delete($this->tenantConfig->getTablename(), ['id' => $subObjectId]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Logger::warn('Error during updating index table: ' . $e);
                 }
 
                 try {
                     $this->db->delete($this->tenantConfig->getRelationTablename(), ['src' => $subObjectId]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Logger::warn('Error during updating index relation table: ' . $e);
                 }
 
@@ -220,7 +222,7 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
                     if ($this->tenantConfig->getTenantRelationTablename()) {
                         $this->db->delete($this->tenantConfig->getTenantRelationTablename(), ['id' => $subObjectId]);
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Logger::warn('Error during updating index tenant relation table: ' . $e);
                 }
             }

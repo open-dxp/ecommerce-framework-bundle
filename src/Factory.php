@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle;
 
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystemInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystemLocatorInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
@@ -49,49 +50,41 @@ class Factory
 
     /**
      * Tenant specific cart managers
-     *
      */
     private CartManagerLocatorInterface $cartManagers;
 
     /**
      * Tenant specific order managers
-     *
      */
     private OrderManagerLocatorInterface $orderManagers;
 
     /**
      * Pricing managers registered by tenant
-     *
      */
     private PricingManagerLocatorInterface $pricingManagers;
 
     /**
      * Price systems registered by name
-     *
      */
     private PriceSystemLocatorInterface $priceSystems;
 
     /**
      * Availability systems registered by name
-     *
      */
     private AvailabilitySystemLocatorInterface $availabilitySystems;
 
     /**
      * Checkout manager factories registered by tenant
-     *
      */
     private CheckoutManagerFactoryLocatorInterface $checkoutManagerFactories;
 
     /**
      * Commit order processors registered by tenant
-     *
      */
     private CommitOrderProcessorLocatorInterface $commitOrderProcessors;
 
     /**
      * Filter services registered by ^tenant
-     *
      */
     private FilterServiceLocatorInterface $filterServices;
 
@@ -99,7 +92,6 @@ class Factory
      * Systems with multiple instances (e.g. price systems or tenant specific systems) are
      * injected through a service locator which is indexed by tenant/name. All other services
      * are loaded from the container on demand to make sure only services needed are built.
-     *
      */
     public function __construct(
         ContainerInterface $container,
@@ -125,7 +117,7 @@ class Factory
 
     public static function getInstance(): self
     {
-        return \OpenDxp::getContainer()->get(OpenDxpEcommerceFrameworkExtension::SERVICE_ID_FACTORY);
+        return OpenDxp::getContainer()->get(OpenDxpEcommerceFrameworkExtension::SERVICE_ID_FACTORY);
     }
 
     public function getEnvironment(): EnvironmentInterface
@@ -136,8 +128,6 @@ class Factory
     /**
      * Returns cart manager for a specific tenant. If no tenant is passed it will fall back to the current
      * checkout tenant or to "default" if no current checkout tenant is set.
-     *
-     *
      */
     public function getCartManager(string $tenant = null): CartManagerInterface
     {
@@ -147,8 +137,6 @@ class Factory
     /**
      * Returns order manager for a specific tenant. If no tenant is passed it will fall back to the current
      * checkout tenant or to "default" if no current checkout tenant is set.
-     *
-     *
      */
     public function getOrderManager(string $tenant = null): OrderManagerInterface
     {
@@ -158,8 +146,6 @@ class Factory
     /**
      * Returns pricing manager for a specific tenant. If no tenant is passed it will fall back to the current
      * checkout tenant or to "default" if no current checkout tenant is set.
-     *
-     *
      */
     public function getPricingManager(string $tenant = null): PricingManagerInterface
     {
@@ -168,8 +154,6 @@ class Factory
 
     /**
      * Returns a price system by name. Falls back to "default" if no name is passed.
-     *
-     *
      */
     public function getPriceSystem(string $name = null): PriceSystemInterface
     {
@@ -178,8 +162,6 @@ class Factory
 
     /**
      * Returns an availability system by name. Falls back to "default" if no name is passed.
-     *
-     *
      */
     public function getAvailabilitySystem(string $name = null): AvailabilitySystemInterface
     {
@@ -189,8 +171,6 @@ class Factory
     /**
      * Returns checkout manager for a specific tenant. If no tenant is passed it will fall back to the current
      * checkout tenant or to "default" if no current checkout tenant is set.
-     *
-     *
      */
     public function getCheckoutManager(CartInterface $cart, string $tenant = null): CheckoutManagerInterface
     {
@@ -201,8 +181,6 @@ class Factory
 
     /**
      * Returns a commit order processor which is configured for a specific checkout manager
-     *
-     *
      */
     public function getCommitOrderProcessor(string $tenant = null): CommitOrderProcessorInterface
     {
@@ -216,7 +194,6 @@ class Factory
 
     /**
      * Returns the index service which holds a collection of all index workers
-     *
      */
     public function getIndexService(): IndexService
     {
@@ -226,8 +203,6 @@ class Factory
     /**
      * Returns the filter service for the currently set assortment tenant. Falls back to "default" if no tenant is passed
      * and there is no current assortment tenant set.
-     *
-     *
      */
     public function getFilterService(string $tenant = null): FilterService
     {
@@ -251,8 +226,6 @@ class Factory
 
     /**
      * Builds a token manager for a specific token configuration
-     *
-     *
      */
     public function getTokenManager(AbstractVoucherTokenType $configuration): TokenManagerInterface
     {

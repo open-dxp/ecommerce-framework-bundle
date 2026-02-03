@@ -2,20 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ClassDefinition;
 
+use Exception;
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\DependencyInjection\OpenDxpEcommerceFrameworkExtension;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
@@ -45,7 +47,7 @@ class IndexFieldSelectionCombo extends Select
     {
         $options = [];
 
-        if (\OpenDxp::getContainer()->has(OpenDxpEcommerceFrameworkExtension::SERVICE_ID_FACTORY)) {
+        if (OpenDxp::getContainer()->has(OpenDxpEcommerceFrameworkExtension::SERVICE_ID_FACTORY)) {
             try {
                 $indexService = Factory::getInstance()->getIndexService();
                 $indexColumns = $indexService->getIndexAttributes(true);
@@ -63,7 +65,7 @@ class IndexFieldSelectionCombo extends Select
                         'value' => ProductListInterface::ORDERKEY_PRICE,
                     ];
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Logger::error((string) $e);
             }
         }

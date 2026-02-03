@@ -1,20 +1,21 @@
 <?php
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItem;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItem;
 use OpenDxp\Model\Exception\NotFoundException;
 
@@ -29,7 +30,6 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
 
     /**
      * Contains all valid columns in the database table
-     *
      */
     protected array $validColumns = [];
 
@@ -37,7 +37,6 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
 
     /**
      * Get the valid columns from the database
-     *
      */
     public function init(): void
     {
@@ -45,7 +44,6 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
     }
 
     /**
-     *
      * @throws NotFoundException
      */
     public function getByCartIdItemKey(int|string $cartId, string $itemKey, string $parentKey = ''): void
@@ -89,14 +87,13 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
 
         try {
             $this->db->insert(self::TABLE_NAME, $data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->db->update(self::TABLE_NAME, $data, ['itemKey' => $this->model->getItemKey(), 'cartId' => $this->model->getCartId(),  'parentItemKey' => $this->model->getParentItemKey()]);
         }
     }
 
     /**
      * Deletes object from database
-     *
      */
     public function delete(): void
     {

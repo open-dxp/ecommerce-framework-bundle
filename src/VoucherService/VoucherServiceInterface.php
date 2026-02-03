@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService;
@@ -33,15 +33,11 @@ interface VoucherServiceInterface
 
     /**
      * Gets the correct token manager and calls its reserveToken() function.
-     *
-     *
      */
     public function reserveToken(string $code, CartInterface $cart): bool;
 
     /**
      * Gets the correct token manager and calls its releaseToken() function, which removes a reservations.
-     *
-     *
      */
     public function releaseToken(string $code, CartInterface $cart): bool;
 
@@ -49,16 +45,12 @@ interface VoucherServiceInterface
      * Gets the correct token manager and calls its applyToken() function, which returns
      * the ordered token object which gets appended to the order object. The token
      * reservations gets released.
-     *
-     *
      */
     public function applyToken(string $code, CartInterface $cart, AbstractOrder $order): bool;
 
     /**
      * Gets the correct token manager and calls removeAppliedTokenFromOrder(), which cleans up the
      * token usage and the ordered token object if necessary, removes the token object from the order.
-     *
-     *
      */
     public function removeAppliedTokenFromOrder(\OpenDxp\Model\DataObject\OnlineShopVoucherToken $tokenObject, AbstractOrder $order): mixed;
 
@@ -79,8 +71,6 @@ interface VoucherServiceInterface
     /**
      * Removes all tokens from a voucher series and its reservations,
      * not considering any type of filter.
-     *
-     *
      */
     public function cleanUpVoucherSeries(\OpenDxp\Model\DataObject\OnlineShopVoucherSeries $series): bool;
 

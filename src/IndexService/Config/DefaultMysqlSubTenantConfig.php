@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config;
@@ -49,7 +49,6 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
 
     /**
      * returns table name of product index
-     *
      */
     public function getTablename(): string
     {
@@ -58,7 +57,6 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
 
     /**
      * returns table name of product index reations
-     *
      */
     public function getRelationTablename(): string
     {
@@ -67,7 +65,6 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
 
     /**
      * return table name of product index tenant relations for subtenants
-     *
      */
     public function getTenantRelationTablename(): string
     {
@@ -76,8 +73,6 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
 
     /**
      * checks, if product should be in index for current tenant (not subtenant)
-     *
-     *
      */
     public function inIndex(IndexableInterface $object): bool
     {
@@ -94,7 +89,6 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
      *
      * In this case adds join statement to tenant relation table. But in theory any needed join statement can be
      * added here.
-     *
      */
     public function getJoins(): string
     {
@@ -110,7 +104,6 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
      * returns additional condition in case of subtenants
      *
      * In this case just adds the condition that subtenant_id equals the current subtenant
-     *
      */
     public function getCondition(): string
     {
@@ -153,8 +146,6 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
      * populates index for tenant relations based on given data
      *
      * In this case deletes all entries of given object from tenant relation table and adds the new ones.
-     *
-     *
      */
     public function updateSubTenantEntries(mixed $objectId, mixed $subTenantData, mixed $subObjectId = null): void
     {

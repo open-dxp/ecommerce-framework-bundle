@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\StatusInterface;
@@ -28,7 +29,7 @@ interface CommitOrderProcessorInterface
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws UnsupportedException
      */
     public function committedOrderWithSamePaymentExists(StatusInterface|array $paymentResponseParams, PaymentInterface $paymentProvider): ?AbstractOrder;
@@ -40,8 +41,6 @@ interface CommitOrderProcessorInterface
      *  - commit order payment
      *
      * Can be used by controllers to commit orders with payment
-     *
-     *
      */
     public function handlePaymentResponseAndCommitOrderPayment(StatusInterface|array $paymentResponseParams, PaymentInterface $paymentProvider): AbstractOrder;
 
@@ -54,20 +53,16 @@ interface CommitOrderProcessorInterface
      * Use this for committing order when payment is activated
      *
      * @param AbstractOrder|null $sourceOrder Source order for recurring payment
-     *
      */
     public function commitOrderPayment(StatusInterface $paymentStatus, PaymentInterface $paymentProvider, AbstractOrder $sourceOrder = null): AbstractOrder;
 
     /**
      * Commits order
-     *
-     *
      */
     public function commitOrder(AbstractOrder $order): AbstractOrder;
 
     /**
      * Cleans up orders with state pending payment after 1h
-     *
      */
     public function cleanUpPendingOrders(): void;
 }

@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Model;
@@ -27,22 +27,16 @@ abstract class AbstractFilterDefinition extends DataObject\Concrete implements D
 {
     /**
      * returns page limit for product list
-     *
-     *
      */
     abstract public function getPageLimit(): ?float;
 
     /**
      * returns list of available fields for sorting ascending
-     *
-     *
      */
     abstract public function getOrderByAsc(): ?string;
 
     /**
      * returns list of available fields for sorting descending
-     *
-     *
      */
     abstract public function getOrderByDesc(): ?string;
 
@@ -64,8 +58,6 @@ abstract class AbstractFilterDefinition extends DataObject\Concrete implements D
 
     /**
      * enables inheritance for field collections, if xxxInheritance field is available and set to string 'true'
-     *
-     *
      */
     public function preGetValue(string $key): ?Fieldcollection
     {

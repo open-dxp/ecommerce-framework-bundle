@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker;
@@ -23,6 +23,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Logger;
 use OpenDxp\Model\DataObject\Concrete;
 use Psr\Log\LoggerInterface;
+use SimpleXMLElement;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -40,13 +41,12 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
 
     /**
      * findologic supported fields
-     *
      */
     protected array $supportedFields = [
         'id', 'ordernumber', 'name', 'summary', 'description', 'price',
     ];
 
-    protected \SimpleXMLElement $batchData;
+    protected SimpleXMLElement $batchData;
 
     protected LoggerInterface $logger;
 
@@ -58,7 +58,6 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
 
     /**
      * creates or updates necessary index structures (like database tables and so on)
-     *
      */
     public function createOrUpdateIndexStructures(): void
     {
@@ -67,8 +66,6 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
 
     /**
      * deletes given element from index
-     *
-     *
      */
     public function deleteFromIndex(IndexableInterface $object): void
     {
@@ -77,8 +74,6 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
 
     /**
      * updates given element in index
-     *
-     *
      */
     public function updateIndex(IndexableInterface $object): void
     {
@@ -123,13 +118,13 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
         /**
          * Adds a child with $value inside CDATA
          *
-         * @param \SimpleXMLElement $parent
+         * @param SimpleXMLElement $parent
          * @param string $name
          * @param string|null $value
          *
-         * @return \SimpleXMLElement
+         * @return SimpleXMLElement
          */
-        $addChildWithCDATA = function (\SimpleXMLElement $parent, string $name, string $value = null) {
+        $addChildWithCDATA = function (SimpleXMLElement $parent, string $name, string $value = null) {
             $new_child = $parent->addChild($name);
 
             if ($new_child !== null) {
@@ -264,7 +259,7 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
         $this->db->executeQuery(sprintf('DELETE FROM %1$s WHERE id = %2$d', $this->getStoreTableName(), $subObjectId));
     }
 
-    protected function updateExportItem(int $objectId, \SimpleXMLElement $item): void
+    protected function updateExportItem(int $objectId, SimpleXMLElement $item): void
     {
         // save
         $query = <<<SQL
@@ -292,9 +287,9 @@ SQL;
         return self::EXPORT_TABLE_NAME;
     }
 
-    protected function createXMLElement(): \SimpleXMLElement
+    protected function createXMLElement(): SimpleXMLElement
     {
-        return new \SimpleXMLElement('<?xml version="1.0"?><item />');
+        return new SimpleXMLElement('<?xml version="1.0"?><item />');
     }
 
     public function getProductList(): \OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\DefaultFindologic

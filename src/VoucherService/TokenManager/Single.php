@@ -2,20 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\TokenManager;
 
+use DateTime;
+use Exception;
 use Knp\Component\Pager\PaginatorInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
@@ -110,7 +112,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getExportData(array $params): array
     {
@@ -144,7 +146,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
             $db->executeQuery($query, [trim($this->configuration->getToken()), $this->getFinalTokenLength(), $this->getSeriesId(), trim($this->configuration->getToken()), $this->getFinalTokenLength()]);
 
             return trim($this->configuration->getToken());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Logger::error((string) $e);
         }
 
@@ -158,7 +160,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
 
     protected function prepareUsageStatisticData(array &$data, ?int $usagePeriod): void
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         $periodData = [];
         for ($i = $usagePeriod; $i > 0; $i--) {
             $index = $now->format('Y-m-d');
@@ -226,8 +228,6 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
 
     /**
      * cleans up the token usage and the ordered token object if necessary
-     *
-     *
      */
     public function removeAppliedTokenFromOrder(OnlineShopVoucherToken $tokenObject, AbstractOrder $order): bool
     {

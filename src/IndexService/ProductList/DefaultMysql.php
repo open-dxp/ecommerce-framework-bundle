@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\MysqlConfigInterface;
@@ -122,7 +123,6 @@ class DefaultMysql implements ProductListInterface
      * Adds query condition to product list for fulltext search
      * Fieldname is optional but highly recommended - needed for resetting condition based on fieldname
      * and exclude functionality in group by results
-     *
      */
     public function addQueryCondition(string|array $condition, string $fieldname = ''): void
     {
@@ -132,7 +132,6 @@ class DefaultMysql implements ProductListInterface
 
     /**
      * Reset query condition for fieldname
-     *
      */
     public function resetQueryCondition(string $fieldname): void
     {
@@ -280,7 +279,6 @@ class DefaultMysql implements ProductListInterface
 
     /**
      * First case: no price filtering and no price sorting
-     *
      */
     protected function loadWithoutPriceFilterWithoutPriceSorting(): array
     {
@@ -294,7 +292,7 @@ class DefaultMysql implements ProductListInterface
      * Second case: no price filtering but price sorting
      *
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @todo Not implemented yet
      */
@@ -314,7 +312,7 @@ class DefaultMysql implements ProductListInterface
         } elseif (count($priceSystemArrays) == 0) {
             //nothing to do
         } else {
-            throw new \Exception('Not implemented yet - multiple pricing systems are not supported yet');
+            throw new Exception('Not implemented yet - multiple pricing systems are not supported yet');
         }
 
         return $objectRaws;
@@ -324,7 +322,7 @@ class DefaultMysql implements ProductListInterface
      * Third case: price filtering but no price sorting
      *
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @todo Not implemented yet
      */
@@ -332,14 +330,14 @@ class DefaultMysql implements ProductListInterface
     {
         //check number of price systems
         //set $this->totalCount
-        throw new \Exception('Not implemented yet');
+        throw new Exception('Not implemented yet');
     }
 
     /**
      * Forth case: price filtering and price sorting
      *
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @todo Not implemented yet
      */
@@ -347,13 +345,11 @@ class DefaultMysql implements ProductListInterface
     {
         //check number of price systems
         //set $this->totalCount
-        throw new \Exception('Not implemented yet');
+        throw new Exception('Not implemented yet');
     }
 
     /**
      * loads element by id
-     *
-     *
      */
     protected function loadElementById(int $elementId): ?IndexableInterface
     {
@@ -363,8 +359,6 @@ class DefaultMysql implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -373,7 +367,6 @@ class DefaultMysql implements ProductListInterface
 
     /**
      * resets all set prepared group by values
-     *
      */
     public function resetPreparedGroupByValues(): void
     {
@@ -383,8 +376,6 @@ class DefaultMysql implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupByRelationValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -394,8 +385,6 @@ class DefaultMysql implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -407,7 +396,7 @@ class DefaultMysql implements ProductListInterface
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -418,7 +407,7 @@ class DefaultMysql implements ProductListInterface
     /**
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -429,14 +418,14 @@ class DefaultMysql implements ProductListInterface
         if ($this->conditionPriceFrom === null && $this->conditionPriceTo === null) {
             return $this->resource->loadGroupByValues($fieldname, $this->buildQueryFromConditions(false, $excludedFieldName, $this->getVariantMode()), $countValues);
         } else {
-            throw new \Exception('Not supported yet');
+            throw new Exception('Not supported yet');
         }
     }
 
     /**
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupByRelationValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -447,7 +436,7 @@ class DefaultMysql implements ProductListInterface
         if ($this->conditionPriceFrom === null && $this->conditionPriceTo === null) {
             return $this->resource->loadGroupByRelationValues($fieldname, $this->buildQueryFromConditions(false, $excludedFieldName), $countValues);
         } else {
-            throw new \Exception('Not supported yet');
+            throw new Exception('Not supported yet');
         }
     }
 
@@ -619,8 +608,6 @@ class DefaultMysql implements ProductListInterface
     /**
      * returns order by statement for simularity calculations based on given fields and object ids
      * returns cosine simularity calculation
-     *
-     *
      */
     public function buildSimularityOrderBy(array $fields, int $objectId): string
     {
@@ -629,8 +616,6 @@ class DefaultMysql implements ProductListInterface
 
     /**
      * returns where statement for fulltext search index
-     *
-     *
      */
     public function buildFulltextSearchWhere(array $fields, string $searchstring): string
     {
@@ -666,7 +651,6 @@ class DefaultMysql implements ProductListInterface
      *
      * @param int $offset Page offset
      * @param int $itemCountPerPage Number of items per page
-     *
      */
     public function getItems(int $offset, int $itemCountPerPage): array
     {
@@ -701,7 +685,6 @@ class DefaultMysql implements ProductListInterface
     }
 
     /**
-     *
      * @internal
      */
     public function __sleep(): array
@@ -726,7 +709,6 @@ class DefaultMysql implements ProductListInterface
 
     /**
      * this is needed for ZF1 Paginator
-     *
      */
     public function getCacheIdentifier(): string
     {

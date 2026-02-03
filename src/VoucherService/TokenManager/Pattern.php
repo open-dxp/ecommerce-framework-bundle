@@ -2,20 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\TokenManager;
 
+use DateTime;
+use Exception;
 use Knp\Component\Pager\PaginatorInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
@@ -74,7 +76,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     /**
      * @param array|null $filter Associative with the indices: "usage" and "olderThan".
-     *
      */
     public function cleanUpCodes(?array $filter = []): bool
     {
@@ -82,8 +83,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
     }
 
     /**
-     *
-     *
      * @throws VoucherServiceException
      */
     public function checkToken(string $code, CartInterface $cart): bool
@@ -102,8 +101,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
     }
 
     /**
-     *
-     *
      * @throws VoucherServiceException
      */
     public function reserveToken(string $code, CartInterface $cart): bool
@@ -120,10 +117,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
     }
 
     /**
-     *
-     *
      * @throws VoucherServiceException
-     *
      */
     public function applyToken(string $code, CartInterface $cart, AbstractOrder $order): OnlineShopVoucherToken|bool
     {
@@ -151,8 +145,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     /**
      * cleans up the token usage and the ordered token object if necessary
-     *
-     *
      */
     public function removeAppliedTokenFromOrder(OnlineShopVoucherToken $tokenObject, AbstractOrder $order): bool
     {
@@ -221,7 +213,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
             }
 
             return $codeSets;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Logger::error((string) $e);
         }
 
@@ -231,7 +223,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
     /**
      * Gets the final length of the token, incl.
      * prefix and separators.
-     *
      */
     public function getFinalTokenLength(): int
     {
@@ -251,7 +242,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     /**
      * Calculates the probability to hit an existing value on a token generation.
-     *
      */
     public function getInsertProbability(): float
     {
@@ -291,7 +281,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     /**
      * Generates a single code.
-     *
      */
     protected function generateCode(): string
     {
@@ -335,7 +324,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
      *
      * @param array|string $tokens One or more tokens.
      * @param array $cTokens Array of tokens.
-     *
      */
     protected function tokenExists(array|string $tokens, array $cTokens): bool
     {
@@ -353,8 +341,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     /**
      * Builds an insert query for an array of tokens.
-     *
-     *
      */
     protected function buildInsertQuery(array $insertTokens): string
     {
@@ -379,7 +365,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
      * Generates a set of unique tokens according to the given token settings.
      * Returns false if the generation is not possible, due to set insert
      * probability MAX_INSERT_PROBABILITY.
-     *
      */
     public function generateCodes(): bool|array
     {
@@ -467,11 +452,10 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     /**
      * Creates an array with the indices of days of the given usage period.
-     *
      */
     protected function prepareUsageStatisticData(array &$data, int $usagePeriod): void
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         $periodData = [];
         for ($i = $usagePeriod; $i > 0; $i--) {
             $index = $now->format('Y-m-d');
@@ -483,8 +467,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     /**
      * Prepares the view and returns the according template for rendering.
-     *
-     *
      */
     public function prepareConfigurationView(array &$viewParamsBag, array $params): string
     {
@@ -494,7 +476,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
         try {
             $tokens->setFilterConditions((int) $params['id'], $params);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->template = '@OpenDxpEcommerceFramework/voucher/voucher_code_tab_error.html.twig';
             $viewParamsBag['errors'][] = $e->getMessage() . ' | Error-Code: ' . $e->getCode();
         }
@@ -545,7 +527,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getExportData(array $params): array
     {
@@ -574,8 +556,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
     /**
      * Checks whether an index for the given name parameter exists in
      * the character pool member array.
-     *
-     *
      */
     protected function characterPoolExists(string $poolName): bool
     {
@@ -584,7 +564,6 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     /**
      * Generates and returns an example token to the given settings.
-     *
      */
     public function getExampleToken(): string
     {

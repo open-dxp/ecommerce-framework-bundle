@@ -2,25 +2,28 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config;
 
+use InvalidArgumentException;
+use LogicException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\Definition\Attribute;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Model\DataObject;
+use RuntimeException;
 
 abstract class AbstractConfig implements ConfigInterface
 {
@@ -74,7 +77,6 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * Attribute configuration
-     *
      */
     public function getAttributeConfig(): array
     {
@@ -90,7 +92,7 @@ abstract class AbstractConfig implements ConfigInterface
                 $attribute = $this->attributeFactory->createAttribute($attribute);
                 $this->addAttribute($attribute);
             } else {
-                throw new \InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'Wrong type for attribute. Expected Attribute or array, got "%s"',
                     is_object($attribute) ? get_class($attribute) : gettype($attribute)
                 ));
@@ -106,7 +108,7 @@ abstract class AbstractConfig implements ConfigInterface
     protected function addSearchAttribute(string $searchAttribute): void
     {
         if (!isset($this->attributes[$searchAttribute])) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'The search attribute "%s" in product index tenant "%s" is not defined as attribute',
                 $searchAttribute,
                 $this->tenantName
@@ -130,17 +132,16 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Checks if tenant worker matches prerequisites (config wrapped in worker is this instance and instance has no
      * worker set yet).
-     *
      */
     protected function checkTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (null !== $this->tenantWorker) {
-            throw new \LogicException(sprintf('Worker for tenant "%s" is already set', $this->tenantName));
+            throw new LogicException(sprintf('Worker for tenant "%s" is already set', $this->tenantName));
         }
 
         // make sure the worker is the one working on this config instance
         if ($tenantWorker->getTenantConfig() !== $this) {
-            throw new \LogicException('Worker config does not match the config the worker is about to be set to');
+            throw new LogicException('Worker config does not match the config the worker is about to be set to');
         }
     }
 
@@ -148,7 +149,7 @@ abstract class AbstractConfig implements ConfigInterface
     {
         // the worker is expected to call setTenantWorker as soon as possible
         if (null === $this->tenantWorker) {
-            throw new \RuntimeException('Tenant worker is not set.');
+            throw new RuntimeException('Tenant worker is not set.');
         }
 
         return $this->tenantWorker;
@@ -171,7 +172,6 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * Returns full text search index attribute names for product index
-     *
      */
     public function getSearchAttributes(): array
     {
@@ -180,7 +180,6 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * return all supported filter types for product index
-     *
      */
     public function getFilterTypeConfig(): ?array
     {
@@ -193,7 +192,6 @@ abstract class AbstractConfig implements ConfigInterface
     }
 
     /**
-     *
      * @return AbstractCategory[]
      */
     public function getCategories(IndexableInterface $object, int $subObjectId = null): array
@@ -215,8 +213,6 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * checks if there are some zombie subIds around and returns them for cleanup
-     *
-     *
      */
     public function getSubIdsToCleanup(IndexableInterface $object, array $subIds): array
     {
@@ -226,8 +222,6 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * creates virtual parent id for given sub id
      * default is getOSParentId
-     *
-     *
      */
     public function createVirtualParentIdForSubId(IndexableInterface $object, int $subId): int|string|null
     {
@@ -239,7 +233,6 @@ abstract class AbstractConfig implements ConfigInterface
      * always returns object itself - see also getObjectMockupById
      *
      * @param bool $onlyMainObject - only returns main object
-     *
      */
     public function getObjectById(int $objectId, bool $onlyMainObject = false): ?DataObject
     {
@@ -249,8 +242,6 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Gets object mockup by id, can consider subIds and therefore return e.g. an array of values
      * always returns a object mockup if available
-     *
-     *
      */
     public function getObjectMockupById(int $objectId): ?IndexableInterface
     {
@@ -264,8 +255,6 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * returns column type for id
-     *
-     *
      */
     public function getIdColumnType(bool $isPrimary): string
     {

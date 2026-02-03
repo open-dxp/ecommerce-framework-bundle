@@ -2,22 +2,25 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\V7;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Exception;
+use InvalidArgumentException;
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItemInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\EnvironmentInterface;
@@ -50,6 +53,7 @@ use OpenDxp\Model\DataObject\Listing\Concrete;
 use OpenDxp\Model\DataObject\Service;
 use OpenDxp\Model\FactoryInterface;
 use OpenDxp\Tool;
+use RuntimeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -126,10 +130,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
-     *
+     * @throws Exception
      */
     public function getOrCreateOrderFromCart(CartInterface $cart): AbstractOrder
     {
@@ -155,7 +156,7 @@ class OrderManager implements OrderManagerInterface
 
             $cartId = $this->createCartId($cart);
             if (strlen($cartId) > 190) {
-                throw new \Exception('CartId cannot be longer than 190 characters');
+                throw new Exception('CartId cannot be longer than 190 characters');
             }
 
             $order->setCartId($cartId);
@@ -256,9 +257,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getOrderFromCart(CartInterface $cart): ?AbstractOrder
     {
@@ -270,7 +269,7 @@ class OrderManager implements OrderManagerInterface
         /** @var AbstractOrder[] $orders */
         $orders = $orderList->load();
         if (count($orders) > 1) {
-            throw new \Exception("No unique order found for $cartId.");
+            throw new Exception("No unique order found for $cartId.");
         }
 
         if (count($orders) === 1) {
@@ -281,9 +280,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function recreateOrder(CartInterface $cart): AbstractOrder
     {
@@ -326,9 +323,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function recreateOrderBasedOnSourceOrder(AbstractOrder $sourceOrder): AbstractOrder
     {
@@ -375,9 +370,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function cartHasPendingPayments(CartInterface $cart): bool
     {
@@ -401,9 +394,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function createOrderItem(CartItemInterface $item, AbstractObject $parent, bool $isGiftItem = false): AbstractOrderItem
     {
@@ -415,7 +406,7 @@ class OrderManager implements OrderManagerInterface
         /** @var AbstractOrderItem[] $orderItems */
         $orderItems = $orderItemList->load();
         if (count($orderItems) > 1) {
-            throw new \Exception("No unique order item found for $key.");
+            throw new Exception("No unique order item found for $key.");
         }
 
         if (count($orderItems) == 1) {
@@ -496,7 +487,7 @@ class OrderManager implements OrderManagerInterface
     protected function buildModelClass(string $className, array $params = []): mixed
     {
         if (null === $this->modelFactory) {
-            throw new \RuntimeException('Model factory is not set. Please either configure the order manager service to be autowired or add a call to setModelFactory');
+            throw new RuntimeException('Model factory is not set. Please either configure the order manager service to be autowired or add a call to setModelFactory');
         }
 
         return $this->modelFactory->build($className, $params);
@@ -550,8 +541,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setParentOrderFolder(int|Folder $orderParentFolder): void
     {
@@ -563,19 +553,18 @@ class OrderManager implements OrderManagerInterface
             if ($folder) {
                 $this->orderParentFolder = $folder;
             } else {
-                throw new \InvalidArgumentException(sprintf('Folder with ID "%s" was not found', $orderParentFolder));
+                throw new InvalidArgumentException(sprintf('Folder with ID "%s" was not found', $orderParentFolder));
             }
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'Invalid argument for parent order folder. Expected either int or Folder, but got %s',
             is_object($orderParentFolder) ? get_class($orderParentFolder) : gettype($orderParentFolder)
         ));
     }
 
     /**
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getOrderParentFolder(): Folder
     {
@@ -587,7 +576,7 @@ class OrderManager implements OrderManagerInterface
 
                 // The asterisks must be either 0 or be in pairs to be a valid
                 if (substr_count($parentFolderOption, '*') % 2 !== 0) {
-                    throw new \InvalidArgumentException('Invalid parent order folder path. Please make sure that the path is properly formatted.');
+                    throw new InvalidArgumentException('Invalid parent order folder path. Please make sure that the path is properly formatted.');
                 }
 
                 $pattern = '/\*([^\*]+)\*/';
@@ -622,8 +611,6 @@ class OrderManager implements OrderManagerInterface
 
     /**
      * returns cart id for order object
-     *
-     *
      */
     protected function createCartId(CartInterface $cart): string
     {
@@ -631,8 +618,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function cleanupZombieOrderItems(AbstractOrder $order): void
     {
@@ -659,9 +645,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function applyOrderItems(array $items, AbstractOrder $order, bool $giftItems = false): array
     {
@@ -717,8 +701,6 @@ class OrderManager implements OrderManagerInterface
 
     /**
      * hook to save individual data into order object
-     *
-     *
      */
     protected function applyCustomCheckoutDataToOrder(CartInterface $cart, AbstractOrder $order): AbstractOrder
     {
@@ -728,8 +710,6 @@ class OrderManager implements OrderManagerInterface
     /**
      * hook to set customer into order
      * default implementation gets current customer from environment and sets it into order
-     *
-     *
      */
     protected function setCurrentCustomerToOrder(AbstractOrder $order): AbstractOrder
     {
@@ -745,7 +725,6 @@ class OrderManager implements OrderManagerInterface
 
     /**
      * hook for creating order number - can be overwritten
-     *
      */
     protected function createOrderNumber(): string
     {
@@ -753,14 +732,13 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getNewOrderObject(): AbstractOrder
     {
         $orderClassName = $this->getOrderClassName();
         if (!Tool::classExists($orderClassName)) {
-            throw new \Exception('Order Class' . $orderClassName . ' does not exist.');
+            throw new Exception('Order Class' . $orderClassName . ' does not exist.');
         }
 
         return $this->buildModelClass($orderClassName);
@@ -771,7 +749,7 @@ class OrderManager implements OrderManagerInterface
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws ProviderNotFoundException
      */
     public function getRecurringPaymentSourceOrderList(string $customerId, RecurringPaymentInterface $paymentProvider, string $paymentMethod = null, string $orderId = ''): Concrete
@@ -805,7 +783,7 @@ class OrderManager implements OrderManagerInterface
      *
      * @return \Pimcore\Model\DataObject\Concrete|null|false
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRecurringPaymentSourceOrder(string $customerId, RecurringPaymentInterface $paymentProvider, string $paymentMethod = null): bool|\OpenDxp\Model\DataObject\Concrete|null
     {
@@ -820,9 +798,7 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function isValidOrderForRecurringPayment(AbstractOrder $order, RecurringPaymentInterface $payment, string $customerId = ''): bool
     {
@@ -832,14 +808,13 @@ class OrderManager implements OrderManagerInterface
     }
 
     /**
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getNewOrderItemObject(): AbstractOrderItem
     {
         $orderItemClassName = $this->getOrderItemClassName();
         if (!Tool::classExists($orderItemClassName)) {
-            throw new \Exception('OrderItem Class' . $orderItemClassName . ' does not exist.');
+            throw new Exception('OrderItem Class' . $orderItemClassName . ' does not exist.');
         }
 
         return $this->buildModelClass($orderItemClassName);
@@ -847,7 +822,6 @@ class OrderManager implements OrderManagerInterface
 
     /**
      * @param TaxEntry[] $taxItems
-     *
      */
     protected function buildTaxArray(array $taxItems): array
     {
@@ -868,7 +842,7 @@ class OrderManager implements OrderManagerInterface
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function buildListClassName(string $className): string
     {
@@ -876,7 +850,7 @@ class OrderManager implements OrderManagerInterface
         if (!Tool::classExists($listClassName)) {
             $listClassName = sprintf('%s_List', $className);
             if (!Tool::classExists($listClassName)) {
-                throw new \Exception(sprintf('Class %s does not exist.', $listClassName));
+                throw new Exception(sprintf('Class %s does not exist.', $listClassName));
             }
         }
 
@@ -887,7 +861,7 @@ class OrderManager implements OrderManagerInterface
      * Build class name for order list
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function buildOrderListClassName(): string
     {
@@ -898,7 +872,7 @@ class OrderManager implements OrderManagerInterface
      * Build class name for order item list
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function buildOrderItemListClassName(): string
     {
@@ -909,7 +883,7 @@ class OrderManager implements OrderManagerInterface
      * Build order listing
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function buildOrderList(): Concrete
     {
@@ -922,7 +896,7 @@ class OrderManager implements OrderManagerInterface
      * Build order item listing
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function buildOrderItemList(): Concrete
     {
@@ -934,7 +908,7 @@ class OrderManager implements OrderManagerInterface
     public function getOrderByPaymentStatus(StatusInterface $paymentStatus): ?AbstractOrder
     {
         //this call is needed in order to really load most updated object from cache or DB (otherwise it could be loaded from process)
-        \OpenDxp::collectGarbage();
+        OpenDxp::collectGarbage();
 
         $orderId = explode('~', $paymentStatus->getInternalPaymentId());
         $orderId = $orderId[1];
