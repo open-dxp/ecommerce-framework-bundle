@@ -12,12 +12,12 @@ declare(strict_types=1);
  * - providerData [textarea]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
-class PaymentInfo extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractPaymentInformation
+class PaymentInfo extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractPaymentInformation
 {
 protected $type = "PaymentInfo";
 protected $paymentStart;
@@ -36,7 +36,7 @@ protected $providerData;
 public function getPaymentStart(): ?\Carbon\Carbon
 {
 	$data = $this->paymentStart;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -62,7 +62,7 @@ public function setPaymentStart(?\Carbon\Carbon $paymentStart): static
 public function getPaymentFinish(): ?\Carbon\Carbon
 {
 	$data = $this->paymentFinish;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -88,7 +88,7 @@ public function setPaymentFinish(?\Carbon\Carbon $paymentFinish): static
 public function getPaymentReference(): ?string
 {
 	$data = $this->paymentReference;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -114,7 +114,7 @@ public function setPaymentReference(?string $paymentReference): static
 public function getPaymentState(): ?string
 {
 	$data = $this->paymentState;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -140,7 +140,7 @@ public function setPaymentState(?string $paymentState): static
 public function getInternalPaymentId(): ?string
 {
 	$data = $this->internalPaymentId;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -166,7 +166,7 @@ public function setInternalPaymentId(?string $internalPaymentId): static
 public function getMessage(): ?string
 {
 	$data = $this->message;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -192,7 +192,7 @@ public function setMessage(?string $message): static
 public function getProviderData(): ?string
 {
 	$data = $this->providerData;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 

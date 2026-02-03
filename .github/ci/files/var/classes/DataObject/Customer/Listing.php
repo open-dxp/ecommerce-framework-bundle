@@ -1,9 +1,9 @@
 <?php
 
-namespace Pimcore\Model\DataObject\Customer;
+namespace OpenDxp\Model\DataObject\Customer;
 
-use Pimcore\Model;
-use Pimcore\Model\DataObject;
+use OpenDxp\Model;
+use OpenDxp\Model\DataObject;
 
 /**
  * @method DataObject\Customer|false current()

@@ -1,5 +1,6 @@
-#!/usr/bin/env php
 <?php
+declare(strict_types=1);
+
 /**
  * OpenDXP
  *
@@ -14,16 +15,14 @@
  */
 
 use OpenDxp\Bootstrap;
-use OpenDxp\Console\Application;
 
-include __DIR__ . '/../vendor/autoload_runtime.php';
+require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
 
-define('OPENDXP_PROJECT_ROOT', __DIR__ . '/..');
-define('OPENDXP_CONSOLE', true);
+Bootstrap::setProjectRoot();
 
 return static function () {
 
-    $kernel = Bootstrap::startupCli();
+    Bootstrap::bootstrap();
 
-    return new Application($kernel);
+    return Bootstrap::kernel();
 };

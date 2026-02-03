@@ -8,10 +8,10 @@ declare(strict_types=1);
  * -- name [input]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
 class PricingRule extends DataObject\Fieldcollection\Data\AbstractData
 {
@@ -27,7 +27,7 @@ protected ?DataObject\Localizedfield $localizedfields;
 public function getRuleId(): ?float
 {
 	$data = $this->ruleId;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -41,7 +41,7 @@ public function getRuleId(): ?float
 */
 public function setRuleId(?float $ruleId): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("ruleId");
 	$this->ruleId = $fd->preSetData($this, $ruleId);
 	return $this;
@@ -49,15 +49,15 @@ public function setRuleId(?float $ruleId): static
 
 /**
 * Get localizedfields -
-* @return \Pimcore\Model\DataObject\Localizedfield|null
+* @return \OpenDxp\Model\DataObject\Localizedfield|null
 */
-public function getLocalizedfields(): ?\Pimcore\Model\DataObject\Localizedfield
+public function getLocalizedfields(): ?\OpenDxp\Model\DataObject\Localizedfield
 {
 	$container = $this;
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Localizedfields $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Localizedfields $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("localizedfields");
 	$data = $fd->preGetData($container);
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -70,7 +70,7 @@ public function getLocalizedfields(): ?\Pimcore\Model\DataObject\Localizedfield
 public function getName($language = null): ?string
 {
 	$data = $this->getLocalizedfields()->getLocalizedValue("name", $language);
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -79,15 +79,15 @@ public function getName($language = null): ?string
 
 /**
 * Set localizedfields -
-* @param \Pimcore\Model\DataObject\Localizedfield|null $localizedfields
+* @param \OpenDxp\Model\DataObject\Localizedfield|null $localizedfields
 * @return $this
 */
-public function setLocalizedfields(?\Pimcore\Model\DataObject\Localizedfield $localizedfields): static
+public function setLocalizedfields(?\OpenDxp\Model\DataObject\Localizedfield $localizedfields): static
 {
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getLocalizedfields();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$this->markFieldDirty("localizedfields", true);
 	$this->localizedfields = $localizedfields;
 

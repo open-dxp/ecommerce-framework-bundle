@@ -8,13 +8,13 @@ declare(strict_types=1);
  * Fields Summary:
  */
 
-namespace Pimcore\Model\DataObject;
+namespace OpenDxp\Model\DataObject;
 
-use Pimcore\Model\DataObject\Exception\InheritanceParentNotFoundException;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject\Exception\InheritanceParentNotFoundException;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
 /**
-* @method static \Pimcore\Model\DataObject\Customer\Listing getList(array $config = [])
+* @method static \OpenDxp\Model\DataObject\Customer\Listing getList(array $config = [])
 */
 
 class Customer extends Concrete

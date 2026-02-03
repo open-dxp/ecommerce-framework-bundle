@@ -9,10 +9,10 @@ declare(strict_types=1);
  * - amount [numeric]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
 class OrderPriceModifications extends DataObject\Fieldcollection\Data\AbstractData
 {
@@ -30,7 +30,7 @@ protected ?string $amount;
 public function getName(): ?string
 {
 	$data = $this->name;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -56,7 +56,7 @@ public function setName(?string $name): static
 public function getNetAmount(): ?string
 {
 	$data = $this->netAmount;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -70,7 +70,7 @@ public function getNetAmount(): ?string
 */
 public function setNetAmount(?string $netAmount): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("netAmount");
 	$this->netAmount = $fd->preSetData($this, $netAmount);
 	return $this;
@@ -83,7 +83,7 @@ public function setNetAmount(?string $netAmount): static
 public function getPricingRuleId(): ?int
 {
 	$data = $this->pricingRuleId;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -97,7 +97,7 @@ public function getPricingRuleId(): ?int
 */
 public function setPricingRuleId(?int $pricingRuleId): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("pricingRuleId");
 	$this->pricingRuleId = $fd->preSetData($this, $pricingRuleId);
 	return $this;
@@ -110,7 +110,7 @@ public function setPricingRuleId(?int $pricingRuleId): static
 public function getAmount(): ?string
 {
 	$data = $this->amount;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -124,7 +124,7 @@ public function getAmount(): ?string
 */
 public function setAmount(?string $amount): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("amount");
 	$this->amount = $fd->preSetData($this, $amount);
 	return $this;

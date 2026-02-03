@@ -1,9 +1,9 @@
 <?php
 
-namespace Pimcore\Model\DataObject\OnlineShopTaxClass;
+namespace OpenDxp\Model\DataObject\OnlineShopTaxClass;
 
-use Pimcore\Model;
-use Pimcore\Model\DataObject;
+use OpenDxp\Model;
+use OpenDxp\Model\DataObject;
 
 /**
  * @method DataObject\OnlineShopTaxClass|false current()
