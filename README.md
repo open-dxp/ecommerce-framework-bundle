@@ -1,5 +1,18 @@
 # E-Commerce Framework
 
+***
+
+## Disclaimer
+
+> OpenDXP is a community-driven fork based on the Pimcore® Community Edition (GPLv3).  
+> OpenDXP is independent and maintained by its community and contributors.
+> It is not affiliated with, endorsed by, or sponsored by Pimcore GmbH.   
+> Original credits: [Pimcore GmbH](https://www.pimcore.com)
+
+**OpenDXP Admin Bundle is based on the Pimcore® Community Edition and remains licensed under GPLv3.**
+
+***
+
 ## Why OpenDXP E-Commerce Framework
 The e-commerce environment has fundamentally changed and e-commerce projects often face new challenges like: 
  - **complex product structures:** lots of data attributes, complex product relations, configurable product systems, 
@@ -53,3 +66,32 @@ Following aspects are short-cuts into the documentation for start working with t
 - [Working with Orders](./doc/17_Order_Manager/README.md)
 - [Tracking Manager](./doc/19_Tracking_Manager.md)
 - [Events](./doc/20_Event_API_and_Event_Manager.md)
+
+***
+
+## Upstream Origin & Version Transparency
+This project is a fork of the [Pimcore ecommerce-framework-bundle (7a0ab7f / v1.3.5)](https://github.com/pimcore/ecommerce-framework-bundle/tree/7a0ab7f567077ed8304f302799ccd43227bc1325), which is © Pimcore GmbH and licensed under GPLv3.
+
+## License
+Licensed under the GNU General Public License v3.0 (GPLv3). For details, please see [LICENSE.md](LICENSE.md).
+
+## Copyright
+© Pimcore GmbH  
+© 2025 OpenDXP Contributors — GPLv3
+
+## Trademarks
+Pimcore® is a registered [trademark](https://www.trademarkelite.com/europe/trademark/trademark-detail/009309841/PIMCORE) of Pimcore GmbH.
+Any use of the Pimcore® mark in this repository is purely descriptive to identify the original upstream project.
+
+***
+
+## Contact
+For inquiries, suggestions, or contributions, feel free to reach us at contact@opendxp.ch.
+
+## About
+OpenDXP is a community-driven project initiated by [DACHCOM.DIGITAL](https://www.dachcom.com/de-ch) (Rheineck, Switzerland) and maintained by its community and contributors.
+OpenDXP is independent and not affiliated with Pimcore GmbH.
+
+The project’s purpose is to preserve and maintain a GPLv3‑licensed codebase for community use.
+
+It is **not positioned as a competitor** to products or services of Pimcore GmbH and does **not** purport to replace or supersede any Pimcore offering.   
