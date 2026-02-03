@@ -37,8 +37,11 @@ class IndexService
     /**
      * @param WorkerInterface[] $tenantWorkers
      */
-    public function __construct(protected EnvironmentInterface $environment, array $tenantWorkers = [], string $defaultTenant = 'default')
-    {
+    public function __construct(
+        protected EnvironmentInterface $environment,
+        array $tenantWorkers = [],
+        string $defaultTenant = 'default'
+    ) {
         foreach ($tenantWorkers as $tenantWorker) {
             $this->registerTenantWorker($tenantWorker);
         }

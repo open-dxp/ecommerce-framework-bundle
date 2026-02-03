@@ -32,8 +32,7 @@ abstract class TenantAwareServiceLocator
          * If true the locator will not fall back to the default tenant if a tenant is requested but not existing
          */
         protected bool $strictTenants = false
-    )
-    {
+    ) {
     }
 
     protected function locate(?string $tenant = null): mixed

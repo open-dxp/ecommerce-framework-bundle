@@ -29,8 +29,12 @@ class OrderManagerEvent extends Event
     /**
      * OrderManagerEvent constructor.
      */
-    public function __construct(protected CartInterface $cart, protected ?AbstractOrder $order, protected OrderManagerInterface $orderManager, array $arguments = [])
-    {
+    public function __construct(
+        protected CartInterface $cart,
+        protected ?AbstractOrder $order,
+        protected OrderManagerInterface $orderManager,
+        array $arguments = []
+    ) {
         $this->arguments = $arguments;
     }
 

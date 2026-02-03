@@ -18,6 +18,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Fil
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Filter\AbstractSearch;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListInterface;
+use Override;
 
 class PaymentReference extends AbstractSearch
 {
@@ -26,7 +27,7 @@ class PaymentReference extends AbstractSearch
         return 'paymentInfo.paymentReference';
     }
 
-    #[\Override]
+    #[Override]
     protected function getConditionValue(): string
     {
         $value = parent::getConditionValue();

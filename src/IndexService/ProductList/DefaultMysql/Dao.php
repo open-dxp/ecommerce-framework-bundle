@@ -107,6 +107,7 @@ class Dao
         $this->logger->info('Query: ' . $query);
         $result = $this->db->fetchFirstColumn($query);
         $this->logger->info('Query done.');
+
         return $result;
     }
 
@@ -150,6 +151,7 @@ class Dao
         $this->logger->info('Query: ' . $query);
         $result = $this->db->fetchFirstColumn($query);
         $this->logger->info('Query done.');
+
         return $result;
     }
 
@@ -236,6 +238,7 @@ class Dao
 
                 return $statement;
             }
+
             throw new Exception('Field array for given object id is empty');
         } catch (Exception $e) {
             $this->logger->error((string) $e);

@@ -23,6 +23,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Logger;
 use OpenDxp\Model\DataObject;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterMultiRelation;
+use Override;
 
 class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelectRelation
 {
@@ -31,7 +32,7 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
      *
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $field = $this->getField($filterDefinition);
@@ -89,7 +90,7 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
     /**
      * @param FilterMultiRelation $filterDefinition
      */
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

@@ -27,6 +27,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceSystemInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 use OpenDxp\Model\DataObject\Concrete;
+use Override;
 
 /**
  * Mock Product class which should be used as a product when actual product is not available in the System.
@@ -116,7 +117,7 @@ class MockProduct extends Concrete implements ProductInterface, IndexableInterfa
         return 0;
     }
 
-    #[\Override]
+    #[Override]
     public function __call(string $method, array $args): mixed
     {
         return null;

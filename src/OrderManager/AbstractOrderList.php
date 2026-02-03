@@ -80,7 +80,7 @@ abstract class AbstractOrderList implements OrderListInterface
 
     public function load(): OrderListInterface|static
     {
-        if (!$this->list instanceof \ArrayIterator) {
+        if (!$this->list instanceof ArrayIterator) {
             // load
             $conn = \OpenDxp\Db::getConnection();
             $queryBuilder = $this->getQueryBuilder();

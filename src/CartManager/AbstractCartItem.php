@@ -207,6 +207,7 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
         if ($this->getProduct() instanceof AbstractSetProduct) {
             return $this->getProduct()->getOSAvailabilityInfo($this->getCount(), $this->getSetEntries());
         }
+
         return $this->getProduct()->getOSAvailabilityInfo($this->getCount());
     }
 

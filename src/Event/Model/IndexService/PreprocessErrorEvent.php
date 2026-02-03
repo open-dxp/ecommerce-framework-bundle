@@ -24,8 +24,11 @@ class PreprocessErrorEvent extends Event
     /**
      * PreprocessErrorEvent constructor.
      */
-    public function __construct(protected Throwable $exception, protected bool $throwException = true, protected int $subObjectId = 0)
-    {
+    public function __construct(
+        protected Throwable $exception,
+        protected bool $throwException = true,
+        protected int $subObjectId = 0
+    ) {
     }
 
     public function getException(): Throwable

@@ -19,19 +19,20 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\Elast
 use OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
+use Override;
 
 /**
  * @deprecated This class will be moved to the SearchIndex namespace in version 2.0.0.
  */
 class SelectFromMultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectFromMultiSelect
 {
-    #[\Override]
+    #[Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         $productList->prepareGroupByValues($this->getField($filterDefinition), true);
     }
 
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

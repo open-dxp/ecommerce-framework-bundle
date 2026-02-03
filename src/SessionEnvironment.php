@@ -19,6 +19,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle;
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\EventListener\SessionBagListener;
 use OpenDxp\Localization\LocaleServiceInterface;
+use Override;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -39,8 +40,11 @@ class SessionEnvironment extends Environment implements EnvironmentInterface
 
     protected bool $sessionLoaded = false;
 
-    public function __construct(protected RequestStack $requestStack, LocaleServiceInterface $localeService, array $options = [])
-    {
+    public function __construct(
+        protected RequestStack $requestStack,
+        LocaleServiceInterface $localeService,
+        array $options = []
+    ) {
         parent::__construct($localeService, $options);
     }
 
@@ -67,7 +71,7 @@ class SessionEnvironment extends Environment implements EnvironmentInterface
         $this->sessionLoaded = true;
     }
 
-    #[\Override]
+    #[Override]
     public function save(): mixed
     {
         if ($this->isCli()) {
@@ -87,7 +91,7 @@ class SessionEnvironment extends Environment implements EnvironmentInterface
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function clearEnvironment(): void
     {
         parent::clearEnvironment();

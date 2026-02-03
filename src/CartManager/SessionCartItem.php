@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
 
 use Exception;
+use Override;
 
 class SessionCartItem extends AbstractCartItem implements CartItemInterface
 {
@@ -58,7 +59,7 @@ class SessionCartItem extends AbstractCartItem implements CartItemInterface
     /**
      * @internal
      */
-    #[\Override]
+    #[Override]
     public function __sleep(): array
     {
         $vars = parent::__sleep();

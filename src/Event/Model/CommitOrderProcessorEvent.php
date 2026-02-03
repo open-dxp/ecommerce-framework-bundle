@@ -28,8 +28,11 @@ class CommitOrderProcessorEvent extends Event
     /**
      * CommitOrderProcessorEvent constructor.
      */
-    public function __construct(protected CommitOrderProcessorInterface $commitOrderProcessor, protected ?AbstractOrder $order, array $arguments = [])
-    {
+    public function __construct(
+        protected CommitOrderProcessorInterface $commitOrderProcessor,
+        protected ?AbstractOrder $order,
+        array $arguments = []
+    ) {
         $this->arguments = $arguments;
     }
 

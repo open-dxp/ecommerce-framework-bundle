@@ -22,13 +22,14 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ElasticSear
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterMultiSelect;
+use Override;
 
 /**
  * @deprecated This class will be moved to the SearchIndex namespace in version 2.0.0.
  */
 class MultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelect
 {
-    #[\Override]
+    #[Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         if (!$filterDefinition instanceof FilterMultiSelect) {
@@ -42,7 +43,7 @@ class MultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
     /**
      * @param FilterMultiSelect $filterDefinition
      */
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

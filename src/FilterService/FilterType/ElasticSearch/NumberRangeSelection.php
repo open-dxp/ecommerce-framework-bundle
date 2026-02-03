@@ -20,13 +20,14 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFil
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterNumberRangeSelection;
+use Override;
 
 /**
  * @deprecated This class will be moved to the SearchIndex namespace in version 2.0.0.
  */
 class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRangeSelection
 {
-    #[\Override]
+    #[Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         $productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -35,7 +36,7 @@ class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filt
     /**
      * @param FilterNumberRangeSelection $filterDefinition
      */
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

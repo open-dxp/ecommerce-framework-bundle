@@ -18,7 +18,6 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager
 
 use Codeception\Stub;
 use DateTime;
-use PHPUnit_Framework_MockObject_Stub;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart;
@@ -35,6 +34,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Environment;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\EnvironmentInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use PHPUnit_Framework_MockObject_Stub;
 
 class ConditionTest extends EcommerceTestCase
 {

@@ -28,8 +28,12 @@ class TaxEntry
 
     const string CALCULATION_MODE_FIXED = 'fixed';
 
-    public function __construct(protected float $percent, protected Decimal $amount, protected ?string $taxId = null, protected ?TaxEntryFieldcollection $entry = null)
-    {
+    public function __construct(
+        protected float $percent,
+        protected Decimal $amount,
+        protected ?string $taxId = null,
+        protected ?TaxEntryFieldcollection $entry = null
+    ) {
     }
 
     public function getPercent(): float

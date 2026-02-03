@@ -19,6 +19,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
 use Exception;
 use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\EventListener\SessionBagListener;
+use Override;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
@@ -93,7 +94,7 @@ class SessionCart extends AbstractCart implements CartInterface
         $session->set('carts', $carts);
     }
 
-    #[\Override]
+    #[Override]
     public function sortItems(callable $value_compare_func): static
     {
         if (is_array($this->items)) {
@@ -132,7 +133,7 @@ class SessionCart extends AbstractCart implements CartInterface
     /**
      * @internal
      */
-    #[\Override]
+    #[Override]
     public function __sleep(): array
     {
         $vars = parent::__sleep();

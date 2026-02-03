@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
 
 use Exception;
+use Override;
 
 class SessionCartCheckoutData extends AbstractCartCheckoutData
 {
@@ -41,14 +42,14 @@ class SessionCartCheckoutData extends AbstractCartCheckoutData
         }
     }
 
-    #[\Override]
+    #[Override]
     public function setCart(CartInterface $cart): void
     {
         $this->cart = $cart;
         $this->cartId = $cart->getId();
     }
 
-    #[\Override]
+    #[Override]
     public function getCart(): ?CartInterface
     {
         if (empty($this->cart)) {
@@ -58,7 +59,7 @@ class SessionCartCheckoutData extends AbstractCartCheckoutData
         return $this->cart;
     }
 
-    #[\Override]
+    #[Override]
     public function getCartId(): int|string|null
     {
         return $this->cartId;
@@ -72,7 +73,7 @@ class SessionCartCheckoutData extends AbstractCartCheckoutData
     /**
      * @internal
      */
-    #[\Override]
+    #[Override]
     public function __sleep(): array
     {
         $vars = parent::__sleep();

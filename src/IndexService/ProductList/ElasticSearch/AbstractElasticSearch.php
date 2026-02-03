@@ -825,8 +825,10 @@ abstract class AbstractElasticSearch implements ProductListInterface
             foreach ($results as $result) {
                 $resultsWithoutCounts[] = $result['value'];
             }
+
             return $resultsWithoutCounts;
         }
+
         return [];
     }
 

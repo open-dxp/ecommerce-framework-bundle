@@ -32,8 +32,13 @@ class MultiCartManager implements CartManagerInterface
 
     protected bool $initialized = false;
 
-    public function __construct(protected EnvironmentInterface $environment, protected CartFactoryInterface $cartFactory, protected CartPriceCalculatorFactoryInterface $cartPriceCalculatorFactory, protected OrderManagerLocatorInterface $orderManagers, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        protected EnvironmentInterface $environment,
+        protected CartFactoryInterface $cartFactory,
+        protected CartPriceCalculatorFactoryInterface $cartPriceCalculatorFactory,
+        protected OrderManagerLocatorInterface $orderManagers,
+        protected LoggerInterface $logger
+    ) {
     }
 
     public function getCartClassName(): string

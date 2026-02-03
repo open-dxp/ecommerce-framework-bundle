@@ -25,7 +25,6 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductList
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OpenSearch\AbstractOpenSearch as Worker;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
-use OpenSearch\Client;
 
 abstract class AbstractOpenSearch implements ProductListInterface
 {
@@ -822,8 +821,10 @@ abstract class AbstractOpenSearch implements ProductListInterface
             foreach ($results as $result) {
                 $resultsWithoutCounts[] = $result['value'];
             }
+
             return $resultsWithoutCounts;
         }
+
         return [];
     }
 

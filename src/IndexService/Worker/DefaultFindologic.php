@@ -48,8 +48,12 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
 
     protected SimpleXMLElement $batchData;
 
-    public function __construct(FindologicConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        FindologicConfigInterface $tenantConfig,
+        Connection $db,
+        EventDispatcherInterface $eventDispatcher,
+        protected LoggerInterface $logger
+    ) {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
     }
 

@@ -26,6 +26,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Logger;
 use OpenDxp\Model\DataObject;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -40,8 +41,12 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
 
     protected Helper\MySql $mySqlHelper;
 
-    public function __construct(MysqlConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        MysqlConfigInterface $tenantConfig,
+        Connection $db,
+        EventDispatcherInterface $eventDispatcher,
+        protected LoggerInterface $logger
+    ) {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
         $this->mySqlHelper = new Helper\MySql($tenantConfig, $db);
     }
@@ -235,7 +240,7 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
     /**
      * @return string[]
      */
-    #[\Override]
+    #[Override]
     protected function getSystemAttributes(): array
     {
         return $this->mySqlHelper->getSystemAttributes();

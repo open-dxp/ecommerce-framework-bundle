@@ -24,6 +24,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListInterface;
 use OpenDxp\Db;
 use OpenDxp\Model\DataObject\OnlineShopOrder;
 use OpenDxp\Model\DataObject\OnlineShopOrderItem;
+use Override;
 
 class Listing extends AbstractOrderList implements OrderListInterface
 {
@@ -41,7 +42,7 @@ class Listing extends AbstractOrderList implements OrderListInterface
      */
     protected ?array $availableFilterValues = null;
 
-    #[\Override]
+    #[Override]
     public function setListType(string $type): static
     {
         $this->listType = $type;
@@ -88,7 +89,7 @@ class Listing extends AbstractOrderList implements OrderListInterface
     /**
      * @return $this
      */
-    #[\Override]
+    #[Override]
     public function setLimit(int $limit, int $offset = 0): static
     {
         parent::setLimit($limit, $offset);

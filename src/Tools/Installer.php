@@ -27,6 +27,7 @@ use OpenDxp\Model\DataObject\ClassDefinition;
 use OpenDxp\Model\DataObject\ClassDefinition\Service;
 use OpenDxp\Model\DataObject\Fieldcollection;
 use OpenDxp\Model\User\Permission;
+use Override;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Throwable;
@@ -177,7 +178,7 @@ class Installer extends AbstractInstaller
         $this->uninstallTables();
     }
 
-    #[\Override]
+    #[Override]
     public function isInstalled(): bool
     {
         $installed = false;
@@ -194,13 +195,13 @@ class Installer extends AbstractInstaller
         return (bool) $installed;
     }
 
-    #[\Override]
+    #[Override]
     public function canBeInstalled(): bool
     {
         return !$this->isInstalled();
     }
 
-    #[\Override]
+    #[Override]
     public function canBeUninstalled(): bool
     {
         return $this->isInstalled();
@@ -385,7 +386,7 @@ class Installer extends AbstractInstaller
         return $results;
     }
 
-    #[\Override]
+    #[Override]
     public function needsReloadAfterInstall(): bool
     {
         return true;

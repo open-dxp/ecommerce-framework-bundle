@@ -23,10 +23,11 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Logger;
 use OpenDxp\Model\DataObject;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterRelation;
+use Override;
 
 class SelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectRelation
 {
-    #[\Override]
+    #[Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         //$productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -37,7 +38,7 @@ class SelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
      *
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $field = $this->getField($filterDefinition);
@@ -73,7 +74,7 @@ class SelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
     /**
      * @param FilterRelation $filterDefinition
      */
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

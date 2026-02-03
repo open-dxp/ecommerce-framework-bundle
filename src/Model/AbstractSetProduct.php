@@ -20,6 +20,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilityInter
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInfoInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
+use Override;
 
 /**
  * Abstract base class for pimcore objects who should be used as set products in the online shop framework
@@ -51,7 +52,7 @@ abstract class AbstractSetProduct extends AbstractProduct
      *
      * @param AbstractSetProductEntry[]|null $products
      */
-    #[\Override]
+    #[Override]
     public function getOSIsBookable(int $quantityScale = 1, ?array $products = null): bool
     {
         if ($this->isActive()) {
@@ -70,6 +71,7 @@ abstract class AbstractSetProduct extends AbstractProduct
 
             return $priceInfo != null;
         }
+
         return false;
     }
 
@@ -80,7 +82,7 @@ abstract class AbstractSetProduct extends AbstractProduct
      *
      * @throws UnsupportedException
      */
-    #[\Override]
+    #[Override]
     public function getOSPrice(?int $quantityScale = null, ?array $products = null): PriceInterface
     {
         return $this->getOSPriceInfo($quantityScale, $products)->getPrice();
@@ -93,7 +95,7 @@ abstract class AbstractSetProduct extends AbstractProduct
      *
      * @throws UnsupportedException
      */
-    #[\Override]
+    #[Override]
     public function getOSPriceInfo(?int $quantityScale = null, ?array $products = null): PriceInfoInterface
     {
         if (!is_array($products)) {
@@ -108,7 +110,7 @@ abstract class AbstractSetProduct extends AbstractProduct
      *
      * @throws UnsupportedException
      */
-    #[\Override]
+    #[Override]
     public function getOSAvailabilityInfo(?int $quantity = null, ?array $products = null): AvailabilityInterface
     {
         if ($quantity === null) {

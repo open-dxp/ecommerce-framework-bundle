@@ -21,11 +21,12 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\CheckoutCompleteInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\ProductAction;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Transaction;
 use OpenDxp\Bundle\GoogleMarketingBundle\Tracker\Tracker as GoogleTracker;
+use Override;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Ecommerce extends AbstractAnalyticsTracker implements CheckoutCompleteInterface
 {
-    #[\Override]
+    #[Override]
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

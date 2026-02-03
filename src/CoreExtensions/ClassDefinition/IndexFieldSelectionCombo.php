@@ -24,6 +24,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductList
 use OpenDxp\Logger;
 use OpenDxp\Model\DataObject\ClassDefinition\Data\Select;
 use OpenDxp\Model\DataObject\ClassDefinition\Service;
+use Override;
 
 class IndexFieldSelectionCombo extends Select
 {
@@ -103,7 +104,7 @@ class IndexFieldSelectionCombo extends Select
         return $this->considerTenants;
     }
 
-    #[\Override]
+    #[Override]
     public function jsonSerialize(): mixed
     {
         if (Service::doRemoveDynamicOptions()) {
@@ -113,7 +114,7 @@ class IndexFieldSelectionCombo extends Select
         return parent::jsonSerialize();
     }
 
-    #[\Override]
+    #[Override]
     public function getFieldType(): string
     {
         return 'indexFieldSelectionCombo';

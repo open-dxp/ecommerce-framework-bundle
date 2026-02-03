@@ -18,6 +18,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule;
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\RuleInterface;
+use Override;
 
 /**
  * @method Rule[] load()
@@ -33,7 +34,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing
         $this->validate = $state;
     }
 
-    #[\Override]
+    #[Override]
     public function isValidOrderKey(string $key): bool
     {
         return in_array($key, ['prio', 'name']);

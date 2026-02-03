@@ -33,6 +33,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingCodeAwareInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Transaction;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use Override;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GoogleTagManager extends Tracker implements
@@ -56,7 +57,7 @@ class GoogleTagManager extends Tracker implements
 
     protected array $deferred = [];
 
-    #[\Override]
+    #[Override]
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -237,7 +238,7 @@ class GoogleTagManager extends Tracker implements
 
     protected function transformCheckoutItems(array $items): array
     {
-        return array_map(fn(ProductAction $item) => $this->transformProductAction($item), $items);
+        return array_map(fn (ProductAction $item) => $this->transformProductAction($item), $items);
     }
 
     private function formatPrice(mixed $price): string

@@ -37,6 +37,7 @@ class StructuredTable implements InterpreterInterface
         if (isset($config['defaultUnit'])) {
             return $value->$getter() . ' ' . $config['defaultUnit'];
         }
+
         return $value->$getter();
     }
 

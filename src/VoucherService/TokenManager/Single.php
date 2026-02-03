@@ -30,6 +30,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Token;
 use OpenDxp\Logger;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\VoucherTokenTypeSingle;
 use OpenDxp\Model\DataObject\OnlineShopVoucherToken;
+use Override;
 
 /**
  * @property \OpenDxp\Model\DataObject\Fieldcollection\Data\VoucherTokenTypeSingle $configuration
@@ -114,7 +115,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
      *
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     protected function getExportData(array $params): array
     {
         $data = [];
@@ -240,7 +241,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
         return Reservation::releaseToken($code, $cart);
     }
 
-    #[\Override]
+    #[Override]
     public function checkToken(string $code, CartInterface $cart): bool
     {
         parent::checkToken($code, $cart);

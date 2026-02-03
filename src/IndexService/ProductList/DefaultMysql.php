@@ -414,6 +414,7 @@ class DefaultMysql implements ProductListInterface
         if ($this->conditionPriceFrom === null && $this->conditionPriceTo === null) {
             return $this->resource->loadGroupByValues($fieldname, $this->buildQueryFromConditions(false, $excludedFieldName, $this->getVariantMode()), $countValues);
         }
+
         throw new Exception('Not supported yet');
     }
 
@@ -431,6 +432,7 @@ class DefaultMysql implements ProductListInterface
         if ($this->conditionPriceFrom === null && $this->conditionPriceTo === null) {
             return $this->resource->loadGroupByRelationValues($fieldname, $this->buildQueryFromConditions(false, $excludedFieldName), $countValues);
         }
+
         throw new Exception('Not supported yet');
     }
 
@@ -530,7 +532,7 @@ class DefaultMysql implements ProductListInterface
                     }
 
                     $condition .= is_array($cond)
-                        ? sprintf(' ( %1$s IN (%2$s) )', $fieldname, implode(',', array_map(fn($value) => $this->quote($value), $cond)))
+                        ? sprintf(' ( %1$s IN (%2$s) )', $fieldname, implode(',', array_map(fn ($value) => $this->quote($value), $cond)))
                         : '(' . $cond . ')'
                     ;
                 }

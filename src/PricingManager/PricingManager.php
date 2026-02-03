@@ -19,7 +19,6 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Discount;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
-use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInfoInterface as PriceSystemPriceInfoInterface;
 use OpenDxp\Bundle\PersonalizationBundle\Targeting\VisitorInfoStorageInterface;
 use RuntimeException;

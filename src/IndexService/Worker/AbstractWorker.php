@@ -29,8 +29,11 @@ abstract class AbstractWorker implements WorkerInterface
 
     protected ?array $filterGroups = null;
 
-    public function __construct(protected ConfigInterface $tenantConfig, protected Connection $db, protected EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        protected ConfigInterface $tenantConfig,
+        protected Connection $db,
+        protected EventDispatcherInterface $eventDispatcher
+    ) {
         $this->tenantConfig->setTenantWorker($this);
 
         $this->name = $this->tenantConfig->getTenantName();

@@ -21,10 +21,11 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItem;
 use OpenDxp\Db;
+use Override;
 
 final class Version20210430124911 extends AbstractMigration
 {
-    #[\Override]
+    #[Override]
     public function getDescription(): string
     {
         return 'Changes addedDateTimestamp of Cart Items to mirco seconds';
@@ -51,7 +52,7 @@ final class Version20210430124911 extends AbstractMigration
         }
     }
 
-    #[\Override]
+    #[Override]
     public function down(Schema $schema): void
     {
         if ($schema->hasTable(CartItem\Dao::TABLE_NAME) && $this->getColumnType() === 'bigint') {

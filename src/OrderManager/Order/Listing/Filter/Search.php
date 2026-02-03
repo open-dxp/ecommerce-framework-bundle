@@ -24,7 +24,7 @@ class Search extends AbstractSearch
     public function __construct(string $value, /**
      * Search column
      */
-    protected string $column)
+        protected string $column)
     {
         parent::__construct($value);
     }

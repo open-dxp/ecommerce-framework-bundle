@@ -40,8 +40,7 @@ class TrackingCodeSubscriber implements EventSubscriberInterface
         protected TrackingManager $trackingManager,
         /** @var Environment * */
         protected Environment $twig
-    )
-    {
+    ) {
     }
 
     public static function getSubscribedEvents(): array

@@ -22,10 +22,11 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Db;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterMultiSelectFromMultiSelect;
+use Override;
 
 class MultiSelectFromMultiSelect extends SelectFromMultiSelect
 {
-    #[\Override]
+    #[Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $field = $this->getField($filterDefinition);
@@ -68,7 +69,7 @@ class MultiSelectFromMultiSelect extends SelectFromMultiSelect
     /**
      * @return string[]
      */
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

@@ -22,8 +22,9 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\Currency;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxCalculationService;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxEntry;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use Stringable;
 
-class Price implements PriceInterface, \Stringable
+class Price implements PriceInterface, Stringable
 {
     private Decimal $grossAmount;
 
@@ -36,8 +37,11 @@ class Price implements PriceInterface, \Stringable
      */
     private array $taxEntries = [];
 
-    public function __construct(Decimal $amount, private Currency $currency, private readonly bool $minPrice = false)
-    {
+    public function __construct(
+        Decimal $amount,
+        private Currency $currency,
+        private readonly bool $minPrice = false
+    ) {
         $this->grossAmount = $this->netAmount = $amount;
     }
 

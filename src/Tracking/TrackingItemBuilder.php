@@ -24,7 +24,6 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrderItem;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\ProductInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
-use OpenDxp\Model\DataObject\AbstractObject;
 use OpenDxp\Model\DataObject\Concrete;
 
 /**

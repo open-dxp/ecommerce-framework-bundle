@@ -23,7 +23,6 @@ use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItemInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
-use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\ProductInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 use OpenDxp\Model\DataObject\AbstractObject;
@@ -57,7 +56,7 @@ class DefaultService implements ServiceInterface
         $maybeStrftime = str_contains($parentFolderPath, '%');
         if (substr_count($parentFolderPath, '*') % 2 === 0 && !$maybeStrftime) {
             $pattern = '/\*([^\*]+)\*/';
-            $offerParentPath = preg_replace_callback($pattern, fn($matches) => CarbonImmutable::now()->isoFormat($matches[1]), $parentFolderPath);
+            $offerParentPath = preg_replace_callback($pattern, fn ($matches) => CarbonImmutable::now()->isoFormat($matches[1]), $parentFolderPath);
         } else {
             trigger_deprecation(
                 'open-dxp/ecommerce-framework-bundle',

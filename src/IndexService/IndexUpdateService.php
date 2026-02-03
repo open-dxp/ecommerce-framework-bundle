@@ -240,7 +240,7 @@ class IndexUpdateService
         ;
 
         if ($tenantNameFilterList !== []) {
-            $qb->andWhere(sprintf('tenant in(%s)', implode(',', array_map(fn($str) => sprintf("'%s'", $str),
+            $qb->andWhere(sprintf('tenant in(%s)', implode(',', array_map(fn ($str) => sprintf("'%s'", $str),
                 $tenantNameFilterList))
             ));
         }
@@ -265,7 +265,7 @@ class IndexUpdateService
         $qb->update($storeTableName);
 
         if ($tenantNameFilterList !== []) {
-            $qb->andWhere(sprintf('tenant in(%s)', implode(',', array_map(fn($str) => sprintf("'%s'", $str),
+            $qb->andWhere(sprintf('tenant in(%s)', implode(',', array_map(fn ($str) => sprintf("'%s'", $str),
                 $tenantNameFilterList))
             ));
         }

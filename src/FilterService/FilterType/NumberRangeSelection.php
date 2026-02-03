@@ -91,6 +91,7 @@ class NumberRangeSelection extends AbstractFilterType
                 if (!empty($data['to'])) {
                     return $data['from'] . ' - ' . $data['to'];
                 }
+
                 return $this->translator->trans('more than') . ' ' . $data['from'];
             }
             if (!empty($data['to'])) {

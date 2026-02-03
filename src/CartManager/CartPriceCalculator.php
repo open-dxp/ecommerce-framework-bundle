@@ -63,8 +63,11 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
 
     protected ?PricingManagerInterface $pricingManager = null;
 
-    public function __construct(protected EnvironmentInterface $environment, protected CartInterface $cart, array $modificatorConfig = [])
-    {
+    public function __construct(
+        protected EnvironmentInterface $environment,
+        protected CartInterface $cart,
+        array $modificatorConfig = []
+    ) {
         $this->setModificatorConfig($modificatorConfig);
         $this->initModificators();
     }
@@ -345,9 +348,9 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
             }
         }
 
-        $itemRules = array_filter($itemRules, fn(RuleInterface $rule) => $rule->hasProductActions());
+        $itemRules = array_filter($itemRules, fn (RuleInterface $rule) => $rule->hasProductActions());
 
-        $cartRules = array_filter($this->appliedPricingRules, fn(RuleInterface $rule) => $rule->hasCartActions());
+        $cartRules = array_filter($this->appliedPricingRules, fn (RuleInterface $rule) => $rule->hasCartActions());
 
         $itemRules = [...$cartRules, ...$itemRules];
         $uniqueItemRules = [];

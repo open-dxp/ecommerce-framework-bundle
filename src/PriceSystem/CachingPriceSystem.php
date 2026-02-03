@@ -18,6 +18,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem;
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
+use Override;
 
 /**
  * Price system which caches created price info objects per product and request
@@ -29,7 +30,7 @@ abstract class CachingPriceSystem extends AbstractPriceSystem implements Caching
      */
     protected array $priceInfos = [];
 
-    #[\Override]
+    #[Override]
     public function getPriceInfo(CheckoutableInterface $product, int|string|null $quantityScale = null, ?array $products = null): PriceInfoInterface
     {
         $pId = $product->getId();

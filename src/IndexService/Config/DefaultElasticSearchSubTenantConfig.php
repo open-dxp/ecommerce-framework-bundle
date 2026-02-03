@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config;
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
+use Override;
 
 /**
  * Sample implementation for sub-tenants based on elastic search.
@@ -26,7 +27,7 @@ class DefaultElasticSearchSubTenantConfig extends ElasticSearch
     /**
      * checks, if product should be in index for current tenant (not subtenant)
      */
-    #[\Override]
+    #[Override]
     public function inIndex(IndexableInterface $object): bool
     {
         $tenants = null;
@@ -46,7 +47,7 @@ class DefaultElasticSearchSubTenantConfig extends ElasticSearch
      *
      * @return array $subTenantData
      */
-    #[\Override]
+    #[Override]
     public function prepareSubTenantEntries(IndexableInterface $object, ?int $subObjectId = null): array
     {
         $subTenantData = [];

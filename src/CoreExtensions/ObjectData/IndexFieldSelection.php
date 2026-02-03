@@ -21,8 +21,11 @@ class IndexFieldSelection
     /**
      * @param string|string[]|int $preSelect
      */
-    public function __construct(public ?string $tenant, public string $field, public string|array|int|null $preSelect)
-    {
+    public function __construct(
+        public ?string $tenant,
+        public string $field,
+        public string|array|int|null $preSelect
+    ) {
     }
 
     public function setField(string $field): void

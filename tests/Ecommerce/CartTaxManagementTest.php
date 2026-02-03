@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce;
 
 use Codeception\Stub;
-use PHPUnit_Framework_MockObject_Stub;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping;
@@ -38,6 +37,7 @@ use OpenDxp\Model\DataObject\ClassDefinition;
 use OpenDxp\Model\DataObject\Fieldcollection;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\TaxEntry as TaxEntryFieldcollection;
 use OpenDxp\Model\DataObject\OnlineShopTaxClass;
+use PHPUnit_Framework_MockObject_Stub;
 
 class CartTaxManagementTest extends EcommerceTestCase
 {

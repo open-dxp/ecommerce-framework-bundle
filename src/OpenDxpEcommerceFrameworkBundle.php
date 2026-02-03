@@ -29,6 +29,7 @@ use OpenDxp\Extension\Bundle\Traits\BundleAdminClassicTrait;
 use OpenDxp\HttpKernel\Bundle\DependentBundleInterface;
 use OpenDxp\HttpKernel\BundleCollection\BundleCollection;
 use OpenDxp\Version;
+use Override;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
@@ -37,7 +38,7 @@ class OpenDxpEcommerceFrameworkBundle extends AbstractOpenDxpBundle implements D
 {
     use BundleAdminClassicTrait;
 
-    #[\Override]
+    #[Override]
     public function getContainerExtension(): ?ExtensionInterface
     {
         if ($this->extension === null) {
@@ -47,7 +48,7 @@ class OpenDxpEcommerceFrameworkBundle extends AbstractOpenDxpBundle implements D
         return $this->extension;
     }
 
-    #[\Override]
+    #[Override]
     public function getVersion(): string
     {
         return sprintf('%s build %s', Version::getVersion(), Version::getRevision());

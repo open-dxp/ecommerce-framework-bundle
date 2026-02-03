@@ -29,6 +29,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Logger;
 use OpenDxp\Model\Tool\TmpStore;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Throwable;
@@ -73,8 +74,12 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
      */
     protected string $routingParamName = 'routing';
 
-    public function __construct(ElasticSearchConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        ElasticSearchConfigInterface $tenantConfig,
+        Connection $db,
+        EventDispatcherInterface $eventDispatcher,
+        protected LoggerInterface $logger
+    ) {
         trigger_error(
             'ElasticSearchConfigInterface is deprecated. Use SearchConfigInterface instead.',
             E_USER_DEPRECATED
@@ -262,7 +267,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
      * creates mapping attributes based on system attributes, in product index defined attributes and relations
      * can be overwritten in order to consider additional mappings for sub tenants
      */
-    #[\Override]
+    #[Override]
     public function getSystemAttributes(bool $includeTypes = false): array
     {
         $systemAttributes = [
@@ -282,6 +287,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
         if ($includeTypes) {
             return $systemAttributes;
         }
+
         return array_keys($systemAttributes);
     }
 
@@ -395,7 +401,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
             }
 
             $this->bulkIndexData[] = ['index' => ['_index' => $this->getIndexNameVersion(), '_id' => $objectId, $this->routingParamName => $routingId]];
-            $bulkIndexData = array_filter(['system' => array_filter($indexSystemData), 'type' => $indexSystemData['type'], 'attributes' => array_filter($indexAttributeData, fn($value) => $value !== null), 'relations' => $indexRelationData, 'subtenants' => $data['subtenants']]);
+            $bulkIndexData = array_filter(['system' => array_filter($indexSystemData), 'type' => $indexSystemData['type'], 'attributes' => array_filter($indexAttributeData, fn ($value) => $value !== null), 'relations' => $indexRelationData, 'subtenants' => $data['subtenants']]);
 
             if ($indexSystemData['type'] == ProductListInterface::PRODUCT_TYPE_VARIANT) {
                 $bulkIndexData[self::RELATION_FIELD] = ['name' => $indexSystemData['type'], 'parent' => $indexSystemData['virtualProductId']];
@@ -419,7 +425,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
     /**
      * actually sending data to elastic search
      */
-    #[\Override]
+    #[Override]
     public function commitBatchToIndex(): void
     {
         if (count($this->bulkIndexData)) {
@@ -537,7 +543,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
      *
      * return array in this case
      */
-    #[\Override]
+    #[Override]
     protected function convertArray(array|string $data): array|string
     {
         return $data;

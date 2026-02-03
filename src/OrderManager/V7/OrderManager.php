@@ -31,7 +31,6 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\OrderUpdateNotPossibleExce
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrderItem;
-use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderAgentFactoryInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderAgentInterface;
@@ -559,7 +558,7 @@ class OrderManager implements OrderManagerInterface
                 }
 
                 $pattern = '/\*([^\*]+)\*/';
-                $parentFolderPath = preg_replace_callback($pattern, fn($matches) => CarbonImmutable::now()->isoFormat($matches[1]), $parentFolderOption);
+                $parentFolderPath = preg_replace_callback($pattern, fn ($matches) => CarbonImmutable::now()->isoFormat($matches[1]), $parentFolderOption);
 
             } else {
                 trigger_deprecation(

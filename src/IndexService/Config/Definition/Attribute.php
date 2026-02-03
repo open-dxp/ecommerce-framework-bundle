@@ -112,6 +112,7 @@ class Attribute
             if ($this->getter instanceof ExtendedGetterInterface) {
                 return $this->getter->get($object, $this->getterOptions, $subObjectId, $tenantConfig);
             }
+
             return $this->getter->get($object, $this->getterOptions);
         }
 

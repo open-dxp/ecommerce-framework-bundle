@@ -39,6 +39,7 @@ class QuantityValue implements InterpreterInterface
 
                 return $value;
             }
+
             return $value->__toString();
         }
 

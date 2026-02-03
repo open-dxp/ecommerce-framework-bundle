@@ -21,6 +21,7 @@ use OpenDxp\Extension\Bundle\Installer\AbstractInstaller;
 use OpenDxp\Model\DataObject\ClassDefinition;
 use OpenDxp\Model\DataObject\ClassDefinition\Service;
 use OpenDxp\Model\DataObject\Objectbrick;
+use Override;
 
 class PaymentProviderInstaller extends AbstractInstaller
 {
@@ -34,13 +35,13 @@ class PaymentProviderInstaller extends AbstractInstaller
      */
     protected array $bricksToInstall = [];
 
-    #[\Override]
+    #[Override]
     public function canBeInstalled(): bool
     {
         return ClassDefinition::getByName('OnlineShopOrder') && !$this->isInstalled();
     }
 
-    #[\Override]
+    #[Override]
     public function canBeUninstalled(): bool
     {
         return $this->isInstalled();
@@ -56,7 +57,7 @@ class PaymentProviderInstaller extends AbstractInstaller
         $this->unInstallBricks();
     }
 
-    #[\Override]
+    #[Override]
     public function isInstalled(): bool
     {
         $installed = false;
@@ -73,7 +74,7 @@ class PaymentProviderInstaller extends AbstractInstaller
         return (bool) $installed;
     }
 
-    #[\Override]
+    #[Override]
     public function needsReloadAfterInstall(): bool
     {
         return true;

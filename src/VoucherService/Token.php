@@ -93,6 +93,7 @@ class Token extends AbstractModel
         $db = Db::get();
         $query = 'SELECT EXISTS(SELECT id FROM ' . Dao::TABLE_NAME . ' WHERE token = ?)';
         $result = $db->fetchOne($query, [$code]);
+
         return $result != 0;
     }
 

@@ -33,6 +33,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerLocator
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerLocatorInterface;
 use OpenDxp\Bundle\ElasticsearchClientBundle\DependencyInjection\OpenDxpElasticsearchClientExtension;
 use OpenDxp\Bundle\OpenSearchClientBundle\DependencyInjection\OpenDxpOpenSearchClientExtension;
+use Override;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -65,7 +66,7 @@ final class OpenDxpEcommerceFrameworkExtension extends ConfigurableExtension imp
 
     const string SERVICE_ID_TRACKING_MANAGER = 'opendxp_ecommerce.tracking.tracking_manager';
 
-    #[\Override]
+    #[Override]
     public function getAlias(): string
     {
         return 'opendxp_ecommerce_framework';

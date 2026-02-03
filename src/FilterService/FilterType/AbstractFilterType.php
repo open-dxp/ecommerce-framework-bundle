@@ -39,10 +39,10 @@ abstract class AbstractFilterType
      */
     public function __construct(
         protected TranslatorInterface $translator,
-        Environment                   $twig,
-        RequestStack                  $requestStack,
-        protected string              $template,
-        array                         $options = []
+        Environment $twig,
+        RequestStack $requestStack,
+        protected string $template,
+        array $options = []
     ) {
         $this->twig = $twig;
         $this->request = $requestStack->getCurrentRequest();
@@ -70,6 +70,7 @@ abstract class AbstractFilterType
         if (!empty($filterDefinition->getScriptPath())) {
             return $filterDefinition->getScriptPath();
         }
+
         return $this->template;
     }
 

@@ -25,6 +25,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInfoInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceSystemInterface;
 use OpenDxp\Model\DataObject;
+use Override;
 
 /**
  * Abstract base class for pimcore objects who should be used as custom products in the offer tool
@@ -114,7 +115,7 @@ abstract class AbstractOfferToolProduct extends \OpenDxp\Model\DataObject\Concre
         return $this->getAvailabilitySystemImplementation()->getAvailabilityInfo($this, $quantity);
     }
 
-    #[\Override]
+    #[Override]
     public static function getById(int|string $id, array $params = []): ?static
     {
         if (is_string($id)) {

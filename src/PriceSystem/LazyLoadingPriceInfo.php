@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem;
 
+use Override;
+
 /**
  * Base implementation for a lazy loading price info
  */
@@ -27,7 +29,7 @@ class LazyLoadingPriceInfo extends AbstractPriceInfo implements PriceInfoInterfa
      */
     protected array $priceRegistry = [];
 
-    #[\Override]
+    #[Override]
     public static function getInstance(): static
     {
         return parent::getInstance();

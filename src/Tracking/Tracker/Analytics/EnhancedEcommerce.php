@@ -34,6 +34,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingCodeAwareInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Transaction;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 use OpenDxp\Bundle\GoogleMarketingBundle\Tracker\Tracker as GoogleTracker;
+use Override;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EnhancedEcommerce extends AbstractAnalyticsTracker implements
@@ -59,7 +60,7 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
      */
     protected array $trackedCodes = [];
 
-    #[\Override]
+    #[Override]
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

@@ -25,6 +25,7 @@ use OpenDxp\Cache\RuntimeCache;
 use OpenDxp\Logger;
 use OpenDxp\Model\AbstractModel;
 use OpenDxp\Model\Exception\NotFoundException;
+use Override;
 
 /**
  * @method Dao getDao()
@@ -93,7 +94,7 @@ class Rule extends AbstractModel implements RuleInterface
      *
      * @internal
      */
-    #[\Override]
+    #[Override]
     public function setValue(string $key, mixed $value, bool $ignoreEmptyValues = false): static
     {
         $method = 'set' . $key;

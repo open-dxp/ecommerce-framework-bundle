@@ -21,6 +21,7 @@ use DivisionByZeroError;
 use DomainException;
 use InvalidArgumentException;
 use OverflowException;
+use Stringable;
 use TypeError;
 use UnderflowException;
 
@@ -30,7 +31,7 @@ use UnderflowException;
  * IMPORTANT: if you do any changes, make sure to keep this object immutable. Every operation needs
  * to return a new instance with the changed value!
  */
-class Decimal implements \Stringable
+class Decimal implements Stringable
 {
     const INTEGER_NUMBER_REGEXP = '/^([+\-]?)\d+$/';
 
@@ -46,8 +47,7 @@ class Decimal implements \Stringable
          * Precision after comma - actual amount will be amount divided by 10^scale
          */
         private readonly int $scale
-    )
-    {
+    ) {
     }
 
     /**
@@ -377,6 +377,7 @@ class Decimal implements \Stringable
     public function compare(Decimal $other): int
     {
         $this->assertSameScale($other, 'Can\'t compare values with different scales. Please convert both values to the same scale.');
+
         return $this->amount <=> $other->amount;
     }
 

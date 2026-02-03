@@ -57,8 +57,12 @@ class OrderAgent implements OrderAgentInterface
      */
     protected ?array $fullChangeLog = null;
 
-    public function __construct(protected AbstractOrder $order, protected EnvironmentInterface $environment, protected PaymentManagerInterface $paymentManager, protected EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        protected AbstractOrder $order,
+        protected EnvironmentInterface $environment,
+        protected PaymentManagerInterface $paymentManager,
+        protected EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function getOrder(): AbstractOrder
@@ -192,6 +196,7 @@ class OrderAgent implements OrderAgentInterface
     public function hasPayment(): bool
     {
         $paymentInfo = $this->getOrder()->getPaymentInfo();
+
         return $paymentInfo && !empty($paymentInfo->getItems());
     }
 
@@ -558,6 +563,7 @@ class OrderAgent implements OrderAgentInterface
                 $paymentStateBackup . '". throwing exception!'
             );
             $order->save(['versionNote' => 'OrderAgent::updatePayment - aborted response received.']);
+
             throw new ResponseWithAbortedPaymentStateException($paymentStateBackup);
         }
 
@@ -567,6 +573,7 @@ class OrderAgent implements OrderAgentInterface
             $currentPaymentInformation->setMessage($currentPaymentInformation->getMessage() . ' -> order fingerprint changed since start payment. throwing exception!');
             $order->setOrderState(null);
             $order->save(['versionNote' => 'OrderAgent::updatePayment - finger print of order changed.']);
+
             throw new UnsupportedException('order fingerprint changed since start payment. Old internal status = ' . $status->getInternalPaymentId() . ' -> current internal status id = ' . $currentOrderFingerPrint);
         }
         $order->save(['versionNote' => 'OrderAgent::updatePayment.']);

@@ -41,8 +41,11 @@ class TrackingManager implements TrackingManagerInterface
 
     protected ?string $cachedCheckoutTenant = null;
 
-    public function __construct(protected RequestStack $requestStack, protected ?EnvironmentInterface $enviroment, array $trackers = [])
-    {
+    public function __construct(
+        protected RequestStack $requestStack,
+        protected ?EnvironmentInterface $enviroment,
+        array $trackers = []
+    ) {
         foreach ($trackers as $tracker) {
             $this->registerTracker($tracker);
         }

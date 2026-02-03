@@ -30,8 +30,11 @@ class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, In
      */
     protected static array $linkGenerators = [];
 
-    public function __construct(protected int $id, protected array $params, array $relations)
-    {
+    public function __construct(
+        protected int $id,
+        protected array $params,
+        array $relations
+    ) {
         foreach ($relations as $relation) {
             $this->relations[$relation['fieldname']][] = ['id' => $relation['dest'], 'type' => $relation['type']];
         }
@@ -103,6 +106,7 @@ class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, In
         if (count($relationObjectArray) > 1) {
             return $relationObjectArray;
         }
+
         return null;
     }
 

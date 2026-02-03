@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce;
 
 use Codeception\Stub;
-use PHPUnit_Framework_MockObject_Stub;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\Currency;
@@ -29,6 +28,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerLocator
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 use OpenDxp\Model\DataObject\OnlineShopTaxClass;
+use PHPUnit_Framework_MockObject_Stub;
 
 class ProductTaxManagementTest extends EcommerceTestCase
 {

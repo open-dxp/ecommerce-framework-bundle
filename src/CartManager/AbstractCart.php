@@ -632,6 +632,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
             $this->setCheckoutData($index, $code);
             $this->save();
             $this->modified();
+
             return true;
         }
 

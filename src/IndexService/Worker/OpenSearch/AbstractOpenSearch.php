@@ -28,6 +28,7 @@ use OpenDxp\Db;
 use OpenDxp\Logger;
 use OpenDxp\Model\Tool\TmpStore;
 use OpenSearch\Client;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Throwable;
@@ -72,8 +73,12 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      */
     protected string $routingParamName = 'routing';
 
-    public function __construct(SearchConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        SearchConfigInterface $tenantConfig,
+        Connection $db,
+        EventDispatcherInterface $eventDispatcher,
+        protected LoggerInterface $logger
+    ) {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
         $this->indexName = strtolower(($tenantConfig->getClientConfig('indexName')) ?: $this->name);
     }
@@ -258,7 +263,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      * creates mapping attributes based on system attributes, in product index defined attributes and relations
      * can be overwritten in order to consider additional mappings for sub tenants
      */
-    #[\Override]
+    #[Override]
     public function getSystemAttributes(bool $includeTypes = false): array
     {
         $systemAttributes = [
@@ -392,7 +397,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
             }
 
             $this->bulkIndexData[] = ['index' => ['_index' => $this->getIndexNameVersion(), '_id' => $objectId, $this->routingParamName => $routingId]];
-            $bulkIndexData = array_filter(['system' => array_filter($indexSystemData), 'type' => $indexSystemData['type'], 'attributes' => array_filter($indexAttributeData, fn($value) => $value !== null), 'relations' => $indexRelationData, 'subtenants' => $data['subtenants']]);
+            $bulkIndexData = array_filter(['system' => array_filter($indexSystemData), 'type' => $indexSystemData['type'], 'attributes' => array_filter($indexAttributeData, fn ($value) => $value !== null), 'relations' => $indexRelationData, 'subtenants' => $data['subtenants']]);
 
             if ($indexSystemData['type'] == ProductListInterface::PRODUCT_TYPE_VARIANT) {
                 $bulkIndexData[self::RELATION_FIELD] = ['name' => $indexSystemData['type'], 'parent' => $indexSystemData['virtualProductId']];
@@ -416,7 +421,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
     /**
      * actually sending data to elastic search
      */
-    #[\Override]
+    #[Override]
     public function commitBatchToIndex(): void
     {
         if (count($this->bulkIndexData)) {
@@ -534,7 +539,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      *
      * return array in this case
      */
-    #[\Override]
+    #[Override]
     protected function convertArray(array|string $data): array|string
     {
         return $data;

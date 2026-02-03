@@ -21,9 +21,9 @@ use DateTime;
 use DivisionByZeroError;
 use DomainException;
 use InvalidArgumentException;
-use OverflowException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 use OpenDxp\Tests\Support\Test\TestCase;
+use OverflowException;
 use TypeError;
 use UnderflowException;
 

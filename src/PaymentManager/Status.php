@@ -39,8 +39,7 @@ class Status implements StatusInterface
          */
         protected string $status,
         protected array $data = []
-    )
-    {
+    ) {
     }
 
     public function getInternalPaymentId(): string

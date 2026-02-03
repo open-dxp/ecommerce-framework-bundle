@@ -26,6 +26,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\DefaultMockup;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Traits\OptionsResolverTrait;
+use Override;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -75,7 +76,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         parent::__construct($attributeFactory, $tenantName, $attributes, $searchAttributes, $filterTypes, $options);
     }
 
-    #[\Override]
+    #[Override]
     protected function addAttribute(Attribute $attribute): void
     {
         parent::addAttribute($attribute);
@@ -88,7 +89,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         $this->fieldMapping[$attribute->getName()] = sprintf('%s.%s', $attributeType, $attribute->getName());
     }
 
-    #[\Override]
+    #[Override]
     protected function addSearchAttribute(string $searchAttribute): void
     {
         if (isset($this->attributes[$searchAttribute])) {
@@ -113,7 +114,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         ));
     }
 
-    #[\Override]
+    #[Override]
     protected function processOptions(array $options): void
     {
         $options = $this->resolveOptions($options);
@@ -263,7 +264,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         return [];
     }
 
-    #[\Override]
+    #[Override]
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof DefaultOpenSearchWorker) {
@@ -288,7 +289,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
      * Gets object mockup by id, can consider subIds and therefore return e.g. an array of values
      * always returns a object mockup if available
      */
-    #[\Override]
+    #[Override]
     public function getObjectMockupById(int $objectId): ?IndexableInterface
     {
         $listing = $this->getTenantWorker()->getProductList();

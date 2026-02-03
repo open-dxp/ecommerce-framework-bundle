@@ -20,10 +20,11 @@ use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterNumberRange;
+use Override;
 
 class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRange
 {
-    #[\Override]
+    #[Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         //$productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -34,7 +35,7 @@ class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
      *
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $currentField = $this->getField($filterDefinition);
@@ -77,7 +78,7 @@ class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
     /**
      * @param FilterNumberRange $filterDefinition
      */
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

@@ -20,6 +20,7 @@ use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\DefaultMysql as DefaultMysqlWorker;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
+use Override;
 
 /**
  * Tenant configuration for a simple mysql product index implementation. It is used by the default tenant.
@@ -76,7 +77,7 @@ class DefaultMysql extends AbstractConfig implements MysqlConfigInterface
     {
     }
 
-    #[\Override]
+    #[Override]
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof DefaultMysqlWorker) {

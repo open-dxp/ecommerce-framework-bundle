@@ -20,10 +20,11 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFil
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterSelect;
+use Override;
 
 class Select extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\Select
 {
-    #[\Override]
+    #[Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         //$productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -32,7 +33,7 @@ class Select extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\Filt
     /**
      * @param FilterSelect $filterDefinition
      */
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

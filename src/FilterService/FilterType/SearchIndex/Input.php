@@ -21,10 +21,11 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFil
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterInputfield;
+use Override;
 
 class Input extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\Input
 {
-    #[\Override]
+    #[Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

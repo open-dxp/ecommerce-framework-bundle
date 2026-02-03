@@ -88,6 +88,7 @@ class VoucherController extends UserAwareController implements KernelControllerE
             return $this->render($renderScript, $paramsBag);
         }
         $paramsBag['errors'] = ['bundle_ecommerce_voucherservice_msg-error-config-missing'];
+
         return $this->render('@OpenDxpEcommerceFramework/voucher/voucher_code_tab_error.html.twig', $paramsBag);
     }
 
@@ -189,7 +190,8 @@ class VoucherController extends UserAwareController implements KernelControllerE
         }
         if ($tokenManager = $onlineShopVoucherSeries->getTokenManager()) {
             // Prepare cleanUp parameter array.
-            $params = ['id' => $request->get('id')]; if ($request->get('usage')) {
+            $params = ['id' => $request->get('id')];
+            if ($request->get('usage')) {
                 $params['usage'] = $request->get('usage');
             }
             if ($request->get('olderThan')) {

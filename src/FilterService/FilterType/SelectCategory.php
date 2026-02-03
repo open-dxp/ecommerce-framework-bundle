@@ -22,7 +22,6 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductList
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Db;
 use OpenDxp\Model\DataObject\Concrete;
-use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterCategory;
 use OpenDxp\Model\Element\ElementInterface;
 
 class SelectCategory extends AbstractFilterType

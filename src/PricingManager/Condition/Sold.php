@@ -53,6 +53,7 @@ class Sold extends AbstractOrder implements ConditionInterface
 
             return ($this->getSoldCount($rule) + $cartUsedCount) < $this->getCount();
         }
+
         return false;
     }
 

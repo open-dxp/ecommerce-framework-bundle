@@ -55,8 +55,13 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
 
     protected ?StatusInterface $lastPaymentStatus = null;
 
-    public function __construct(private LockFactory $lockFactory, protected OrderManagerLocatorInterface $orderManagers, protected EventDispatcherInterface $eventDispatcher, protected ApplicationLogger $applicationLogger, array $options = [])
-    {
+    public function __construct(
+        private LockFactory $lockFactory,
+        protected OrderManagerLocatorInterface $orderManagers,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected ApplicationLogger $applicationLogger,
+        array $options = []
+    ) {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 

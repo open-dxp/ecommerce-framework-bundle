@@ -39,8 +39,11 @@ class ProcessPreparationQueueCommand extends AbstractIndexServiceCommand
         Parallelization::runAfterBatch as parentRunAfterBatch;
     }
 
-    public function __construct(protected IndexUpdateService $indexUpdateService, protected IndexService $indexService, ?string $name = null)
-    {
+    public function __construct(
+        protected IndexUpdateService $indexUpdateService,
+        protected IndexService $indexService,
+        ?string $name = null
+    ) {
         parent::__construct($name);
     }
 
@@ -69,7 +72,7 @@ class ProcessPreparationQueueCommand extends AbstractIndexServiceCommand
         $tenantNameFilterList = $input->getOption('tenant');
         $combinedRows = $this->indexUpdateService->fetchProductIdsForPreparation($tenantNameFilterList);
 
-        return array_map(fn($row) => serialize($row), $combinedRows);
+        return array_map(fn ($row) => serialize($row), $combinedRows);
     }
 
     protected function runSingleCommand(string $serializedRow, InputInterface $input, OutputInterface $output): void

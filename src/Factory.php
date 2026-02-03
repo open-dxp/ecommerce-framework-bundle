@@ -85,8 +85,7 @@ class Factory
          * Filter services registered by ^tenant
          */
         private readonly FilterServiceLocatorInterface $filterServices
-    )
-    {
+    ) {
     }
 
     public static function getInstance(): self

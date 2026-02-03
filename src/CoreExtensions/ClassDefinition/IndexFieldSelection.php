@@ -24,6 +24,7 @@ use OpenDxp\Model\DataObject\ClassDefinition\Data\QueryResourcePersistenceAwareI
 use OpenDxp\Model\DataObject\ClassDefinition\Data\ResourcePersistenceAwareInterface;
 use OpenDxp\Model\DataObject\Concrete;
 use OpenDxp\Normalizer\NormalizerInterface;
+use Override;
 
 class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterface, QueryResourcePersistenceAwareInterface, NormalizerInterface
 {
@@ -164,7 +165,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
      *
      * @see Data::getVersionPreview
      */
-    #[\Override]
+    #[Override]
     public function getVersionPreview(mixed $data, $object = null, array $params = []): string
     {
         if ($data instanceof ObjectData\IndexFieldSelection) {
@@ -174,7 +175,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
         return '';
     }
 
-    #[\Override]
+    #[Override]
     public function checkValidity(mixed $data, bool $omitMandatoryCheck = false, array $params = []): void
     {
         if (!$omitMandatoryCheck && $this->getMandatory() &&
@@ -190,7 +191,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
      *
      * @internal
      */
-    #[\Override]
+    #[Override]
     public function getForCsvExport(DataObject\Localizedfield|DataObject\Fieldcollection\Data\AbstractData|DataObject\Objectbrick\Data\AbstractData|DataObject\Concrete $object, array $params = []): string
     {
         $key = $this->getName();
@@ -210,7 +211,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
     /**
      * True if change is allowed in edit mode.
      */
-    #[\Override]
+    #[Override]
     public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
     {
         return false;

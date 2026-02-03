@@ -19,6 +19,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Token;
 use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Token;
 use OpenDxp\Model\Paginator\PaginateListingInterface;
+use Override;
 
 /**
  * @method Token[] load()
@@ -28,7 +29,7 @@ use OpenDxp\Model\Paginator\PaginateListingInterface;
  */
 class Listing extends \OpenDxp\Model\Listing\AbstractListing implements PaginateListingInterface
 {
-    #[\Override]
+    #[Override]
     public function isValidOrderKey(string $key): bool
     {
         return in_array($key, ['id', 'token', 'series_id', 'usages', 'timestamp']);
@@ -296,6 +297,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
         $query = 'SELECT EXISTS(SELECT id FROM ' . \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Token\Dao::TABLE_NAME . " WHERE token IN ('" . implode("', '", $codes) . "'))";
 
         $result = $db->fetchOne($query);
+
         return $result != 0;
     }
 
@@ -323,7 +325,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
         return $this->load();
     }
 
-    #[\Override]
+    #[Override]
     public function count(): int
     {
         return $this->getTotalCount();

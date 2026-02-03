@@ -21,6 +21,7 @@ use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\OptimizedMysql as OptimizedMysqlConfig;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Logger;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -37,8 +38,12 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
 
     protected Helper\MySql $mySqlHelper;
 
-    public function __construct(OptimizedMysqlConfig $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        OptimizedMysqlConfig $tenantConfig,
+        Connection $db,
+        EventDispatcherInterface $eventDispatcher,
+        protected LoggerInterface $logger
+    ) {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
         $this->mySqlHelper = new Helper\MySql($tenantConfig, $db);
     }
@@ -152,7 +157,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
     /**
      * @return string[]
      */
-    #[\Override]
+    #[Override]
     protected function getSystemAttributes(): array
     {
         return $this->mySqlHelper->getSystemAttributes();

@@ -33,6 +33,7 @@ use OpenDxp\Logger;
 use OpenDxp\Model\DataObject\Fieldcollection\Data\VoucherTokenTypePattern;
 use OpenDxp\Model\DataObject\OnlineShopVoucherSeries;
 use OpenDxp\Model\DataObject\OnlineShopVoucherToken;
+use Override;
 
 /**
  * @property \OpenDxp\Model\DataObject\Fieldcollection\Data\VoucherTokenTypePattern $configuration
@@ -81,7 +82,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
     /**
      * @throws VoucherServiceException
      */
-    #[\Override]
+    #[Override]
     public function checkToken(string $code, CartInterface $cart): bool
     {
         parent::checkToken($code, $cart);
@@ -151,6 +152,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
             return true;
         }
+
         return false;
     }
 
@@ -258,6 +260,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
             return false;
         }
         $insertProbability = $this->getInsertProbability();
+
         return $insertProbability <= self::MAX_PROBABILITY;
     }
 
@@ -323,6 +326,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
             $tokens = [$tokens];
         }
         $check = array_intersect_key($tokens, $cTokens);
+
         return $check !== [];
     }
 
@@ -516,7 +520,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
      *
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     protected function getExportData(array $params): array
     {
         $tokens = new Token\Listing();

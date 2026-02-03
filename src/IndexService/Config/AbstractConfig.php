@@ -261,6 +261,7 @@ abstract class AbstractConfig implements ConfigInterface
         if ($isPrimary) {
             return "int(11) NOT NULL default '0'";
         }
+
         return 'int(11) NOT NULL';
     }
 }

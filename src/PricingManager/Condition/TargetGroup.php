@@ -38,6 +38,7 @@ class TargetGroup implements ConditionInterface
         if (!$visitorInfo->hasTargetGroupAssignment($this->getTargetGroup())) {
             return false;
         }
+
         return $visitorInfo->getTargetGroupAssignment($this->getTargetGroup())->getCount() > $this->getThreshold();
     }
 

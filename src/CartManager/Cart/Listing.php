@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart;
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
+use Override;
 
 /**
  * @method \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart[] load()
@@ -35,7 +36,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing
     /**
      * @param string $key The key to check
      */
-    #[\Override]
+    #[Override]
     public function isValidOrderKey(string $key): bool
     {
         return in_array($key, ['userId', 'name', 'creationDateTimestamp', 'modificationDateTimestamp']);

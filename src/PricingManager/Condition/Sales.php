@@ -41,6 +41,7 @@ class Sales extends AbstractOrder implements ConditionInterface
 
             return $this->getSalesAmount($rule)->lessThan($amount);
         }
+
         return false;
     }
 

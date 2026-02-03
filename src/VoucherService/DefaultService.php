@@ -105,6 +105,7 @@ class DefaultService implements VoucherServiceInterface
             $voucherTokens[] = $orderToken;
             $order->setVoucherTokens($voucherTokens);
             $this->releaseToken($code, $cart);
+
             return true;
         }
 
@@ -177,7 +178,7 @@ class DefaultService implements VoucherServiceInterface
         }
 
         // calculate not applied rules with voucher conditions
-        $notAppliedRules = array_udiff($validRules, $appliedRules, fn($rule1, $rule2) => $rule1->getId() <=> $rule2->getId());
+        $notAppliedRules = array_udiff($validRules, $appliedRules, fn ($rule1, $rule2) => $rule1->getId() <=> $rule2->getId());
         $notAppliedRulesWithVoucherCondition = [];
         foreach ($notAppliedRules as $notAppliedRule) {
             $conditions = $notAppliedRule->getConditionsByType(VoucherToken::class);
@@ -249,6 +250,7 @@ class DefaultService implements VoucherServiceInterface
         if (isset($seriesId)) {
             return Statistic::cleanUpStatistics($this->statisticsDaysThreshold, $seriesId);
         }
+
         return Statistic::cleanUpStatistics($this->statisticsDaysThreshold);
     }
 

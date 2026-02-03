@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData;
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData;
+use Override;
 
 /**
  * @method CartCheckoutData[] load()
@@ -26,7 +27,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData;
  */
 class Listing extends \OpenDxp\Model\Listing\AbstractListing
 {
-    #[\Override]
+    #[Override]
     public function isValidOrderKey(string $key): bool
     {
         return $key === 'key' || $key === 'cartId';

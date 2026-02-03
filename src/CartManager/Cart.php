@@ -20,6 +20,7 @@ use Exception;
 use OpenDxp\Cache\RuntimeCache;
 use OpenDxp\Logger;
 use OpenDxp\Model\Exception\NotFoundException;
+use Override;
 
 /**
  * @method Cart\Dao getDao()
@@ -65,7 +66,7 @@ class Cart extends AbstractCart implements CartInterface
         $this->getDao()->delete();
     }
 
-    #[\Override]
+    #[Override]
     public function sortItems(callable $value_compare_func): static
     {
         //call get items to lazy load items
@@ -116,7 +117,7 @@ class Cart extends AbstractCart implements CartInterface
         return $cart;
     }
 
-    #[\Override]
+    #[Override]
     public function getItems(): array
     {
         if ($this->items === null) {
@@ -144,7 +145,7 @@ class Cart extends AbstractCart implements CartInterface
     /**
      * @param string $countSubItems - use one of COUNT_MAIN_ITEMS_ONLY, COUNT_MAIN_OR_SUB_ITEMS, COUNT_MAIN_AND_SUB_ITEMS
      */
-    #[\Override]
+    #[Override]
     public function getItemCount(string $countSubItems = self::COUNT_MAIN_ITEMS_ONLY): int
     {
         if ($countSubItems === self::COUNT_MAIN_ITEMS_ONLY) {
@@ -157,10 +158,11 @@ class Cart extends AbstractCart implements CartInterface
 
             return $this->itemCount;
         }
+
         return parent::getItemCount($countSubItems);
     }
 
-    #[\Override]
+    #[Override]
     public function getItemAmount(string $countSubItems = self::COUNT_MAIN_ITEMS_ONLY): int
     {
         if ($countSubItems === self::COUNT_MAIN_ITEMS_ONLY) {
@@ -173,6 +175,7 @@ class Cart extends AbstractCart implements CartInterface
 
             return $this->itemAmount;
         }
+
         return parent::getItemAmount($countSubItems);
     }
 

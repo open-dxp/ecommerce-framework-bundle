@@ -20,6 +20,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFil
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use OpenDxp\Model\DataObject\Classificationstore\KeyConfig;
+use Override;
 
 class SelectClassificationStoreAttributes extends AbstractFilterType
 {
@@ -38,7 +39,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
         return $excludedKeys;
     }
 
-    #[\Override]
+    #[Override]
     protected function sortResult(AbstractFilterDefinitionType $filterDefinition, array $keyCollection): array
     {
         if (!method_exists($filterDefinition, 'getKeyIdPriorityOrder') || empty($filterDefinition->getKeyIdPriorityOrder())) {
@@ -58,7 +59,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
         return $sortedCollection + $keyCollection;
     }
 
-    #[\Override]
+    #[Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         $field = $this->getField($filterDefinition);

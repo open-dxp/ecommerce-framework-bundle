@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ClassDefinition;
 
 use OpenDxp\Model\DataObject\ClassDefinition\Data\Textarea;
+use Override;
 
 class IndexFieldSelectionField extends Textarea
 {
@@ -61,7 +62,7 @@ class IndexFieldSelectionField extends Textarea
         return $this->considerTenants;
     }
 
-    #[\Override]
+    #[Override]
     public function isEmpty(mixed $data): bool
     {
         if (is_string($data)) {
@@ -77,7 +78,7 @@ class IndexFieldSelectionField extends Textarea
     /**
      * @param null|\OpenDxp\Model\DataObject\AbstractObject $object
      */
-    #[\Override]
+    #[Override]
     public function getDataFromEditmode(mixed $data, $object = null, array $params = []): string
     {
         if (is_array($data)) {
@@ -87,7 +88,7 @@ class IndexFieldSelectionField extends Textarea
         return $data;
     }
 
-    #[\Override]
+    #[Override]
     public function getFieldType(): string
     {
         return 'indexFieldSelectionField';

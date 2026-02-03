@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItem;
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItemInterface;
+use Override;
 
 /**
  * @method CartItemInterface[] load()
@@ -31,7 +32,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing
 
     protected array $orderKey = ['`sortIndex`', '`addedDateTimestamp`'];
 
-    #[\Override]
+    #[Override]
     public function isValidOrderKey(string $key): bool
     {
         return in_array($key, ['productId', 'cartId', 'count', 'itemKey', 'addedDateTimestamp', 'sortIndex']);

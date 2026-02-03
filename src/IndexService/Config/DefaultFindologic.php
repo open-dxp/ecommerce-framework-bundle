@@ -22,6 +22,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\DefaultMockup;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Traits\OptionsResolverTrait;
+use Override;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -33,7 +34,7 @@ class DefaultFindologic extends AbstractConfig implements FindologicConfigInterf
 
     protected array $clientConfig;
 
-    #[\Override]
+    #[Override]
     protected function processOptions(array $options): void
     {
         $options = $this->resolveOptions($options);
@@ -85,7 +86,7 @@ class DefaultFindologic extends AbstractConfig implements FindologicConfigInterf
     {
     }
 
-    #[\Override]
+    #[Override]
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof DefaultFindologicWorker) {
@@ -98,7 +99,7 @@ class DefaultFindologic extends AbstractConfig implements FindologicConfigInterf
         parent::setTenantWorker($tenantWorker);
     }
 
-    #[\Override]
+    #[Override]
     public function getTenantWorker(): DefaultFindologicWorker
     {
         $tenantWorker = parent::getTenantWorker();

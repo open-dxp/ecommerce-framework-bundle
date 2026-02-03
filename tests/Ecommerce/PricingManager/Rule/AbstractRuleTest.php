@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager\Rule;
 
 use Codeception\Stub;
-use PHPUnit_Framework_MockObject_Stub;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping;
@@ -43,6 +42,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 use OpenDxp\Model\DataObject\OnlineShopTaxClass;
 use OpenDxp\Tests\Support\Helper\OpenDxp;
+use PHPUnit_Framework_MockObject_Stub;
 use TypeError;
 
 class AbstractRuleTest extends EcommerceTestCase

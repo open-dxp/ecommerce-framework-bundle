@@ -35,8 +35,11 @@ class AttributePriceSystem extends CachingPriceSystem implements PriceSystemInte
 
     protected string $priceClass;
 
-    public function __construct(PricingManagerLocatorInterface $pricingManagers, protected EnvironmentInterface $environment, array $options = [])
-    {
+    public function __construct(
+        PricingManagerLocatorInterface $pricingManagers,
+        protected EnvironmentInterface $environment,
+        array $options = []
+    ) {
         parent::__construct($pricingManagers);
 
         $resolver = new OptionsResolver();
@@ -119,6 +122,7 @@ class AttributePriceSystem extends CachingPriceSystem implements PriceSystemInte
 
                 return Decimal::create($sum);
             }
+
             return Decimal::create((float) $product->$getter());
         }
 
