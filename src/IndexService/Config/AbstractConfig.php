@@ -27,6 +27,14 @@ use RuntimeException;
 
 abstract class AbstractConfig implements ConfigInterface
 {
+    protected string $tenantName;
+
+    protected array $attributeConfig = [];
+
+    protected array $searchAttributeConfig = [];
+
+    protected ?AttributeFactory $attributeFactory = null;
+
     protected array $attributes = [];
 
     protected array $searchAttributes = [];
@@ -37,17 +45,27 @@ abstract class AbstractConfig implements ConfigInterface
 
     protected array $options = [];
 
+    protected array $filterTypes;
+
     /**
-     * @param array[]|Attribute[] $attributeConfig
+     * @param array[]|Attribute[] $attributes
      */
     public function __construct(
-        protected ?AttributeFactory $attributeFactory,
-        protected string $tenantName,
-        protected array $attributeConfig = [],
-        protected array $searchAttributeConfig = [],
-        protected array $filterTypes = [],
+        AttributeFactory $attributeFactory,
+        string $tenantName,
+        array $attributes = [],
+        array $searchAttributes = [],
+        array $filterTypes = [],
         array $options = [],
     ) {
+        $this->tenantName = $tenantName;
+
+        $this->attributeConfig = $attributes;
+        $this->searchAttributeConfig = $searchAttributes;
+
+        $this->filterTypes = $filterTypes;
+
+        $this->attributeFactory = $attributeFactory;
         $this->buildAttributes($this->attributeConfig);
 
         foreach ($this->searchAttributeConfig as $searchAttribute) {
