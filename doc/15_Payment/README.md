@@ -16,19 +16,19 @@ For more information about integrating Payment into checkout processes see
 
 ## Configuration
 
-Configuration of Payment Manager takes place in the `pimcore_ecommerce_config.payment_manager` config section: 
+Configuration of Payment Manager takes place in the `opendxp_ecommerce_config.payment_manager` config section: 
 
 ```yaml
-pimcore_ecommerce_config:
+opendxp_ecommerce_config:
     payment_manager:
         # service ID of payment manager implementation - following value is default value an can be omitted
-        payment_manager_id: Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\PaymentManager
+        payment_manager_id: OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\PaymentManager
 
         # configuration of payment providers, key is name of provider
         providers:
             datatrans:
                 # service ID of payment provider implementation
-                provider_id: Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\Datatrans
+                provider_id: OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\Datatrans
 
                 # active profile - you can define multiple profiles in the section below 
                 profile: sandbox
@@ -46,7 +46,7 @@ pimcore_ecommerce_config:
                         mode: live
 
             ogone:
-                provider_id: Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\OGone
+                provider_id: OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\OGone
                 profile: sandbox
                 profiles:
                     sandbox:
@@ -60,7 +60,7 @@ pimcore_ecommerce_config:
                         mode: live                        
 #                       encryptionType: SHA256 or SHA512 (optional)
             mpay24:
-                provider_id: Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\Mpay24Seamless
+                provider_id: OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\Mpay24Seamless
                 profile: testsystem
                 profiles:
                   _defaults:
@@ -82,7 +82,7 @@ pimcore_ecommerce_config:
                       testSystem: false
                       debugMode: false                  
             hobex:
-                    provider_id: Pimcore\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\Hobex                    
+                    provider_id: OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\Payment\Hobex                    
                     profile: sandbox
                     profiles:
                         sandbox:

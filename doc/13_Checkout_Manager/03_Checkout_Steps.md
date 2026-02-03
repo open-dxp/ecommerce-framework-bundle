@@ -2,8 +2,8 @@
 
 For each checkout step (e.g. delivery address, delivery date, ...) there has to be a concrete checkout step implementation.
 This implementation is responsible for storage and loading of necessary checkout data for each step. It needs to extend 
-`\Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\AbstractStep` and implement 
-`\Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\CheckoutStepInterface`. 
+`\OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\AbstractStep` and implement 
+`\OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\CheckoutStepInterface`. 
 
 Following methods have to be implemented: 
 * `commit($data)`: Is called when step is finished and data needs to be saved. 
@@ -19,10 +19,10 @@ See [configuration](./01_Basic_Configuration.md) for checkout step configuration
 ```php
 <?php
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager;
 
 /**
- * Class \Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\DeliveryAddress
+ * Class \OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\DeliveryAddress
  *
  * sample implementation for delivery address
  */

@@ -18,7 +18,7 @@ public function initPaymentAction(Request $request, Factory $factory) {
     /** @var CheckoutManagerInterface $checkoutManager */
     $checkoutManager = $factory->getCheckoutManager($cart);
  
-    //optional - init payment and get Pimcore internal payment ID (e.g. if needed for config of payment provider)
+    //optional - init payment and get OpenDxp internal payment ID (e.g. if needed for config of payment provider)
     $paymentInformation = $checkoutManager->initOrderPayment();
     $config = new DatatransRequest([
         //all options needed for payment provider - you also can use setters of the corresponding object
@@ -139,24 +139,24 @@ with one of the following strategies how to handle pending payments when a new p
   
 ```yml
 factory_options:
-    class: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
-    handle_pending_payments_strategy: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\AlwaysRecreateOrderStrategy
+    class: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
+    handle_pending_payments_strategy: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\AlwaysRecreateOrderStrategy
 ```
   
   * **CancelPaymentOrRecreateOrder** (default value): Cancel payments if possible and cart has not changed, create new order when cart has changed.
 
 ```yml
 factory_options:
-    class: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
-    handle_pending_payments_strategy: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\CancelPaymentOrRecreateOrderStrategy
+    class: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
+    handle_pending_payments_strategy: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\CancelPaymentOrRecreateOrderStrategy
 ```  
 
   * **ThrowException**: Throw exceptions to make handling of these cases in controller possible. 
 
 ```yml
 factory_options:
-    class: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
-    handle_pending_payments_strategy: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\ThrowExceptionStrategy
+    class: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
+    handle_pending_payments_strategy: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\ThrowExceptionStrategy
 ```
 
 Above mentioned use cases will now result in following behavior: 

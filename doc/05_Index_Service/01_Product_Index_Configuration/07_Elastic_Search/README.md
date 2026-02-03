@@ -5,7 +5,7 @@ Currently, Elasticsearch 8 is supported.
 ## Installation
 
 ### Elasticsearch 8
-To work properly Pimcore requires the Elasticsearch client, install them with: `composer require pimcore/elasticsearch-client`.
+To work properly OpenDxp requires the Elasticsearch client, install them with: `composer require open-dxp/elasticsearch-client`.
 
 ## Index Configuration
 Elasticsearch provides a couple of additional configuration options for the index to utilize elasticsearch features. 
@@ -33,12 +33,12 @@ The existing command `bin/console ecommerce:indexservice:search-elasticsearch-sy
 
 ## Indexing of Classification Store Attributes
 
-With elasticsearch it is possible to index all attributes of [Classification Store](https://github.com/pimcore/pimcore/tree/11.x/doc/05_Objects/01_Object_Classes/01_Data_Types/15_Classification_Store.md) 
+With elasticsearch it is possible to index all attributes of [Classification Store](https://github.com/open-dxp/opendxp/tree/1.x/doc/05_Objects/01_Object_Classes/01_Data_Types/15_Classification_Store.md) 
 data without defining an attribute for each single classification store key.   
 
 For details see [Filter Classification Store](../../../07_Filter_Service/03_Elastic_Search/01_Filter_Classification_Store.md) 
 in Filter Service documentation. 
 
 ## Synonyms 
-Pimcore provides an out-of-the box integration for synonyms in elasticsearch. 
+OpenDxp provides an out-of-the box integration for synonyms in elasticsearch. 
 See [Synonyms](./02_Synonyms.md) for details. 

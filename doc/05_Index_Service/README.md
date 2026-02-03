@@ -10,9 +10,9 @@ These implementations can be configured in [Assortment Tenants](./01_Product_Ind
 The default tenant always uses `DefaultMysql` as implementation.  
 
 The separate *Product Index* has several advantages:  
-- It is completely independent from the Pimcore object structure, only contains needed information and can pre-calculate 
+- It is completely independent from the OpenDxp object structure, only contains needed information and can pre-calculate 
   complex data.
-- It can be optimized without any side effects on Pimcore for requirements considering filtering, listing and 
+- It can be optimized without any side effects on OpenDxp for requirements considering filtering, listing and 
   searching products. 
 - It supports assortment tenants and therefore allows optimized indices for multiple assortments within one system. 
 

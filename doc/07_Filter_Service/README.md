@@ -21,22 +21,22 @@ these Filter Types require
 The Filter Types are responsible for these three tasks and can be used for composing filter definition objects (see next chapter).
 
 The backend implementation of Filter Types takes place in php classes which extend the abstract class 
-`\Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType` and are responsible for creating 
+`\OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType` and are responsible for creating 
 the correct filter conditions based on the Product Index implementation and rendering the filter output to the frontend. 
 
-Therefore `\Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType` expects the two methods 
+Therefore `\OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType` expects the two methods 
 `getFilterValues()` and `addCondition()` to be implemented. 
 
-Each Filter Type needs to be defined as service and registered on the `pimcore_ecommerce_framework.filter_service` configuration.
-The framework already defines a number of core filter types in [filter_service_filter_types.yaml](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/Resources/config/filter_service_filter_types.yaml).
+Each Filter Type needs to be defined as service and registered on the `opendxp_ecommerce_framework.filter_service` configuration.
+The framework already defines a number of core filter types in [filter_service_filter_types.yaml](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/Resources/config/filter_service_filter_types.yaml).
 
 > FilterTypes are dependent of the used index backend. You need to use different FilterTypes when using MySQL, ElasticSearch or OpenSearch etc. 
-> Pimcore ships with FilterTypes implementations for all supported index backends. For details see for example 
+> OpenDxp ships with FilterTypes implementations for all supported index backends. For details see for example 
 > [Elasticsearch Config](03_Elastic_Search/README.md).  
 > [OpenSearch Config](05_Open_Search/README.md).
 
 ```yaml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     filter_service:
         tenants:
             default:
@@ -46,59 +46,59 @@ pimcore_ecommerce_framework:
                     # filter type for the FilterNumberRange field collection
                     FilterNumberRange:
                         # service id for filter type implementation
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRange
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRange
                         # default template for filter, can be overwritten in filter definition
                         template: ':Shop/filters:range.html.php'
 
                     FilterNumberRangeSelection:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRangeSelection
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRangeSelection
                         template: ':Shop/filters:numberrange.html.php'
 
                     FilterSelect:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\Select
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\Select
                         template: ':Shop/filters:select.html.php'
 
                     FilterSelectFromMultiSelect:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectFromMultiSelect
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectFromMultiSelect
                         template: ':Shop/filters:select.html.php'
 
                     FilterMultiSelect:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelect
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelect
                         template: ':Shop/filters:multiselect.html.php'
 
                     FilterMultiSelectFromMultiSelect:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelectFromMultiSelect
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelectFromMultiSelect
                         template: ':Shop/filters:multiselect.html.php'
 
                     FilterMultiRelation:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelectRelation
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelectRelation
                         template: ':Shop/filters:multiselect-relation.html.php'
 
                     FilterCategory:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectCategory
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectCategory
                         template: ':Shop/filters:select_category.html.php'
 
                     FilterRelation:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectRelation
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectRelation
                         template: ':Shop/filters:object_relation.html.php'
 ```
 
 Optionally, you can configure a custom filter service which relies on a custom helper implementation. The helper is a tool
-for the Pimcore backend controller to get possible group by values for a certain field (used by object data type IndexFieldSelection,
+for the OpenDxp backend controller to get possible group by values for a certain field (used by object data type IndexFieldSelection,
 e.g. in filter definitions). First, create your filter service definition:
 
 ```yaml
 services:
     app.custom_filter_service:
-        class: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterService
+        class: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterService
         arguments:
-            - '@Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterGroupHelper'
+            - '@OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterGroupHelper'
 ```
 
 You can now use the service definition in the `filter_service` config:
 
 ```yaml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     filter_service:
         tenants:
             default:
@@ -123,7 +123,7 @@ pimcore_ecommerce_framework:
 
 ## 2 - Setting up FilterDefinition Objects
 The configuration of available filters and the set up of product listings in the frontend takes place in FilterDefinition 
-Pimcore objects. Configuration options are beside others: 
+OpenDxp objects. Configuration options are beside others: 
 - General settings like `page size` etc. 
 - `PreConditions` for pre filtering of products, e.g. only products of a certain category. These preconditions cannot be 
 changed by the user in the frontend. 
@@ -134,12 +134,12 @@ changed by the user in the frontend.
 
 
 The configuration of preconditions and filters is done by field collection entries, whereby the field collection types 
-are mapped to Filter Types and their backend implementations in the `pimcore_ecommerce_framework.filter_service` config 
+are mapped to Filter Types and their backend implementations in the `opendxp_ecommerce_framework.filter_service` config 
 section (see previous chapter). 
 The Filter Definition class can be extended and modified to custom needs of the system. 
 
 Filter Definition objects can be assigned to category objects to build up automatic category pages or to area bricks in 
-Pimcore documents to set up manual landing pages etc. 
+OpenDxp documents to set up manual landing pages etc. 
 Both is demonstrated at our [Demo](https://demo.pimcore.fun) and also available as 
 [source code](https://github.com/pimcore/demo). 
 
@@ -157,7 +157,7 @@ sample:
 
 ```php
 <?php 
-$ecommerceFactory = \Pimcore\Bundle\EcommerceFrameworkBundle\Factory::getInstance();
+$ecommerceFactory = \OpenDxp\Bundle\EcommerceFrameworkBundle\Factory::getInstance();
 
 $templateParams = [];
 $params = array_merge($request->query->all(), $request->attributes->all());
@@ -171,7 +171,7 @@ $filterDefinition = //TODO ...get from somewhere;
 
 // create and init filter service
 $filterService = $ecommerceFactory->getFilterService();
-(new \Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\ListHelper)->setupProductList($filterDefinition, $productListing, $params, $filterService, true, true);
+(new \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\ListHelper)->setupProductList($filterDefinition, $productListing, $params, $filterService, true, true);
 $templateParams['filterService'] = $filterService;
 $templateParams['filterDefinition'] = $filterDefinition;
 

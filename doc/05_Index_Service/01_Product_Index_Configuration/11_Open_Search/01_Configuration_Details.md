@@ -15,18 +15,18 @@ also [OpenSearch Docs](https://opensearch.org/docs/latest/api-reference/index-ap
 
 #### `opensearch_client_name`
 OpenSearch client configuration takes place via 
-[Pimcore OpenSearch Client Bundle](https://github.com/pimcore/opensearch-client) and has two parts.
+[OpenDxp OpenSearch Client Bundle](https://github.com/open-dxp/opensearch-client) and has two parts.
 
 1) Configuring an OpenSearch client in separate configuration
 ```yaml
 # Configure an OpenSearch client 
-pimcore_open_search_client:
+opendxp_open_search_client:
     clients:
         default:
             hosts: [ 'opensearch:9200' ]
             username: 'admin'
             password: 'somethingsecret'
-            logger_channel: 'pimcore.opensearch'    
+            logger_channel: 'opendxp.opensearch'    
 ```
 
 2) Define the client name to be used by an OpenSearch tenant. This will be done via the `opensearch_client_name` configuration 
@@ -38,12 +38,12 @@ For details see [Synonyms](./02_Synonyms.md).
 
 #### Sample Config
 ```yml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     index_service:
         tenants:
             MyOpenSearchTenant:
-                worker_id: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OpenSearch\DefaultOpensearch
-                config_id: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Config\OpenSearch
+                worker_id: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OpenSearch\DefaultOpensearch
+                config_id: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\OpenSearch
                 
                 config_options:
                     client_config:
@@ -82,7 +82,7 @@ pimcore_ecommerce_framework:
 The type of the data attributes needs to be set to OpenSearch data types..
 
 ```yml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     index_service:
         tenants:
             MyOpenSearchTenant:
@@ -99,7 +99,7 @@ You can also skip the `type` and `mapping`, then OpenSearch will try to create d
 
 ```yml
 
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     index_service:
         tenants:
             MyOpenSearchTenant:

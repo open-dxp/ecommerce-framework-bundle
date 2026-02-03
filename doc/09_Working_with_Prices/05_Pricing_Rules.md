@@ -1,8 +1,6 @@
 # Pricing Rules
 Pricing Rules are supported by the E-Commerce Framework out of the box. The pricing rules themselves can be configured 
-in the Pimcore Backend UI by putting conditions and actions together. 
-
-![Pricing Rules](../img/pricing-rules.png)
+in the OpenDxp Backend UI by putting conditions and actions together. 
 
 Once active, all rules are checked and applied automatically by the system - including reducing product prices, adding 
 price modificators to reduce cart totals, removing shipping costs and adding gift items to the cart. 
@@ -22,17 +20,17 @@ following scripts can be used.
             {% for rule in priceInfo.rules %}
 				<?php foreach($rule->getActions() as $action) { ?>
                 {% for action in rule.actions %}
-                    {% if action is instanceof('Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Action\ProductDiscount') %}
+                    {% if action is instanceof('OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\ProductDiscount') %}
                         {% if action.amount > 0 %}
 							<li>{{ rule.label }} {{ 'shop.detail.your_benefit.discount.amount'|trans([action.amount]) }}</li>
                         {% elseif action.percent > 0 %} 
 							<li>{{ rule.label }} {{ 'shop.detail.your_benefit.discount.percent'|trans([action.percent]) }}</li>
 						{% endif %}
-					{% elseif action is instanceof('Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Action\GiftInterface') %}
+					{% elseif action is instanceof('OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\GiftInterface') %}
                         <li>
                             {{ 'shop.detail.your_benefit.discount.gift'|trans }}, <a href="{{ action.product.getShopDetailLink() }}">{{ action.product.name }}</a>
                         </li>
-                    {% elseif action is instanceof('Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Action\FreeShipping') %}
+                    {% elseif action is instanceof('OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\FreeShipping') %}
 						<li>
 							{{ 'shop.detail.your_benefit.discount.freeshipping'|trans }}
 						</li>

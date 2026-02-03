@@ -7,47 +7,47 @@ These filter types create the OpenSearch specific conditions for each filter.
 
 Here is an example for the configuration: 
 ```yml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     filter_service:
         tenants:
             MyOpenSearchTenant:
                 filter_types:
                     FilterNumberRange:
                         # Service id for filter type implementation
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\NumberRange
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\NumberRange
                         # Default template for filter, can be overwritten in filter definition
                         template: ':Shop/filters:range.html.php'
 
                     FilterNumberRangeSelection:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\NumberRangeSelection
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\NumberRangeSelection
                         template: ':Shop/filters:numberrange.html.php'
 
                     FilterSelect:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\Select
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\Select
                         template: ':Shop/filters:select.html.php'
 
                     FilterSelectFromMultiSelect:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\SelectFromMultiSelect
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\SelectFromMultiSelect
                         template: ':Shop/filters:select.html.php'
 
                     FilterMultiSelect:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\MultiSelect
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\MultiSelect
                         template: ':Shop/filters:multiselect.html.php'
 
                     FilterMultiSelectFromMultiSelect:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\MultiSelectFromMultiSelect
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\MultiSelectFromMultiSelect
                         template: ':Shop/filters:multiselect.html.php'
 
                     FilterMultiRelation:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\MultiSelectRelation
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\MultiSelectRelation
                         template: ':Shop/filters:multiselect-relation.html.php'
 
                     FilterCategory:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\SelectCategory
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\SelectCategory
                         template: ':Shop/filters:select_category.html.php'
 
                     FilterRelation:
-                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\SelectRelation
+                        filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SearchIndex\SelectRelation
                         template: ':Shop/filters:object_relation.html.php'
 ```
 

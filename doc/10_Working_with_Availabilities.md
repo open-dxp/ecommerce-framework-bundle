@@ -9,10 +9,10 @@ Each product can have its own Availability System.
 
 ## Configuration of Availability Systems
 
-An availability system is a class implementing `Pimcore\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystemInterface` which 
-is defined as service and registered with a name in the `pimcore_ecommerce_framework.availability_systems` configuration tree. 
+An availability system is a class implementing `OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystemInterface` which 
+is defined as service and registered with a name in the `opendxp_ecommerce_framework.availability_systems` configuration tree. 
 
-Currently, the framework ships only with a [sample implementation](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/AvailabilitySystem/AvailabilitySystem.php#L21)
+Currently, the framework ships only with a [sample implementation](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/AvailabilitySystem/AvailabilitySystem.php#L21)
 which you can use as starting point.
 
 There are 3 places where the configuration of Availability Systems takes place: 
@@ -28,7 +28,7 @@ The product class returns the name of an Availability System:
 ```php
 <?php
 
-class MyProduct implements \Pimcore\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface
+class MyProduct implements \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface
 {
     public function getAvailabilitySystemName(): string
     {
@@ -49,19 +49,19 @@ Each Availability System must be defined as service (either a service defined by
     #
     # AVAILABILITY SYSTEMS
     #
-    Pimcore\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystem: ~
+    OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystem: ~
 ```
 
 
 The `availability_systems` configuration maps names to service IDs:
 
 ```
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     # defines 3 availability systems
     availability_systems:
         # the availability system is already defined in core availability_systems.yaml service definition
         default:
-            id: Pimcore\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystem
+            id: OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilitySystem
        
         foo:
             id: App\Ecommerce\AvailabilitySystem\CustomAvailabilitySystem

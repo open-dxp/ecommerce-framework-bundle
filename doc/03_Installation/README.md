@@ -5,27 +5,27 @@ This section describes the installation of the E-Commerce Framework and the firs
 ## Installation
 
 ### Minimum Requirements
-* Pimcore >= 11.0
+* OpenDXP >= 1.0
 
 ### Install
 
 Install bundle via composer:
 ```bash 
-composer require pimcore/ecommerce-framework-bundle
+composer require open-dxp/ecommerce-framework-bundle
 ```
 
 Enable bundle via console or extensions manager:
 ```bash
-php bin/console pimcore:bundle:install PimcoreEcommerceFrameworkBundle
+php bin/console opendxp:bundle:install OpenDxpEcommerceFrameworkBundle
 ```
 
 Check if the bundle has been installed:
 ```bash
-php bin/console pimcore:bundle:list
+php bin/console opendxp:bundle:list
 +---------------------------------+---------+-----------+----+-----+-----+
 | Bundle                          | Enabled | Installed | I? | UI? | UP? |
 +---------------------------------+---------+-----------+----+-----+-----+
-| PimcoreEcommerceFrameworkBundle  | ✔     | ✔        | ❌  | ✔ | ❌ |
+| OpenDxpEcommerceFrameworkBundle | ✔       | ✔         | ❌  | ✔   | ❌  |
 +---------------------------------+---------+-----------+----+-----+-----+
 ```
 
@@ -34,7 +34,7 @@ The installer does following tasks:
 - Install several object classes. 
 - Install several object bricks. 
 - Create additional tables for carts, pricing rules, vouchers, etc. 
-- Import translations for Pimcore Admin UI and Order Backend. 
+- Import translations for OpenDxp Admin UI and Order Backend. 
 - Add additional permissions. 
 
 If either classes, field collections, object bricks or tables already exist, the installation cannot be started. 
@@ -51,41 +51,41 @@ category class, and it is also possible to have several product classes (if nece
 The only requirement is, that the classes have to be 'prepared' for being products or product categories. 
 
 ### Product
-There are two ways of preparing a Pimcore class for product-usage in the E-Commerce Framework
+There are two ways of preparing a OpenDxp class for product-usage in the E-Commerce Framework
 
-1. The Pimcore class needs to extend the abstract class `\Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct`
+1. The OpenDxp class needs to extend the abstract class `\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct`
    * This is useful, when both product index and checkout functionality are based on the E-Commerce Framework.    
    
    
-2. Make sure that the Pimcore class implements either `\Pimcore\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface` or 
-`\Pimcore\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface` - or both, depending on the use case it is used for.
+2. Make sure that the OpenDxp class implements either `\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface` or 
+`\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface` - or both, depending on the use case it is used for.
    * This is useful, when e.g. only checkout functionality is based on the E-Commerce Framework, but not the product 
    presentation. 
    * The interfaces define methods that are needed for the two use cases and need to be implemented. 
 
-> For the abstract class use the parent class functionality of Pimcore. For implementing the interfaces use either 
-the parent class functionality or the overriding models functionality of Pimcore 
-(see also [Overriding Models](https://github.com/pimcore/pimcore/tree/11.x/doc/20_Extending_Pimcore/03_Overriding_Models.md)).
+> For the abstract class use the parent class functionality of OpenDxp. For implementing the interfaces use either 
+the parent class functionality or the overriding models functionality of OpenDxp 
+(see also [Overriding Models](https://github.com/open-dxp/opendxp/tree/1.x/doc/20_Extending_OpenDxp/03_Overriding_Models.md)).
 
-> If using the abstract class, also have a look at its [implementation](https://github.com/pimcore/ecommerce-framework-bundle/tree/1.x/src/Model/AbstractProduct.php). 
+> If using the abstract class, also have a look at its [implementation](https://github.com/open-dxp/ecommerce-framework-bundle/tree/1.x/src/Model/AbstractProduct.php). 
 You might need to override a few methods that cannot be implemented by the abstract class and throw an 
 exception depending on the use case you are using it. 
 
 
 ### Product Category
 When a product category class is used, this class needs to extend the abstract class 
-`\Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory`. 
+`\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory`. 
 
-> For product categories only one Pimcore class should be used. For products, several Pimcore classes can be used. 
+> For product categories only one OpenDxp class should be used. For products, several OpenDxp classes can be used. 
 Possibly the index update scripts need to be adapted.
 
 
-## Configuring Pimcore Ecommerce Framework
+## Configuring OpenDxp Ecommerce Framework
 
 The E-Commerce Framework is split up into multiple components which can be configured individually. For further reading please see:
 
 - [Configuration](../04_Configuration/README.md) describes configuration features valid for the whole framework configuration
-- [PimcoreEcommerceFrameworkBundle Configuration Reference](../04_Configuration/01_PimcoreEcommerceFrameworkBundle_Configuration_Reference.md)
+- [OpenDxpEcommerceFrameworkBundle Configuration Reference](../04_Configuration/01_OpenDxpEcommerceFrameworkBundle_Configuration_Reference.md)
   contains a reference of the whole configuration tree
   
 Please see the following sections for a description of each component and a configuration reference describing

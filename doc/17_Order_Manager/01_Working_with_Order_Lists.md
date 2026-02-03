@@ -1,6 +1,6 @@
 # Working with Order Lists
 
-The Order List are a one stop API for filtering and listing order objects. Of course default Pimcore object lists also 
+The Order List are a one stop API for filtering and listing order objects. Of course default OpenDxp object lists also 
 can be used for listing order objects. But Order Lists provide additional functionality in terms of predefined filters etc. 
 
 ## Basic - Get Newest Orders
@@ -16,7 +16,7 @@ $orderList->setOrder( 'order.orderDate desc' );
 $orderList->setLimit( 10, 0 );
 
 // iterate
-/** @var \Pimcore\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListItemInterface $order */
+/** @var \OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListItemInterface $order */
 foreach($orderList as $order) {
     echo $order->getOrdernumber();
 }
@@ -45,7 +45,7 @@ $orderList = $orderManager->createOrderList();
 
 
 // create date time filter
-$filterDate = new \Pimcore\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Filter\OrderDateTime();
+$filterDate = new \OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Filter\OrderDateTime();
 $filterDate->setFrom( new DateTime('20.01.2015') );
 $filterDate->setTill( new DateTime('31.01.2015') );
 
@@ -97,7 +97,7 @@ $query->where('order.comment like ?', '%hallo world%');
 
 ### Expert - High Performance
 
-> avoid loading of Pimcore object's for higher performance
+> avoid loading of OpenDxp object's for higher performance
 
 ```php
 <?php
@@ -121,12 +121,12 @@ $orderList->addSelectField(['Items' => 'count(orderItem.id)']);
 <?php
 
 // e.g. get all orderings for a customer
-$orderList->joinCustomer( \Pimcore\Model\DataObject\Customer::classId() );
+$orderList->joinCustomer( \OpenDxp\Model\DataObject\Customer::classId() );
 $orderList->getQuery()->where('customer.id = ?', 12345);
 
 
 // e.g. filter product number
-$orderList->joinProduct( \Pimcore\Model\DataObject\Product::classId() );
+$orderList->joinProduct( \OpenDxp\Model\DataObject\Product::classId() );
 $orderList->getQuery()->where('product.productNumber = ?', 'CMD1191');
 
 ```
@@ -134,7 +134,7 @@ $orderList->getQuery()->where('product.productNumber = ?', 'CMD1191');
 
 ### Generic Filter
 
-> Namespace: \Pimcore\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Filter
+> Namespace: \OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Filter
 
 | Filter          | Description |
 | --------------- | ----------- |
