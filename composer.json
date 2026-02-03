@@ -51,7 +51,7 @@
       "OpenDxp\\Model\\DataObject\\": "var/classes/DataObject"
     },
     "files": [
-      "kernel/Kernel.php"
+      "kernel/TestKernel.php"
     ]
   },
   "extra": {
