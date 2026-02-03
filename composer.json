@@ -29,7 +29,7 @@
     "codeception/module-asserts": "^3.2",
     "phpstan/phpstan": "2.1.33",
     "phpstan/phpstan-symfony": "^2.0.9",
-    "pimcore/elasticsearch-client": "^1.0.0",
+    "open-dxp/elasticsearch-client-bundle": "^1.0.0",
     "open-dxp/opensearch-client-bundle": "^1.0.0",
     "symfony/dotenv": "^7.4",
     "symfony/runtime": "^7.4"
