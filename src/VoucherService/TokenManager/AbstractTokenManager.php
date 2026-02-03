@@ -90,12 +90,10 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
         $cartCodes = $cart->getVoucherTokenCodes();
         if (method_exists($this->configuration, 'getAllowOncePerCart') && $this->configuration->getAllowOncePerCart()) {
             $token = Token::getByCode($code);
-            if (is_array($cartCodes)) {
-                foreach ($cartCodes as $cartCode) {
-                    $cartToken = Token::getByCode($cartCode);
-                    if ($token->getVoucherSeriesId() === $cartToken->getVoucherSeriesId()) {
-                        throw new VoucherServiceException('OncePerCart: Only one token of this series is allowed per cart.', VoucherServiceException::ERROR_CODE_ONCE_PER_CART_VIOLATED);
-                    }
+            foreach ($cartCodes as $cartCode) {
+                $cartToken = Token::getByCode($cartCode);
+                if ($token->getVoucherSeriesId() === $cartToken->getVoucherSeriesId()) {
+                    throw new VoucherServiceException('OncePerCart: Only one token of this series is allowed per cart.', VoucherServiceException::ERROR_CODE_ONCE_PER_CART_VIOLATED);
                 }
             }
         }
@@ -110,8 +108,7 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
     protected function checkOnlyToken(CartInterface $cart): void
     {
         $cartCodes = $cart->getVoucherTokenCodes();
-        $cartVoucherCount = count($cartCodes);
-        if ($cartVoucherCount && method_exists($this->configuration, 'getOnlyTokenPerCart')) {
+        if (count($cartCodes) > 0) {
             if ($this->configuration->getOnlyTokenPerCart()) {
                 throw new VoucherServiceException('OnlyTokenPerCart: This token is only allowed as only token in this cart.', VoucherServiceException::ERROR_CODE_ONLY_TOKEN_PER_CART_CANNOT_BE_ADDED);
             }
@@ -149,7 +146,7 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
             fputcsv($stream, ['']);
         }
 
-        if (null !== $data && is_array($data)) {
+        if (is_array($data)) {
             foreach ($data as $tokenInfo) {
                 fputcsv($stream, [
                     $tokenInfo['token'],
@@ -185,7 +182,7 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
             $result[] = '';
         }
 
-        if (null !== $data && is_array($data)) {
+        if (is_array($data)) {
             foreach ($data as $tokenInfo) {
                 $result[] = $tokenInfo['token'];
             }

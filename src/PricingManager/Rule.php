@@ -71,7 +71,6 @@ class Rule extends AbstractModel implements RuleInterface
         } catch (Exception) {
             try {
                 $ruleClass = static::class;
-                /** @var Rule $rule */
                 $rule = new $ruleClass();
                 $rule->getDao()->getById($id);
 

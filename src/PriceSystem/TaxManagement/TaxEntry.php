@@ -22,11 +22,11 @@ use OpenDxp\Model\DataObject\OnlineShopTaxClass;
 
 class TaxEntry
 {
-    const CALCULATION_MODE_COMBINE = 'combine';
+    const string CALCULATION_MODE_COMBINE = 'combine';
 
-    const CALCULATION_MODE_ONE_AFTER_ANOTHER = 'oneAfterAnother';
+    const string CALCULATION_MODE_ONE_AFTER_ANOTHER = 'oneAfterAnother';
 
-    const CALCULATION_MODE_FIXED = 'fixed';
+    const string CALCULATION_MODE_FIXED = 'fixed';
 
     public function __construct(protected float $percent, protected Decimal $amount, protected ?string $taxId = null, protected ?TaxEntryFieldcollection $entry = null)
     {

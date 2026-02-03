@@ -11,7 +11,7 @@ services:
         public: false
         arguments:
             - '@translator'
-            - '@opendxp.templating.engine.delegating'
+            - '@twig'
             - '@request_stack'
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\:

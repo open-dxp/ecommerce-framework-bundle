@@ -124,14 +124,12 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
                     'name' => $this->indexName,
                 ])->asArray();
 
-                if (is_array($result)) {
-                    $aliasIndexName = array_key_first($result);
-                    preg_match('/'.$this->indexName.'-(\d+)/', $aliasIndexName, $matches);
-                    if (count($matches) > 1) {
-                        $version = (int)$matches[1];
-                        if ($version > $this->indexVersion) {
-                            $this->indexVersion = $version;
-                        }
+                $aliasIndexName = array_key_first($result);
+                preg_match('/'.$this->indexName.'-(\d+)/', $aliasIndexName, $matches);
+                if (count($matches) > 1) {
+                    $version = (int)$matches[1];
+                    if ($version > $this->indexVersion) {
+                        $this->indexVersion = $version;
                     }
                 }
             } catch (ClientResponseException $e) {

@@ -109,11 +109,11 @@ class NumberRangeSelection extends AbstractFilterType
         $field = $this->getField($filterDefinition);
         $rawValue = $params[$field] ?? null;
 
-        if (!empty($rawValue) && $rawValue != AbstractFilterType::EMPTY_STRING && is_string($rawValue)) {
+        if (!empty($rawValue) && $rawValue !== AbstractFilterType::EMPTY_STRING && is_string($rawValue)) {
             $values = explode('-', $rawValue);
             $value['from'] = trim($values[0]);
             $value['to'] = trim($values[1]);
-        } elseif ($rawValue == AbstractFilterType::EMPTY_STRING) {
+        } elseif ($rawValue === AbstractFilterType::EMPTY_STRING) {
             $value = null;
         } else {
             $value['from'] = method_exists($filterDefinition, 'getPreSelectFrom') ? $filterDefinition->getPreSelectFrom() : null;

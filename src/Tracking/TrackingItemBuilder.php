@@ -173,7 +173,6 @@ class TrackingItemBuilder implements TrackingItemBuilderInterface
      */
     public function buildCheckoutItem(AbstractOrder $order, AbstractOrderItem $orderItem): ProductAction
     {
-        /** @var ProductInterface $product */
         $product = $orderItem->getProduct();
 
         $item = new ProductAction();
@@ -192,7 +191,6 @@ class TrackingItemBuilder implements TrackingItemBuilderInterface
      */
     public function buildCheckoutItemByCartItem(CartItemInterface $cartItem): ProductAction
     {
-        /** @var ProductInterface|AbstractObject $product */
         $product = $cartItem->getProduct();
 
         $item = new ProductAction();

@@ -83,7 +83,7 @@ interface CartItemInterface
 
     public function setAddedDate(?DateTime $date = null): void;
 
-    public function getAddedDate(): DateTime;
+    public function getAddedDate(): ?DateTime;
 
     /**
      * @return int unix timestamp

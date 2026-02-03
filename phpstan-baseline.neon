@@ -1,32 +1,115 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\OfferTool\\\\AbstractOfferToolProduct\\:\\:getById\\(\\) should return static\\(OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\OfferTool\\\\AbstractOfferToolProduct\\)\\|null but returns OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\OfferTool\\\\AbstractOfferToolProduct\\.$#"
-			reportUnmatched: false
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 2
+			path: src/CartManager/CartItem.php
+
+		-
+			message: '#^Call to function method_exists\(\) with OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterCategory and ''getRootCategory'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/FilterService/FilterType/ElasticSearch/SelectCategory.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/FilterService/FilterType/Findologic/MultiSelectRelation.php
+
+		-
+			message: '#^Call to function method_exists\(\) with OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterNumberRangeSelection and ''getPreSelectFrom'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/FilterService/FilterType/Findologic/NumberRangeSelection.php
+
+		-
+			message: '#^Call to function method_exists\(\) with OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterNumberRangeSelection and ''getPreSelectTo'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/FilterService/FilterType/Findologic/NumberRangeSelection.php
+
+		-
+			message: '#^Call to function method_exists\(\) with OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterCategory and ''getRootCategory'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/FilterService/FilterType/Findologic/SelectCategory.php
+
+		-
+			message: '#^Instanceof between OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterCategory and OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterCategory will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/FilterService/FilterType/Findologic/SelectCategory.php
+
+		-
+			message: '#^Call to function method_exists\(\) with OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterCategoryMultiselect and ''getAvailableCategor…'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/FilterService/FilterType/MultiSelectCategory.php
+
+		-
+			message: '#^Call to function method_exists\(\) with OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterNumberRangeSelection and ''getPreSelectFrom'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/FilterService/FilterType/NumberRangeSelection.php
+
+		-
+			message: '#^Call to function method_exists\(\) with OpenDxp\\Model\\DataObject\\Fieldcollection\\Data\\FilterNumberRangeSelection and ''getPreSelectTo'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/FilterService/FilterType/NumberRangeSelection.php
+
+		-
+			message: '#^Offset ''acknowledged'' does not exist on array\<mixed, mixed\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/IndexService/Worker/ElasticSearch/AbstractElasticSearch.php
+
+		-
+			message: '#^Offset ''acknowledged'' does not exist on array\<mixed, mixed\>\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: src/IndexService/Worker/OpenSearch/AbstractOpenSearch.php
+
+		-
+			message: '#^Method OpenDxp\\Bundle\\EcommerceFrameworkBundle\\OfferTool\\AbstractOfferToolProduct\:\:getById\(\) should return static\(OpenDxp\\Bundle\\EcommerceFrameworkBundle\\OfferTool\\AbstractOfferToolProduct\)\|null but returns OpenDxp\\Bundle\\EcommerceFrameworkBundle\\OfferTool\\AbstractOfferToolProduct\.$#'
+			identifier: return.type
 			count: 1
 			path: src/OfferTool/AbstractOfferToolProduct.php
 
 		-
-			message: "#^Parameter \\#1 \\$product of method OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\OfferTool\\\\AbstractOfferItem\\:\\:setProduct\\(\\) expects OpenDxp\\\\Model\\\\Element\\\\AbstractElement\\|null, OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\Model\\\\CheckoutableInterface given\\.$#"
-			count: 2
-			path: src/OfferTool/DefaultService.php
+			message: '#^PHPDoc tag @var with type OpenDxp\\Bundle\\EcommerceFrameworkBundle\\PaymentManager\\V7\\Payment\\PaymentInterface is not subtype of native type OpenDxp\\Model\\DataObject\\Objectbrick\|null\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/OrderManager/V7/OrderAgent.php
 
 		-
-			message: "#^Parameter \\#1 \\$product of method OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\Model\\\\AbstractOrderItem\\:\\:setProduct\\(\\) expects OpenDxp\\\\Model\\\\Element\\\\AbstractElement\\|null, OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\Model\\\\CheckoutableInterface given\\.$#"
+			message: '#^Call to function method_exists\(\) with OpenDxp\\Bundle\\EcommerceFrameworkBundle\\Model\\AbstractOrderItem and ''setPricingRules'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/OrderManager/V7/OrderManager.php
 
 		-
-			message: "#^Parameter \\#1 \\$categories of method OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\PricingManager\\\\Condition\\\\CatalogCategory\\:\\:setCategories\\(\\) expects array\\<OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\Model\\\\AbstractCategory\\>, array\\<int\\<0, max\\>, OpenDxp\\\\Model\\\\DataObject\\\\Concrete\\> given\\.$#"
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
 			count: 1
-			path: src/PricingManager/Condition/CatalogCategory.php
+			path: src/PriceSystem/AbstractPriceInfo.php
 
 		-
-			message: "#^Parameter \\#1 \\$products of method OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\PricingManager\\\\Condition\\\\CatalogProduct\\:\\:setProducts\\(\\) expects array\\<OpenDxp\\\\Bundle\\\\EcommerceFrameworkBundle\\\\Model\\\\AbstractProduct\\>, array\\<int\\<0, max\\>, OpenDxp\\\\Model\\\\DataObject\\\\Concrete\\> given\\.$#"
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: src/PriceSystem/TaxManagement/TaxEntry.php
+
+		-
+			message: '#^Cannot unset property OpenDxp\\Bundle\\EcommerceFrameworkBundle\\PricingManager\\Condition\\CatalogProduct\:\:\$products because it might have hooks in a subclass\.$#'
+			identifier: unset.possiblyHookedProperty
 			count: 1
 			path: src/PricingManager/Condition/CatalogProduct.php
 
 		-
-			message: "#^Parameter \\#3 \\$mode of function round expects 1\\|2\\|3\\|4, int given\\.$#"
-			count: 1
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 9
 			path: src/Type/Decimal.php

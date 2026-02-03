@@ -137,7 +137,7 @@ class VoucherController extends UserAwareController implements KernelControllerE
         $response->headers->set('Content-Type', $contentType);
         $response->headers->set('Content-Length', (string) strlen($result));
 
-        if ($download && null !== $suffix) {
+        if ($download) {
             $response->headers->set('Content-Disposition', sprintf('attachment; filename="voucher-export.%s"', $suffix));
         }
 

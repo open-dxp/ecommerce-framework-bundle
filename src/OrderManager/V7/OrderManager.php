@@ -409,7 +409,7 @@ class OrderManager implements OrderManagerInterface
         $price = Decimal::zero();
         $netPrice = Decimal::zero();
 
-        if (!$isGiftItem && is_object($item->getTotalPrice())) {
+        if (!$isGiftItem) {
             $price = $item->getTotalPrice()->getGrossAmount();
             $netPrice = $item->getTotalPrice()->getNetAmount();
         }
@@ -651,7 +651,7 @@ class OrderManager implements OrderManagerInterface
     protected function applyVoucherTokens(AbstractOrder $order, CartInterface $cart): void
     {
         $voucherTokens = $cart->getVoucherTokenCodes();
-        if (is_array($voucherTokens)) {
+        if (count($voucherTokens) > 0) {
             $flippedVoucherTokens = array_flip($voucherTokens);
 
             if ($tokenObjects = $order->getVoucherTokens()) {

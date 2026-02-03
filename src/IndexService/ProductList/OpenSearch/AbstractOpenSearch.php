@@ -1051,37 +1051,32 @@ abstract class AbstractOpenSearch implements ProductListInterface
             throw new InvalidConfigException('Invalid worker configured, AbstractOpenSearch compatible worker expected.');
         }
 
-        /**
-         * @var Client $osClient
-         */
         $osClient = $worker->getOpenSearchClient();
         $result = [];
 
-        if ($osClient instanceof Client) {
-            if ($this->doScrollRequest) {
-                $params = ['scroll' => $this->scrollRequestKeepAlive, ...$params];
-                //kind of dirty hack :/
-                $params['body']['size'] = $this->getLimit();
-            }
+        if ($this->doScrollRequest) {
+            $params = ['scroll' => $this->scrollRequestKeepAlive, ...$params];
+            //kind of dirty hack :/
+            $params['body']['size'] = $this->getLimit();
+        }
 
-            $result = $osClient->search($params);
+        $result = $osClient->search($params);
 
-            if ($this->doScrollRequest) {
-                $additionalHits = [];
-                $scrollId = $result['_scroll_id'];
+        if ($this->doScrollRequest) {
+            $additionalHits = [];
+            $scrollId = $result['_scroll_id'];
 
-                while (true) {
-                    $additionalResult = $osClient->scroll(['scroll_id' => $scrollId, 'scroll' => $this->scrollRequestKeepAlive]);
+            while (true) {
+                $additionalResult = $osClient->scroll(['scroll_id' => $scrollId, 'scroll' => $this->scrollRequestKeepAlive]);
 
-                    if (count($additionalResult['hits']['hits'])) {
-                        $additionalHits = [...$additionalHits, ...$additionalResult['hits']['hits']];
-                        $scrollId = $additionalResult['_scroll_id'];
-                    } else {
-                        break;
-                    }
+                if (count($additionalResult['hits']['hits'])) {
+                    $additionalHits = [...$additionalHits, ...$additionalResult['hits']['hits']];
+                    $scrollId = $additionalResult['_scroll_id'];
+                } else {
+                    break;
                 }
-                $result['hits']['hits'] = [...$result['hits']['hits'], ...$additionalHits];
             }
+            $result['hits']['hits'] = [...$result['hits']['hits'], ...$additionalHits];
         }
 
         return $result;

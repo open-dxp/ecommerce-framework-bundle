@@ -92,7 +92,6 @@ class Cart extends AbstractCart implements CartInterface
         } catch (Exception) {
             try {
                 $cartClass = static::class;
-                /** @var Cart $cart */
                 $cart = new $cartClass;
                 $cart->getDao()->getById($id);
 

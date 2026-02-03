@@ -22,14 +22,14 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductList
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 abstract class AbstractFilterType
 {
     const EMPTY_STRING = '$$EMPTY$$';
 
-    protected EngineInterface $templatingEngine;
+    protected Environment $twig;
 
     protected ?Request $request = null;
 
@@ -39,12 +39,12 @@ abstract class AbstractFilterType
      */
     public function __construct(
         protected TranslatorInterface $translator,
-        EngineInterface $templatingEngine,
-        RequestStack $requestStack,
-        protected string $template,
-        array $options = []
+        Environment                   $twig,
+        RequestStack                  $requestStack,
+        protected string              $template,
+        array                         $options = []
     ) {
-        $this->templatingEngine = $templatingEngine;
+        $this->twig = $twig;
         $this->request = $requestStack->getCurrentRequest();
 
         $this->processOptions($options);
@@ -135,6 +135,6 @@ abstract class AbstractFilterType
      */
     protected function render(string $template, array $parameters = []): string
     {
-        return $this->templatingEngine->render($template, $parameters);
+        return $this->twig->render($template, $parameters);
     }
 }

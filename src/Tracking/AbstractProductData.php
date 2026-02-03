@@ -73,7 +73,7 @@ abstract class AbstractProductData extends AbstractData
 
     public function getCategory(): ?string
     {
-        if (is_array($this->categories) && count($this->categories) > 0) {
+        if (count($this->categories) > 0) {
             return $this->categories[0];
         }
 

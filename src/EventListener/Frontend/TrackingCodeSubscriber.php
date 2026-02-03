@@ -57,13 +57,11 @@ class TrackingCodeSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $activeTrackers = $this->trackingManager->getActiveTrackers();
-
-        foreach ($activeTrackers as $activeTracker) {
+        foreach ($this->trackingManager->getActiveTrackers() as $activeTracker) {
             if ($activeTracker instanceof GoogleTagManager) {
                 $trackedCodes = $activeTracker->getTrackedCodes();
 
-                if ($trackedCodes === [] || ! is_array($trackedCodes)) {
+                if ($trackedCodes === []) {
                     return;
                 }
 

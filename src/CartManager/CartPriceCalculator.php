@@ -132,10 +132,6 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
         $grandTotalTaxes = [];
 
         foreach ($this->cart->getItems() as $item) {
-            if (!is_object($item->getPrice())) {
-                continue;
-            }
-
             if (null === $currency) {
                 $currency = $item->getPrice()->getCurrency();
             }

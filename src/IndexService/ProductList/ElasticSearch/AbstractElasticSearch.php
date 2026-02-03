@@ -1054,9 +1054,6 @@ abstract class AbstractElasticSearch implements ProductListInterface
             throw new InvalidConfigException('Invalid worker configured, AbstractElasticSearch compatible worker expected.');
         }
 
-        /**
-         * @var Client $esClient
-         */
         $esClient = $worker->getElasticSearchClient();
         $result = [];
 

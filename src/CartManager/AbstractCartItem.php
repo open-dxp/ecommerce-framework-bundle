@@ -245,11 +245,12 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
         $this->addedDateTimestamp = $date ? intval($date->format('Uu')) : null;
     }
 
-    public function getAddedDate(): DateTime
+    public function getAddedDate(): ?DateTime
     {
         if ($this->addedDateTimestamp) {
             return DateTime::createFromFormat('U', (string) intval($this->addedDateTimestamp / 1000000));
         }
+
         return null;
     }
 

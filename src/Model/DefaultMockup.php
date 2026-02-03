@@ -116,13 +116,13 @@ class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, In
 
         foreach ([$attributeName, lcfirst($attributeName)] as $attrName) {
 
-            if (is_array($this->params) && array_key_exists($attrName, $this->params)) {
+            if (array_key_exists($attrName, $this->params)) {
                 return $this->params[$attrName];
             }
 
         }
 
-        if (is_array($this->relations) && array_key_exists($attributeName, $this->relations)) {
+        if (array_key_exists($attributeName, $this->relations)) {
             $relation = $this->getRelationAttribute($attributeName);
             if ($relation) {
                 return $relation;

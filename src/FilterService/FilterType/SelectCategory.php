@@ -71,15 +71,12 @@ class SelectCategory extends AbstractFilterType
         ];
     }
 
-    /**
-     * @param FilterCategory $filterDefinition
-     */
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $value = $params[$filterDefinition->getField()] ?? null;
         $isReload = $params['is_reload'] ?? null;
 
-        if ($value == AbstractFilterType::EMPTY_STRING) {
+        if ($value === AbstractFilterType::EMPTY_STRING) {
             $value = null;
         } elseif (empty($value) && !$isReload && method_exists($filterDefinition, 'getPreSelect')) {
             $value = $filterDefinition->getPreSelect();

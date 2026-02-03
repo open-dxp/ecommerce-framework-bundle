@@ -45,13 +45,9 @@ class VoucherToken implements ConditionInterface
             return false;
         }
 
-        $voucherTokenCodes = $cart->getVoucherTokenCodes();
-
-        if (is_array($voucherTokenCodes)) {
-            foreach ($voucherTokenCodes as $code) {
-                if ($this->checkVoucherCode($code)) {
-                    return true;
-                }
+        foreach ($cart->getVoucherTokenCodes() as $code) {
+            if ($this->checkVoucherCode($code)) {
+                return true;
             }
         }
 

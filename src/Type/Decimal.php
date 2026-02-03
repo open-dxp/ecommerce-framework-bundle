@@ -120,16 +120,12 @@ class Decimal implements \Stringable
         if (is_string($amount)) {
             return static::fromString($amount, $scale, $roundingMode);
         }
+
         if (is_numeric($amount)) {
             return static::fromNumeric($amount, $scale, $roundingMode);
         }
-        if ($amount instanceof self) {
-            return static::fromDecimal($amount, $scale);
-        }
-        throw new TypeError(
-            'Expected (int, float, string, self), but received ' .
-            get_debug_type($amount)
-        );
+
+        return static::fromDecimal($amount, $scale);
     }
 
     /**

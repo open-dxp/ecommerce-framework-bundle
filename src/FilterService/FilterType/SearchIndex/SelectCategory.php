@@ -32,8 +32,6 @@ class SelectCategory extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
     }
 
     /**
-     * @param FilterCategory $filterDefinition
-     *
      * @throws Exception
      */
     #[\Override]

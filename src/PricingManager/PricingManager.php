@@ -121,7 +121,7 @@ class PricingManager implements PricingManagerInterface
         $categories = [];
         foreach ($cart->getItems() as $item) {
             $product = $item->getProduct();
-            if ($product instanceof CheckoutableInterface && method_exists($product, 'getCategories')) {
+            if (method_exists($product, 'getCategories')) {
                 $productCategories = $product->getCategories();
                 if (is_array($productCategories)) {
                     foreach ($productCategories as $c) {

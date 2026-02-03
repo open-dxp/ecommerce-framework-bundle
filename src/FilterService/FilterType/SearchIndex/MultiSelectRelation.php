@@ -54,10 +54,8 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
                 $objects = explode(',', $objects);
             }
 
-            if (is_array($objects)) {
-                foreach ($objects as $o) {
-                    $value[] = is_object($o) ? $o->getId() : $o;
-                }
+            foreach ($objects as $o) {
+                $value[] = is_object($o) ? $o->getId() : $o;
             }
         } elseif (!empty($value) && in_array(AbstractFilterType::EMPTY_STRING, $value)) {
             $value = null;

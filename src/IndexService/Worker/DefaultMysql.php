@@ -101,9 +101,7 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
                 $parentCategoryIds = [];
                 if ($categories) {
                     foreach ($categories as $c) {
-                        if ($c instanceof AbstractCategory) {
-                            $categoryIds[$c->getId()] = $c->getId();
-                        }
+                        $categoryIds[$c->getId()] = $c->getId();
 
                         $currentCategory = $c;
                         while ($currentCategory instanceof AbstractCategory) {
