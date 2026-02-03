@@ -727,7 +727,7 @@ class OrderManager implements OrderManagerInterface
      * @throws Exception
      * @throws ProviderNotFoundException
      */
-    public function getRecurringPaymentSourceOrderList(string $customerId, RecurringPaymentInterface $paymentProvider, string $paymentMethod = null, string $orderId = ''): Concrete
+    public function getRecurringPaymentSourceOrderList(string $customerId, RecurringPaymentInterface $paymentProvider, ?string $paymentMethod = null, string $orderId = ''): Concrete
     {
         $orders = $this->buildOrderList();
         $orders->addConditionParam('customer__id = ?', $customerId);
@@ -760,7 +760,7 @@ class OrderManager implements OrderManagerInterface
      *
      * @throws Exception
      */
-    public function getRecurringPaymentSourceOrder(string $customerId, RecurringPaymentInterface $paymentProvider, string $paymentMethod = null): bool|\OpenDxp\Model\DataObject\Concrete|null
+    public function getRecurringPaymentSourceOrder(string $customerId, RecurringPaymentInterface $paymentProvider, ?string $paymentMethod = null): bool|\OpenDxp\Model\DataObject\Concrete|null
     {
         if (!$paymentProvider->isRecurringPaymentEnabled()) {
             return null;

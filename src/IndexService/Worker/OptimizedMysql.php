@@ -66,7 +66,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
         $this->doCleanupOldZombieData($object, $subObjectIds);
     }
 
-    protected function doDeleteFromIndex(int $subObjectId, IndexableInterface $object = null): void
+    protected function doDeleteFromIndex(int $subObjectId, ?IndexableInterface $object = null): void
     {
         try {
             $this->db->beginTransaction();
@@ -108,7 +108,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
     /**
      * updates all index tables, delegates subtenant updates to tenant config and updates mockup cache
      */
-    public function doUpdateIndex(int $objectId, array $data = null, array $metadata = null): void
+    public function doUpdateIndex(int $objectId, ?array $data = null, ?array $metadata = null): void
     {
         if (empty($data)) {
             $data = $this->db->fetchOne('SELECT data FROM ' . self::STORE_TABLE_NAME . ' WHERE id = ? AND tenant = ?', [$objectId, $this->name]);

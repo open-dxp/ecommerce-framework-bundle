@@ -55,7 +55,7 @@ class CheckoutManagerFactory implements CheckoutManagerFactoryInterface
         array $checkoutStepDefinitions,
         protected ?PaymentInterface $paymentProvider = null,
         array $options = [],
-        ServiceLocator $handlePendingPaymentStrategyLocator = null,
+        ?ServiceLocator $handlePendingPaymentStrategyLocator = null,
         protected ?EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->handlePendingPaymentStrategyLocator = $handlePendingPaymentStrategyLocator;

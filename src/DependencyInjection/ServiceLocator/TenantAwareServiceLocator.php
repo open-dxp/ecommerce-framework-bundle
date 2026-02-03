@@ -36,7 +36,7 @@ abstract class TenantAwareServiceLocator
     {
     }
 
-    protected function locate(string $tenant = null): mixed
+    protected function locate(?string $tenant = null): mixed
     {
         $tenant = $this->resolveTenant($tenant);
 
@@ -49,7 +49,7 @@ abstract class TenantAwareServiceLocator
 
     abstract protected function buildNotFoundException(string $tenant): UnsupportedException;
 
-    protected function resolveTenant(string $tenant = null): string
+    protected function resolveTenant(?string $tenant = null): string
     {
         // explicitly checking for empty here to catch situations where the tenant is just an empty string
         if (empty($tenant)) {

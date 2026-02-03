@@ -66,7 +66,7 @@ interface ConfigInterface
      *
      * @return \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory[]
      */
-    public function getCategories(IndexableInterface $object, int $subObjectId = null): array;
+    public function getCategories(IndexableInterface $object, ?int $subObjectId = null): array;
 
     /**
      * in case of subtenants returns a data structure containing all sub tenants
@@ -74,7 +74,7 @@ interface ConfigInterface
      *
      * @return mixed $subTenantData
      */
-    public function prepareSubTenantEntries(IndexableInterface $object, int $subObjectId = null): mixed;
+    public function prepareSubTenantEntries(IndexableInterface $object, ?int $subObjectId = null): mixed;
 
     /**
      * populates index for tenant relations based on given data

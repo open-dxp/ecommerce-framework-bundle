@@ -83,7 +83,7 @@ interface TokenManagerInterface
     /**
      * Get the codes of a voucher series, optionally a filter array can be passed.
      */
-    public function getCodes(array $filter = null): bool|array;
+    public function getCodes(?array $filter = null): bool|array;
 
     public function getStatistics(?int $usagePeriod = null): bool|array;
 

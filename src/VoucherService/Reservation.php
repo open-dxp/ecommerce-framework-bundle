@@ -35,7 +35,7 @@ class Reservation extends AbstractModel
 
     public ?string $cart_id = null;
 
-    public static function get(string $code, CartInterface $cart = null): ?self
+    public static function get(string $code, ?CartInterface $cart = null): ?self
     {
         try {
             $config = new self();
@@ -61,7 +61,7 @@ class Reservation extends AbstractModel
         }
     }
 
-    public static function releaseToken(string $code, CartInterface $cart = null): bool
+    public static function releaseToken(string $code, ?CartInterface $cart = null): bool
     {
         $db = \OpenDxp\Db::get();
 

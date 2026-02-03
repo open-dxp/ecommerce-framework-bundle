@@ -211,7 +211,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         return $fullFieldName;
     }
 
-    public function getClientConfig(string $property = null): array|string|null
+    public function getClientConfig(?string $property = null): array|string|null
     {
         if ($property) {
             return $this->clientConfig[$property] ?? null;
@@ -239,7 +239,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
      *
      * @return array $subTenantData
      */
-    public function prepareSubTenantEntries(IndexableInterface $object, int $subObjectId = null): array
+    public function prepareSubTenantEntries(IndexableInterface $object, ?int $subObjectId = null): array
     {
         return [];
     }

@@ -232,7 +232,7 @@ abstract class AbstractElasticSearch implements ProductListInterface
     /**
      * Adds price condition to product list
      */
-    public function addPriceCondition(float $from = null, float $to = null): void
+    public function addPriceCondition(?float $from = null, ?float $to = null): void
     {
         $this->conditionPriceFrom = $from;
         $this->conditionPriceTo = $to;
@@ -554,7 +554,7 @@ abstract class AbstractElasticSearch implements ProductListInterface
     /**
      * build the complete query
      */
-    protected function buildQuery(array $params, array $boolFilters, array $queryFilters, string $variantMode = null): array
+    protected function buildQuery(array $params, array $boolFilters, array $queryFilters, ?string $variantMode = null): array
     {
         if (!$variantMode) {
             $variantMode = $this->getVariantMode();

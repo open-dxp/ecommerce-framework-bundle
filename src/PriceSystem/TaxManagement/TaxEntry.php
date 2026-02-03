@@ -67,7 +67,7 @@ class TaxEntry
         return $this->taxId;
     }
 
-    public function setTaxId(string $taxId = null): void
+    public function setTaxId(?string $taxId = null): void
     {
         $this->taxId = $taxId;
     }

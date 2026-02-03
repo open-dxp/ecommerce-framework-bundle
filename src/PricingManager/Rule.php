@@ -331,7 +331,7 @@ class Rule extends AbstractModel implements RuleInterface
     /**
      * gets current language
      */
-    protected function getLanguage(string $language = null): string
+    protected function getLanguage(?string $language = null): string
     {
         if ($language) {
             return $language;

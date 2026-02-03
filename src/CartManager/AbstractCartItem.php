@@ -240,7 +240,7 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
         return $this->getPriceInfo()->getTotalPrice();
     }
 
-    public function setAddedDate(DateTime $date = null): void
+    public function setAddedDate(?DateTime $date = null): void
     {
         $this->addedDateTimestamp = $date ? intval($date->format('Uu')) : null;
     }

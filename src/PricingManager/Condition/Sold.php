@@ -107,7 +107,7 @@ class Sold extends AbstractOrder implements ConditionInterface
     /**
      * Returns a count how often the rule is already used in the cart
      */
-    protected function getCartRuleCount(CartInterface $cart, RuleInterface $rule, CartItemInterface $cartItem = null): int
+    protected function getCartRuleCount(CartInterface $cart, RuleInterface $rule, ?CartItemInterface $cartItem = null): int
     {
         // init
         $counter = 0;

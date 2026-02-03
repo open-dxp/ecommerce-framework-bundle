@@ -29,7 +29,7 @@ class Attribute
 
     public function __construct(
         private readonly string $name,
-        string $fieldName = null,
+        ?string $fieldName = null,
         private readonly ?string $type = null,
         private readonly ?string $locale = null,
         private readonly ?string $filterGroup = null,
@@ -106,7 +106,7 @@ class Attribute
     /**
      * Get value from object, running through getter if defined
      */
-    public function getValue(IndexableInterface $object, int $subObjectId = null, ConfigInterface $tenantConfig = null, mixed $default = null): mixed
+    public function getValue(IndexableInterface $object, ?int $subObjectId = null, ?ConfigInterface $tenantConfig = null, mixed $default = null): mixed
     {
         if ($this->getter instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Getter\GetterInterface) {
             if ($this->getter instanceof ExtendedGetterInterface) {

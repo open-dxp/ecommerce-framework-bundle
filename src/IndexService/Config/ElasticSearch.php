@@ -213,7 +213,7 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
         return $fullFieldName;
     }
 
-    public function getClientConfig(string $property = null): array|string|null
+    public function getClientConfig(?string $property = null): array|string|null
     {
         if ($property) {
             return $this->clientConfig[$property] ?? null;
@@ -241,7 +241,7 @@ class ElasticSearch extends AbstractConfig implements MockupConfigInterface, Ela
      *
      * @return array $subTenantData
      */
-    public function prepareSubTenantEntries(IndexableInterface $object, int $subObjectId = null): array
+    public function prepareSubTenantEntries(IndexableInterface $object, ?int $subObjectId = null): array
     {
         return [];
     }

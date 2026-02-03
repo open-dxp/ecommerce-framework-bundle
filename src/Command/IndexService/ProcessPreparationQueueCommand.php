@@ -39,7 +39,7 @@ class ProcessPreparationQueueCommand extends AbstractIndexServiceCommand
         Parallelization::runAfterBatch as parentRunAfterBatch;
     }
 
-    public function __construct(protected IndexUpdateService $indexUpdateService, protected IndexService $indexService, string $name = null)
+    public function __construct(protected IndexUpdateService $indexUpdateService, protected IndexService $indexService, ?string $name = null)
     {
         parent::__construct($name);
     }

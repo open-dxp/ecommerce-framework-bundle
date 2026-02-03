@@ -103,7 +103,7 @@ class Factory
      * Returns cart manager for a specific tenant. If no tenant is passed it will fall back to the current
      * checkout tenant or to "default" if no current checkout tenant is set.
      */
-    public function getCartManager(string $tenant = null): CartManagerInterface
+    public function getCartManager(?string $tenant = null): CartManagerInterface
     {
         return $this->cartManagers->getCartManager($tenant);
     }
@@ -112,7 +112,7 @@ class Factory
      * Returns order manager for a specific tenant. If no tenant is passed it will fall back to the current
      * checkout tenant or to "default" if no current checkout tenant is set.
      */
-    public function getOrderManager(string $tenant = null): OrderManagerInterface
+    public function getOrderManager(?string $tenant = null): OrderManagerInterface
     {
         return $this->orderManagers->getOrderManager($tenant);
     }
@@ -121,7 +121,7 @@ class Factory
      * Returns pricing manager for a specific tenant. If no tenant is passed it will fall back to the current
      * checkout tenant or to "default" if no current checkout tenant is set.
      */
-    public function getPricingManager(string $tenant = null): PricingManagerInterface
+    public function getPricingManager(?string $tenant = null): PricingManagerInterface
     {
         return $this->pricingManagers->getPricingManager($tenant);
     }
@@ -129,7 +129,7 @@ class Factory
     /**
      * Returns a price system by name. Falls back to "default" if no name is passed.
      */
-    public function getPriceSystem(string $name = null): PriceSystemInterface
+    public function getPriceSystem(?string $name = null): PriceSystemInterface
     {
         return $this->priceSystems->getPriceSystem($name);
     }
@@ -137,7 +137,7 @@ class Factory
     /**
      * Returns an availability system by name. Falls back to "default" if no name is passed.
      */
-    public function getAvailabilitySystem(string $name = null): AvailabilitySystemInterface
+    public function getAvailabilitySystem(?string $name = null): AvailabilitySystemInterface
     {
         return $this->availabilitySystems->getAvailabilitySystem($name);
     }
@@ -146,7 +146,7 @@ class Factory
      * Returns checkout manager for a specific tenant. If no tenant is passed it will fall back to the current
      * checkout tenant or to "default" if no current checkout tenant is set.
      */
-    public function getCheckoutManager(CartInterface $cart, string $tenant = null): CheckoutManagerInterface
+    public function getCheckoutManager(CartInterface $cart, ?string $tenant = null): CheckoutManagerInterface
     {
         $factory = $this->checkoutManagerFactories->getCheckoutManagerFactory($tenant);
 
@@ -156,7 +156,7 @@ class Factory
     /**
      * Returns a commit order processor which is configured for a specific checkout manager
      */
-    public function getCommitOrderProcessor(string $tenant = null): CommitOrderProcessorInterface
+    public function getCommitOrderProcessor(?string $tenant = null): CommitOrderProcessorInterface
     {
         return $this->commitOrderProcessors->getCommitOrderProcessor($tenant);
     }
@@ -178,7 +178,7 @@ class Factory
      * Returns the filter service for the currently set assortment tenant. Falls back to "default" if no tenant is passed
      * and there is no current assortment tenant set.
      */
-    public function getFilterService(string $tenant = null): FilterService
+    public function getFilterService(?string $tenant = null): FilterService
     {
         return $this->filterServices->getFilterService($tenant);
     }

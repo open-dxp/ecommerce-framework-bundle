@@ -85,7 +85,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
      * @param CheckoutableInterface&Concrete $product
      * @param AbstractSetProductEntry[] $subProducts
      */
-    public function addItem(CheckoutableInterface $product, int $count, string $itemKey = null, bool $replace = false, array $params = [], array $subProducts = [], string $comment = null): string
+    public function addItem(CheckoutableInterface $product, int $count, ?string $itemKey = null, bool $replace = false, array $params = [], array $subProducts = [], ?string $comment = null): string
     {
         if (empty($itemKey)) {
             $itemKey = (string) $product->getId();
@@ -102,7 +102,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
      * @param CheckoutableInterface&Concrete $product
      * @param AbstractSetProductEntry[] $subProducts
      */
-    public function updateItem(string $itemKey, CheckoutableInterface $product, int $count, bool $replace = false, array $params = [], array $subProducts = [], string $comment = null): string
+    public function updateItem(string $itemKey, CheckoutableInterface $product, int $count, bool $replace = false, array $params = [], array $subProducts = [], ?string $comment = null): string
     {
         //load items first in order to lazyload items (if they are lazy loaded)
         $this->getItems();
@@ -176,7 +176,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     /**
      * @param CheckoutableInterface&Concrete $product
      */
-    public function addGiftItem(CheckoutableInterface $product, int $count, string $itemKey = null, bool $replace = false, array $params = [], array $subProducts = [], string $comment = null): string
+    public function addGiftItem(CheckoutableInterface $product, int $count, ?string $itemKey = null, bool $replace = false, array $params = [], array $subProducts = [], ?string $comment = null): string
     {
         if (empty($itemKey)) {
             $itemKey = (string) $product->getId();
@@ -192,7 +192,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     /**
      * @param CheckoutableInterface&Concrete $product
      */
-    public function updateGiftItem(string $itemKey, CheckoutableInterface $product, int $count, bool $replace = false, array $params = [], array $subProducts = [], string $comment = null): string
+    public function updateGiftItem(string $itemKey, CheckoutableInterface $product, int $count, bool $replace = false, array $params = [], array $subProducts = [], ?string $comment = null): string
     {
         // item already exists?
         if (!array_key_exists($itemKey, $this->giftItems)) {
@@ -476,7 +476,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
         return $this->creationDate;
     }
 
-    public function setCreationDate(DateTime $creationDate = null): void
+    public function setCreationDate(?DateTime $creationDate = null): void
     {
         $this->creationDate = $creationDate;
         $this->creationDateTimestamp = $creationDate ? $creationDate->getTimestamp() : null;
@@ -503,7 +503,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
         return $this->modificationDate;
     }
 
-    public function setModificationDate(DateTime $modificationDate = null): void
+    public function setModificationDate(?DateTime $modificationDate = null): void
     {
         $this->modificationDate = $modificationDate;
         $this->modificationDateTimestamp = $modificationDate ? $modificationDate->getTimestamp() : null;

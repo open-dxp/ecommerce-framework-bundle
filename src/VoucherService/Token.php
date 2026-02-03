@@ -79,7 +79,7 @@ class Token extends AbstractModel
     /**
      * @param bool $isCheckout In the checkout there is one reservation more, the one of the current order.
      */
-    public function check(int $maxUsages = null, bool $isCheckout = false): bool
+    public function check(?int $maxUsages = null, bool $isCheckout = false): bool
     {
         if (isset($maxUsages)) {
             return $this->getUsages() + Reservation::getReservationCount($this->getToken()) - (int)$isCheckout < $maxUsages;

@@ -23,5 +23,5 @@ interface AvailabilitySystemInterface
     /**
      * Get availability info for a given product
      */
-    public function getAvailabilityInfo(CheckoutableInterface $product, int $quantityScale = 1, array $products = null): AvailabilityInterface;
+    public function getAvailabilityInfo(CheckoutableInterface $product, int $quantityScale = 1, ?array $products = null): AvailabilityInterface;
 }

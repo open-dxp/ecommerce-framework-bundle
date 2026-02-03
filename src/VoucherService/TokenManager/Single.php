@@ -154,7 +154,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
         return false;
     }
 
-    public function getCodes(array $filter = null): bool|array
+    public function getCodes(?array $filter = null): bool|array
     {
         return Token\Listing::getCodes($this->seriesId, $filter);
     }
@@ -171,7 +171,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
         $data = $periodData;
     }
 
-    public function getStatistics(int $usagePeriod = null): array
+    public function getStatistics(?int $usagePeriod = null): array
     {
         $token = Token::getByCode($this->configuration->getToken());
         $overallCount = $this->configuration->getUsages();

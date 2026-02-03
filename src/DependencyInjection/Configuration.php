@@ -1116,7 +1116,7 @@ final readonly class Configuration implements ConfigurationInterface
         return $trackingManager;
     }
 
-    private function buildOptionsNode(string $name = 'options', array $defaultValue = [], string $documentation = null): NodeDefinition
+    private function buildOptionsNode(string $name = 'options', array $defaultValue = [], ?string $documentation = null): NodeDefinition
     {
         $node = new VariableNodeDefinition($name);
         if ($documentation) {

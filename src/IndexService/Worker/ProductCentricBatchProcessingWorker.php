@@ -51,7 +51,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
         return $this->getStoreTableName();
     }
 
-    abstract protected function doUpdateIndex(int $objectId, array $data = null, array $metadata = null): void;
+    abstract protected function doUpdateIndex(int $objectId, ?array $data = null, ?array $metadata = null): void;
 
     public function updateItemInIndex(int $objectId): void
     {

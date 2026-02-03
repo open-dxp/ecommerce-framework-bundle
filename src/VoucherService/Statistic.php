@@ -48,7 +48,7 @@ class Statistic extends \OpenDxp\Model\AbstractModel
     /**
      * @throws Exception
      */
-    public static function getBySeriesId(int $seriesId, int $usagePeriod = null): bool|array
+    public static function getBySeriesId(int $seriesId, ?int $usagePeriod = null): bool|array
     {
         $db = \OpenDxp\Db::get();
 
@@ -88,7 +88,7 @@ class Statistic extends \OpenDxp\Model\AbstractModel
     /**
      * @param int $duration days
      */
-    public static function cleanUpStatistics(int $duration, int $seriesId = null): bool
+    public static function cleanUpStatistics(int $duration, ?int $seriesId = null): bool
     {
         $query = 'DELETE FROM ' . \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Statistic\Dao::TABLE_NAME . ' WHERE DAY(DATEDIFF(date, NOW())) >= ?';
         $params[] = $duration;

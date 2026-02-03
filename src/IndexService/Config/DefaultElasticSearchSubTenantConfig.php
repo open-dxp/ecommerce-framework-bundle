@@ -47,7 +47,7 @@ class DefaultElasticSearchSubTenantConfig extends ElasticSearch
      * @return array $subTenantData
      */
     #[\Override]
-    public function prepareSubTenantEntries(IndexableInterface $object, int $subObjectId = null): array
+    public function prepareSubTenantEntries(IndexableInterface $object, ?int $subObjectId = null): array
     {
         $subTenantData = [];
         if ($this->inIndex($object)) {
