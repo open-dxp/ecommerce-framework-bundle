@@ -32,7 +32,7 @@ class CartItem extends AbstractCartItem implements CartItemInterface
 
     public function setSortIndex(int $sortIndex): void
     {
-        $this->sortIndex = (int)$sortIndex;
+        $this->sortIndex = $sortIndex;
     }
 
     public function getSortIndex(): int
@@ -52,7 +52,7 @@ class CartItem extends AbstractCartItem implements CartItemInterface
 
     public function save(): void
     {
-        $items = $this->getSubItems();
+        $this->getSubItems();
         if (!empty($this->subItems)) {
             foreach ($this->subItems as $item) {
                 $item->save();
@@ -67,7 +67,7 @@ class CartItem extends AbstractCartItem implements CartItemInterface
 
         try {
             $cartItem = RuntimeCache::get($cacheKey);
-        } catch (Exception $e) {
+        } catch (Exception) {
             try {
                 $cartItem = new static();
                 $cartItem->getDao()->getByCartIdItemKey($cartId, $itemKey, $parentKey);
@@ -97,15 +97,15 @@ class CartItem extends AbstractCartItem implements CartItemInterface
         if ($this->subItems == null) {
             $this->subItems = [];
 
-            $itemClass = get_class($this) . '\\Listing';
+            $itemClass = static::class . '\\Listing';
             if (!\OpenDxp\Tool::classExists($itemClass)) {
-                $itemClass = get_class($this) . '_List';
+                $itemClass = static::class . '_List';
                 if (!\OpenDxp\Tool::classExists($itemClass)) {
                     throw new Exception("Class $itemClass does not exist.");
                 }
             }
             $itemList = new $itemClass();
-            $itemList->setCartItemClassName(get_class($this));
+            $itemList->setCartItemClassName(static::class);
 
             $db = \OpenDxp\Db::get();
             $itemList->setCondition(

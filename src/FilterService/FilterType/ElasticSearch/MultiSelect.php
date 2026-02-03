@@ -28,6 +28,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterMultiSelect;
  */
 class MultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelect
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         if (!$filterDefinition instanceof FilterMultiSelect) {
@@ -41,6 +42,7 @@ class MultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
     /**
      * @param FilterMultiSelect $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);
@@ -49,10 +51,8 @@ class MultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
         $value = $params[$field] ?? null;
         $isReload = $params['is_reload'] ?? null;
 
-        if (!empty($value)) {
-            if (!is_array($value)) {
-                $value = [$value];
-            }
+        if (!empty($value) && !is_array($value)) {
+            $value = [$value];
         }
 
         if (empty($value) && !$isReload) {
@@ -85,7 +85,7 @@ class MultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
                 }
             }
 
-            if (!empty($quotedValues)) {
+            if ($quotedValues !== []) {
                 if ($filterDefinition->getUseAndCondition()) {
                     foreach ($quotedValues as $value) {
                         $productList->addCondition($value, $field);

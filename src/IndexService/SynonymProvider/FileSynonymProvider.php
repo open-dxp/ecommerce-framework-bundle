@@ -35,9 +35,8 @@ class FileSynonymProvider extends AbstractSynonymProvider implements SynonymProv
         }
 
         $content = file_get_contents($filePath);
-        $synonymLines = explode_and_trim(PHP_EOL, $content);
 
-        return $synonymLines;
+        return explode_and_trim(PHP_EOL, $content);
     }
 
     protected function configureOptionsResolver(string $resolverName, OptionsResolver $resolver): void

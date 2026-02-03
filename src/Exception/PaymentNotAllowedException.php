@@ -21,21 +21,11 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 
 class PaymentNotAllowedException extends AbstractEcommerceException
 {
-    protected AbstractOrder $order;
-
-    protected ?CartInterface $cart = null;
-
-    protected ?bool $orderNeedsUpdate = null;
-
     /**
      * PaymentNotAllowedException constructor.
      */
-    public function __construct(string $message, AbstractOrder $order, CartInterface $cart = null, bool $orderNeedsUpdate = null)
+    public function __construct(string $message, protected AbstractOrder $order, protected ?CartInterface $cart = null, protected ?bool $orderNeedsUpdate = null)
     {
         parent::__construct($message);
-
-        $this->order = $order;
-        $this->cart = $cart;
-        $this->orderNeedsUpdate = $orderNeedsUpdate;
     }
 }

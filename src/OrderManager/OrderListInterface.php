@@ -113,7 +113,7 @@ interface OrderListInterface extends SeekableIterator, ArrayAccess, PaginateList
     /**
      * @return $this
      */
-    public function addCondition(string $condition, string $value = null): static;
+    public function addCondition(string $condition, ?string $value = null): static;
 
     /**
      * @return $this

@@ -29,6 +29,7 @@ class MultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
      *
      * @throws Exception
      */
+    #[\Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $field = $this->getField($filterDefinition);
@@ -72,6 +73,7 @@ class MultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
     /**
      * @param FilterMultiSelect $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         // init

@@ -49,22 +49,23 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
  */
 final class OpenDxpEcommerceFrameworkExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
-    const SERVICE_ID_FACTORY = 'opendxp_ecommerce.factory';
+    const string SERVICE_ID_FACTORY = 'opendxp_ecommerce.factory';
 
-    const SERVICE_ID_ENVIRONMENT = 'opendxp_ecommerce.environment';
+    const string SERVICE_ID_ENVIRONMENT = 'opendxp_ecommerce.environment';
 
-    const SERVICE_ID_PAYMENT_MANAGER = 'opendxp_ecommerce.payment_manager';
+    const string SERVICE_ID_PAYMENT_MANAGER = 'opendxp_ecommerce.payment_manager';
 
-    const SERVICE_ID_INDEX_SERVICE = 'opendxp_ecommerce.index_service';
+    const string SERVICE_ID_INDEX_SERVICE = 'opendxp_ecommerce.index_service';
 
-    const SERVICE_ID_VOUCHER_SERVICE = 'opendxp_ecommerce.voucher_service';
+    const string SERVICE_ID_VOUCHER_SERVICE = 'opendxp_ecommerce.voucher_service';
 
-    const SERVICE_ID_TOKEN_MANAGER_FACTORY = 'opendxp_ecommerce.voucher_service.token_manager_factory';
+    const string SERVICE_ID_TOKEN_MANAGER_FACTORY = 'opendxp_ecommerce.voucher_service.token_manager_factory';
 
-    const SERVICE_ID_OFFER_TOOL = 'opendxp_ecommerce.offer_tool';
+    const string SERVICE_ID_OFFER_TOOL = 'opendxp_ecommerce.offer_tool';
 
-    const SERVICE_ID_TRACKING_MANAGER = 'opendxp_ecommerce.tracking.tracking_manager';
+    const string SERVICE_ID_TRACKING_MANAGER = 'opendxp_ecommerce.tracking.tracking_manager';
 
+    #[\Override]
     public function getAlias(): string
     {
         return 'opendxp_ecommerce_framework';
@@ -333,7 +334,7 @@ final class OpenDxpEcommerceFrameworkExtension extends ConfigurableExtension imp
                 $checkoutManagerFactory->setArgument('$options', $factoryConfig);
             }
 
-            if (empty($paymentStrategyLocatorMapping)) {
+            if ($paymentStrategyLocatorMapping === []) {
                 $paymentStrategyLocatorMapping[CancelPaymentOrRecreateOrderStrategy::class] = CancelPaymentOrRecreateOrderStrategy::class;
             }
             $checkoutManagerFactory->setArgument('$handlePendingPaymentStrategyLocator', $this->setupServiceLocator($container, 'opendxp_ecommerce.checkout_manager.handle_pending_payments_strategy_locator', $paymentStrategyLocatorMapping));

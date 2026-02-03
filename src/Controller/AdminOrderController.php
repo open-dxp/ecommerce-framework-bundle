@@ -232,7 +232,7 @@ class AdminOrderController extends UserAwareController implements KernelControll
                         $json = $json[0];
                     }
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // noting to do
             }
 
@@ -279,14 +279,14 @@ class AdminOrderController extends UserAwareController implements KernelControll
             }
 
             // order count
-            $addOrderCount = function () use ($customer, &$arrCustomerAccount) {
+            $addOrderCount = function () use ($customer, &$arrCustomerAccount): void {
                 $order = new OnlineShopOrder();
                 $field = $order->getClass()->getFieldDefinition('customer');
                 if ($field instanceof ManyToOneRelation) {
                     $classes = $field->getClasses();
                     if (count($classes) === 1) {
-                        /** @var \OpenDxp\Model\DataObject\Concrete $class */
-                        $class = 'OpenDxp\Model\DataObject\\' . reset($classes)['classes'];
+                        /** @var class-string<\OpenDxp\Model\DataObject\Concrete> $class */
+                        $class = 'OpenDxp\\Model\\DataObject\\' . reset($classes)['classes'];
 
                         $orderList = $this->orderManager->createOrderList();
                         $orderList->joinCustomer($class::classId());

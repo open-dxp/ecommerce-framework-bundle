@@ -21,16 +21,13 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListInterface;
 
 class Product implements OrderListFilterInterface
 {
-    protected \OpenDxp\Model\DataObject\Concrete $product;
-
-    public function __construct(\OpenDxp\Model\DataObject\Concrete $product)
+    public function __construct(protected \OpenDxp\Model\DataObject\Concrete $product)
     {
-        $this->product = $product;
     }
 
     public function apply(OrderListInterface $orderList): static
     {
-        $db = \OpenDxp\Db::get();
+        \OpenDxp\Db::get();
         $ids = [
             $this->product->getId() ?? 0,
         ];

@@ -39,13 +39,13 @@ abstract class AbstractConfig implements ConfigInterface
 
     protected array $searchAttributes = [];
 
-    protected array $filterTypes = [];
-
     protected ?WorkerInterface $tenantWorker = null;
 
     protected ?array $filterTypeConfig = null;
 
     protected array $options = [];
+
+    protected array $filterTypes;
 
     /**
      * @param array[]|Attribute[] $attributes
@@ -94,7 +94,7 @@ abstract class AbstractConfig implements ConfigInterface
             } else {
                 throw new InvalidArgumentException(sprintf(
                     'Wrong type for attribute. Expected Attribute or array, got "%s"',
-                    is_object($attribute) ? get_class($attribute) : gettype($attribute)
+                    get_debug_type($attribute)
                 ));
             }
         }
@@ -135,7 +135,7 @@ abstract class AbstractConfig implements ConfigInterface
      */
     protected function checkTenantWorker(WorkerInterface $tenantWorker): void
     {
-        if (null !== $this->tenantWorker) {
+        if ($this->tenantWorker instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface) {
             throw new LogicException(sprintf('Worker for tenant "%s" is already set', $this->tenantName));
         }
 
@@ -148,7 +148,7 @@ abstract class AbstractConfig implements ConfigInterface
     public function getTenantWorker(): WorkerInterface
     {
         // the worker is expected to call setTenantWorker as soon as possible
-        if (null === $this->tenantWorker) {
+        if (!$this->tenantWorker instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\WorkerInterface) {
             throw new RuntimeException('Tenant worker is not set.');
         }
 
@@ -194,7 +194,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * @return AbstractCategory[]
      */
-    public function getCategories(IndexableInterface $object, int $subObjectId = null): array
+    public function getCategories(IndexableInterface $object, ?int $subObjectId = null): array
     {
         return $object->getCategories();
     }
@@ -260,8 +260,7 @@ abstract class AbstractConfig implements ConfigInterface
     {
         if ($isPrimary) {
             return "int(11) NOT NULL default '0'";
-        } else {
-            return 'int(11) NOT NULL';
         }
+        return 'int(11) NOT NULL';
     }
 }

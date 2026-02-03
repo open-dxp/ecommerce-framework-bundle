@@ -23,26 +23,17 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractWorker implements WorkerInterface
 {
-    protected Connection $db;
-
-    protected ConfigInterface $tenantConfig;
-
     protected string $name;
 
     protected ?array $indexColumns = null;
 
     protected ?array $filterGroups = null;
 
-    protected EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(ConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher)
+    public function __construct(protected ConfigInterface $tenantConfig, protected Connection $db, protected EventDispatcherInterface $eventDispatcher)
     {
-        $this->tenantConfig = $tenantConfig;
-        $tenantConfig->setTenantWorker($this);
+        $this->tenantConfig->setTenantWorker($this);
 
-        $this->name = $tenantConfig->getTenantName();
-        $this->db = $db;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->name = $this->tenantConfig->getTenantName();
     }
 
     public function getTenantConfig(): ConfigInterface
@@ -119,7 +110,7 @@ abstract class AbstractWorker implements WorkerInterface
      *
      * @param IndexableInterface|null $object - might be empty (when object doesn't exist any more in pimcore
      */
-    abstract protected function doDeleteFromIndex(int $subObjectId, IndexableInterface $object = null): void;
+    abstract protected function doDeleteFromIndex(int $subObjectId, ?IndexableInterface $object = null): void;
 
     /**
      * Checks if given data is array and returns converted data suitable for search backend. For mysql it is a string with special delimiter.

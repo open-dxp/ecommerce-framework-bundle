@@ -32,18 +32,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CheckoutManagerFactory implements CheckoutManagerFactoryInterface
 {
-    protected EnvironmentInterface $environment;
-
-    protected OrderManagerLocatorInterface $orderManagers;
-
-    protected CommitOrderProcessorLocatorInterface $commitOrderProcessors;
-
     /**
      * Array of checkout step definitions
      */
     protected array $checkoutStepDefinitions = [];
-
-    protected ?PaymentInterface $paymentProvider = null;
 
     /**
      * @var CheckoutManagerInterface[]
@@ -56,24 +48,17 @@ class CheckoutManagerFactory implements CheckoutManagerFactoryInterface
 
     protected ?HandlePendingPaymentsStrategyInterface $handlePendingPaymentStrategy = null;
 
-    protected ?EventDispatcherInterface $eventDispatcher = null;
-
     public function __construct(
-        EnvironmentInterface $environment,
-        OrderManagerLocatorInterface $orderManagers,
-        CommitOrderProcessorLocatorInterface $commitOrderProcessors,
+        protected EnvironmentInterface $environment,
+        protected OrderManagerLocatorInterface $orderManagers,
+        protected CommitOrderProcessorLocatorInterface $commitOrderProcessors,
         array $checkoutStepDefinitions,
-        PaymentInterface $paymentProvider = null,
+        protected ?PaymentInterface $paymentProvider = null,
         array $options = [],
-        ServiceLocator $handlePendingPaymentStrategyLocator = null,
-        EventDispatcherInterface $eventDispatcher = null
+        ?ServiceLocator $handlePendingPaymentStrategyLocator = null,
+        protected ?EventDispatcherInterface $eventDispatcher = null
     ) {
-        $this->environment = $environment;
-        $this->orderManagers = $orderManagers;
-        $this->commitOrderProcessors = $commitOrderProcessors;
-        $this->paymentProvider = $paymentProvider;
         $this->handlePendingPaymentStrategyLocator = $handlePendingPaymentStrategyLocator;
-        $this->eventDispatcher = $eventDispatcher;
 
         $this->processOptions($options);
         $this->processCheckoutStepDefinitions($checkoutStepDefinitions);
@@ -174,8 +159,6 @@ class CheckoutManagerFactory implements CheckoutManagerFactoryInterface
             ));
         }
 
-        $step = new $className($cart, $checkoutStepDefinition['options'] ?? []);
-
-        return $step;
+        return new $className($cart, $checkoutStepDefinition['options'] ?? []);
     }
 }

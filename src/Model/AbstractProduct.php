@@ -51,7 +51,7 @@ class AbstractProduct extends Concrete implements ProductInterface, IndexableInt
      */
     public function isActive(bool $inProductList = false): bool
     {
-        throw new UnsupportedException('isActive is not supported for ' . get_class($this));
+        throw new UnsupportedException('isActive is not supported for ' . static::class);
     }
 
     /**
@@ -63,7 +63,7 @@ class AbstractProduct extends Concrete implements ProductInterface, IndexableInt
      */
     public function getPriceSystemName(): string
     {
-        throw new UnsupportedException('getPriceSystemName is not supported for ' . get_class($this));
+        throw new UnsupportedException('getPriceSystemName is not supported for ' . static::class);
     }
 
     /**
@@ -92,7 +92,7 @@ class AbstractProduct extends Concrete implements ProductInterface, IndexableInt
      */
     public function getCategories(): ?array
     {
-        throw new UnsupportedException('getCategories is not supported for ' . get_class($this));
+        throw new UnsupportedException('getCategories is not supported for ' . static::class);
     }
 
     // =============================================
@@ -107,7 +107,7 @@ class AbstractProduct extends Concrete implements ProductInterface, IndexableInt
      */
     public function getOSName(): ?string
     {
-        throw new UnsupportedException('getOSName is not supported for ' . get_class($this));
+        throw new UnsupportedException('getOSName is not supported for ' . static::class);
     }
 
     /**
@@ -118,7 +118,7 @@ class AbstractProduct extends Concrete implements ProductInterface, IndexableInt
      */
     public function getOSProductNumber(): ?string
     {
-        throw new UnsupportedException('getOSProductNumber is not supported for ' . get_class($this));
+        throw new UnsupportedException('getOSProductNumber is not supported for ' . static::class);
     }
 
     /**
@@ -179,7 +179,7 @@ class AbstractProduct extends Concrete implements ProductInterface, IndexableInt
     /**
      * returns availability info based on given quantity
      */
-    public function getOSAvailabilityInfo(int $quantity = null): AvailabilityInterface
+    public function getOSAvailabilityInfo(?int $quantity = null): AvailabilityInterface
     {
         return $this->getAvailabilitySystemImplementation()->getAvailabilityInfo($this, $quantity);
     }

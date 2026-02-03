@@ -24,6 +24,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterInputfield;
 
 class Input extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\Input
 {
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

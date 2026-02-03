@@ -24,11 +24,8 @@ use OpenDxp\Logger;
 
 class IndexUpdateService
 {
-    protected IndexService $indexService;
-
-    public function __construct(IndexService $indexService)
+    public function __construct(protected IndexService $indexService)
     {
-        $this->indexService = $indexService;
     }
 
     /**
@@ -150,7 +147,7 @@ class IndexUpdateService
      * @param string[]|null $tenantNameList optional list of tenant names for which the update should happen. If null, then the parameter
      *        will be ignored. If the array is empty, then no update will take place.
      */
-    public function resetIdsInPreparation(array $idList, string $triggerInfo, array $tenantNameList = null): void
+    public function resetIdsInPreparation(array $idList, string $triggerInfo, ?array $tenantNameList = null): void
     {
         $this->resetIds($idList, $triggerInfo, false, $tenantNameList);
     }
@@ -164,7 +161,7 @@ class IndexUpdateService
      * @param string[]|null $tenantNameList optional list of tenant names for which the update should happen. If null, then the parameter
      *        will be ignored. If the array is empty, then no update will take place.
      */
-    public function resetIdsUpdateIndex(array $idList, string $triggerInfo, array $tenantNameList = null): void
+    public function resetIdsUpdateIndex(array $idList, string $triggerInfo, ?array $tenantNameList = null): void
     {
         $this->resetIds($idList, $triggerInfo, true, $tenantNameList);
     }
@@ -180,7 +177,7 @@ class IndexUpdateService
      * @param string[]|null $tenantNameList optional list of tenant names for which the update should happen. If null, then the parameter
      *        will be ignored. If the array is empty, then no update will take place.
      */
-    protected function resetIds(array $idList, string $triggerInfo, bool $onlyResetUpdateIndex = false, array $tenantNameList = null): void
+    protected function resetIds(array $idList, string $triggerInfo, bool $onlyResetUpdateIndex = false, ?array $tenantNameList = null): void
     {
         if (count($idList) === 0) {
             return;
@@ -242,10 +239,8 @@ class IndexUpdateService
             ->from($storeTableName, 'storeTable')
         ;
 
-        if (!empty($tenantNameFilterList)) {
-            $qb->andWhere(sprintf('tenant in(%s)', implode(',', array_map(function ($str) {
-                return sprintf("'%s'", $str);
-            },
+        if ($tenantNameFilterList !== []) {
+            $qb->andWhere(sprintf('tenant in(%s)', implode(',', array_map(fn($str) => sprintf("'%s'", $str),
                 $tenantNameFilterList))
             ));
         }
@@ -269,10 +264,8 @@ class IndexUpdateService
         $qb = Db::get()->createQueryBuilder();
         $qb->update($storeTableName);
 
-        if (!empty($tenantNameFilterList)) {
-            $qb->andWhere(sprintf('tenant in(%s)', implode(',', array_map(function ($str) {
-                return sprintf("'%s'", $str);
-            },
+        if ($tenantNameFilterList !== []) {
+            $qb->andWhere(sprintf('tenant in(%s)', implode(',', array_map(fn($str) => sprintf("'%s'", $str),
                 $tenantNameFilterList))
             ));
         }
@@ -295,7 +288,7 @@ class IndexUpdateService
         $tenants = $this->indexService->getTenants();
         $storeTableList = [];
         foreach ($tenants as $tenantName) {
-            if (!empty($tenantNameFilterList) && !in_array($tenantName, $tenantNameFilterList)) {
+            if ($tenantNameFilterList !== [] && !in_array($tenantName, $tenantNameFilterList)) {
                 continue;
             }
 
@@ -327,7 +320,7 @@ class IndexUpdateService
             if (array_key_exists($id, $combinedRows)) {
                 $openTenantsExisting = $combinedRows[$id]['tenants'];
                 $openTenantsNew = $row['tenants'];
-                $mergedTenantNameList = array_unique(array_merge($openTenantsExisting, $openTenantsNew));
+                $mergedTenantNameList = array_unique([...$openTenantsExisting, ...$openTenantsNew]);
                 $combinedRow['tenants'] = $mergedTenantNameList;
                 $combinedRow['numTenants'] = count($mergedTenantNameList);
             }

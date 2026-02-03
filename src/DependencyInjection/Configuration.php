@@ -56,7 +56,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 /**
  * @internal
  */
-final class Configuration implements ConfigurationInterface
+final readonly class Configuration implements ConfigurationInterface
 {
     private TenantProcessor $tenantProcessor;
 
@@ -118,7 +118,6 @@ final class Configuration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('opendxp');
 
-        /** @var ArrayNodeDefinition $pimcore */
         $opendxp = $builder->getRootNode();
         $opendxp
             ->addDefaultsIfNotSet()
@@ -221,13 +220,13 @@ final class Configuration implements ConfigurationInterface
                         'default' => [
                             'cart' => [
                                 'factory_options' => [
-                                    'cart_class_name' => 'OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart',
+                                    'cart_class_name' => \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart::class,
                                 ],
                             ],
                             'price_calculator' => [
                                 'modificators' => [
                                     'shipping' => [
-                                        'class' => 'OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping',
+                                        'class' => \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping::class,
                                         'options' => [
                                             'charge' => '5.90',
                                         ],
@@ -244,9 +243,7 @@ final class Configuration implements ConfigurationInterface
                     ])
                     ->useAttributeAsKey('name')
                     ->validate()
-                        ->ifTrue(function (array $v) {
-                            return !array_key_exists('default', $v);
-                        })
+                        ->ifTrue(fn(array $v) => !array_key_exists('default', $v))
                         ->thenInvalid('Cart manager needs at least a default tenant')
                     ->end()
                     ->beforeNormalization()
@@ -328,9 +325,7 @@ final class Configuration implements ConfigurationInterface
                     ->info('Configuration per tenant. If a _defaults key is set, it will be merged into every tenant. A tenant named "default" is mandatory.')
                     ->useAttributeAsKey('name')
                     ->validate()
-                        ->ifTrue(function (array $v) {
-                            return !array_key_exists('default', $v);
-                        })
+                        ->ifTrue(fn(array $v) => !array_key_exists('default', $v))
                         ->thenInvalid('Order manager needs at least a default tenant')
                     ->end()
                     ->beforeNormalization()
@@ -354,17 +349,17 @@ final class Configuration implements ConfigurationInterface
                                 ->children()
                                     ->scalarNode('customer_class')
                                         ->info('OpenDxp object class for customers')
-                                        ->defaultValue('\\OpenDxp\\Model\\DataObject\\Customer')
+                                        ->defaultValue(\OpenDxp\Model\DataObject\Customer::class)
                                         ->cannotBeEmpty()
                                     ->end()
                                     ->scalarNode('order_class')
                                         ->info('OpenDxp object class for orders')
-                                        ->defaultValue('\\OpenDxp\\Model\\DataObject\\OnlineShopOrder')
+                                        ->defaultValue(\OpenDxp\Model\DataObject\OnlineShopOrder::class)
                                         ->cannotBeEmpty()
                                     ->end()
                                     ->scalarNode('order_item_class')
                                         ->info('OpenDxp object class for order items')
-                                        ->defaultValue('\\OpenDxp\\Model\\DataObject\\OnlineShopOrderItem')
+                                        ->defaultValue(\OpenDxp\Model\DataObject\OnlineShopOrderItem::class)
                                         ->cannotBeEmpty()
                                     ->end()
                                     ->scalarNode('list_class')
@@ -443,9 +438,7 @@ final class Configuration implements ConfigurationInterface
                     ->info('Configuration per tenant. If a _defaults key is set, it will be merged into every tenant. A tenant named "default" is mandatory.')
                     ->useAttributeAsKey('name')
                     ->validate()
-                        ->ifTrue(function (array $v) {
-                            return !array_key_exists('default', $v);
-                        })
+                        ->ifTrue(fn(array $v) => !array_key_exists('default', $v))
                         ->thenInvalid('Pricing manager needs at least a default tenant')
                     ->end()
                     ->beforeNormalization()
@@ -502,9 +495,7 @@ final class Configuration implements ConfigurationInterface
             ->prototype('array')
                 ->beforeNormalization()
                     ->ifString()
-                    ->then(function ($v) {
-                        return ['id' => $v];
-                    })
+                    ->then(fn($v) => ['id' => $v])
                 ->end()
                 ->children()
                     ->scalarNode('name')->end()
@@ -528,9 +519,7 @@ final class Configuration implements ConfigurationInterface
             ->prototype('array')
                 ->beforeNormalization()
                     ->ifString()
-                    ->then(function ($v) {
-                        return ['id' => $v];
-                    })
+                    ->then(fn($v) => ['id' => $v])
                 ->end()
                 ->children()
                     ->scalarNode('name')->end()
@@ -558,9 +547,7 @@ final class Configuration implements ConfigurationInterface
                     ->info('Configuration per tenant. If a _defaults key is set, it will be merged into every tenant. A tenant named "default" is mandatory.')
                     ->useAttributeAsKey('name')
                     ->validate()
-                        ->ifTrue(function (array $v) {
-                            return !array_key_exists('default', $v);
-                        })
+                        ->ifTrue(fn(array $v) => !array_key_exists('default', $v))
                         ->thenInvalid('Checkout manager needs at least a default tenant')
                     ->end()
                     ->beforeNormalization()
@@ -708,7 +695,7 @@ final class Configuration implements ConfigurationInterface
 
                                     $delimiters = ['.', '^'];
                                     foreach ($delimiters as $delimiter) {
-                                        if (!$attributeFound && strpos($searchAttribute, $delimiter) !== false) {
+                                        if (!$attributeFound && str_contains($searchAttribute, $delimiter)) {
                                             $fieldNameParts = explode($delimiter, $searchAttribute);
                                             if (isset($tenantConfig['attributes'][$fieldNameParts[0]])) {
                                                 $attributeFound = true;
@@ -768,8 +755,8 @@ final class Configuration implements ConfigurationInterface
                                     $config[$tenant]['placeholders'] = $placeholders;
                                 }
 
-                                $config[$tenant]['config_id'] = $config[$tenant]['config_id'] ?? null;
-                                $config[$tenant]['worker_id'] = $config[$tenant]['worker_id'] ?? null;
+                                $config[$tenant]['config_id'] ??= null;
+                                $config[$tenant]['worker_id'] ??= null;
 
                                 // if only config or worker is set, try to auto resolve missing config/worker
                                 if (!($config[$tenant]['config_id'] && $config[$tenant]['worker_id'])) {
@@ -849,7 +836,7 @@ final class Configuration implements ConfigurationInterface
                                                 return $v;
                                             }
 
-                                            $v = $this->remapProperties($v, [
+                                            return $this->remapProperties($v, [
                                                 'fieldname' => 'field_name',
                                                 'filtergroup' => 'filter_group',
                                                 'getter' => 'getter_id',
@@ -857,8 +844,6 @@ final class Configuration implements ConfigurationInterface
                                                 'config' => 'options',
                                                 'hideInFieldlistDatatype' => 'hide_in_fieldlist_datatype',
                                             ]);
-
-                                            return $v;
                                         })
                                     ->end()
                                     ->children()
@@ -1041,12 +1026,12 @@ final class Configuration implements ConfigurationInterface
                         ->scalarNode('offer_class')
                             ->info('OpenDxp object class for offers')
                             ->cannotBeEmpty()
-                            ->defaultValue('OpenDxp\\Model\\DataObject\\OfferToolOffer')
+                            ->defaultValue(\OpenDxp\Model\DataObject\OfferToolOffer::class)
                         ->end()
                         ->scalarNode('offer_item_class')
                             ->info('OpenDxp object class for offer items')
                             ->cannotBeEmpty()
-                            ->defaultValue('OpenDxp\\Model\\DataObject\\OfferToolOfferItem')
+                            ->defaultValue(\OpenDxp\Model\DataObject\OfferToolOfferItem::class)
                         ->end()
                         ->scalarNode('parent_folder_path')
                             ->info('default path for new offers')
@@ -1131,7 +1116,7 @@ final class Configuration implements ConfigurationInterface
         return $trackingManager;
     }
 
-    private function buildOptionsNode(string $name = 'options', array $defaultValue = [], string $documentation = null): NodeDefinition
+    private function buildOptionsNode(string $name = 'options', array $defaultValue = [], ?string $documentation = null): NodeDefinition
     {
         $node = new VariableNodeDefinition($name);
         if ($documentation) {

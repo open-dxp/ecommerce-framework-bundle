@@ -26,6 +26,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterNumberRangeSelection;
  */
 class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRangeSelection
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         $productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -34,6 +35,7 @@ class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filt
     /**
      * @param FilterNumberRangeSelection $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

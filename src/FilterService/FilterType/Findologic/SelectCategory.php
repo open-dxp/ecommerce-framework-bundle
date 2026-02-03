@@ -28,6 +28,7 @@ class SelectCategory extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
 {
     const FIELDNAME = 'cat';
 
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         //$productList->prepareGroupBySystemValues($filterDefinition->getField(), true);
@@ -38,6 +39,7 @@ class SelectCategory extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
      *
      * @throws Exception
      */
+    #[\Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $rawValues = $productList->getGroupByValues(self::FIELDNAME, true);
@@ -61,6 +63,7 @@ class SelectCategory extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
     /**
      * @param FilterCategory $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $value = $params[$filterDefinition->getField()] ?? null;

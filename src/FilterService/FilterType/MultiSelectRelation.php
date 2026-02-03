@@ -45,7 +45,7 @@ class MultiSelectRelation extends AbstractFilterType
         }
 
         foreach ($values as $v) {
-            if (empty($availableRelations) || ($availableRelations[$v['value']] ?? false) === true) {
+            if ($availableRelations === [] || ($availableRelations[$v['value']] ?? false) === true) {
                 $objects[$v['value']] = DataObject::getById($v['value']);
             }
         }
@@ -101,14 +101,8 @@ class MultiSelectRelation extends AbstractFilterType
                 $objects = explode(',', $objects);
             }
 
-            if (is_array($objects)) {
-                foreach ($objects as $o) {
-                    if (is_object($o)) {
-                        $value[] = $o->getId();
-                    } else {
-                        $value[] = $o;
-                    }
-                }
+            foreach ($objects as $o) {
+                $value[] = is_object($o) ? $o->getId() : $o;
             }
         } elseif (!empty($value) && in_array(AbstractFilterType::EMPTY_STRING, $value)) {
             $value = null;
@@ -124,7 +118,7 @@ class MultiSelectRelation extends AbstractFilterType
                     $quotedValues[] = $db->quote($v);
                 }
             }
-            if (!empty($quotedValues)) {
+            if ($quotedValues !== []) {
                 if ($filterDefinition->getUseAndCondition()) {
                     foreach ($quotedValues as $value) {
                         $productList->addRelationCondition($field, 'dest = ' . $value);

@@ -32,12 +32,13 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
 
         if (method_exists($filterDefinition, 'getExcludedKeyIds') && $filterDefinition->getExcludedKeyIds()) {
             $excludedKeys = explode(',', $filterDefinition->getExcludedKeyIds());
-            $excludedKeys = array_map('intval', $excludedKeys);
+            $excludedKeys = array_map(intval(...), $excludedKeys);
         }
 
         return $excludedKeys;
     }
 
+    #[\Override]
     protected function sortResult(AbstractFilterDefinitionType $filterDefinition, array $keyCollection): array
     {
         if (!method_exists($filterDefinition, 'getKeyIdPriorityOrder') || empty($filterDefinition->getKeyIdPriorityOrder())) {
@@ -45,7 +46,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
         }
 
         $priorityKeys = explode(',', $filterDefinition->getKeyIdPriorityOrder());
-        $priorityKeys = array_map('intval', $priorityKeys);
+        $priorityKeys = array_map(intval(...), $priorityKeys);
 
         $sortedCollection = [];
 
@@ -57,6 +58,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
         return $sortedCollection + $keyCollection;
     }
 
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         $field = $this->getField($filterDefinition);
@@ -95,7 +97,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
             $valuesField = $field . '.values.' . $keyId . '.keyword';
 
             $keyValues = $productList->getGroupByValues($valuesField, true, true);
-            if (!empty($keyValues)) {
+            if ($keyValues !== []) {
                 $key = KeyConfig::getById($keyId);
 
                 $keyCollection[$keyId] = [
@@ -126,7 +128,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
         if (is_array($value)) {
             foreach ($value as $keyId => $keyValue) {
                 $filterValue = trim($keyValue);
-                if ($filterValue == AbstractFilterType::EMPTY_STRING) {
+                if ($filterValue === AbstractFilterType::EMPTY_STRING) {
                     $filterValue = null;
                 }
 

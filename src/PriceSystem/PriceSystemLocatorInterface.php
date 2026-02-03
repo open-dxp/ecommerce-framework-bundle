@@ -19,7 +19,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem;
 
 interface PriceSystemLocatorInterface
 {
-    public function getPriceSystem(string $name = null): PriceSystemInterface;
+    public function getPriceSystem(?string $name = null): PriceSystemInterface;
 
     public function hasPriceSystem(string $name): bool;
 }

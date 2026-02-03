@@ -14,21 +14,21 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce;
 
 use Codeception\Stub;
 use PHPUnit_Framework_MockObject_Stub;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\Currency;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\Price;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxEntry;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManager;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerLocator;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
-use Pimcore\Model\DataObject\OnlineShopTaxClass;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\Currency;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\Price;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxEntry;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManager;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerLocator;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Model\DataObject\OnlineShopTaxClass;
 
 class ProductTaxManagementTest extends EcommerceTestCase
 {
@@ -37,10 +37,10 @@ class ProductTaxManagementTest extends EcommerceTestCase
         $grossPrice = Decimal::create($grossPrice);
 
         $taxClass = new OnlineShopTaxClass();
-        $taxEntries = new \Pimcore\Model\DataObject\Fieldcollection();
+        $taxEntries = new \OpenDxp\Model\DataObject\Fieldcollection();
 
         foreach ($taxes as $name => $tax) {
-            $entry = new \Pimcore\Model\DataObject\Fieldcollection\Data\TaxEntry();
+            $entry = new \OpenDxp\Model\DataObject\Fieldcollection\Data\TaxEntry();
             $entry->setPercent($tax);
             $entry->setName($name);
             $taxEntries->add($entry);

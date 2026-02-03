@@ -14,15 +14,15 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Model;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Model;
 
 use InvalidArgumentException;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper\TestDataHelper;
-use Pimcore\Model\DataObject\AbstractObject;
-use Pimcore\Model\DataObject\Concrete;
-use Pimcore\Model\DataObject\Unittest;
-use Pimcore\Tests\Support\Test\TestCase;
-use Pimcore\Tests\Support\Util\TestHelper;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper\TestDataHelper;
+use OpenDxp\Model\DataObject\AbstractObject;
+use OpenDxp\Model\DataObject\Concrete;
+use OpenDxp\Model\DataObject\Unittest;
+use OpenDxp\Tests\Support\Test\TestCase;
+use OpenDxp\Tests\Support\Util\TestHelper;
 
 /**
  * @group dataTypeLocal

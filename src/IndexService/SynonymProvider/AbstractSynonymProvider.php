@@ -18,11 +18,8 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\SynonymProvider;
 
 abstract class AbstractSynonymProvider implements SynonymProviderInterface
 {
-    protected array $options;
-
-    public function __construct(array $options = [])
+    public function __construct(protected array $options = [])
     {
-        $this->options = $options;
     }
 
     public function getOptions(): array

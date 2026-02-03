@@ -50,18 +50,14 @@ class Token extends AbstractModel
             $config->getDao()->getByCode($code);
 
             return $config;
-        } catch (NotFoundException $ex) {
+        } catch (NotFoundException) {
             return null;
         }
     }
 
     public function isUsed(int $maxUsages = 1): bool
     {
-        if ($this->usages >= $maxUsages) {
-            return true;
-        }
-
-        return false;
+        return $this->usages >= $maxUsages;
     }
 
     public static function isUsedToken(string $code, int $maxUsages = 1): bool
@@ -75,7 +71,7 @@ class Token extends AbstractModel
 
             return $tokenUsed >= $maxUsages;
             // If an Error occurs the token is defined as used.
-        } catch (Exception $e) {
+        } catch (Exception) {
             return true;
         }
     }
@@ -83,14 +79,10 @@ class Token extends AbstractModel
     /**
      * @param bool $isCheckout In the checkout there is one reservation more, the one of the current order.
      */
-    public function check(int $maxUsages = null, bool $isCheckout = false): bool
+    public function check(?int $maxUsages = null, bool $isCheckout = false): bool
     {
         if (isset($maxUsages)) {
-            if ($this->getUsages() + Reservation::getReservationCount($this->getToken()) - (int)$isCheckout < $maxUsages) {
-                return true;
-            }
-
-            return false;
+            return $this->getUsages() + Reservation::getReservationCount($this->getToken()) - (int)$isCheckout < $maxUsages;
         } else {
             return !$this->isUsed() && !$this->isReserved();
         }
@@ -101,12 +93,7 @@ class Token extends AbstractModel
         $db = Db::get();
         $query = 'SELECT EXISTS(SELECT id FROM ' . Dao::TABLE_NAME . ' WHERE token = ?)';
         $result = $db->fetchOne($query, [$code]);
-
-        if ($result == 0) {
-            return false;
-        }
-
-        return true;
+        return $result != 0;
     }
 
     public function release(?CartInterface $cart): bool
@@ -127,11 +114,7 @@ class Token extends AbstractModel
 
     public function unuse(): bool
     {
-        if ($this->getDao()->unuse()) {
-            return true;
-        }
-
-        return false;
+        return $this->getDao()->unuse();
     }
 
     public function getTimestamp(): string

@@ -41,6 +41,7 @@ class Listing extends AbstractOrderList implements OrderListInterface
      */
     protected ?array $availableFilterValues = null;
 
+    #[\Override]
     public function setListType(string $type): static
     {
         $this->listType = $type;
@@ -67,7 +68,7 @@ class Listing extends AbstractOrderList implements OrderListInterface
             $this->joinItemsAndSubItems($queryBuilder);
 
             // group by list type
-            if ($this->getListType() == self::LIST_TYPE_ORDER_ITEM) {
+            if ($this->getListType() === self::LIST_TYPE_ORDER_ITEM) {
                 $queryBuilder->addSelect('orderItem.oo_id AS Id');
                 $queryBuilder->groupBy('OrderItemId');
             } else {
@@ -87,6 +88,7 @@ class Listing extends AbstractOrderList implements OrderListInterface
     /**
      * @return $this
      */
+    #[\Override]
     public function setLimit(int $limit, int $offset = 0): static
     {
         parent::setLimit($limit, $offset);
@@ -230,7 +232,7 @@ class Listing extends AbstractOrderList implements OrderListInterface
                 '_orderItems.fieldname = "items" AND _orderItems.src_id = order.oo_id'
             );
         } else {
-            $select->join('`order`', (string) $this->getOrderItemsSubQuery(), '_orderItems',
+            $select->join('`order`', $this->getOrderItemsSubQuery(), '_orderItems',
                 '_orderItems.orderId = order.oo_id'
             );
         }
@@ -261,7 +263,7 @@ class Listing extends AbstractOrderList implements OrderListInterface
     /**
      * @return $this
      */
-    public function addCondition(string $condition, string $value = null): static
+    public function addCondition(string $condition, ?string $value = null): static
     {
         if (null === $value) {
             $value = [];

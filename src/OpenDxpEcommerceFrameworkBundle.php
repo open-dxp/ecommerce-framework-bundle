@@ -37,6 +37,7 @@ class OpenDxpEcommerceFrameworkBundle extends AbstractOpenDxpBundle implements D
 {
     use BundleAdminClassicTrait;
 
+    #[\Override]
     public function getContainerExtension(): ?ExtensionInterface
     {
         if ($this->extension === null) {
@@ -46,6 +47,7 @@ class OpenDxpEcommerceFrameworkBundle extends AbstractOpenDxpBundle implements D
         return $this->extension;
     }
 
+    #[\Override]
     public function getVersion(): string
     {
         return sprintf('%s build %s', Version::getVersion(), Version::getRevision());

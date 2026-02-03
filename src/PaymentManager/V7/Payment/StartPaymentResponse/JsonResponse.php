@@ -20,15 +20,12 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 
 class JsonResponse extends AbstractResponse
 {
-    protected string $jsonString;
-
     /**
      * JsonResponse constructor.
      */
-    public function __construct(AbstractOrder $order, string $jsonString)
+    public function __construct(AbstractOrder $order, protected string $jsonString)
     {
         parent::__construct($order);
-        $this->jsonString = $jsonString;
     }
 
     public function getJsonString(): string

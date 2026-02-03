@@ -43,9 +43,9 @@ class SessionCart extends AbstractCart implements CartInterface
     {
         try {
             $session = OpenDxp::getContainer()->get('request_stack')->getSession();
-        } catch (SessionNotFoundException $e) {
+        } catch (SessionNotFoundException) {
             trigger_deprecation('open-dxp/opendxp', '1.0',
-                sprintf('Session used with non existing request stack in %s, that will not be possible in OpenDXP 1.', __CLASS__));
+                sprintf('Session used with non existing request stack in %s, that will not be possible in OpenDXP 1.', self::class));
 
             $session = OpenDxp::getContainer()->get('session');
         }
@@ -93,6 +93,7 @@ class SessionCart extends AbstractCart implements CartInterface
         $session->set('carts', $carts);
     }
 
+    #[\Override]
     public function sortItems(callable $value_compare_func): static
     {
         if (is_array($this->items)) {
@@ -131,6 +132,7 @@ class SessionCart extends AbstractCart implements CartInterface
     /**
      * @internal
      */
+    #[\Override]
     public function __sleep(): array
     {
         $vars = parent::__sleep();

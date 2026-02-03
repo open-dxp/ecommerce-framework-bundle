@@ -58,6 +58,7 @@ class SessionCartItem extends AbstractCartItem implements CartItemInterface
     /**
      * @internal
      */
+    #[\Override]
     public function __sleep(): array
     {
         $vars = parent::__sleep();

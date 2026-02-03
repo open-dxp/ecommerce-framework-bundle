@@ -39,7 +39,7 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
     /**
      * @throws NotFoundException
      */
-    public function get(string $code, CartInterface $cart = null): void
+    public function get(string $code, ?CartInterface $cart = null): void
     {
         $query = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE token = ?';
         $params[] = $code;
@@ -74,7 +74,7 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
         return true;
     }
 
-    public static function getReservedTokenCount(int $seriesId = null): bool|int
+    public static function getReservedTokenCount(?int $seriesId = null): bool|int
     {
         $db = \OpenDxp\Db::get();
 
@@ -93,7 +93,7 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
             }
 
             return $count;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return true;
         }
     }
@@ -106,12 +106,8 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
         $params[] = $token;
 
         try {
-            if ($db->fetchOne($query, $params) === 0) {
-                return false;
-            }
-
-            return true;
-        } catch (Exception $e) {
+            return $db->fetchOne($query, $params) !== 0;
+        } catch (Exception) {
             return true;
         }
     }

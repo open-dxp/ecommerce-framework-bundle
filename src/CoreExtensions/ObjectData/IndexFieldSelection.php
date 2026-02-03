@@ -18,23 +18,11 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData;
 
 class IndexFieldSelection
 {
-    public ?string $tenant = null;
-
-    public string $field;
-
-    /**
-     * @var string|string[]|int|null
-     */
-    public string|array|int|null $preSelect;
-
     /**
      * @param string|string[]|int $preSelect
      */
-    public function __construct(?string $tenant, string $field, array|string|int|null $preSelect)
+    public function __construct(public ?string $tenant, public string $field, public string|array|int|null $preSelect)
     {
-        $this->field = $field;
-        $this->preSelect = $preSelect;
-        $this->tenant = $tenant;
     }
 
     public function setField(string $field): void

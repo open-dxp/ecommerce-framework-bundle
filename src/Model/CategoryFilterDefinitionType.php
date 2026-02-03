@@ -25,9 +25,8 @@ abstract class CategoryFilterDefinitionType extends AbstractFilterDefinitionType
     {
         if ($this->getIncludeParentCategories()) {
             return 'parentCategoryIds';
-        } else {
-            return 'categoryIds';
         }
+        return 'categoryIds';
     }
 
     public function getIncludeParentCategories(): ?bool

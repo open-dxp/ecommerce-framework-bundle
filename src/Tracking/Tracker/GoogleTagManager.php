@@ -56,6 +56,7 @@ class GoogleTagManager extends Tracker implements
 
     protected array $deferred = [];
 
+    #[\Override]
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -159,7 +160,7 @@ class GoogleTagManager extends Tracker implements
         $this->trackCode($result);
     }
 
-    public function trackCheckoutStep(CheckoutManagerCheckoutStepInterface $step, CartInterface $cart, string $stepNumber = null, string $checkoutOption = null): void
+    public function trackCheckoutStep(CheckoutManagerCheckoutStepInterface $step, CartInterface $cart, ?string $stepNumber = null, ?string $checkoutOption = null): void
     {
         $items = $this->trackingItemBuilder->buildCheckoutItemsByCart($cart);
 
@@ -210,18 +211,7 @@ class GoogleTagManager extends Tracker implements
     protected function transformProductAction(ProductAction $item): array
     {
         return $this->filterNullValues(
-            array_merge([
-                'name' => $item->getName(),
-                'id' => (string)$item->getId(),
-                'price' => $this->formatPrice($item->getPrice()),
-                'brand' => $item->getBrand(),
-                'category' => $item->getCategory(),
-                'variant' => $item->getVariant(),
-                'quantity' => $item->getQuantity(),
-                'position' => $item->getPosition(),
-                'coupon' => $item->getCoupon(),
-            ],
-                $item->getAdditionalAttributes())
+            ['name' => $item->getName(), 'id' => $item->getId(), 'price' => $this->formatPrice($item->getPrice()), 'brand' => $item->getBrand(), 'category' => $item->getCategory(), 'variant' => $item->getVariant(), 'quantity' => $item->getQuantity(), 'position' => $item->getPosition(), 'coupon' => $item->getCoupon(), ...$item->getAdditionalAttributes()]
         );
     }
 
@@ -230,21 +220,9 @@ class GoogleTagManager extends Tracker implements
      */
     protected function transformProductImpression(ProductImpression $item): array
     {
-        $data = $this->filterNullValues(
-            array_merge([
-                'id' => (string) $item->getId(),
-                'name' => $item->getName(),
-                'category' => $item->getCategory(),
-                'brand' => $item->getBrand(),
-                'variant' => $item->getVariant(),
-                'price' => $this->formatPrice($item->getPrice()),
-                'list' => $item->getList(),
-                'position' => $item->getPosition(),
-            ],
-                $item->getAdditionalAttributes())
+        return $this->filterNullValues(
+            ['id' => $item->getId(), 'name' => $item->getName(), 'category' => $item->getCategory(), 'brand' => $item->getBrand(), 'variant' => $item->getVariant(), 'price' => $this->formatPrice($item->getPrice()), 'list' => $item->getList(), 'position' => $item->getPosition(), ...$item->getAdditionalAttributes()]
         );
-
-        return $data;
     }
 
     /**
@@ -253,23 +231,13 @@ class GoogleTagManager extends Tracker implements
     protected function transformTransaction(Transaction $transaction): array
     {
         return $this->filterNullValues(
-            array_merge([
-                'id' => $transaction->getId(),
-                'affiliation' => $transaction->getAffiliation(),
-                'revenue' => $this->formatPrice($transaction->getTotal()),
-                'tax' => $this->formatPrice($transaction->getTax()),
-                'coupon' => $transaction->getCoupon(),
-                'shipping' => $this->formatPrice($transaction->getShipping()),
-            ],
-                $transaction->getAdditionalAttributes())
+            ['id' => $transaction->getId(), 'affiliation' => $transaction->getAffiliation(), 'revenue' => $this->formatPrice($transaction->getTotal()), 'tax' => $this->formatPrice($transaction->getTax()), 'coupon' => $transaction->getCoupon(), 'shipping' => $this->formatPrice($transaction->getShipping()), ...$transaction->getAdditionalAttributes()]
         );
     }
 
     protected function transformCheckoutItems(array $items): array
     {
-        return array_map(function (ProductAction $item) {
-            return $this->transformProductAction($item);
-        }, $items);
+        return array_map(fn(ProductAction $item) => $this->transformProductAction($item), $items);
     }
 
     private function formatPrice(mixed $price): string

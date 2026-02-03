@@ -26,7 +26,7 @@ class CartAmount implements CartAmountInterface
 
     public function check(EnvironmentInterface $environment): bool
     {
-        if (!$environment->getCart() || $environment->getProduct() !== null) {
+        if (!$environment->getCart() || $environment->getProduct() instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface) {
             return false;
         }
 

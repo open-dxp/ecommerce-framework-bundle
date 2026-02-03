@@ -31,14 +31,8 @@ class MySql
      */
     protected array $_sqlChangeLog = [];
 
-    protected MysqlConfigInterface $tenantConfig;
-
-    protected Connection $db;
-
-    public function __construct(MysqlConfigInterface $tenantConfig, Connection $db)
+    public function __construct(protected MysqlConfigInterface $tenantConfig, protected Connection $db)
     {
-        $this->tenantConfig = $tenantConfig;
-        $this->db = $db;
     }
 
     /**
@@ -79,7 +73,7 @@ class MySql
     public function doInsertData(array $data): void
     {
         $validColumns = $this->getValidTableColumns($this->tenantConfig->getTablename());
-        foreach ($data as $column => $value) {
+        foreach (array_keys($data) as $column) {
             if (!in_array($column, $validColumns)) {
                 unset($data[$column]);
             }
@@ -160,7 +154,7 @@ class MySql
         }
 
         $searchIndexColumns = $this->tenantConfig->getSearchAttributes();
-        if (!empty($searchIndexColumns)) {
+        if ($searchIndexColumns !== []) {
             try {
                 $this->dbexec('ALTER TABLE ' . $this->tenantConfig->getTablename() . ' DROP INDEX search;');
             } catch (Exception $e) {
@@ -209,7 +203,7 @@ class MySql
     public function __destruct()
     {
         // write sql change log for deploying to production system
-        if (!empty($this->_sqlChangeLog)) {
+        if ($this->_sqlChangeLog !== []) {
             $log = implode("\n\n\n", $this->_sqlChangeLog);
 
             $filename = 'db-change-log_'.time().'_productindex.sql';

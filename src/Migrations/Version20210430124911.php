@@ -24,6 +24,7 @@ use OpenDxp\Db;
 
 final class Version20210430124911 extends AbstractMigration
 {
+    #[\Override]
     public function getDescription(): string
     {
         return 'Changes addedDateTimestamp of Cart Items to mirco seconds';
@@ -50,6 +51,7 @@ final class Version20210430124911 extends AbstractMigration
         }
     }
 
+    #[\Override]
     public function down(Schema $schema): void
     {
         if ($schema->hasTable(CartItem\Dao::TABLE_NAME) && $this->getColumnType() === 'bigint') {

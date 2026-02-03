@@ -14,22 +14,22 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper;
 
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\VoucherToken;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tools\Installer;
-use Pimcore\Model\DataObject\FilterDefinition;
-use Pimcore\Model\DataObject\OfferToolCustomProduct;
-use Pimcore\Model\DataObject\OfferToolOffer;
-use Pimcore\Model\DataObject\OfferToolOfferItem;
-use Pimcore\Model\DataObject\OnlineShopOrder;
-use Pimcore\Model\DataObject\OnlineShopOrderItem;
-use Pimcore\Model\DataObject\OnlineShopTaxClass;
-use Pimcore\Model\DataObject\OnlineShopVoucherSeries;
-use Pimcore\Tests\Support\Helper\Pimcore;
-use Pimcore\Tests\Support\Util\Autoloader;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\VoucherToken;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tools\Installer;
+use OpenDxp\Model\DataObject\FilterDefinition;
+use OpenDxp\Model\DataObject\OfferToolCustomProduct;
+use OpenDxp\Model\DataObject\OfferToolOffer;
+use OpenDxp\Model\DataObject\OfferToolOfferItem;
+use OpenDxp\Model\DataObject\OnlineShopOrder;
+use OpenDxp\Model\DataObject\OnlineShopOrderItem;
+use OpenDxp\Model\DataObject\OnlineShopTaxClass;
+use OpenDxp\Model\DataObject\OnlineShopVoucherSeries;
+use OpenDxp\Tests\Support\Helper\OpenDxp;
+use OpenDxp\Tests\Support\Util\Autoloader;
 
 class Ecommerce extends Module
 {
@@ -45,13 +45,13 @@ class Ecommerce extends Module
     public function _beforeSuite(array $settings = []): void
     {
         if ($this->config['run_installer']) {
-            /** @var Pimcore $pimcoreModule */
-            $pimcoreModule = $this->getModule('\\' . Pimcore::class);
+            /** @var OpenDxp $opendxpModule */
+            $opendxpModule = $this->getModule('\\' . OpenDxp::class);
 
             $this->debug('[ECOMMERCE] Running ecommerce framework installer');
 
             // install ecommerce framework
-            $installer = $pimcoreModule->getContainer()->get(Installer::class);
+            $installer = $opendxpModule->getContainer()->get(Installer::class);
             $installer->install();
 
             //explicitly load installed classes so that the new ones are used during tests

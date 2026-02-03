@@ -32,24 +32,14 @@ class AgentFactory implements OrderAgentFactoryInterface
 {
     use LoggerAwareTrait;
 
-    protected EnvironmentInterface $environment;
-
-    protected PaymentManagerInterface $paymentManager;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
     protected string $agentClass = OrderAgent::class;
 
     public function __construct(
-        EnvironmentInterface $environment,
-        PaymentManagerInterface $paymentManager,
-        EventDispatcherInterface $eventDispatcher,
+        protected EnvironmentInterface $environment,
+        protected PaymentManagerInterface $paymentManager,
+        protected EventDispatcherInterface $eventDispatcher,
         array $options = []
     ) {
-        $this->environment = $environment;
-        $this->paymentManager = $paymentManager;
-        $this->eventDispatcher = $eventDispatcher;
-
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $this->processOptions($resolver->resolve($options));

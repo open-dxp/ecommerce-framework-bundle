@@ -27,10 +27,6 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
  */
 class DefaultMysqlSubTenantConfig extends DefaultMysql
 {
-    protected EnvironmentInterface $environment;
-
-    protected Connection $db;
-
     public function __construct(
         AttributeFactory $attributeFactory,
         string $tenantName,
@@ -38,18 +34,16 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
         array $searchAttributes,
         array $filterTypes,
         array $options,
-        EnvironmentInterface $environment,
-        Connection $db
+        protected EnvironmentInterface $environment,
+        protected Connection $db
     ) {
-        $this->environment = $environment;
-        $this->db = $db;
-
         parent::__construct($attributeFactory, $tenantName, $attributes, $searchAttributes, $filterTypes, $options);
     }
 
     /**
      * returns table name of product index
      */
+    #[\Override]
     public function getTablename(): string
     {
         return 'ecommerceframework_productindex_with_subtenants';
@@ -58,6 +52,7 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
     /**
      * returns table name of product index reations
      */
+    #[\Override]
     public function getRelationTablename(): string
     {
         return 'ecommerceframework_productindex_with_subtenants_relations';
@@ -66,6 +61,7 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
     /**
      * return table name of product index tenant relations for subtenants
      */
+    #[\Override]
     public function getTenantRelationTablename(): string
     {
         return 'ecommerceframework_productindex_with_subtenants_tenant_relations';
@@ -74,6 +70,7 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
     /**
      * checks, if product should be in index for current tenant (not subtenant)
      */
+    #[\Override]
     public function inIndex(IndexableInterface $object): bool
     {
         $tenants = null;
@@ -90,14 +87,14 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
      * In this case adds join statement to tenant relation table. But in theory any needed join statement can be
      * added here.
      */
+    #[\Override]
     public function getJoins(): string
     {
         $currentSubTenant = $this->environment->getCurrentAssortmentSubTenant();
         if ($currentSubTenant) {
             return ' INNER JOIN ' . $this->getTenantRelationTablename() . ' b ON a.id = b.id ';
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
@@ -105,14 +102,14 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
      *
      * In this case just adds the condition that subtenant_id equals the current subtenant
      */
+    #[\Override]
     public function getCondition(): string
     {
         $currentSubTenant = $this->environment->getCurrentAssortmentSubTenant();
         if ($currentSubTenant) {
             return 'b.subtenant_id = ' . $currentSubTenant;
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
@@ -124,7 +121,7 @@ class DefaultMysqlSubTenantConfig extends DefaultMysql
      *
      * @return array $subTenantData
      */
-    public function prepareSubTenantEntries(IndexableInterface $object, int $subObjectId = null): array
+    public function prepareSubTenantEntries(IndexableInterface $object, ?int $subObjectId = null): array
     {
         $subTenantData = [];
         if ($this->inIndex($object)) {

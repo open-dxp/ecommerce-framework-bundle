@@ -25,23 +25,11 @@ class OrderManagerItemEvent extends Event
 {
     use ArgumentsAwareTrait;
 
-    protected CartItemInterface $cartItem;
-
-    /**+
-     * @var bool
-     */
-    protected bool $isGiftItem;
-
-    protected ?AbstractOrderItem $orderItem = null;
-
     /**
      * OrderManagerItemEvent constructor.
      */
-    public function __construct(CartItemInterface $cartItem, bool $isGiftItem, ?AbstractOrderItem $orderItem, array $arguments = [])
+    public function __construct(protected CartItemInterface $cartItem, protected bool $isGiftItem, protected ?AbstractOrderItem $orderItem, array $arguments = [])
     {
-        $this->cartItem = $cartItem;
-        $this->isGiftItem = $isGiftItem;
-        $this->orderItem = $orderItem;
         $this->arguments = $arguments;
     }
 

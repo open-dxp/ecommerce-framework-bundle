@@ -80,7 +80,7 @@ abstract class AbstractOrderList implements OrderListInterface
 
     public function load(): OrderListInterface|static
     {
-        if ($this->list === null) {
+        if (!$this->list instanceof \ArrayIterator) {
             // load
             $conn = \OpenDxp\Db::getConnection();
             $queryBuilder = $this->getQueryBuilder();
@@ -114,8 +114,8 @@ abstract class AbstractOrderList implements OrderListInterface
 
     public function setLimit(int $limit, int $offset = 0): static
     {
-        $this->limit = (int)$limit;
-        $this->offset = (int)$offset;
+        $this->limit = $limit;
+        $this->offset = $offset;
         $this->list = null;
 
         return $this;

@@ -56,7 +56,7 @@ interface OrderAgentInterface
 
     public function getPaymentProvider(): PaymentInterface;
 
-    public function setPaymentProvider(PaymentInterface $paymentProvider, AbstractOrder $sourceOrder = null): OrderAgentInterface;
+    public function setPaymentProvider(PaymentInterface $paymentProvider, ?AbstractOrder $sourceOrder = null): OrderAgentInterface;
 
     /**
      * Init payment:

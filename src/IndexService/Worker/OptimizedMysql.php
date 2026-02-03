@@ -37,13 +37,9 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
 
     protected Helper\MySql $mySqlHelper;
 
-    protected LoggerInterface $logger;
-
-    public function __construct(OptimizedMysqlConfig $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, LoggerInterface $opendxpEcommerceSqlLogger)
+    public function __construct(OptimizedMysqlConfig $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
     {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
-
-        $this->logger = $opendxpEcommerceSqlLogger;
         $this->mySqlHelper = new Helper\MySql($tenantConfig, $db);
     }
 
@@ -70,7 +66,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
         $this->doCleanupOldZombieData($object, $subObjectIds);
     }
 
-    protected function doDeleteFromIndex(int $subObjectId, IndexableInterface $object = null): void
+    protected function doDeleteFromIndex(int $subObjectId, ?IndexableInterface $object = null): void
     {
         try {
             $this->db->beginTransaction();
@@ -112,7 +108,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
     /**
      * updates all index tables, delegates subtenant updates to tenant config and updates mockup cache
      */
-    public function doUpdateIndex(int $objectId, array $data = null, array $metadata = null): void
+    public function doUpdateIndex(int $objectId, ?array $data = null, ?array $metadata = null): void
     {
         if (empty($data)) {
             $data = $this->db->fetchOne('SELECT data FROM ' . self::STORE_TABLE_NAME . ' WHERE id = ? AND tenant = ?', [$objectId, $this->name]);
@@ -156,6 +152,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
     /**
      * @return string[]
      */
+    #[\Override]
     protected function getSystemAttributes(): array
     {
         return $this->mySqlHelper->getSystemAttributes();

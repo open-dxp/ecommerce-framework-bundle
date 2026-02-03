@@ -23,14 +23,8 @@ use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 class PaymentManager implements PaymentManagerInterface
 {
-    private PsrContainerInterface $providers;
-
-    protected array $providerTypes;
-
-    public function __construct(PsrContainerInterface $providers, array $providerTypes)
+    public function __construct(private readonly PsrContainerInterface $providers, protected array $providerTypes)
     {
-        $this->providers = $providers;
-        $this->providerTypes = $providerTypes;
     }
 
     public function getProviderTypes(): array

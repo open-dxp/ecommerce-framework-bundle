@@ -145,13 +145,11 @@ class ListHelper
 
     public function getFirstFilteredCategory(array $conditions): ?AbstractCategory
     {
-        if (!empty($conditions)) {
-            foreach ($conditions as $c) {
-                if ($c instanceof \OpenDxp\Model\DataObject\Fieldcollection\Data\FilterCategory) {
-                    $result = $c->getPreSelect();
-                    if ($result instanceof AbstractCategory) {
-                        return $result;
-                    }
+        foreach ($conditions as $c) {
+            if ($c instanceof \OpenDxp\Model\DataObject\Fieldcollection\Data\FilterCategory) {
+                $result = $c->getPreSelect();
+                if ($result instanceof AbstractCategory) {
+                    return $result;
                 }
             }
         }

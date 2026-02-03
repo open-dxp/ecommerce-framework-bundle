@@ -24,6 +24,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterNumberRangeSelection;
 
 class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRangeSelection
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         //$productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -34,6 +35,7 @@ class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filt
      *
      * @throws Exception
      */
+    #[\Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $field = $this->getField($filterDefinition);
@@ -90,6 +92,7 @@ class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filt
     /**
      * @param FilterNumberRangeSelection $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);
@@ -115,11 +118,7 @@ class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filt
 
         if ($value['from'] || $value['to']) {
             $v = [];
-            if ($value['from']) {
-                $v['min'] = $value['from'];
-            } else {
-                $v['min'] = 0;
-            }
+            $v['min'] = $value['from'] ?: 0;
 
             if ($value['to']) {
                 $v['max'] = $value['to'];
@@ -138,10 +137,10 @@ class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filt
             if (!empty($data['from'])) {
                 if (!empty($data['to'])) {
                     return $data['from'] . ' - ' . $data['to'];
-                } else {
-                    return $this->translator->trans('more than') . ' ' . $data['from'];
                 }
-            } elseif (!empty($data['to'])) {
+                return $this->translator->trans('more than') . ' ' . $data['from'];
+            }
+            if (!empty($data['to'])) {
                 return $this->translator->trans('less than') . ' ' . $data['to'];
             }
         }

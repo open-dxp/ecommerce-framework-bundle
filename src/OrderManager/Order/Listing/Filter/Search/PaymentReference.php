@@ -26,12 +26,12 @@ class PaymentReference extends AbstractSearch
         return 'paymentInfo.paymentReference';
     }
 
+    #[\Override]
     protected function getConditionValue(): string
     {
         $value = parent::getConditionValue();
-        $value = ',' . $value . ',';
 
-        return $value;
+        return ',' . $value . ',';
     }
 
     /**

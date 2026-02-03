@@ -14,27 +14,27 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager;
 
 use Codeception\Stub;
 use DateTime;
 use PHPUnit_Framework_MockObject_Stub;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart;
-use Pimcore\Bundle\EcommerceFrameworkBundle\EventListener\SessionBagListener;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\Currency;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\Price;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CartAmount;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogCategory;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogProduct;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\DateRange;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Environment;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\EnvironmentInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\EventListener\SessionBagListener;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\Currency;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\Price;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CartAmount;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogCategory;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogProduct;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\DateRange;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Environment;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\EnvironmentInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 
 class ConditionTest extends EcommerceTestCase
 {

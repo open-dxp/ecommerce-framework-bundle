@@ -22,7 +22,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException;
 
 class PriceSystemLocator extends NameServiceLocator implements PriceSystemLocatorInterface
 {
-    public function getPriceSystem(string $name = null): PriceSystemInterface
+    public function getPriceSystem(?string $name = null): PriceSystemInterface
     {
         return $this->locate($name);
     }

@@ -25,14 +25,8 @@ class CheckoutManagerStepsEvent extends Event
 {
     use ArgumentsAwareTrait;
 
-    protected ?CheckoutStepInterface $currentStep = null;
-
-    protected CheckoutManagerInterface $checkoutManager;
-
-    public function __construct(CheckoutManagerInterface $checkoutManager, ?CheckoutStepInterface $currentStep, array $arguments = [])
+    public function __construct(protected CheckoutManagerInterface $checkoutManager, protected ?CheckoutStepInterface $currentStep, array $arguments = [])
     {
-        $this->checkoutManager = $checkoutManager;
-        $this->currentStep = $currentStep;
         $this->arguments = $arguments;
     }
 

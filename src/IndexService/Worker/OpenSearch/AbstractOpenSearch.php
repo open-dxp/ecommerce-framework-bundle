@@ -72,12 +72,9 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      */
     protected string $routingParamName = 'routing';
 
-    protected LoggerInterface $logger;
-
-    public function __construct(SearchConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, LoggerInterface $opendxpEcommerceOsLogger)
+    public function __construct(SearchConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
     {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
-        $this->logger = $opendxpEcommerceOsLogger;
         $this->indexName = strtolower(($tenantConfig->getClientConfig('indexName')) ?: $this->name);
     }
 
@@ -104,7 +101,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      *
      * @return string the name of the index, such as at_de_elastic_13
      */
-    public function getIndexNameVersion(int $indexVersionOverride = null): string
+    public function getIndexNameVersion(?int $indexVersionOverride = null): string
     {
         $indexVersion = $indexVersionOverride ?? $this->getIndexVersion();
 
@@ -132,7 +129,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
 
         $aliasIndexName = array_key_first($result);
         preg_match('/'.$this->indexName.'-(\d+)/', $aliasIndexName, $matches);
-        if (is_array($matches) && count($matches) > 1) {
+        if (count($matches) > 1) {
             $version = (int)$matches[1];
             if ($version > $this->indexVersion) {
                 $this->indexVersion = $version;
@@ -205,11 +202,9 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
 
                 //check, if interpreter is set and if this interpreter is instance of relation interpreter
                 // -> then set type to long
-                if (null !== $attribute->getInterpreter()) {
-                    if ($attribute->getInterpreter() instanceof RelationInterpreterInterface) {
-                        $type = 'long';
-                        $isRelation = true;
-                    }
+                if (null !== $attribute->getInterpreter() && $attribute->getInterpreter() instanceof RelationInterpreterInterface) {
+                    $type = 'long';
+                    $isRelation = true;
                 }
 
                 if (!empty($attribute->getOption('mapper'))) {
@@ -263,6 +258,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      * creates mapping attributes based on system attributes, in product index defined attributes and relations
      * can be overwritten in order to consider additional mappings for sub tenants
      */
+    #[\Override]
     public function getSystemAttributes(bool $includeTypes = false): array
     {
         $systemAttributes = [
@@ -337,7 +333,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
         $this->fillupPreparationQueue($object);
     }
 
-    protected function doUpdateIndex(int $objectId, array $data = null, array $metadata = null): void
+    protected function doUpdateIndex(int $objectId, ?array $data = null, ?array $metadata = null): void
     {
         $isLocked = $this->checkIndexLock(false);
 
@@ -396,9 +392,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
             }
 
             $this->bulkIndexData[] = ['index' => ['_index' => $this->getIndexNameVersion(), '_id' => $objectId, $this->routingParamName => $routingId]];
-            $bulkIndexData = array_filter(['system' => array_filter($indexSystemData), 'type' => $indexSystemData['type'], 'attributes' => array_filter($indexAttributeData, function ($value) {
-                return $value !== null;
-            }), 'relations' => $indexRelationData, 'subtenants' => $data['subtenants']]);
+            $bulkIndexData = array_filter(['system' => array_filter($indexSystemData), 'type' => $indexSystemData['type'], 'attributes' => array_filter($indexAttributeData, fn($value) => $value !== null), 'relations' => $indexRelationData, 'subtenants' => $data['subtenants']]);
 
             if ($indexSystemData['type'] == ProductListInterface::PRODUCT_TYPE_VARIANT) {
                 $bulkIndexData[self::RELATION_FIELD] = ['name' => $indexSystemData['type'], 'parent' => $indexSystemData['virtualProductId']];
@@ -422,6 +416,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
     /**
      * actually sending data to elastic search
      */
+    #[\Override]
     public function commitBatchToIndex(): void
     {
         if (count($this->bulkIndexData)) {
@@ -523,7 +518,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
         $stats = $osClient->indices()->stats();
         foreach ($stats['indices'] as $key => $data) {
             preg_match('/'.$this->indexName.'-(\d+)/', $key, $matches);
-            if (is_array($matches) && count($matches) > 1) {
+            if (count($matches) > 1) {
                 $version = (int)$matches[1];
                 if ($version !== $this->indexVersion) {
                     $indexNameVersion = $this->getIndexNameVersion($version);
@@ -539,6 +534,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      *
      * return array in this case
      */
+    #[\Override]
     protected function convertArray(array|string $data): array|string
     {
         return $data;
@@ -547,7 +543,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
     /**
      * @throws Exception
      */
-    protected function doDeleteFromIndex(int $objectId, IndexableInterface $object = null): void
+    protected function doDeleteFromIndex(int $objectId, ?IndexableInterface $object = null): void
     {
         $osClient = $this->getOpenSearchClient();
 
@@ -634,14 +630,12 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
 
     protected function getMappingParams(): array
     {
-        $params = [
+        return [
             'index' => $this->getIndexNameVersion(),
             'body' => [
                 'properties' => $this->createMappingAttributes(),
             ],
         ];
-
-        return $params;
     }
 
     /**
@@ -947,7 +941,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
             $indexName = $indexNameOverride ?: $this->getIndexNameVersion();
 
             $indexSettingsSynonymPartLocalConfig = $this->extractMinimalSynonymFiltersTreeFromTenantConfig();
-            if (empty($indexSettingsSynonymPartLocalConfig)) {
+            if ($indexSettingsSynonymPartLocalConfig === []) {
                 Logger::info('No index update required, as no synonym providers are configured. '.
                     'If filters have been removed, then reindexing will help to get rid of old configurations.'
                 );
@@ -1033,13 +1027,13 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      */
     public function extractMinimalSynonymFiltersTreeFromIndexSettings(array $indexSettings): array
     {
-        $filters = isset($indexSettings['analysis']['filter']) ? $indexSettings['analysis']['filter'] : [];
+        $filters = $indexSettings['analysis']['filter'] ?? [];
         $indexPart = [];
         if ($filters) {
             $synonymProviderMap = $this->tenantConfig->getSynonymProviders();
             foreach ($filters as $filterName => $filter) {
                 if (array_key_exists($filterName, $synonymProviderMap)) {
-                    if (empty($indexPart)) {
+                    if ($indexPart === []) {
                         $indexPart = [
                             'analysis' =>
                                 [

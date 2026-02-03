@@ -15,10 +15,10 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\DependencyInjection\Config\Processor;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\DependencyInjection\Config\Processor;
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\DependencyInjection\Config\Processor\TenantProcessor;
-use Pimcore\Tests\Support\Test\TestCase;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\DependencyInjection\Config\Processor\TenantProcessor;
+use OpenDxp\Tests\Support\Test\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class TenantProcessorTest extends TestCase

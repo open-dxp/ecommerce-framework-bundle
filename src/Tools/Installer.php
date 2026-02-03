@@ -36,7 +36,7 @@ use Throwable;
  */
 class Installer extends AbstractInstaller
 {
-    private string $installSourcesPath;
+    private readonly string $installSourcesPath;
 
     private array $tablesToInstall = [
         'ecommerceframework_cart' =>
@@ -131,19 +131,13 @@ class Installer extends AbstractInstaller
         'bundle_ecommerce_back-office_order',
     ];
 
-    protected BundleInterface $bundle;
-
-    protected Connection $db;
-
     protected ?Schema $schema = null;
 
     public function __construct(
-        BundleInterface $bundle,
-        Connection $connection
+        protected BundleInterface $bundle,
+        protected Connection $db
     ) {
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
-        $this->bundle = $bundle;
-        $this->db = $connection;
         parent::__construct();
     }
 
@@ -183,6 +177,7 @@ class Installer extends AbstractInstaller
         $this->uninstallTables();
     }
 
+    #[\Override]
     public function isInstalled(): bool
     {
         $installed = false;
@@ -192,18 +187,20 @@ class Installer extends AbstractInstaller
             $installed = $this->db->fetchOne('SELECT `key` FROM users_permission_definitions WHERE `key` = :key', [
                 'key' => $this->permissionsToInstall[0],
             ]);
-        } catch (Exception $e) {
+        } catch (Exception) {
             // nothing to do
         }
 
         return (bool) $installed;
     }
 
+    #[\Override]
     public function canBeInstalled(): bool
     {
         return !$this->isInstalled();
     }
 
+    #[\Override]
     public function canBeUninstalled(): bool
     {
         return $this->isInstalled();
@@ -388,6 +385,7 @@ class Installer extends AbstractInstaller
         return $results;
     }
 
+    #[\Override]
     public function needsReloadAfterInstall(): bool
     {
         return true;

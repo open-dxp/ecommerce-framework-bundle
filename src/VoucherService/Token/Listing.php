@@ -28,13 +28,10 @@ use OpenDxp\Model\Paginator\PaginateListingInterface;
  */
 class Listing extends \OpenDxp\Model\Listing\AbstractListing implements PaginateListingInterface
 {
+    #[\Override]
     public function isValidOrderKey(string $key): bool
     {
-        if ($key == 'id' || $key == 'token' || $key == 'series_id' || $key == 'usages' || $key == 'timestamp') {
-            return true;
-        }
-
-        return false;
+        return in_array($key, ['id', 'token', 'series_id', 'usages', 'timestamp']);
     }
 
     /**
@@ -91,7 +88,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
             $config->getDao()->load();
 
             return $config;
-        } catch (Exception $ex) {
+        } catch (Exception) {
             //            Logger::debug($ex->getMessage());
             return false;
         }
@@ -150,7 +147,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
 
         try {
             $codes = $db->fetchAllAssociative($query, array_values($queryParams));
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
 
@@ -170,7 +167,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
 
         try {
             return (int) $db->fetchOne($query, $params);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }
@@ -184,7 +181,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
 
         try {
             return (int) $db->fetchOne($query, $params);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }
@@ -204,12 +201,12 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
 
         try {
             return (int) $db->fetchOne($query, $params);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }
 
-    public static function getCountByLength(int $length, int $seriesId = null): ?int
+    public static function getCountByLength(int $length, ?int $seriesId = null): ?int
     {
         $query = 'SELECT COUNT(*) as count FROM ' . \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Token\Dao::TABLE_NAME . ' WHERE length = ?';
         $params = [$length];
@@ -221,10 +218,8 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
         $db = \OpenDxp\Db::get();
 
         try {
-            $result = $db->fetchOne($query, $params);
-
-            return $result;
-        } catch (Exception $e) {
+            return $db->fetchOne($query, $params);
+        } catch (Exception) {
             return null;
         }
     }
@@ -267,7 +262,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
             $queryParts[] = 't.timestamp < STR_TO_DATE(' . $param . ",'%Y-%m-%d')";
         }
 
-        if (count($queryParts) == 1) {
+        if (count($queryParts) === 1) {
             $reservationsQuery = $reservationsQuery . ' AND ' . $queryParts[0];
             $tokensQuery = $tokensQuery . ' AND ' . $queryParts[0];
         } elseif (count($queryParts) > 1) {
@@ -283,7 +278,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
             $db->commit();
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception) {
             $db->rollBack();
 
             return false;
@@ -301,12 +296,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
         $query = 'SELECT EXISTS(SELECT id FROM ' . \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Token\Dao::TABLE_NAME . " WHERE token IN ('" . implode("', '", $codes) . "'))";
 
         $result = $db->fetchOne($query);
-
-        if ($result == 0) {
-            return false;
-        }
-
-        return true;
+        return $result != 0;
     }
 
     public function getTokens(): array
@@ -333,6 +323,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing implements Paginate
         return $this->load();
     }
 
+    #[\Override]
     public function count(): int
     {
         return $this->getTotalCount();

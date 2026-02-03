@@ -23,7 +23,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\V7\OrderManagerInterfac
 
 class OrderManagerLocator extends CheckoutTenantAwareServiceLocator implements OrderManagerLocatorInterface
 {
-    public function getOrderManager(string $tenant = null): OrderManagerInterface
+    public function getOrderManager(?string $tenant = null): OrderManagerInterface
     {
         return $this->locate($tenant);
     }

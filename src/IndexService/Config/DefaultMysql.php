@@ -64,7 +64,7 @@ class DefaultMysql extends AbstractConfig implements MysqlConfigInterface
      *
      * @return mixed $subTenantData
      */
-    public function prepareSubTenantEntries(IndexableInterface $object, int $subObjectId = null): mixed
+    public function prepareSubTenantEntries(IndexableInterface $object, ?int $subObjectId = null): mixed
     {
         return null;
     }
@@ -74,9 +74,9 @@ class DefaultMysql extends AbstractConfig implements MysqlConfigInterface
      */
     public function updateSubTenantEntries(mixed $objectId, mixed $subTenantData, mixed $subObjectId = null): void
     {
-        return;
     }
 
+    #[\Override]
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof DefaultMysqlWorker) {

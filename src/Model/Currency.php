@@ -33,8 +33,6 @@ class Currency
 
     const USE_NAME = 'longname';
 
-    protected string $currencyShortName;
-
     protected string $currencySymbol;
 
     protected string $currencyName;
@@ -61,9 +59,8 @@ class Currency
     /**
      * Currency constructor.
      */
-    public function __construct(string $currencyShortName)
+    public function __construct(protected string $currencyShortName)
     {
-        $this->currencyShortName = $currencyShortName;
     }
 
     protected function getFormatter(): IntlFormatter
@@ -78,10 +75,10 @@ class Currency
         }
 
         if (is_array($pattern)) {
-            $symbol = $pattern['display'] ? $pattern['display'] : self::USE_SYMBOL;
-            $position = $pattern['position'] ? $pattern['position'] : self::RIGHT;
+            $symbol = $pattern['display'] ?: self::USE_SYMBOL;
+            $position = $pattern['position'] ?: self::RIGHT;
 
-            $pattern = $this->patternStore[$symbol][$position] ? $this->patternStore[$symbol][$position] : 'default';
+            $pattern = $this->patternStore[$symbol][$position] ?: 'default';
         }
 
         if ($value instanceof Decimal) {

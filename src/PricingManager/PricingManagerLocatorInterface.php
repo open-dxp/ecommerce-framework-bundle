@@ -19,7 +19,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager;
 
 interface PricingManagerLocatorInterface
 {
-    public function getPricingManager(string $tenant = null): PricingManagerInterface;
+    public function getPricingManager(?string $tenant = null): PricingManagerInterface;
 
     public function hasPricingManager(string $tenant): bool;
 }

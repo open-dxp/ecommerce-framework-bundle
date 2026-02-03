@@ -59,14 +59,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class OrderManager implements OrderManagerInterface
 {
-    protected EnvironmentInterface $environment;
-
-    protected OrderAgentFactoryInterface $orderAgentFactory;
-
-    protected VoucherServiceInterface $voucherService;
-
-    protected ?FactoryInterface $modelFactory = null;
-
     protected array $options;
 
     protected ?Folder $orderParentFolder = null;
@@ -77,23 +69,14 @@ class OrderManager implements OrderManagerInterface
 
     protected string $orderItemClassName;
 
-    protected EventDispatcherInterface $eventDispatcher;
-
     public function __construct(
-        EnvironmentInterface $environment,
-        OrderAgentFactoryInterface $orderAgentFactory,
-        VoucherServiceInterface $voucherService,
-        EventDispatcherInterface $eventDispatcher,
-        FactoryInterface $modelFactory,
+        protected EnvironmentInterface $environment,
+        protected OrderAgentFactoryInterface $orderAgentFactory,
+        protected VoucherServiceInterface $voucherService,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected ?FactoryInterface $modelFactory,
         array $options = []
     ) {
-        $this->eventDispatcher = $eventDispatcher;
-
-        $this->environment = $environment;
-        $this->orderAgentFactory = $orderAgentFactory;
-        $this->voucherService = $voucherService;
-        $this->modelFactory = $modelFactory;
-
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
@@ -115,9 +98,9 @@ class OrderManager implements OrderManagerInterface
         $resolver->setRequired($classProperties);
 
         $resolver->setDefaults([
-            'customer_class' => '\\OpenDxp\\Model\\DataObject\\Customer',
-            'order_class' => '\\OpenDxp\\Model\\DataObject\\OnlineShopOrder',
-            'order_item_class' => '\\OpenDxp\\Model\\DataObject\\OnlineShopOrderItem',
+            'customer_class' => \OpenDxp\Model\DataObject\Customer::class,
+            'order_class' => \OpenDxp\Model\DataObject\OnlineShopOrder::class,
+            'order_item_class' => \OpenDxp\Model\DataObject\OnlineShopOrderItem::class,
             'list_class' => Listing::class,
             'list_item_class' => Listing\Item::class,
             'parent_order_folder' => '/order/%Y/%m/%d',
@@ -194,7 +177,7 @@ class OrderManager implements OrderManagerInterface
         $modificationItems = new Fieldcollection();
         foreach ($cart->getPriceCalculator()->getPriceModifications() as $name => $modification) {
             $modificationItem = new Fieldcollection\Data\OrderPriceModifications();
-            $modificationItem->setName($modification->getDescription() ? $modification->getDescription() : $name);
+            $modificationItem->setName($modification->getDescription() ?: $name);
             $modificationItem->setAmount($modification->getGrossAmount()->asString());
             $modificationItem->setNetAmount($modification->getNetAmount()->asString());
 
@@ -251,7 +234,7 @@ class OrderManager implements OrderManagerInterface
         $hashString .= $cart->getItemCount();
         $hashString .= $cart->getItemAmount();
         $hashString .= count($cart->getGiftItems());
-        $hashString .= implode($cart->getVoucherTokenCodes());
+        $hashString .= implode('', $cart->getVoucherTokenCodes());
 
         return crc32($hashString);
     }
@@ -383,10 +366,8 @@ class OrderManager implements OrderManagerInterface
             $orderAgent = $this->createOrderAgent($order);
             $paymentInfo = $orderAgent->getCurrentPendingPaymentInfo();
 
-            if ($paymentInfo) {
-                if ($paymentInfo->getPaymentState() == AbstractOrder::ORDER_STATE_PAYMENT_PENDING) {
-                    return true;
-                }
+            if ($paymentInfo && $paymentInfo->getPaymentState() == AbstractOrder::ORDER_STATE_PAYMENT_PENDING) {
+                return true;
             }
         }
 
@@ -409,7 +390,7 @@ class OrderManager implements OrderManagerInterface
             throw new Exception("No unique order item found for $key.");
         }
 
-        if (count($orderItems) == 1) {
+        if (count($orderItems) === 1) {
             $orderItem = $orderItems[0];
         } else {
             $orderItem = $this->getNewOrderItemObject();
@@ -421,16 +402,14 @@ class OrderManager implements OrderManagerInterface
         $product = $item->getProduct();
         $orderItem->setAmount($item->getCount());
         $orderItem->setProduct($product);
-        if ($product instanceof CheckoutableInterface) {
-            $orderItem->setProductName($product->getOSName());
-            $orderItem->setProductNumber($product->getOSProductNumber());
-        }
+        $orderItem->setProductName($product->getOSName());
+        $orderItem->setProductNumber($product->getOSProductNumber());
         $orderItem->setComment($item->getComment());
 
         $price = Decimal::zero();
         $netPrice = Decimal::zero();
 
-        if (!$isGiftItem && is_object($item->getTotalPrice())) {
+        if (!$isGiftItem) {
             $price = $item->getTotalPrice()->getGrossAmount();
             $netPrice = $item->getTotalPrice()->getNetAmount();
         }
@@ -486,7 +465,7 @@ class OrderManager implements OrderManagerInterface
 
     protected function buildModelClass(string $className, array $params = []): mixed
     {
-        if (null === $this->modelFactory) {
+        if (!$this->modelFactory instanceof \OpenDxp\Model\FactoryInterface) {
             throw new RuntimeException('Model factory is not set. Please either configure the order manager service to be autowired or add a call to setModelFactory');
         }
 
@@ -559,7 +538,7 @@ class OrderManager implements OrderManagerInterface
 
         throw new InvalidArgumentException(sprintf(
             'Invalid argument for parent order folder. Expected either int or Folder, but got %s',
-            is_object($orderParentFolder) ? get_class($orderParentFolder) : gettype($orderParentFolder)
+            get_debug_type($orderParentFolder)
         ));
     }
 
@@ -580,9 +559,7 @@ class OrderManager implements OrderManagerInterface
                 }
 
                 $pattern = '/\*([^\*]+)\*/';
-                $parentFolderPath = preg_replace_callback($pattern, function ($matches) {
-                    return CarbonImmutable::now()->isoFormat($matches[1]);
-                }, $parentFolderOption);
+                $parentFolderPath = preg_replace_callback($pattern, fn($matches) => CarbonImmutable::now()->isoFormat($matches[1]), $parentFolderOption);
 
             } else {
                 trigger_deprecation(
@@ -614,7 +591,7 @@ class OrderManager implements OrderManagerInterface
      */
     protected function createCartId(CartInterface $cart): string
     {
-        return get_class($cart) . '_' . $cart->getId();
+        return $cart::class . '_' . $cart->getId();
     }
 
     /**
@@ -632,13 +609,11 @@ class OrderManager implements OrderManagerInterface
 
         $orderItemChildren = $order->getChildren();
         foreach ($orderItemChildren as $orderItemChild) {
-            if ($orderItemChild instanceof AbstractOrderItem) {
-                if (!in_array($orderItemChild->getId(), $validItemIds)) {
-                    if (!$orderItemChild->getDependencies()->getRequiredBy(null, 1)) {
-                        $orderItemChild->delete();
-                    } else {
-                        Logger::info('orderItem ('.$orderItemChild->getId().') was not removed because it still has remaining dependencies');
-                    }
+            if ($orderItemChild instanceof AbstractOrderItem && !in_array($orderItemChild->getId(), $validItemIds)) {
+                if (!$orderItemChild->getDependencies()->getRequiredBy(null, 1)) {
+                    $orderItemChild->delete();
+                } else {
+                    Logger::info('orderItem ('.$orderItemChild->getId().') was not removed because it still has remaining dependencies');
                 }
             }
         }
@@ -676,7 +651,7 @@ class OrderManager implements OrderManagerInterface
     protected function applyVoucherTokens(AbstractOrder $order, CartInterface $cart): void
     {
         $voucherTokens = $cart->getVoucherTokenCodes();
-        if (is_array($voucherTokens)) {
+        if (count($voucherTokens) > 0) {
             $flippedVoucherTokens = array_flip($voucherTokens);
 
             if ($tokenObjects = $order->getVoucherTokens()) {
@@ -693,7 +668,7 @@ class OrderManager implements OrderManagerInterface
             }
 
             //add new tokens - which are the remaining entries of $flippedVoucherTokens
-            foreach ($flippedVoucherTokens as $code => $x) {
+            foreach (array_keys($flippedVoucherTokens) as $code) {
                 $this->voucherService->applyToken((string)$code, $cart, $order);
             }
         }
@@ -752,7 +727,7 @@ class OrderManager implements OrderManagerInterface
      * @throws Exception
      * @throws ProviderNotFoundException
      */
-    public function getRecurringPaymentSourceOrderList(string $customerId, RecurringPaymentInterface $paymentProvider, string $paymentMethod = null, string $orderId = ''): Concrete
+    public function getRecurringPaymentSourceOrderList(string $customerId, RecurringPaymentInterface $paymentProvider, ?string $paymentMethod = null, string $orderId = ''): Concrete
     {
         $orders = $this->buildOrderList();
         $orders->addConditionParam('customer__id = ?', $customerId);
@@ -785,7 +760,7 @@ class OrderManager implements OrderManagerInterface
      *
      * @throws Exception
      */
-    public function getRecurringPaymentSourceOrder(string $customerId, RecurringPaymentInterface $paymentProvider, string $paymentMethod = null): bool|\OpenDxp\Model\DataObject\Concrete|null
+    public function getRecurringPaymentSourceOrder(string $customerId, RecurringPaymentInterface $paymentProvider, ?string $paymentMethod = null): bool|\OpenDxp\Model\DataObject\Concrete|null
     {
         if (!$paymentProvider->isRecurringPaymentEnabled()) {
             return null;

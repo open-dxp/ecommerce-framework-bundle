@@ -22,18 +22,14 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductList
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 abstract class AbstractFilterType
 {
     const EMPTY_STRING = '$$EMPTY$$';
 
-    protected TranslatorInterface $translator;
-
-    protected EngineInterface $templatingEngine;
-
-    protected string $template;
+    protected Environment $twig;
 
     protected ?Request $request = null;
 
@@ -42,15 +38,13 @@ abstract class AbstractFilterType
      * @param array $options for additional options
      */
     public function __construct(
-        TranslatorInterface $translator,
-        EngineInterface $templatingEngine,
-        RequestStack $requestStack,
-        string $template,
-        array $options = []
+        protected TranslatorInterface $translator,
+        Environment                   $twig,
+        RequestStack                  $requestStack,
+        protected string              $template,
+        array                         $options = []
     ) {
-        $this->translator = $translator;
-        $this->templatingEngine = $templatingEngine;
-        $this->template = $template;
+        $this->twig = $twig;
         $this->request = $requestStack->getCurrentRequest();
 
         $this->processOptions($options);
@@ -73,12 +67,10 @@ abstract class AbstractFilterType
 
     protected function getTemplate(AbstractFilterDefinitionType $filterDefinition): ?string
     {
-        $template = $this->template;
         if (!empty($filterDefinition->getScriptPath())) {
-            $template = $filterDefinition->getScriptPath();
+            return $filterDefinition->getScriptPath();
         }
-
-        return $template;
+        return $this->template;
     }
 
     protected function getPreSelect(AbstractFilterDefinitionType $filterDefinition): array|string|int|null
@@ -86,7 +78,8 @@ abstract class AbstractFilterType
         $field = $filterDefinition->getField();
         if ($field instanceof IndexFieldSelection) {
             return $field->getPreSelect();
-        } elseif (method_exists($filterDefinition, 'getPreSelect')) {
+        }
+        if (method_exists($filterDefinition, 'getPreSelect')) {
             return $filterDefinition->getPreSelect();
         }
 
@@ -142,6 +135,6 @@ abstract class AbstractFilterType
      */
     protected function render(string $template, array $parameters = []): string
     {
-        return $this->templatingEngine->render($template, $parameters);
+        return $this->twig->render($template, $parameters);
     }
 }

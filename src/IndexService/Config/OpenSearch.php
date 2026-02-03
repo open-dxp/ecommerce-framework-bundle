@@ -60,9 +60,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
 
     protected EnvironmentInterface $environment;
 
-    /** @var SynonymProviderInterface[] */
-    protected iterable $synonymProviders = [];
-
     /**
      * @param SynonymProviderInterface[] $synonymProviders
      */
@@ -73,24 +70,25 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         array $searchAttributes = [],
         array $filterTypes = [],
         array $options = [],
-        iterable $synonymProviders = []
+        protected iterable $synonymProviders = []
     ) {
-        $this->synonymProviders = $synonymProviders;
         parent::__construct($attributeFactory, $tenantName, $attributes, $searchAttributes, $filterTypes, $options);
     }
 
+    #[\Override]
     protected function addAttribute(Attribute $attribute): void
     {
         parent::addAttribute($attribute);
 
         $attributeType = 'attributes';
-        if (null !== $attribute->getInterpreter() && $attribute->getInterpreter() instanceof RelationInterpreterInterface) {
+        if ($attribute->getInterpreter() instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\InterpreterInterface && $attribute->getInterpreter() instanceof RelationInterpreterInterface) {
             $attributeType = 'relations';
         }
 
         $this->fieldMapping[$attribute->getName()] = sprintf('%s.%s', $attributeType, $attribute->getName());
     }
 
+    #[\Override]
     protected function addSearchAttribute(string $searchAttribute): void
     {
         if (isset($this->attributes[$searchAttribute])) {
@@ -115,6 +113,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         ));
     }
 
+    #[\Override]
     protected function processOptions(array $options): void
     {
         $options = $this->resolveOptions($options);
@@ -157,7 +156,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         $delimiters = ['.', '^'];
 
         foreach ($delimiters as $delimiter) {
-            if (strpos($fieldName, $delimiter) !== false) {
+            if (str_contains($fieldName, $delimiter)) {
                 $fieldNameParts = explode($delimiter, $fieldName);
                 $parts[] = $fieldNameParts[0];
             }
@@ -212,7 +211,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         return $fullFieldName;
     }
 
-    public function getClientConfig(string $property = null): array|string|null
+    public function getClientConfig(?string $property = null): array|string|null
     {
         if ($property) {
             return $this->clientConfig[$property] ?? null;
@@ -240,7 +239,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
      *
      * @return array $subTenantData
      */
-    public function prepareSubTenantEntries(IndexableInterface $object, int $subObjectId = null): array
+    public function prepareSubTenantEntries(IndexableInterface $object, ?int $subObjectId = null): array
     {
         return [];
     }
@@ -250,8 +249,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
      */
     public function updateSubTenantEntries(mixed $objectId, mixed $subTenantData, mixed $subObjectId = null): void
     {
-        // nothing to do
-        return;
     }
 
     /**
@@ -266,6 +263,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         return [];
     }
 
+    #[\Override]
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof DefaultOpenSearchWorker) {
@@ -290,6 +288,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
      * Gets object mockup by id, can consider subIds and therefore return e.g. an array of values
      * always returns a object mockup if available
      */
+    #[\Override]
     public function getObjectMockupById(int $objectId): ?IndexableInterface
     {
         $listing = $this->getTenantWorker()->getProductList();
@@ -297,7 +296,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
         $listing->setLimit(1);
         $product = $listing->current();
 
-        return $product ? $product : null;
+        return $product ?: null;
     }
 
     #[Required]

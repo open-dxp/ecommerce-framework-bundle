@@ -103,7 +103,7 @@ abstract class AbstractOffer extends Concrete
      */
     public function getCustomer(): mixed
     {
-        throw new UnsupportedException('getCustomer is not implemented for ' . get_class($this));
+        throw new UnsupportedException('getCustomer is not implemented for ' . static::class);
     }
 
     /**
@@ -113,7 +113,7 @@ abstract class AbstractOffer extends Concrete
      */
     public function setCustomer(mixed $customer): static
     {
-        throw new UnsupportedException('setCustomer is not implemented for ' . get_class($this));
+        throw new UnsupportedException('setCustomer is not implemented for ' . static::class);
     }
 
     abstract public function getCartId(): ?string;

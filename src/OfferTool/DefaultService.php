@@ -57,9 +57,7 @@ class DefaultService implements ServiceInterface
         $maybeStrftime = str_contains($parentFolderPath, '%');
         if (substr_count($parentFolderPath, '*') % 2 === 0 && !$maybeStrftime) {
             $pattern = '/\*([^\*]+)\*/';
-            $offerParentPath = preg_replace_callback($pattern, function ($matches) {
-                return CarbonImmutable::now()->isoFormat($matches[1]);
-            }, $parentFolderPath);
+            $offerParentPath = preg_replace_callback($pattern, fn($matches) => CarbonImmutable::now()->isoFormat($matches[1]), $parentFolderPath);
         } else {
             trigger_deprecation(
                 'open-dxp/ecommerce-framework-bundle',
@@ -161,10 +159,8 @@ class DefaultService implements ServiceInterface
         $product = $item->getProduct();
         $offerItem->setAmount($item->getCount());
         $offerItem->setProduct($product);
-        if ($product instanceof CheckoutableInterface) {
-            $offerItem->setProductName($product->getOSName());
-            $offerItem->setProductNumber($product->getOSProductNumber());
-        }
+        $offerItem->setProductName($product->getOSName());
+        $offerItem->setProductNumber($product->getOSProductNumber());
 
         $offerItem->setComment($item->getComment());
 
@@ -177,7 +173,7 @@ class DefaultService implements ServiceInterface
         $offerItem->save();
 
         $subItems = $item->getSubItems();
-        if (!empty($subItems)) {
+        if ($subItems !== []) {
             $offerSubItems = [];
 
             foreach ($subItems as $subItem) {
@@ -220,7 +216,7 @@ class DefaultService implements ServiceInterface
         }
 
         $subItems = $cartItem->getSubItems();
-        if (!empty($subItems)) {
+        if ($subItems !== []) {
             $offerSubItems = [];
 
             foreach ($subItems as $subItem) {
@@ -250,7 +246,7 @@ class DefaultService implements ServiceInterface
     {
         $env = Factory::getInstance()->getEnvironment();
 
-        if (@class_exists('\OpenDxp\Model\DataObject\Customer')) {
+        if (@class_exists(\OpenDxp\Model\DataObject\Customer::class)) {
             $customer = \OpenDxp\Model\DataObject\Customer::getById($env->getCurrentUserId());
             $offer->setCustomer($customer);
         }

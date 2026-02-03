@@ -25,20 +25,17 @@ use Twig\Environment;
 
 abstract class AbstractAnalyticsTracker extends EcommerceTracker
 {
-    protected TrackerInterface $tracker;
-
     /**
      * @internal
      */
     public function __construct(
         TrackingItemBuilderInterface $trackingItemBuilder,
         Environment $twig,
-        TrackerInterface $tracker,
+        protected TrackerInterface $tracker,
         array $options = [],
         array $assortmentTenants = [],
         array $checkoutTenants = []
     ) {
         parent::__construct($trackingItemBuilder, $twig, $options, $assortmentTenants, $checkoutTenants);
-        $this->tracker = $tracker;
     }
 }

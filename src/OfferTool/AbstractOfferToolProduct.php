@@ -109,11 +109,12 @@ abstract class AbstractOfferToolProduct extends \OpenDxp\Model\DataObject\Concre
     /**
      * returns availability info based on given quantity
      */
-    public function getOSAvailabilityInfo(int $quantity = null): AvailabilityInterface
+    public function getOSAvailabilityInfo(?int $quantity = null): AvailabilityInterface
     {
         return $this->getAvailabilitySystemImplementation()->getAvailabilityInfo($this, $quantity);
     }
 
+    #[\Override]
     public static function getById(int|string $id, array $params = []): ?static
     {
         if (is_string($id)) {
@@ -138,6 +139,6 @@ abstract class AbstractOfferToolProduct extends \OpenDxp\Model\DataObject\Concre
      */
     public function getProductGroup(): ?string
     {
-        throw new UnsupportedException('getProductGroup is not implemented for ' . get_class($this));
+        throw new UnsupportedException('getProductGroup is not implemented for ' . static::class);
     }
 }

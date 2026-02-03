@@ -30,9 +30,10 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing
 
     public function setValidation(bool $state): void
     {
-        $this->validate = (bool)$state;
+        $this->validate = $state;
     }
 
+    #[\Override]
     public function isValidOrderKey(string $key): bool
     {
         return in_array($key, ['prio', 'name']);

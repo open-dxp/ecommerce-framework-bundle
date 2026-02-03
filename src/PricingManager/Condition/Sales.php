@@ -40,9 +40,8 @@ class Sales extends AbstractOrder implements ConditionInterface
             $amount = Decimal::create($this->getAmount());
 
             return $this->getSalesAmount($rule)->lessThan($amount);
-        } else {
-            return false;
         }
+        return false;
     }
 
     public function toJSON(): string
@@ -71,7 +70,7 @@ class Sales extends AbstractOrder implements ConditionInterface
 
     public function setAmount(int $amount): void
     {
-        $this->amount = (int)$amount;
+        $this->amount = $amount;
     }
 
     protected function getCurrentAmount(RuleInterface $rule): int

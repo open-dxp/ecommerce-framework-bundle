@@ -24,7 +24,7 @@ class DefaultBrickGetterSequenceToMultiselect implements GetterInterface
 {
     use OptionsResolverTrait;
 
-    public function get(object $object, array $config = null): mixed
+    public function get(object $object, ?array $config = null): mixed
     {
         $config = $this->resolveOptions($config ?? []);
         $sourceList = $config['source'];
@@ -56,12 +56,10 @@ class DefaultBrickGetterSequenceToMultiselect implements GetterInterface
                     if ($value) {
                         if (is_bool($value) || $source['forceBool']) {
                             $values[] = $source['fieldname'];
+                        } elseif (is_array($value)) {
+                            $values = [...$values, ...$value];
                         } else {
-                            if (is_array($value)) {
-                                $values = array_merge($values, $value);
-                            } else {
-                                $values[] = $value;
-                            }
+                            $values[] = $value;
                         }
                     }
                 }
@@ -77,12 +75,10 @@ class DefaultBrickGetterSequenceToMultiselect implements GetterInterface
                     if ($value) {
                         if (is_bool($value) || $source['forceBool']) {
                             $values[] = $source['fieldname'];
+                        } elseif (is_array($value)) {
+                            $values = [...$values, ...$value];
                         } else {
-                            if (is_array($value)) {
-                                $values = array_merge($values, $value);
-                            } else {
-                                $values[] = $value;
-                            }
+                            $values[] = $value;
                         }
                     }
                 }

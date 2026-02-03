@@ -31,6 +31,7 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
      *
      * @throws Exception
      */
+    #[\Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $field = $this->getField($filterDefinition);
@@ -64,7 +65,7 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
         }
 
         foreach ($values as $v) {
-            if (empty($availableRelations) || ($availableRelations[$v['value']] ?? false)) {
+            if ($availableRelations === [] || ($availableRelations[$v['value']] ?? false)) {
                 $objects[$v['value']] = DataObject::getById($v['value']);
             }
         }
@@ -88,6 +89,7 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
     /**
      * @param FilterMultiRelation $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);
@@ -106,11 +108,7 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
 
             if (is_array($objects)) {
                 foreach ($objects as $o) {
-                    if (is_object($o)) {
-                        $value[] = $o->getId();
-                    } else {
-                        $value[] = $o;
-                    }
+                    $value[] = is_object($o) ? $o->getId() : $o;
                 }
             }
         } elseif (!empty($value) && in_array(AbstractFilterType::EMPTY_STRING, $value)) {

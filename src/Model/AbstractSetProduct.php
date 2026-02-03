@@ -51,7 +51,8 @@ abstract class AbstractSetProduct extends AbstractProduct
      *
      * @param AbstractSetProductEntry[]|null $products
      */
-    public function getOSIsBookable(int $quantityScale = 1, array $products = null): bool
+    #[\Override]
+    public function getOSIsBookable(int $quantityScale = 1, ?array $products = null): bool
     {
         if ($this->isActive()) {
             if (empty($products)) {
@@ -59,10 +60,8 @@ abstract class AbstractSetProduct extends AbstractProduct
             }
             if (!empty($products)) {
                 foreach ($products as $productEntry) {
-                    if ($productEntry->getQuantity() > 0) {
-                        if (!$productEntry->getProduct()->getOSIsBookable($productEntry->getQuantity())) {
-                            return false;
-                        }
+                    if ($productEntry->getQuantity() > 0 && !$productEntry->getProduct()->getOSIsBookable($productEntry->getQuantity())) {
+                        return false;
                     }
                 }
             }
@@ -70,9 +69,8 @@ abstract class AbstractSetProduct extends AbstractProduct
             $priceInfo = $this->getOSPriceInfo($quantityScale, $products);
 
             return $priceInfo != null;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -82,7 +80,8 @@ abstract class AbstractSetProduct extends AbstractProduct
      *
      * @throws UnsupportedException
      */
-    public function getOSPrice(int $quantityScale = null, array $products = null): PriceInterface
+    #[\Override]
+    public function getOSPrice(?int $quantityScale = null, ?array $products = null): PriceInterface
     {
         return $this->getOSPriceInfo($quantityScale, $products)->getPrice();
     }
@@ -94,7 +93,8 @@ abstract class AbstractSetProduct extends AbstractProduct
      *
      * @throws UnsupportedException
      */
-    public function getOSPriceInfo(int $quantityScale = null, ?array $products = null): PriceInfoInterface
+    #[\Override]
+    public function getOSPriceInfo(?int $quantityScale = null, ?array $products = null): PriceInfoInterface
     {
         if (!is_array($products)) {
             $products = $this->getMandatoryProductEntries();
@@ -108,7 +108,8 @@ abstract class AbstractSetProduct extends AbstractProduct
      *
      * @throws UnsupportedException
      */
-    public function getOSAvailabilityInfo(int $quantity = null, ?array $products = null): AvailabilityInterface
+    #[\Override]
+    public function getOSAvailabilityInfo(?int $quantity = null, ?array $products = null): AvailabilityInterface
     {
         if ($quantity === null) {
             $quantity = 1;

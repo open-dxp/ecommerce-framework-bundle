@@ -35,6 +35,7 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing
     /**
      * @param string $key The key to check
      */
+    #[\Override]
     public function isValidOrderKey(string $key): bool
     {
         return in_array($key, ['userId', 'name', 'creationDateTimestamp', 'modificationDateTimestamp']);

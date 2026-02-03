@@ -34,11 +34,13 @@ class PaymentProviderInstaller extends AbstractInstaller
      */
     protected array $bricksToInstall = [];
 
+    #[\Override]
     public function canBeInstalled(): bool
     {
         return ClassDefinition::getByName('OnlineShopOrder') && !$this->isInstalled();
     }
 
+    #[\Override]
     public function canBeUninstalled(): bool
     {
         return $this->isInstalled();
@@ -54,22 +56,24 @@ class PaymentProviderInstaller extends AbstractInstaller
         $this->unInstallBricks();
     }
 
+    #[\Override]
     public function isInstalled(): bool
     {
         $installed = false;
 
         try {
             // check if payment brick exists
-            foreach ($this->bricksToInstall as $brickKey => $brickFile) {
+            foreach (array_keys($this->bricksToInstall) as $brickKey) {
                 $installed = Objectbrick\Definition::getByKey($brickKey);
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             // nothing to do
         }
 
         return (bool) $installed;
     }
 
+    #[\Override]
     public function needsReloadAfterInstall(): bool
     {
         return true;
@@ -84,7 +88,7 @@ class PaymentProviderInstaller extends AbstractInstaller
 
     protected function unInstallBricks(): void
     {
-        foreach ($this->bricksToInstall as $brickKey => $brickFile) {
+        foreach (array_keys($this->bricksToInstall) as $brickKey) {
             $brick = Objectbrick\Definition::getByKey($brickKey);
             if ($brick instanceof Objectbrick\Definition) {
                 $brick->delete();
@@ -96,7 +100,7 @@ class PaymentProviderInstaller extends AbstractInstaller
     {
         try {
             $brick = Objectbrick\Definition::getByKey($brickKey);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $brick = null;
         }
 

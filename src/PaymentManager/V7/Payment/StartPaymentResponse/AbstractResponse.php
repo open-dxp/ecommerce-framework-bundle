@@ -20,14 +20,11 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 
 abstract class AbstractResponse implements StartPaymentResponseInterface
 {
-    protected AbstractOrder $order;
-
     /**
      * AbstractResponse constructor.
      */
-    public function __construct(AbstractOrder $order)
+    public function __construct(protected AbstractOrder $order)
     {
-        $this->order = $order;
     }
 
     public function getOrder(): AbstractOrder

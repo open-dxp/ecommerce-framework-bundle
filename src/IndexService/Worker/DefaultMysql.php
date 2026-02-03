@@ -40,13 +40,9 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
 
     protected Helper\MySql $mySqlHelper;
 
-    protected LoggerInterface $logger;
-
-    public function __construct(MysqlConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, LoggerInterface $opendxpEcommerceSqlLogger)
+    public function __construct(MysqlConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
     {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
-
-        $this->logger = $opendxpEcommerceSqlLogger;
         $this->mySqlHelper = new Helper\MySql($tenantConfig, $db);
     }
 
@@ -73,7 +69,7 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
         $this->doCleanupOldZombieData($object, $subObjectIds);
     }
 
-    protected function doDeleteFromIndex(int $subObjectId, IndexableInterface $object = null): void
+    protected function doDeleteFromIndex(int $subObjectId, ?IndexableInterface $object = null): void
     {
         $this->db->delete($this->tenantConfig->getTablename(), ['id' => $subObjectId]);
         $this->db->delete($this->tenantConfig->getRelationTablename(), ['src' => $subObjectId]);
@@ -105,19 +101,13 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
                 $parentCategoryIds = [];
                 if ($categories) {
                     foreach ($categories as $c) {
-                        if ($c instanceof AbstractCategory) {
-                            $categoryIds[$c->getId()] = $c->getId();
-                        }
+                        $categoryIds[$c->getId()] = $c->getId();
 
                         $currentCategory = $c;
                         while ($currentCategory instanceof AbstractCategory) {
                             $parentCategoryIds[$currentCategory->getId()] = $currentCategory->getId();
 
-                            if ($currentCategory->getOSProductsInParentCategoryVisible()) {
-                                $currentCategory = $currentCategory->getParent();
-                            } else {
-                                $currentCategory = null;
-                            }
+                            $currentCategory = $currentCategory->getOSProductsInParentCategoryVisible() ? $currentCategory->getParent() : null;
                         }
                     }
                 }
@@ -245,6 +235,7 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
     /**
      * @return string[]
      */
+    #[\Override]
     protected function getSystemAttributes(): array
     {
         return $this->mySqlHelper->getSystemAttributes();

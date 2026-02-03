@@ -114,6 +114,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
      *
      * @throws Exception
      */
+    #[\Override]
     protected function getExportData(array $params): array
     {
         $data = [];
@@ -153,7 +154,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
         return false;
     }
 
-    public function getCodes(array $filter = null): bool|array
+    public function getCodes(?array $filter = null): bool|array
     {
         return Token\Listing::getCodes($this->seriesId, $filter);
     }
@@ -164,13 +165,13 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
         $periodData = [];
         for ($i = $usagePeriod; $i > 0; $i--) {
             $index = $now->format('Y-m-d');
-            $periodData[$index] = isset($data[$index]) ? $data[$index] : 0;
+            $periodData[$index] = $data[$index] ?? 0;
             $now->modify('-1 day');
         }
         $data = $periodData;
     }
 
-    public function getStatistics(int $usagePeriod = null): array
+    public function getStatistics(?int $usagePeriod = null): array
     {
         $token = Token::getByCode($this->configuration->getToken());
         $overallCount = $this->configuration->getUsages();
@@ -191,35 +192,31 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
 
     public function reserveToken(string $code, CartInterface $cart): bool
     {
-        if (Token::getByCode($code)) {
-            if (Reservation::create($code, $cart)) {
-                return true;
-            }
+        if (!Token::getByCode($code)) {
+            return false;
         }
 
-        return false;
+        return Reservation::create($code, $cart) instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Reservation;
     }
 
     public function applyToken(string $code, CartInterface $cart, AbstractOrder $order): OnlineShopVoucherToken|bool
     {
-        if ($token = Token::getByCode($code)) {
-            if ($token->check((int)$this->configuration->getUsages(), true)) {
-                if ($token->apply()) {
-                    $orderToken = \OpenDxp\Model\DataObject\OnlineShopVoucherToken::getByToken($code, 1);
-                    if (!$orderToken instanceof \OpenDxp\Model\DataObject\OnlineShopVoucherToken) {
-                        $orderToken = new \OpenDxp\Model\DataObject\OnlineShopVoucherToken();
-                        $orderToken->setTokenId($token->getId());
-                        $orderToken->setToken($token->getToken());
-                        $series = \OpenDxp\Model\DataObject\OnlineShopVoucherSeries::getById($token->getVoucherSeriesId());
-                        $orderToken->setVoucherSeries($series);
-                        $orderToken->setParent($series);        // TODO set correct parent for applied tokens
-                        $orderToken->setKey(\OpenDxp\File::getValidFilename($token->getToken()));
-                        $orderToken->setPublished(true);
-                        $orderToken->save();
-                    }
-
-                    return $orderToken;
+        if (($token = Token::getByCode($code)) && $token->check((int)$this->configuration->getUsages(), true)) {
+            if ($token->apply()) {
+                $orderToken = \OpenDxp\Model\DataObject\OnlineShopVoucherToken::getByToken($code, 1);
+                if (!$orderToken instanceof \OpenDxp\Model\DataObject\OnlineShopVoucherToken) {
+                    $orderToken = new \OpenDxp\Model\DataObject\OnlineShopVoucherToken();
+                    $orderToken->setTokenId($token->getId());
+                    $orderToken->setToken($token->getToken());
+                    $series = \OpenDxp\Model\DataObject\OnlineShopVoucherSeries::getById($token->getVoucherSeriesId());
+                    $orderToken->setVoucherSeries($series);
+                    $orderToken->setParent($series);        // TODO set correct parent for applied tokens
+                    $orderToken->setKey(\OpenDxp\File::getValidFilename($token->getToken()));
+                    $orderToken->setPublished(true);
+                    $orderToken->save();
                 }
+
+                return $orderToken;
             }
         }
 
@@ -243,6 +240,7 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
         return Reservation::releaseToken($code, $cart);
     }
 
+    #[\Override]
     public function checkToken(string $code, CartInterface $cart): bool
     {
         parent::checkToken($code, $cart);

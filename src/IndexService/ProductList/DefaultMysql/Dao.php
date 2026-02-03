@@ -26,20 +26,13 @@ use Psr\Log\LoggerInterface;
  */
 class Dao
 {
-    private Connection $db;
-
-    private DefaultMysql $model;
+    private readonly Connection $db;
 
     private int $lastRecordCount;
 
-    protected LoggerInterface $logger;
-
-    public function __construct(DefaultMysql $model, LoggerInterface $logger)
+    public function __construct(private readonly DefaultMysql $model, protected LoggerInterface $logger)
     {
-        $this->model = $model;
         $this->db = \OpenDxp\Db::get();
-
-        $this->logger = $logger;
     }
 
     public function load(string $condition, ?string $orderBy = null, ?int $limit = null, int $offset = 0): array
@@ -53,14 +46,10 @@ class Dao
         }
 
         if ($limit) {
-            if ($offset) {
-                $limit = 'LIMIT ' . $offset . ', ' . $limit;
-            } else {
-                $limit = 'LIMIT ' . $limit;
-            }
+            $limit = $offset ? 'LIMIT ' . $offset . ', ' . $limit : 'LIMIT ' . $limit;
         }
 
-        if ($this->model->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+        if ($this->model->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
             if ($orderBy) {
                 $query = 'SELECT SQL_CALC_FOUND_ROWS DISTINCT virtualProductId as id, priceSystemName FROM '
                     . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
@@ -93,7 +82,7 @@ class Dao
         }
 
         if ($countValues) {
-            if ($this->model->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+            if ($this->model->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
                 $query = "SELECT TRIM(`$fieldname`) as `value`, count(DISTINCT virtualProductId) as `count` FROM "
                     . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
                     . $this->model->getCurrentTenantConfig()->getJoins()
@@ -110,18 +99,15 @@ class Dao
             $this->logger->info('Query done.');
 
             return $result;
-        } else {
-            $query = 'SELECT ' . $this->db->quoteIdentifier($fieldname) . ' FROM '
-                . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
-                . $this->model->getCurrentTenantConfig()->getJoins()
-                . $condition . ' GROUP BY ' . $this->db->quoteIdentifier($fieldname);
-
-            $this->logger->info('Query: ' . $query);
-            $result = $this->db->fetchFirstColumn($query);
-            $this->logger->info('Query done.');
-
-            return $result;
         }
+        $query = 'SELECT ' . $this->db->quoteIdentifier($fieldname) . ' FROM '
+            . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
+            . $this->model->getCurrentTenantConfig()->getJoins()
+            . $condition . ' GROUP BY ' . $this->db->quoteIdentifier($fieldname);
+        $this->logger->info('Query: ' . $query);
+        $result = $this->db->fetchFirstColumn($query);
+        $this->logger->info('Query done.');
+        return $result;
     }
 
     public function loadGroupByRelationValues(string $fieldname, string $condition, bool $countValues = false): array
@@ -131,7 +117,7 @@ class Dao
         }
 
         if ($countValues) {
-            if ($this->model->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+            if ($this->model->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
                 $query = 'SELECT dest as `value`, count(DISTINCT src_virtualProductId) as `count` FROM '
                     . $this->model->getCurrentTenantConfig()->getRelationTablename() . ' a '
                     . 'WHERE fieldname = ' . $this->quote($fieldname);
@@ -153,23 +139,18 @@ class Dao
             $this->logger->info('Query done.');
 
             return $result;
-        } else {
-            $query = 'SELECT dest FROM ' . $this->model->getCurrentTenantConfig()->getRelationTablename() . ' a '
-                . 'WHERE fieldname = ' . $this->quote($fieldname);
-
-            $subquery = 'SELECT a.id FROM '
-                . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
-                . $this->model->getCurrentTenantConfig()->getJoins()
-                . $condition;
-
-            $query .= ' AND src IN (' . $subquery . ') GROUP BY dest';
-
-            $this->logger->info('Query: ' . $query);
-            $result = $this->db->fetchFirstColumn($query);
-            $this->logger->info('Query done.');
-
-            return $result;
         }
+        $query = 'SELECT dest FROM ' . $this->model->getCurrentTenantConfig()->getRelationTablename() . ' a '
+            . 'WHERE fieldname = ' . $this->quote($fieldname);
+        $subquery = 'SELECT a.id FROM '
+            . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
+            . $this->model->getCurrentTenantConfig()->getJoins()
+            . $condition;
+        $query .= ' AND src IN (' . $subquery . ') GROUP BY dest';
+        $this->logger->info('Query: ' . $query);
+        $result = $this->db->fetchFirstColumn($query);
+        $this->logger->info('Query done.');
+        return $result;
     }
 
     public function getCount(string $condition, ?string $orderBy = null, ?int $limit = null, int $offset = 0): int
@@ -183,14 +164,10 @@ class Dao
         }
 
         if ($limit) {
-            if ($offset) {
-                $limit = 'LIMIT ' . $offset . ', ' . $limit;
-            } else {
-                $limit = 'LIMIT ' . $limit;
-            }
+            $limit = $offset ? 'LIMIT ' . $offset . ', ' . $limit : 'LIMIT ' . $limit;
         }
 
-        if ($this->model->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+        if ($this->model->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
             $query = 'SELECT count(DISTINCT virtualProductId) FROM '
                 . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
                 . $this->model->getCurrentTenantConfig()->getJoins()
@@ -258,9 +235,8 @@ class Dao
                 $this->logger->info('Similarity Statement: ' . $statement);
 
                 return $statement;
-            } else {
-                throw new Exception('Field array for given object id is empty');
             }
+            throw new Exception('Field array for given object id is empty');
         } catch (Exception $e) {
             $this->logger->error((string) $e);
 

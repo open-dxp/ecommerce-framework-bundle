@@ -21,20 +21,11 @@ use Throwable;
 
 class PreprocessErrorEvent extends Event
 {
-    protected Throwable $exception;
-
-    protected bool $throwException;
-
-    protected int $subObjectId;
-
     /**
      * PreprocessErrorEvent constructor.
      */
-    public function __construct(Throwable $exception, bool $throwException = true, int $subObjectId = 0)
+    public function __construct(protected Throwable $exception, protected bool $throwException = true, protected int $subObjectId = 0)
     {
-        $this->exception = $exception;
-        $this->throwException = $throwException;
-        $this->subObjectId = $subObjectId;
     }
 
     public function getException(): Throwable

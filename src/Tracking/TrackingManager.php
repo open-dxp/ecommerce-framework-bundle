@@ -41,18 +41,11 @@ class TrackingManager implements TrackingManagerInterface
 
     protected ?string $cachedCheckoutTenant = null;
 
-    protected ?EnvironmentInterface $enviroment = null;
-
-    protected RequestStack $requestStack;
-
-    public function __construct(RequestStack $requestStack, EnvironmentInterface $environment, array $trackers = [])
+    public function __construct(protected RequestStack $requestStack, protected ?EnvironmentInterface $enviroment, array $trackers = [])
     {
         foreach ($trackers as $tracker) {
             $this->registerTracker($tracker);
         }
-
-        $this->requestStack = $requestStack;
-        $this->enviroment = $environment;
     }
 
     /**
@@ -216,7 +209,7 @@ class TrackingManager implements TrackingManagerInterface
     /**
      * Track checkout step
      */
-    public function trackCheckoutStep(CheckoutManagerCheckoutStepInterface $step, CartInterface $cart, string $stepNumber = null, string $checkoutOption = null): void
+    public function trackCheckoutStep(CheckoutManagerCheckoutStepInterface $step, CartInterface $cart, ?string $stepNumber = null, ?string $checkoutOption = null): void
     {
         foreach ($this->getActiveTrackers() as $tracker) {
             if ($tracker instanceof CheckoutStepInterface) {
@@ -229,11 +222,13 @@ class TrackingManager implements TrackingManagerInterface
     {
         $result = '';
         foreach ($this->getTrackers() as $tracker) {
-            if ($tracker instanceof TrackingCodeAwareInterface) {
-                if (count($tracker->getTrackedCodes())) {
-                    $result .= implode(PHP_EOL, $tracker->getTrackedCodes()).PHP_EOL.PHP_EOL;
-                }
+            if (!$tracker instanceof TrackingCodeAwareInterface) {
+                continue;
             }
+            if (!count($tracker->getTrackedCodes())) {
+                continue;
+            }
+            $result .= implode(PHP_EOL, $tracker->getTrackedCodes()).PHP_EOL.PHP_EOL;
         }
 
         return $result;
@@ -244,11 +239,13 @@ class TrackingManager implements TrackingManagerInterface
         $trackedCodes = [];
 
         foreach ($this->getTrackers() as $tracker) {
-            if ($tracker instanceof TrackingCodeAwareInterface) {
-                if (count($tracker->getTrackedCodes())) {
-                    $trackedCodes[get_class($tracker)] = $tracker->getTrackedCodes();
-                }
+            if (!$tracker instanceof TrackingCodeAwareInterface) {
+                continue;
             }
+            if (!count($tracker->getTrackedCodes())) {
+                continue;
+            }
+            $trackedCodes[$tracker::class] = $tracker->getTrackedCodes();
         }
 
         /** @var Session $session */
@@ -262,8 +259,8 @@ class TrackingManager implements TrackingManagerInterface
     public function trackEvent(
         string $eventCategory,
         string $eventAction,
-        string $eventLabel = null,
-        int $eventValue = null
+        ?string $eventLabel = null,
+        ?int $eventValue = null
     ): void {
         foreach ($this->getTrackers() as $tracker) {
             if ($tracker instanceof TrackEventInterface) {

@@ -25,6 +25,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterMultiSelectFromMultiSele
 
 class MultiSelectFromMultiSelect extends SelectFromMultiSelect
 {
+    #[\Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $field = $this->getField($filterDefinition);
@@ -67,6 +68,7 @@ class MultiSelectFromMultiSelect extends SelectFromMultiSelect
     /**
      * @return string[]
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);
@@ -110,11 +112,7 @@ class MultiSelectFromMultiSelect extends SelectFromMultiSelect
                 $useAndCondition = $filterDefinition->getUseAndCondition();
             }
 
-            if ($useAndCondition) {
-                $quotedValues = implode(' and ', $quotedValues);
-            } else {
-                $quotedValues = implode(' or ', $quotedValues);
-            }
+            $quotedValues = $useAndCondition ? implode(' and ', $quotedValues) : implode(' or ', $quotedValues);
             $quotedValues = '('.$quotedValues.')';
 
             if ($isPrecondition) {

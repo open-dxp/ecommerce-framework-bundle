@@ -53,10 +53,8 @@ class IndexController extends UserAwareController implements KernelControllerEve
         $tenants = Factory::getInstance()->getAllTenants();
 
         $filterGroups = $indexService->getAllFilterGroups();
-        if ($tenants) {
-            foreach ($tenants as $tenant) {
-                $filterGroups = array_merge($filterGroups, $indexService->getAllFilterGroups($tenant));
-            }
+        foreach ($tenants as $tenant) {
+            $filterGroups = [...$filterGroups, ...$indexService->getAllFilterGroups($tenant)];
         }
 
         $data = [];
@@ -121,17 +119,14 @@ class IndexController extends UserAwareController implements KernelControllerEve
 
         if ($request->get('filtergroup')) {
             $filtergroups = $request->get('filtergroup');
-
             $indexColumns = [];
             foreach ($filtergroups as $filtergroup) {
-                $indexColumns = array_merge($indexColumns, $indexService->getIndexAttributesByFilterGroup($filtergroup, $request->get('tenant')));
+                $indexColumns = [...$indexColumns, ...$indexService->getIndexAttributesByFilterGroup($filtergroup, $request->get('tenant'))];
             }
+        } elseif ($request->get('show_all_fields') == 'true') {
+            $indexColumns = $indexService->getIndexAttributes(false, $request->get('tenant'));
         } else {
-            if ($request->get('show_all_fields') == 'true') {
-                $indexColumns = $indexService->getIndexAttributes(false, $request->get('tenant'));
-            } else {
-                $indexColumns = $indexService->getIndexAttributes(true, $request->get('tenant'));
-            }
+            $indexColumns = $indexService->getIndexAttributes(true, $request->get('tenant'));
         }
 
         if (!$indexColumns) {
@@ -170,10 +165,8 @@ class IndexController extends UserAwareController implements KernelControllerEve
         $tenants = Factory::getInstance()->getAllTenants();
         $data = [];
 
-        if ($tenants) {
-            foreach ($tenants as $tenant) {
-                $data[] = ['key' => $tenant, 'name' => $translator->trans($tenant, [], 'admin')];
-            }
+        foreach ($tenants as $tenant) {
+            $data[] = ['key' => $tenant, 'name' => $translator->trans($tenant, [], 'admin')];
         }
 
         return $this->jsonResponse(['data' => $data]);

@@ -20,64 +20,46 @@ final class OrderAgentEvents
 {
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const PRE_INIT_PAYMENT = 'opendxp.ecommerce.orderagent.preInitPayment';
+    const string PRE_INIT_PAYMENT = 'opendxp.ecommerce.orderagent.preInitPayment';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const POST_INIT_PAYMENT = 'opendxp.ecommerce.orderagent.postInitPayment';
+    const string POST_INIT_PAYMENT = 'opendxp.ecommerce.orderagent.postInitPayment';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const PRE_START_PAYMENT = 'opendxp.ecommerce.orderagent.preStartPayment';
+    const string PRE_START_PAYMENT = 'opendxp.ecommerce.orderagent.preStartPayment';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const POST_START_PAYMENT = 'opendxp.ecommerce.orderagent.postStartPayment';
+    const string POST_START_PAYMENT = 'opendxp.ecommerce.orderagent.postStartPayment';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const PRE_CANCEL_PAYMENT = 'opendxp.ecommerce.orderagent.preCancelPayment';
+    const string PRE_CANCEL_PAYMENT = 'opendxp.ecommerce.orderagent.preCancelPayment';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const POST_CANCEL_PAYMENT = 'opendxp.ecommerce.orderagent.postCancelPayment';
+    const string POST_CANCEL_PAYMENT = 'opendxp.ecommerce.orderagent.postCancelPayment';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const FINGERPRINT_GENERATED = 'opendxp.ecommerce.orderagent.fingerPrintGenerated';
+    const string FINGERPRINT_GENERATED = 'opendxp.ecommerce.orderagent.fingerPrintGenerated';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const PRE_UPDATE_PAYMENT = 'opendxp.ecommerce.orderagent.preUpdatePayment';
+    const string PRE_UPDATE_PAYMENT = 'opendxp.ecommerce.orderagent.preUpdatePayment';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
-     *
-     * @var string
      */
-    const POST_UPDATE_PAYMENT = 'opendxp.ecommerce.orderagent.postUpdatePayment';
+    const string POST_UPDATE_PAYMENT = 'opendxp.ecommerce.orderagent.postUpdatePayment';
 }

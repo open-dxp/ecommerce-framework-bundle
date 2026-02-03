@@ -26,6 +26,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterRelation;
 
 class SelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectRelation
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         //$productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -36,6 +37,7 @@ class SelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
      *
      * @throws Exception
      */
+    #[\Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $field = $this->getField($filterDefinition);
@@ -51,7 +53,7 @@ class SelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
         }
 
         foreach ($values as $v) {
-            if (empty($availableRelations) || ($availableRelations[$v['label']] ?? false)) {
+            if ($availableRelations === [] || ($availableRelations[$v['label']] ?? false)) {
                 $objects[$v['label']] = DataObject::getById($v['label']);
             }
         }
@@ -71,6 +73,7 @@ class SelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
     /**
      * @param FilterRelation $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

@@ -72,7 +72,7 @@ abstract class AbstractFilterDefinition extends DataObject\Concrete implements D
             ) {
                 try {
                     $parentValue = $this->getValueFromParent($key);
-                } catch (InheritanceParentNotFoundException $e) {
+                } catch (InheritanceParentNotFoundException) {
                     $parentValue = null;
                 }
 

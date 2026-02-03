@@ -30,27 +30,24 @@ use UnderflowException;
  * IMPORTANT: if you do any changes, make sure to keep this object immutable. Every operation needs
  * to return a new instance with the changed value!
  */
-class Decimal
+class Decimal implements \Stringable
 {
     const INTEGER_NUMBER_REGEXP = '/^([+\-]?)\d+$/';
 
     protected static int $defaultScale = 4;
 
-    private int $amount;
-
-    /**
-     * Precision after comma - actual amount will be amount divided by 10^scale
-     */
-    private int $scale;
-
     /**
      * Builds a value from an integer. The integer amount here must be the final value with
      * conversion factor already applied.
      */
-    protected function __construct(int $amount, int $scale)
+    protected function __construct(
+        private readonly int $amount,
+        /**
+         * Precision after comma - actual amount will be amount divided by 10^scale
+         */
+        private readonly int $scale
+    )
     {
-        $this->amount = $amount;
-        $this->scale = $scale;
     }
 
     /**
@@ -85,7 +82,8 @@ class Decimal
     {
         if ($amount > (PHP_INT_MAX - 1)) {
             throw new OverflowException('The maximum allowed integer (PHP_INT_MAX) was reached');
-        } elseif ($amount < (~PHP_INT_MAX + 1)) {
+        }
+        if ($amount < (~PHP_INT_MAX + 1)) {
             throw new UnderflowException('The minimum allowed integer (PHP_INT_MAX) was reached');
         }
     }
@@ -93,9 +91,9 @@ class Decimal
     /**
      * Round value to int value if needed
      */
-    private static function toIntValue(mixed $value, int $roundingMode = null): int
+    private static function toIntValue(mixed $value, ?int $roundingMode = null): int
     {
-        $roundingMode = $roundingMode ?? PHP_ROUND_HALF_UP;
+        $roundingMode ??= PHP_ROUND_HALF_UP;
         if (!is_int($value)) {
             $value = round($value, 0, $roundingMode);
             $value = (int)$value;
@@ -117,28 +115,25 @@ class Decimal
      *
      * @throws TypeError
      */
-    public static function create(float|int|string|Decimal $amount, int $scale = null, int $roundingMode = null): self
+    public static function create(float|int|string|Decimal $amount, ?int $scale = null, ?int $roundingMode = null): self
     {
         if (is_string($amount)) {
             return static::fromString($amount, $scale, $roundingMode);
-        } elseif (is_numeric($amount)) {
-            return static::fromNumeric($amount, $scale, $roundingMode);
-        } elseif ($amount instanceof self) {
-            return static::fromDecimal($amount, $scale);
-        } else {
-            throw new TypeError(
-                'Expected (int, float, string, self), but received ' .
-                get_debug_type($amount)
-            );
         }
+
+        if (is_numeric($amount)) {
+            return static::fromNumeric($amount, $scale, $roundingMode);
+        }
+
+        return static::fromDecimal($amount, $scale);
     }
 
     /**
      * Creates a value from an raw integer input. No value conversions will be done.
      */
-    public static function fromRawValue(int $amount, int $scale = null): static
+    public static function fromRawValue(int $amount, ?int $scale = null): static
     {
-        $scale = $scale ?? static::$defaultScale;
+        $scale ??= static::$defaultScale;
         self::validateScale($scale);
 
         return new static($amount, $scale);
@@ -148,9 +143,9 @@ class Decimal
      * Creates a value from a string input. If possible, the integer will be created with
      * string operations (e.g. adding zeroes), otherwise it will fall back to fromNumeric().
      */
-    public static function fromString(string $amount, int $scale = null, int $roundingMode = null): static
+    public static function fromString(string $amount, ?int $scale = null, ?int $roundingMode = null): static
     {
-        $scale = $scale ?? static::$defaultScale;
+        $scale ??= static::$defaultScale;
         self::validateScale($scale);
 
         $result = null;
@@ -177,7 +172,7 @@ class Decimal
                     $result = (int)($sign . $part . $fractionalPart);
                 } else {
                     // if scale is smaller than decimal part, apply rounding
-                    $result = (float)($sign . $part . '.' . $fractionalPart) * pow(10, $scale);
+                    $result = (float)($sign . $part . '.' . $fractionalPart) * 10 ** $scale;
                     $result = self::toIntValue($result, $roundingMode);
                 }
             }
@@ -199,16 +194,16 @@ class Decimal
      * with the given scale. Please note that this implicitely rounds the amount to the
      * next integer, so precision depends on the given scale.
      */
-    public static function fromNumeric(float|int|string $amount, int $scale = null, int $roundingMode = null): static
+    public static function fromNumeric(float|int|string $amount, ?int $scale = null, ?int $roundingMode = null): static
     {
         if (!is_numeric($amount)) {
             throw new InvalidArgumentException('Value is not numeric');
         }
 
-        $scale = $scale ?? static::$defaultScale;
+        $scale ??= static::$defaultScale;
         self::validateScale($scale);
 
-        $result = $amount * pow(10, $scale);
+        $result = $amount * 10 ** $scale;
         self::validateIntegerBounds($result);
 
         $result = self::toIntValue($result, $roundingMode);
@@ -222,9 +217,9 @@ class Decimal
      * new object will be returned. Please note that this will potentially imply precision
      * loss when converting to a lower scale.
      */
-    public static function fromDecimal(Decimal $amount, int $scale = null): self
+    public static function fromDecimal(Decimal $amount, ?int $scale = null): self
     {
-        $scale = $scale ?? static::$defaultScale;
+        $scale ??= static::$defaultScale;
         self::validateScale($scale);
 
         // object is identical - creating a new object is not necessary
@@ -238,7 +233,7 @@ class Decimal
     /**
      * Create a zero value object
      */
-    public static function zero(int $scale = null): self
+    public static function zero(?int $scale = null): self
     {
         return static::fromRawValue(0, $scale);
     }
@@ -266,14 +261,14 @@ class Decimal
      */
     public function asNumeric(): float|int
     {
-        return $this->amount / pow(10, $this->scale);
+        return $this->amount / 10 ** $this->scale;
     }
 
     /**
      * Returns a string representation. Digits default to the scale. If $digits is passed,
      * the string will be truncated to the given amount of digits without any rounding.
      */
-    public function asString(int $digits = null): string
+    public function asString(?int $digits = null): string
     {
         $signum = $this->amount < 0 ? '-' : '';
 
@@ -310,7 +305,7 @@ class Decimal
         $integerPart = $amount;
         $fractionalPart = '0';
 
-        if (false !== strpos($amount, '.')) {
+        if (str_contains($amount, '.')) {
             [$integerPart, $fractionalPart] = explode('.', $amount);
         }
 
@@ -338,7 +333,7 @@ class Decimal
     /**
      * Builds a value with the given scale
      */
-    public function withScale(int $scale, int $roundingMode = null): static
+    public function withScale(int $scale, ?int $roundingMode = null): static
     {
         self::validateScale($scale);
 
@@ -349,7 +344,7 @@ class Decimal
 
         $diff = $scale - $this->scale;
 
-        $result = $this->amount * pow(10, $diff);
+        $result = $this->amount * 10 ** $diff;
         self::validateIntegerBounds($result);
 
         $result = self::toIntValue($result, $roundingMode);
@@ -382,12 +377,7 @@ class Decimal
     public function compare(Decimal $other): int
     {
         $this->assertSameScale($other, 'Can\'t compare values with different scales. Please convert both values to the same scale.');
-
-        if ($this->amount === $other->amount) {
-            return 0;
-        }
-
-        return ($this->amount > $other->amount) ? 1 : -1;
+        return $this->amount <=> $other->amount;
     }
 
     /**
@@ -452,7 +442,7 @@ class Decimal
     public function abs(): static
     {
         if ($this->amount < 0) {
-            return new static((int)abs($this->amount), $this->scale);
+            return new static(abs($this->amount), $this->scale);
         }
 
         return $this;
@@ -497,7 +487,7 @@ class Decimal
      * a simple scalar factor (e.g. 2) as multiplying prices is rarely needed. However, if
      * a Decimal is passed, its float representation will be used for calculations.
      */
-    public function mul(float|int|string|Decimal $other, int $roundingMode = null): static
+    public function mul(float|int|string|Decimal $other, ?int $roundingMode = null): static
     {
         $operand = $this->getScalarOperand($other);
 
@@ -516,12 +506,12 @@ class Decimal
      *
      * @throws DivisionByZeroError
      */
-    public function div(float|int|string|Decimal $other, int $roundingMode = null): static
+    public function div(float|int|string|Decimal $other, ?int $roundingMode = null): static
     {
         $operand = $this->getScalarOperand($other);
-        $epsilon = pow(10, -1 * $this->scale);
+        $epsilon = 10 ** (-1 * $this->scale);
 
-        if (abs(0 - $operand) < $epsilon) {
+        if (abs(-$operand) < $epsilon) {
             throw new DivisionByZeroError('Division by zero is not allowed');
         }
 
@@ -550,7 +540,7 @@ class Decimal
      * @example Decimal::create(100)->toPercentage(30) = 30
      * @example Decimal::create(50)->toPercentage(50) = 25
      */
-    public function toPercentage(mixed $percentage, int $roundingMode = null): self
+    public function toPercentage(mixed $percentage, ?int $roundingMode = null): self
     {
         $percentage = $this->getScalarOperand($percentage);
 
@@ -562,7 +552,7 @@ class Decimal
      *
      * @example Decimal::create(100)->discount(15) = 85
      */
-    public function discount(float|int|string|Decimal $discount, int $roundingMode = null): static
+    public function discount(float|int|string|Decimal $discount, ?int $roundingMode = null): static
     {
         $discount = $this->getScalarOperand($discount);
 
@@ -623,10 +613,10 @@ class Decimal
         ));
     }
 
-    private function assertSameScale(Decimal $other, string $message = null): void
+    private function assertSameScale(Decimal $other, ?string $message = null): void
     {
         if ($other->scale !== $this->scale) {
-            $message = $message ?? 'Can\'t operate on amounts with different scales. Please convert both amounts to the same scale before proceeding.';
+            $message ??= 'Can\'t operate on amounts with different scales. Please convert both amounts to the same scale before proceeding.';
 
             throw new DomainException($message);
         }

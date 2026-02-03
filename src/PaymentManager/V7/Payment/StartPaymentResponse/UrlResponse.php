@@ -20,15 +20,12 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 
 class UrlResponse extends AbstractResponse
 {
-    protected string $url;
-
     /**
      * UrlResponse constructor.
      */
-    public function __construct(AbstractOrder $order, string $url)
+    public function __construct(AbstractOrder $order, protected string $url)
     {
         parent::__construct($order);
-        $this->url = $url;
     }
 
     public function getUrl(): string

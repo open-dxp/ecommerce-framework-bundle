@@ -20,22 +20,16 @@ final class CheckoutManagerEvents
 {
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
-     *
-     * @var string
      */
-    const PRE_COMMIT_STEP = 'opendxp.ecommerce.checkoutmanager.preCommitStep';
+    const string PRE_COMMIT_STEP = 'opendxp.ecommerce.checkoutmanager.preCommitStep';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
-     *
-     * @var string
      */
-    const POST_COMMIT_STEP = 'opendxp.ecommerce.checkoutmanager.postCommitStep';
+    const string POST_COMMIT_STEP = 'opendxp.ecommerce.checkoutmanager.postCommitStep';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
-     *
-     * @var string
      */
-    const INITIALIZE_STEP_STATE = 'opendxp.ecommerce.checkoutmanager.initializeStepState';
+    const string INITIALIZE_STEP_STATE = 'opendxp.ecommerce.checkoutmanager.initializeStepState';
 }

@@ -39,14 +39,8 @@ class TrackingCodeFlashMessageListener implements EventSubscriberInterface
 
     const FLASH_MESSAGE_BAG_KEY = 'ecommerceframework_trackingcode_flashmessagelistener';
 
-    protected RequestStack $requestStack;
-
-    protected TrackingManager $trackingManger;
-
-    public function __construct(RequestStack $requestStack, TrackingManager $trackingManager)
+    public function __construct(protected RequestStack $requestStack, protected TrackingManager $trackingManger)
     {
-        $this->requestStack = $requestStack;
-        $this->trackingManger = $trackingManager;
     }
 
     public static function getSubscribedEvents(): array
@@ -75,10 +69,10 @@ class TrackingCodeFlashMessageListener implements EventSubscriberInterface
         if ($flashBagCookie && $session instanceof Session) {
             $trackedCodes = $session->getFlashBag()->get(self::FLASH_MESSAGE_BAG_KEY);
 
-            if (is_array($trackedCodes) && count($trackedCodes)) {
+            if (count($trackedCodes)) {
                 foreach ($this->trackingManger->getTrackers() as $tracker) {
-                    if ($tracker instanceof TrackingCodeAwareInterface && isset($trackedCodes[get_class($tracker)])) {
-                        foreach ($trackedCodes[get_class($tracker)] as $trackedCode) {
+                    if ($tracker instanceof TrackingCodeAwareInterface && isset($trackedCodes[$tracker::class])) {
+                        foreach ($trackedCodes[$tracker::class] as $trackedCode) {
                             $tracker->trackCode($trackedCode);
                         }
                     }

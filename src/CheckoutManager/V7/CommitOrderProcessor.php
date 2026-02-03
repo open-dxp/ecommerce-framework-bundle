@@ -49,32 +49,18 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
 
     const LOGGER_NAME = 'commit-order-processor';
 
-    protected OrderManagerLocatorInterface $orderManagers;
-
-    private LockFactory $lockFactory;
-
     protected string $confirmationMail = '/emails/order-confirmation';
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected ApplicationLogger $applicationLogger;
 
     protected ?string $lastPaymentStateResponseHash = null;
 
     protected ?StatusInterface $lastPaymentStatus = null;
 
-    public function __construct(LockFactory $lockFactory, OrderManagerLocatorInterface $orderManagers, EventDispatcherInterface $eventDispatcher, ApplicationLogger $applicationLogger, array $options = [])
+    public function __construct(private LockFactory $lockFactory, protected OrderManagerLocatorInterface $orderManagers, protected EventDispatcherInterface $eventDispatcher, protected ApplicationLogger $applicationLogger, array $options = [])
     {
-        $this->orderManagers = $orderManagers;
-
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
         $this->processOptions($resolver->resolve($options));
-
-        $this->eventDispatcher = $eventDispatcher;
-        $this->applicationLogger = $applicationLogger;
-        $this->lockFactory = $lockFactory;
     }
 
     protected function processOptions(array $options): void
@@ -154,7 +140,7 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
 
         $order = $this->orderManagers->getOrderManager()->getOrderByPaymentStatus($paymentStatus);
 
-        if ($order && $order->getOrderState() == $order::ORDER_STATE_COMMITTED) {
+        if ($order && $order->getOrderState() == \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_COMMITTED) {
             $paymentInformationCollection = $order->getPaymentInfo();
             if ($paymentInformationCollection) {
                 /** @var AbstractPaymentInformation $paymentInfo */
@@ -162,9 +148,8 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
                     if ($paymentInfo->getInternalPaymentId() == $paymentStatus->getInternalPaymentId()) {
                         if ($paymentInfo->getPaymentState() == $paymentStatus->getStatus()) {
                             return $order;
-                        } else {
-                            Logger::warning('Payment state of order ' . $order->getId() . ' does not match with new request!');
                         }
+                        Logger::warning('Payment state of order ' . $order->getId() . ' does not match with new request!');
                     }
                 }
             }
@@ -177,7 +162,7 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
      * @throws UnsupportedException|PaymentNotSuccessfulException
      * @throws Exception
      */
-    public function commitOrderPayment(StatusInterface $paymentStatus, PaymentInterface $paymentProvider, AbstractOrder $sourceOrder = null): AbstractOrder
+    public function commitOrderPayment(StatusInterface $paymentStatus, PaymentInterface $paymentProvider, ?AbstractOrder $sourceOrder = null): AbstractOrder
     {
         // acquire lock to make sure only one process is committing order payment
         $lock = $this->lockFactory->createLock(self::LOCK_KEY . $paymentStatus->getInternalPaymentId());
@@ -209,7 +194,7 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
         $order = $orderAgent->updatePayment($paymentStatus)->getOrder();
         $this->applyAdditionalDataToOrder($order, $paymentStatus, $paymentProvider);
 
-        if ($order->getOrderState() === $order::ORDER_STATE_COMMITTED) {
+        if ($order->getOrderState() === \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_COMMITTED) {
             $message = 'Order with ID ' . $order->getId() . ' got payment status after it was already committed.';
             $this->applicationLogger->critical($message,
                 [
@@ -331,7 +316,7 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
             $pendingOrderEvent = new CommitOrderProcessorEvent($this, $order, ['parameters' => $parameters]);
             $this->eventDispatcher->dispatch($pendingOrderEvent, CommitOrderProcessorEvents::PRE_CLEANUP_PENDING_ORDER);
             $order = $pendingOrderEvent->getOrder();
-            $parameters = array_merge($parameters, $pendingOrderEvent->getArgument('parameters'));
+            $parameters = [...$parameters, ...$pendingOrderEvent->getArgument('parameters')];
 
             $order->save($parameters);
         }
@@ -368,7 +353,7 @@ class CommitOrderProcessor implements CommitOrderProcessorInterface, LoggerAware
                     $pendingPaymentEvent = new GenericEvent($paymentInfo, ['parameters' => $parameters]);
                     $this->eventDispatcher->dispatch($pendingPaymentEvent, CommitOrderProcessorEvents::PRE_CLEANUP_PENDING_PAYMENT);
                     $paymentInfo = $pendingPaymentEvent->getSubject();
-                    $parameters = array_merge($parameters, $pendingPaymentEvent->getArgument('parameters'));
+                    $parameters = [...$parameters, ...$pendingPaymentEvent->getArgument('parameters')];
                 }
             }
             $order->save($parameters);

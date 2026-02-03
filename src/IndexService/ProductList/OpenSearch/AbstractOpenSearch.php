@@ -229,7 +229,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
     /**
      * Adds price condition to product list
      */
-    public function addPriceCondition(float $from = null, float $to = null): void
+    public function addPriceCondition(?float $from = null, ?float $to = null): void
     {
         $this->conditionPriceFrom = $from;
         $this->conditionPriceTo = $to;
@@ -239,7 +239,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     public function setInProductList(bool $inProductList): void
     {
-        $this->inProductList = (bool) $inProductList;
+        $this->inProductList = $inProductList;
         $this->preparedGroupByValuesLoaded = false;
         $this->products = null;
     }
@@ -317,7 +317,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
     public function setOffset(int $offset): void
     {
-        if ($this->offset != $offset) {
+        if ($this->offset !== $offset) {
             $this->products = null;
         }
         $this->offset = $offset;
@@ -507,11 +507,11 @@ abstract class AbstractOpenSearch implements ProductListInterface
         foreach ($objectRaws as $raw) {
             $priceSystemArrays[$raw['priceSystemName']][] = $raw['id'];
         }
-        if (count($priceSystemArrays) == 1) {
+        if (count($priceSystemArrays) === 1) {
             $priceSystemName = key($priceSystemArrays);
             $priceSystem = Factory::getInstance()->getPriceSystem($priceSystemName);
             $objectRaws = $priceSystem->filterProductIds($priceSystemArrays[$priceSystemName], null, null, $this->order, $this->getOffset(), $this->getLimit());
-        } elseif (count($priceSystemArrays) == 0) {
+        } elseif (count($priceSystemArrays) === 0) {
             //nothing to do
         } else {
             throw new Exception('Not implemented yet - multiple pricing systems are not supported yet');
@@ -551,13 +551,13 @@ abstract class AbstractOpenSearch implements ProductListInterface
     /**
      * build the complete query
      */
-    protected function buildQuery(array $params, array $boolFilters, array $queryFilters, string $variantMode = null): array
+    protected function buildQuery(array $params, array $boolFilters, array $queryFilters, ?string $variantMode = null): array
     {
         if (!$variantMode) {
             $variantMode = $this->getVariantMode();
         }
 
-        if ($variantMode == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+        if ($variantMode === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
             $params['body']['query']['bool']['must']['has_child']['type'] = self::PRODUCT_TYPE_VARIANT;
             $params['body']['query']['bool']['must']['has_child']['score_mode'] = 'avg';
             $params['body']['query']['bool']['must']['has_child']['query']['bool']['must'] = $queryFilters;
@@ -570,11 +570,11 @@ abstract class AbstractOpenSearch implements ProductListInterface
                 'size' => 100,
             ];
         } else {
-            if ($variantMode == ProductListInterface::VARIANT_MODE_VARIANTS_ONLY) {
+            if ($variantMode === ProductListInterface::VARIANT_MODE_VARIANTS_ONLY) {
                 $boolFilters[] = [
                     'term' => ['type' => self::PRODUCT_TYPE_VARIANT],
                 ];
-            } elseif ($variantMode == ProductListInterface::VARIANT_MODE_HIDE) {
+            } elseif ($variantMode === ProductListInterface::VARIANT_MODE_HIDE) {
                 $boolFilters[] = [
                     'term' => ['type' => self::PRODUCT_TYPE_OBJECT],
                 ];
@@ -660,21 +660,19 @@ abstract class AbstractOpenSearch implements ProductListInterface
                 foreach ($queryConditionArray as $queryCondition) {
                     if (is_array($queryCondition)) {
                         $queryFilters[] = $queryCondition;
+                    } elseif ($fieldname) {
+                        $queryFilters[] = ['match' => [$this->tenantConfig->getFieldNameMapped($fieldname) => $queryCondition]];
                     } else {
-                        if ($fieldname) {
-                            $queryFilters[] = ['match' => [$this->tenantConfig->getFieldNameMapped($fieldname) => $queryCondition]];
-                        } else {
-                            $fieldnames = $this->tenantConfig->getSearchAttributes();
-                            $mappedFieldnames = [];
-                            foreach ($fieldnames as $searchFieldnames) {
-                                $mappedFieldnames[] = $this->tenantConfig->getFieldNameMapped($searchFieldnames, true);
-                            }
-
-                            $queryFilters[] = ['multi_match' => [
-                                'query' => $queryCondition,
-                                'fields' => $mappedFieldnames,
-                            ]];
+                        $fieldnames = $this->tenantConfig->getSearchAttributes();
+                        $mappedFieldnames = [];
+                        foreach ($fieldnames as $searchFieldnames) {
+                            $mappedFieldnames[] = $this->tenantConfig->getFieldNameMapped($searchFieldnames, true);
                         }
+
+                        $queryFilters[] = ['multi_match' => [
+                            'query' => $queryCondition,
+                            'fields' => $mappedFieldnames,
+                        ]];
                     }
                 }
             }
@@ -700,7 +698,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
             foreach ($sourceData['relations'] ?? [] as $name => $relation) {
                 $relationFormatOpenDxp[] = ['fieldname' => $name, 'dest' => $relation[0], 'type' => 'object'];
             }
-            $mergedAttributes = array_merge($sourceData['system'], $sourceData['attributes']);
+            $mergedAttributes = [...$sourceData['system'], ...$sourceData['attributes']];
             $mockup = $tenantConfig->createMockupObject($elementId, $mergedAttributes, $relationFormatOpenDxp);
         }
 
@@ -724,7 +722,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
      */
     public function prepareGroupByValuesWithConfig(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true, array $aggregationConfig = []): void
     {
-        if ($this->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+        if ($this->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
             throw new Exception('Custom sub aggregations are not supported for variant mode VARIANT_MODE_INCLUDE_PARENT_OBJECT');
         }
 
@@ -819,17 +817,14 @@ abstract class AbstractOpenSearch implements ProductListInterface
         if ($results) {
             if ($countValues) {
                 return $results;
-            } else {
-                $resultsWithoutCounts = [];
-                foreach ($results as $result) {
-                    $resultsWithoutCounts[] = $result['value'];
-                }
-
-                return $resultsWithoutCounts;
             }
-        } else {
-            return [];
+            $resultsWithoutCounts = [];
+            foreach ($results as $result) {
+                $resultsWithoutCounts[] = $result['value'];
+            }
+            return $resultsWithoutCounts;
         }
+        return [];
     }
 
     /**
@@ -875,7 +870,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
                 $filteredFieldnames[$fieldname] = $fieldname;
             }
         }
-        foreach ($this->relationConditions as $fieldname => $condition) {
+        foreach (array_keys($this->relationConditions) as $fieldname) {
             if (!array_key_exists($fieldname, $toExcludeFieldnames)) {
                 $filteredFieldnames[$fieldname] = $fieldname;
             }
@@ -887,9 +882,9 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
             $specificFilters = [];
             //user specific filters
-            $specificFilters = $this->buildFilterConditions($specificFilters, array_merge($filteredFieldnames, [$shortFieldname => $shortFieldname]));
+            $specificFilters = $this->buildFilterConditions($specificFilters, [...$filteredFieldnames, $shortFieldname => $shortFieldname]);
             //relation conditions
-            $specificFilters = $this->buildRelationConditions($specificFilters, array_merge($filteredFieldnames, [$shortFieldname => $shortFieldname]));
+            $specificFilters = $this->buildRelationConditions($specificFilters, [...$filteredFieldnames, $shortFieldname => $shortFieldname]);
 
             if (!empty($config['aggregationConfig'])) {
                 $aggregation = $config['aggregationConfig'];
@@ -912,7 +907,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
                 ];
 
                 //necessary to calculate correct counts of search results for filter values
-                if ($this->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+                if ($this->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
                     $aggregations[$fieldname]['aggs'][$fieldname]['aggs'] = [
                         'objectCount' => ['cardinality' => ['field' => 'system.virtualProductId']],
                     ];
@@ -921,7 +916,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
                 $aggregations[$fieldname] = $aggregation;
 
                 //necessary to calculate correct counts of search results for filter values
-                if ($this->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+                if ($this->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
                     $aggregations[$fieldname]['aggs'] = [
                         'objectCount' => ['cardinality' => ['field' => 'system.virtualProductId']],
                     ];
@@ -939,7 +934,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
 
             // build query for request
             $variantModeForAggregations = $this->getVariantMode();
-            if ($this->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+            if ($this->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
                 $variantModeForAggregations = ProductListInterface::VARIANT_MODE_VARIANTS_ONLY;
             }
 
@@ -968,14 +963,12 @@ abstract class AbstractOpenSearch implements ProductListInterface
                 $buckets = $this->searchForBuckets($aggregation);
 
                 $groupByValueResult = [];
-                if ($buckets) {
-                    foreach ($buckets as $bucket) {
-                        if ($this->getVariantMode() == self::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
-                            $groupByValueResult[] = ['value' => $bucket['key'], 'count' => $bucket['objectCount']['value']];
-                        } else {
-                            $data = $this->convertBucketValues($bucket);
-                            $groupByValueResult[] = $data;
-                        }
+                foreach ($buckets as $bucket) {
+                    if ($this->getVariantMode() === self::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+                        $groupByValueResult[] = ['value' => $bucket['key'], 'count' => $bucket['objectCount']['value']];
+                    } else {
+                        $data = $this->convertBucketValues($bucket);
+                        $groupByValueResult[] = $data;
                     }
                 }
 
@@ -1002,7 +995,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
                 continue;
             }
             $buckets = $this->searchForBuckets($aggregation);
-            if (!empty($buckets)) {
+            if ($buckets !== []) {
                 return $buckets;
             }
         }
@@ -1023,7 +1016,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
         unset($bucket['key']);
         unset($bucket['doc_count']);
 
-        if (!empty($bucket)) {
+        if ($bucket !== []) {
             $subAggregationField = array_key_first($bucket);
             $subAggregationBuckets = $bucket[$subAggregationField];
             $reverseAggregationField = array_key_last($bucket);
@@ -1058,37 +1051,32 @@ abstract class AbstractOpenSearch implements ProductListInterface
             throw new InvalidConfigException('Invalid worker configured, AbstractOpenSearch compatible worker expected.');
         }
 
-        /**
-         * @var Client $osClient
-         */
         $osClient = $worker->getOpenSearchClient();
         $result = [];
 
-        if ($osClient instanceof Client) {
-            if ($this->doScrollRequest) {
-                $params = array_merge(['scroll' => $this->scrollRequestKeepAlive], $params);
-                //kind of dirty hack :/
-                $params['body']['size'] = $this->getLimit();
-            }
+        if ($this->doScrollRequest) {
+            $params = ['scroll' => $this->scrollRequestKeepAlive, ...$params];
+            //kind of dirty hack :/
+            $params['body']['size'] = $this->getLimit();
+        }
 
-            $result = $osClient->search($params);
+        $result = $osClient->search($params);
 
-            if ($this->doScrollRequest) {
-                $additionalHits = [];
-                $scrollId = $result['_scroll_id'];
+        if ($this->doScrollRequest) {
+            $additionalHits = [];
+            $scrollId = $result['_scroll_id'];
 
-                while (true) {
-                    $additionalResult = $osClient->scroll(['scroll_id' => $scrollId, 'scroll' => $this->scrollRequestKeepAlive]);
+            while (true) {
+                $additionalResult = $osClient->scroll(['scroll_id' => $scrollId, 'scroll' => $this->scrollRequestKeepAlive]);
 
-                    if (count($additionalResult['hits']['hits'])) {
-                        $additionalHits = array_merge($additionalHits, $additionalResult['hits']['hits']);
-                        $scrollId = $additionalResult['_scroll_id'];
-                    } else {
-                        break;
-                    }
+                if (count($additionalResult['hits']['hits'])) {
+                    $additionalHits = [...$additionalHits, ...$additionalResult['hits']['hits']];
+                    $scrollId = $additionalResult['_scroll_id'];
+                } else {
+                    break;
                 }
-                $result['hits']['hits'] = array_merge($result['hits']['hits'], $additionalHits);
             }
+            $result['hits']['hits'] = [...$result['hits']['hits'], ...$additionalHits];
         }
 
         return $result;

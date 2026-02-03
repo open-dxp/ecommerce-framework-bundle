@@ -67,12 +67,12 @@ class AbstractPriceInfo implements PriceInfoInterface
 
     public function getPrice(): PriceInterface
     {
-        throw new UnsupportedException(__METHOD__ . ' is not supported for ' . get_class($this));
+        throw new UnsupportedException(__METHOD__ . ' is not supported for ' . static::class);
     }
 
     public function getTotalPrice(): PriceInterface
     {
-        throw new UnsupportedException(__METHOD__ . ' is not supported for ' . get_class($this));
+        throw new UnsupportedException(__METHOD__ . ' is not supported for ' . static::class);
     }
 
     public function setProduct(CheckoutableInterface $product): static

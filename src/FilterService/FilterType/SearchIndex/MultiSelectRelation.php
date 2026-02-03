@@ -24,6 +24,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterMultiRelation;
 
 class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelectRelation
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         if (!$filterDefinition instanceof FilterMultiRelation) {
@@ -36,6 +37,7 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
     /**
      * @param FilterMultiRelation $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);
@@ -52,14 +54,8 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
                 $objects = explode(',', $objects);
             }
 
-            if (is_array($objects)) {
-                foreach ($objects as $o) {
-                    if (is_object($o)) {
-                        $value[] = $o->getId();
-                    } else {
-                        $value[] = $o;
-                    }
-                }
+            foreach ($objects as $o) {
+                $value[] = is_object($o) ? $o->getId() : $o;
             }
         } elseif (!empty($value) && in_array(AbstractFilterType::EMPTY_STRING, $value)) {
             $value = null;
@@ -74,7 +70,7 @@ class MultiSelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filte
                     $quotedValues[] = $v;
                 }
             }
-            if (!empty($quotedValues)) {
+            if ($quotedValues !== []) {
                 if ($filterDefinition->getUseAndCondition()) {
                     foreach ($quotedValues as $value) {
                         $productList->addRelationCondition($field, $value);

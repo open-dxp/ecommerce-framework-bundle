@@ -31,13 +31,10 @@ class Listing extends \OpenDxp\Model\Listing\AbstractListing
 
     protected array $orderKey = ['`sortIndex`', '`addedDateTimestamp`'];
 
+    #[\Override]
     public function isValidOrderKey(string $key): bool
     {
-        if (in_array($key, ['productId', 'cartId', 'count', 'itemKey', 'addedDateTimestamp', 'sortIndex'])) {
-            return true;
-        }
-
-        return false;
+        return in_array($key, ['productId', 'cartId', 'count', 'itemKey', 'addedDateTimestamp', 'sortIndex']);
     }
 
     /**

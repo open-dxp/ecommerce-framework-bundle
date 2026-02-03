@@ -53,14 +53,9 @@ class ResetQueueCommand extends AbstractIndexServiceCommand
 
         $updater = Factory::getInstance()->getIndexService();
 
-        if ($tenant == '*') {
-            $tenants = $updater->getTenants();
-        } else {
-            $tenants = [$tenant];
-        }
+        $tenants = $tenant == '*' ? $updater->getTenants() : [$tenant];
 
         foreach ($tenants as $tenant) {
-            /** @var ProductCentricBatchProcessingWorker $worker */
             $worker = $updater->getTenantWorker($tenant);
 
             $output->writeln("<info>Process tenant {$tenant}...</info>");
@@ -69,9 +64,9 @@ class ResetQueueCommand extends AbstractIndexServiceCommand
                 throw new Exception('Tenant is not of type AbstractBatchProcessingWorker');
             }
 
-            if ($queue == 'preparation') {
+            if ($queue === 'preparation') {
                 $worker->resetPreparationQueue();
-            } elseif ($queue == 'update-index') {
+            } elseif ($queue === 'update-index') {
                 $worker->resetIndexingQueue();
             }
         }

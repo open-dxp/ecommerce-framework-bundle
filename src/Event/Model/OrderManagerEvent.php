@@ -26,20 +26,11 @@ class OrderManagerEvent extends Event
 {
     use ArgumentsAwareTrait;
 
-    protected CartInterface $cart;
-
-    protected ?AbstractOrder $order = null;
-
-    protected OrderManagerInterface $orderManager;
-
     /**
      * OrderManagerEvent constructor.
      */
-    public function __construct(CartInterface $cart, ?AbstractOrder $order, OrderManagerInterface $orderManager, array $arguments = [])
+    public function __construct(protected CartInterface $cart, protected ?AbstractOrder $order, protected OrderManagerInterface $orderManager, array $arguments = [])
     {
-        $this->cart = $cart;
-        $this->order = $order;
-        $this->orderManager = $orderManager;
         $this->arguments = $arguments;
     }
 

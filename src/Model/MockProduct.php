@@ -66,7 +66,7 @@ class MockProduct extends Concrete implements ProductInterface, IndexableInterfa
         return $this->getPriceSystemImplementation()->getPriceInfo($this, 0);
     }
 
-    public function getOSAvailabilityInfo(int $quantity = null): AvailabilityInterface
+    public function getOSAvailabilityInfo(?int $quantity = null): AvailabilityInterface
     {
         return $this->getAvailabilitySystemImplementation()->getAvailabilityInfo($this, 0);
     }
@@ -116,6 +116,7 @@ class MockProduct extends Concrete implements ProductInterface, IndexableInterfa
         return 0;
     }
 
+    #[\Override]
     public function __call(string $method, array $args): mixed
     {
         return null;

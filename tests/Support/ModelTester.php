@@ -14,7 +14,7 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support;
 
 /**
  * Inherited Methods

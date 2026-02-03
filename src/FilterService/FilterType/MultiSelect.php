@@ -53,10 +53,8 @@ class MultiSelect extends AbstractFilterType
         $value = $params[$field] ?? null;
         $isReload = $params['is_reload'] ?? null;
 
-        if (!empty($value)) {
-            if (!is_array($value)) {
-                $value = [$value];
-            }
+        if (!empty($value) && !is_array($value)) {
+            $value = [$value];
         }
 
         if (empty($value) && !$isReload) {
@@ -77,7 +75,7 @@ class MultiSelect extends AbstractFilterType
                     $quotedValues[] = $db->quote($v);
                 }
             }
-            if (!empty($quotedValues)) {
+            if ($quotedValues !== []) {
                 if (!$filterDefinition instanceof FilterMultiSelect) {
                     throw new InvalidConfigException('invalid configuration');
                 }
@@ -90,12 +88,10 @@ class MultiSelect extends AbstractFilterType
                             $productList->addCondition($field . ' = ' . $value, $field);
                         }
                     }
+                } elseif ($isPrecondition) {
+                    $productList->addCondition($field . ' IN (' . implode(',', $quotedValues) . ')', 'PRECONDITION_' . $field);
                 } else {
-                    if ($isPrecondition) {
-                        $productList->addCondition($field . ' IN (' . implode(',', $quotedValues) . ')', 'PRECONDITION_' . $field);
-                    } else {
-                        $productList->addCondition($field . ' IN (' . implode(',', $quotedValues) . ')', $field);
-                    }
+                    $productList->addCondition($field . ' IN (' . implode(',', $quotedValues) . ')', $field);
                 }
             }
         }

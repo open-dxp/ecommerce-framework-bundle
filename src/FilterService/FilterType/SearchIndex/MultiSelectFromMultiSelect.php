@@ -24,6 +24,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterMultiSelectFromMultiSele
 
 class MultiSelectFromMultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\MultiSelectFromMultiSelect
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         $useAndCondition = false;
@@ -41,6 +42,7 @@ class MultiSelectFromMultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundl
     /**
      * @return string[]
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);
@@ -50,11 +52,7 @@ class MultiSelectFromMultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundl
         $isReload = $params['is_reload'] ?? null;
 
         if (empty($value) && !$isReload) {
-            if (is_array($preSelect)) {
-                $value = $preSelect;
-            } else {
-                $value = explode(',', $preSelect);
-            }
+            $value = is_array($preSelect) ? $preSelect : explode(',', $preSelect);
 
             foreach ($value as $key => $v) {
                 if (!$v) {

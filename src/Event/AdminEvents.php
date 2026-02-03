@@ -22,17 +22,13 @@ final class AdminEvents
      * Fired when values in filter definition get fetched
      *
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
-     *
-     * @var string
      */
-    const GET_VALUES_FOR_FILTER_FIELD_PRE_SEND_DATA = 'opendxp.admin.ecommerce.getValuesForFilterFieldPreSendData';
+    const string GET_VALUES_FOR_FILTER_FIELD_PRE_SEND_DATA = 'opendxp.admin.ecommerce.getValuesForFilterFieldPreSendData';
 
     /**
      * Fired when filter fields get fetched
      *
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
-     *
-     * @var string
      */
-    const GET_INDEX_FIELD_NAMES_PRE_SEND_DATA = 'opendxp.admin.ecommerce.getIndexFieldNamesPreSendData';
+    const string GET_INDEX_FIELD_NAMES_PRE_SEND_DATA = 'opendxp.admin.ecommerce.getIndexFieldNamesPreSendData';
 }

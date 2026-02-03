@@ -25,6 +25,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterNumberRange;
  */
 class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRange
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         $productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -33,6 +34,7 @@ class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
     /**
      * @param FilterNumberRange $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);
@@ -47,10 +49,10 @@ class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
 
         if (($value['from'] !== null || $value['to'] !== null) && ($value['from'] !== '' || $value['to'] !== '')) {
             $range = [];
-            if (strlen((string)$value['from']) > 0) {
+            if ((string)$value['from'] !== '') {
                 $range['gte'] = $value['from'];
             }
-            if (strlen($value['to']) > 0) {
+            if ((string) $value['to'] !== '') {
                 $range['lte'] = $value['to'];
             }
             $productList->addCondition(['range' => ['attributes.' . $field => $range]], $field);

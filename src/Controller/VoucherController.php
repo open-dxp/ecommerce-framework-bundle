@@ -39,14 +39,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/voucher')]
 class VoucherController extends UserAwareController implements KernelControllerEventInterface
 {
-    protected TokenStorageUserResolver $tokenResolver;
-
-    protected TranslatorInterface $translator;
-
-    public function __construct(TokenStorageUserResolver $tokenStorageUserResolver, TranslatorInterface $translator)
+    public function __construct(protected TokenStorageUserResolver $tokenResolver, protected TranslatorInterface $translator)
     {
-        $this->tokenResolver = $tokenStorageUserResolver;
-        $this->translator = $translator;
     }
 
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -92,11 +86,9 @@ class VoucherController extends UserAwareController implements KernelControllerE
             $renderScript = $tokenManager->prepareConfigurationView($paramsBag, $request->query->all());
 
             return $this->render($renderScript, $paramsBag);
-        } else {
-            $paramsBag['errors'] = ['bundle_ecommerce_voucherservice_msg-error-config-missing'];
-
-            return $this->render('@OpenDxpEcommerceFramework/voucher/voucher_code_tab_error.html.twig', $paramsBag);
         }
+        $paramsBag['errors'] = ['bundle_ecommerce_voucherservice_msg-error-config-missing'];
+        return $this->render('@OpenDxpEcommerceFramework/voucher/voucher_code_tab_error.html.twig', $paramsBag);
     }
 
     /**
@@ -112,7 +104,7 @@ class VoucherController extends UserAwareController implements KernelControllerE
         }
 
         $tokenManager = $onlineShopVoucherSeries->getTokenManager();
-        if (!(null !== $tokenManager && $tokenManager instanceof ExportableTokenManagerInterface)) {
+        if (!($tokenManager instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\TokenManager\TokenManagerInterface && $tokenManager instanceof ExportableTokenManagerInterface)) {
             throw new InvalidArgumentException('Token manager does not support exporting');
         }
 
@@ -145,7 +137,7 @@ class VoucherController extends UserAwareController implements KernelControllerE
         $response->headers->set('Content-Type', $contentType);
         $response->headers->set('Content-Length', (string) strlen($result));
 
-        if ($download && null !== $suffix) {
+        if ($download) {
             $response->headers->set('Content-Disposition', sprintf('attachment; filename="voucher-export.%s"', $suffix));
         }
 
@@ -197,9 +189,12 @@ class VoucherController extends UserAwareController implements KernelControllerE
         }
         if ($tokenManager = $onlineShopVoucherSeries->getTokenManager()) {
             // Prepare cleanUp parameter array.
-            $params = ['id' => $request->get('id')]; // $request->query->all();
-            $request->get('usage') ? $params['usage'] = $request->get('usage') : '';
-            $request->get('olderThan') ? $params['olderThan'] = $request->get('olderThan') : '';
+            $params = ['id' => $request->get('id')]; if ($request->get('usage')) {
+                $params['usage'] = $request->get('usage');
+            }
+            if ($request->get('olderThan')) {
+                $params['olderThan'] = $request->get('olderThan');
+            }
 
             if (empty($params['usage'])) {
                 $params['error'] = $this->translator->trans('bundle_ecommerce_voucherservice_msg-error-required-missing', [], 'admin');
@@ -235,14 +230,12 @@ class VoucherController extends UserAwareController implements KernelControllerE
         }
 
         $onlineShopVoucherSeries = DataObject::getById($id);
-        if ($onlineShopVoucherSeries instanceof OnlineShopVoucherSeries) {
-            if ($tokenManager = $onlineShopVoucherSeries->getTokenManager()) {
-                if ($tokenManager->cleanUpReservations((int)$duration, $id)) {
-                    return $this->redirectToRoute(
-                        'opendxp_ecommerce_backend_voucher_voucher-code-tab',
-                        ['success' => $this->translator->trans('bundle_ecommerce_voucherservice_msg-success-cleanup-reservations', [], 'admin'), 'id' => $id]
-                    );
-                }
+        if ($onlineShopVoucherSeries instanceof OnlineShopVoucherSeries && $tokenManager = $onlineShopVoucherSeries->getTokenManager()) {
+            if ($tokenManager->cleanUpReservations((int)$duration, $id)) {
+                return $this->redirectToRoute(
+                    'opendxp_ecommerce_backend_voucher_voucher-code-tab',
+                    ['success' => $this->translator->trans('bundle_ecommerce_voucherservice_msg-success-cleanup-reservations', [], 'admin'), 'id' => $id]
+                );
             }
         }
 

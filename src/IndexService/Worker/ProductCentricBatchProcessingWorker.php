@@ -51,7 +51,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
         return $this->getStoreTableName();
     }
 
-    abstract protected function doUpdateIndex(int $objectId, array $data = null, array $metadata = null): void;
+    abstract protected function doUpdateIndex(int $objectId, ?array $data = null, ?array $metadata = null): void;
 
     public function updateItemInIndex(int $objectId): void
     {
@@ -101,12 +101,12 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
         if (!$currentEntry) {
             $this->db->insert($this->getStoreTableName(), $data);
         } elseif ($currentEntry['crc_current'] != $data['crc_current']) {
-            $this->executeTransactionalQuery(function () use ($data, $subObjectId) {
+            $this->executeTransactionalQuery(function () use ($data, $subObjectId): void {
                 $this->db->update($this->getStoreTableName(), $data, ['id' => (string)$subObjectId, 'tenant' => $this->name]);
             });
         } elseif ($currentEntry['in_preparation_queue']) {
             //since no data has changed, just update flags, not data
-            $this->executeTransactionalQuery(function () use ($subObjectId) {
+            $this->executeTransactionalQuery(function () use ($subObjectId): void {
                 $this->db->executeQuery('UPDATE ' . $this->getStoreTableName() . ' SET in_preparation_queue = 0 WHERE id = ? AND tenant = ?', [$subObjectId, $this->name]);
             });
         }
@@ -136,7 +136,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
             //need check, if there are sub objects because update on empty result set is too slow
             $objects = $this->db->fetchFirstColumn('SELECT id FROM objects WHERE `path` like ?', [Helper::escapeLike($object->getFullPath()) . '/%']);
             if ($objects) {
-                $this->executeTransactionalQuery(function () use ($objects) {
+                $this->executeTransactionalQuery(function () use ($objects): void {
                     $updateStatement = 'UPDATE ' . $this->getStoreTableName() . ' SET in_preparation_queue = 1 WHERE tenant = ? AND id IN ('.implode(',', $objects).')';
                     $this->db->executeQuery($updateStatement, [$this->name]);
                 });
@@ -153,41 +153,33 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
         $categoryIds = [];
         $parentCategoryIds = [];
         $categoryIdPaths = [];
-        if ($categories) {
-            foreach ($categories as $c) {
-                if ($c instanceof AbstractCategory) {
-                    $categoryIds[$c->getId()] = $c->getId();
-                }
+        foreach ($categories as $c) {
+            $categoryIds[$c->getId()] = $c->getId();
 
-                $currentCategory = $c;
-                while ($currentCategory instanceof AbstractCategory) {
-                    $parentCategoryIds[$currentCategory->getId()] = $currentCategory->getId();
+            $currentCategory = $c;
+            while ($currentCategory instanceof AbstractCategory) {
+                $parentCategoryIds[$currentCategory->getId()] = $currentCategory->getId();
 
-                    if ($currentCategory->getOSProductsInParentCategoryVisible()) {
-                        $currentCategory = $currentCategory->getParent();
-                    } else {
-                        $currentCategory = null;
-                    }
-                }
+                $currentCategory = $currentCategory->getOSProductsInParentCategoryVisible() ? $currentCategory->getParent() : null;
+            }
 
-                $tmpIds = [];
-                $workingCategory = $c;
-                while ($workingCategory) {
-                    $tmpIds[] = $workingCategory->getId();
-                    $workingCategory = $workingCategory->getParent();
-                    if (!$workingCategory instanceof  AbstractCategory) {
-                        break;
-                    }
-                }
-                $tmpIds = array_reverse($tmpIds);
-                $s = '';
-                foreach ($tmpIds as $id) {
-                    $s .= '/'.$id;
-                    $categoryIdPaths[] = $s;
+            $tmpIds = [];
+            $workingCategory = $c;
+            while ($workingCategory) {
+                $tmpIds[] = $workingCategory->getId();
+                $workingCategory = $workingCategory->getParent();
+                if (!$workingCategory instanceof  AbstractCategory) {
+                    break;
                 }
             }
+            $tmpIds = array_reverse($tmpIds);
+            $s = '';
+            foreach ($tmpIds as $id) {
+                $s .= '/'.$id;
+                $categoryIdPaths[] = $s;
+            }
         }
-        $categoryIdPaths = (array)array_unique($categoryIdPaths);
+        $categoryIdPaths = array_unique($categoryIdPaths);
         sort($categoryIdPaths);
         ksort($categoryIds);
 
@@ -202,7 +194,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
             $virtualProductActive = $virtualProduct->isActive();
         }
 
-        $data = [
+        return [
             'id' => $subObjectId,
             'classId' => $object->getClassId(),
             'virtualProductId' => $virtualProductId,
@@ -211,14 +203,12 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
             'type' => $object->getOSIndexType(),
             'categoryIds' => ',' . implode(',', $categoryIds) . ',',
             'parentCategoryIds' => ',' . implode(',', $parentCategoryIds) . ',',
-            'categoryPaths' => (array)$categoryIdPaths,
+            'categoryPaths' => $categoryIdPaths,
             'priceSystemName' => $object->getPriceSystemName(),
             'active' => $object->isActive(),
             'inProductList' => $object->isActive(true),
             'tenant' => $this->name,
         ];
-
-        return $data;
     }
 
     public function prepareDataForIndex(IndexableInterface $object): array
@@ -303,8 +293,8 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
                 $subTenantData = $this->tenantConfig->prepareSubTenantEntries($object, $subObjectId);
                 $jsonData = json_encode([
                     'data' => $data,
-                    'relations' => ($relationData ? $relationData : []),
-                    'subtenants' => ($subTenantData ? $subTenantData : []),
+                    'relations' => ($relationData ?: []),
+                    'subtenants' => ($subTenantData ?: []),
                 ]);
 
                 $jsonLastError = json_last_error();
@@ -316,9 +306,8 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
                     $this->eventDispatcher->dispatch($event, IndexServiceEvents::GENERAL_PREPROCESSING_ERROR);
                     if ($event->doThrowException()) {
                         throw $e;
-                    } else {
-                        $generalErrors[] = $e->getMessage();
                     }
+                    $generalErrors[] = $e->getMessage();
                 }
 
                 $crc = crc32($jsonData);
@@ -354,7 +343,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
 
                 if ($hasError) {
                     Logger::alert(sprintf('Mark product "%s" with preparation error.', $subObjectId),
-                        array_merge($generalErrors, $attributeErrors)
+                        [...$generalErrors, ...$attributeErrors]
                     );
                 } else {
                     $processedSubObjects[$subObjectId] = $object;

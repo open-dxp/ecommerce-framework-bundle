@@ -34,17 +34,14 @@ class TrackingCodeSubscriber implements EventSubscriberInterface
     use OpenDxpContextAwareTrait;
     use PreviewRequestTrait;
 
-    protected TrackingManager $trackingManager;
-
-    /** @var Environment * */
-    protected Environment $twig;
-
     private bool $enabled = true;
 
-    public function __construct(TrackingManager $trackingManager, Environment $twig)
+    public function __construct(
+        protected TrackingManager $trackingManager,
+        /** @var Environment * */
+        protected Environment $twig
+    )
     {
-        $this->trackingManager = $trackingManager;
-        $this->twig = $twig;
     }
 
     public static function getSubscribedEvents(): array
@@ -60,13 +57,11 @@ class TrackingCodeSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $activeTrackers = $this->trackingManager->getActiveTrackers();
-
-        foreach ($activeTrackers as $activeTracker) {
+        foreach ($this->trackingManager->getActiveTrackers() as $activeTracker) {
             if ($activeTracker instanceof GoogleTagManager) {
                 $trackedCodes = $activeTracker->getTrackedCodes();
 
-                if (empty($trackedCodes) || ! is_array($trackedCodes)) {
+                if ($trackedCodes === []) {
                     return;
                 }
 

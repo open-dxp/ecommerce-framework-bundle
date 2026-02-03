@@ -25,7 +25,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule\Listing;
  */
 class Dao extends \OpenDxp\Model\Listing\Dao\AbstractDao
 {
-    protected string $ruleClass = '\OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule';
+    protected string $ruleClass = \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule::class;
 
     public function load(): array
     {
@@ -69,7 +69,7 @@ class Dao extends \OpenDxp\Model\Listing\Dao\AbstractDao
                 $this->model->getConditionVariables(),
                 $this->model->getConditionVariableTypes(),
             );
-        } catch (Exception $e) {
+        } catch (Exception) {
             return 0;
         }
     }

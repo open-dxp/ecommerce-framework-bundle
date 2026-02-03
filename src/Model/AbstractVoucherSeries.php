@@ -57,7 +57,7 @@ abstract class AbstractVoucherSeries extends \OpenDxp\Model\DataObject\Concrete
             }
 
             return $result;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }

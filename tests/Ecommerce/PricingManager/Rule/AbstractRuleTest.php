@@ -14,35 +14,35 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager\Rule;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager\Rule;
 
 use Codeception\Stub;
 use PHPUnit_Framework_MockObject_Stub;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart;
-use Pimcore\Bundle\EcommerceFrameworkBundle\EventListener\SessionBagListener;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\Currency;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceInfo;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\Price;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxEntry;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\ActionInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Bracket;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\ConditionInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManager;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerLocator;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Rule;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\RuleInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
-use Pimcore\Model\DataObject\OnlineShopTaxClass;
-use Pimcore\Tests\Support\Helper\Pimcore;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\EventListener\SessionBagListener;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\Currency;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceInfo;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\Price;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxEntry;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\ActionInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Bracket;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\ConditionInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManager;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerLocator;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\RuleInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Test\EcommerceTestCase;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Model\DataObject\OnlineShopTaxClass;
+use OpenDxp\Tests\Support\Helper\OpenDxp;
 use TypeError;
 
 class AbstractRuleTest extends EcommerceTestCase
@@ -54,16 +54,16 @@ class AbstractRuleTest extends EcommerceTestCase
     {
         $rules = $this->buildRules($rules);
 
-        /** @var Pimcore $pimcoreModule */
-        $pimcoreModule = $this->getModule('\\' . Pimcore::class);
-        $container = $pimcoreModule->getContainer();
+        /** @var OpenDxp $opendxpModule */
+        $opendxpModule = $this->getModule('\\' . OpenDxp::class);
+        $container = $opendxpModule->getContainer();
 
-        $conditionMapping = $container->getParameter('pimcore_ecommerce.pricing_manager.condition_mapping');
-        $actionMapping = $container->getParameter('pimcore_ecommerce.pricing_manager.action_mapping');
+        $conditionMapping = $container->getParameter('opendxp_ecommerce.pricing_manager.condition_mapping');
+        $actionMapping = $container->getParameter('opendxp_ecommerce.pricing_manager.action_mapping');
         $options = [
-            'rule_class' => "Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Rule",
-            'price_info_class' => "Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\PriceInfo",
-            'environment_class' => "Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Environment",
+            'rule_class' => "OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule",
+            'price_info_class' => "OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PriceInfo",
+            'environment_class' => "OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Environment",
         ];
 
         return Stub::construct(PricingManager::class, [$conditionMapping, $actionMapping, $options], [
@@ -119,10 +119,10 @@ class AbstractRuleTest extends EcommerceTestCase
         $grossPrice = Decimal::create($grossPrice);
 
         $taxClass = new OnlineShopTaxClass();
-        $taxEntries = new \Pimcore\Model\DataObject\Fieldcollection();
+        $taxEntries = new \OpenDxp\Model\DataObject\Fieldcollection();
 
         foreach ($taxes as $name => $tax) {
-            $entry = new \Pimcore\Model\DataObject\Fieldcollection\Data\TaxEntry();
+            $entry = new \OpenDxp\Model\DataObject\Fieldcollection\Data\TaxEntry();
             $entry->setPercent($tax);
             $entry->setName($name);
             $taxEntries->add($entry);

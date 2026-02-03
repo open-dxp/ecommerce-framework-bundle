@@ -25,55 +25,22 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 
 class Attribute
 {
-    private string $name;
-
-    private string $fieldName;
-
-    private ?string $type = null;
-
-    private ?string $locale = null;
-
-    private ?string $filterGroup = null;
-
-    private array $options = [];
-
-    private ?GetterInterface $getter = null;
-
-    private array $getterOptions = [];
-
-    private ?InterpreterInterface $interpreter = null;
-
-    private array $interpreterOptions = [];
-
-    private bool $hideInFieldlistDatatype = false;
+    private readonly string $fieldName;
 
     public function __construct(
-        string $name,
-        string $fieldName = null,
-        string $type = null,
-        string $locale = null,
-        string $filterGroup = null,
-        array $options = [],
-        GetterInterface $getter = null,
-        array $getterOptions = [],
-        InterpreterInterface $interpreter = null,
-        array $interpreterOptions = [],
-        bool $hideInFieldlistDatatype = false
+        private readonly string $name,
+        ?string $fieldName = null,
+        private readonly ?string $type = null,
+        private readonly ?string $locale = null,
+        private readonly ?string $filterGroup = null,
+        private array $options = [],
+        private readonly ?GetterInterface $getter = null,
+        private readonly array $getterOptions = [],
+        private readonly ?InterpreterInterface $interpreter = null,
+        private readonly array $interpreterOptions = [],
+        private readonly bool $hideInFieldlistDatatype = false
     ) {
-        $this->name = $name;
-        $this->fieldName = $fieldName ?? $name;
-        $this->type = $type;
-        $this->locale = $locale;
-        $this->filterGroup = $filterGroup;
-        $this->options = $options;
-
-        $this->getter = $getter;
-        $this->getterOptions = $getterOptions;
-
-        $this->interpreter = $interpreter;
-        $this->interpreterOptions = $interpreterOptions;
-
-        $this->hideInFieldlistDatatype = $hideInFieldlistDatatype;
+        $this->fieldName = $fieldName ?? $this->name;
     }
 
     public function getName(): string
@@ -139,14 +106,13 @@ class Attribute
     /**
      * Get value from object, running through getter if defined
      */
-    public function getValue(IndexableInterface $object, int $subObjectId = null, ConfigInterface $tenantConfig = null, mixed $default = null): mixed
+    public function getValue(IndexableInterface $object, ?int $subObjectId = null, ?ConfigInterface $tenantConfig = null, mixed $default = null): mixed
     {
-        if (null !== $this->getter) {
+        if ($this->getter instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Getter\GetterInterface) {
             if ($this->getter instanceof ExtendedGetterInterface) {
                 return $this->getter->get($object, $this->getterOptions, $subObjectId, $tenantConfig);
-            } else {
-                return $this->getter->get($object, $this->getterOptions);
             }
+            return $this->getter->get($object, $this->getterOptions);
         }
 
         $getter = 'get' . ucfirst($this->fieldName);
@@ -162,7 +128,7 @@ class Attribute
      */
     public function interpretValue(mixed $value): mixed
     {
-        if (null !== $this->interpreter) {
+        if ($this->interpreter instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\InterpreterInterface) {
             return $this->interpreter->interpret($value, $this->interpreterOptions);
         }
 

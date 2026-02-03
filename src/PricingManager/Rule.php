@@ -68,10 +68,9 @@ class Rule extends AbstractModel implements RuleInterface
 
         try {
             $rule = RuntimeCache::get($cacheKey);
-        } catch (Exception $e) {
+        } catch (Exception) {
             try {
-                $ruleClass = get_called_class();
-                /** @var Rule $rule */
+                $ruleClass = static::class;
                 $rule = new $ruleClass();
                 $rule->getDao()->getById($id);
 
@@ -94,6 +93,7 @@ class Rule extends AbstractModel implements RuleInterface
      *
      * @internal
      */
+    #[\Override]
     public function setValue(string $key, mixed $value, bool $ignoreEmptyValues = false): static
     {
         $method = 'set' . $key;
@@ -105,9 +105,8 @@ class Rule extends AbstractModel implements RuleInterface
                     $value = unserialize($value);
                     if ($value === false) {
                         return $this;
-                    } else {
-                        $this->$key = $value;
                     }
+                    $this->$key = $value;
 
                     return $this;
 
@@ -193,7 +192,7 @@ class Rule extends AbstractModel implements RuleInterface
 
     public function setActive(bool $active): static
     {
-        $this->active = (bool) $active;
+        $this->active = $active;
 
         return $this;
     }
@@ -237,7 +236,7 @@ class Rule extends AbstractModel implements RuleInterface
 
     public function setPrio(int $prio): static
     {
-        $this->prio = (int)$prio;
+        $this->prio = $prio;
 
         return $this;
     }
@@ -331,10 +330,10 @@ class Rule extends AbstractModel implements RuleInterface
     /**
      * gets current language
      */
-    protected function getLanguage(string $language = null): string
+    protected function getLanguage(?string $language = null): string
     {
         if ($language) {
-            return (string) $language;
+            return $language;
         }
 
         return Factory::getInstance()->getEnvironment()->getSystemLocale();

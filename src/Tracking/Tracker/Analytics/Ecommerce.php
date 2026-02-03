@@ -25,6 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Ecommerce extends AbstractAnalyticsTracker implements CheckoutCompleteInterface
 {
+    #[\Override]
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
