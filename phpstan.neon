@@ -2,7 +2,7 @@ includes:
 	- %currentWorkingDirectory%/vendor/phpstan/phpstan-symfony/extension.neon
 	- phpstan-baseline.neon
 parameters:
-    level: 6
+    level: 4
     paths:
         - src
     bootstrapFiles:
