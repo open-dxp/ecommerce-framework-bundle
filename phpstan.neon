@@ -11,5 +11,5 @@ parameters:
         - %currentWorkingDirectory%/vendor/open-dxp/opendxp/stubs/dynamic-constants.php
     reportUnmatchedIgnoredErrors: false
     symfony:
-        containerXmlPath: %currentWorkingDirectory%/var/cache/test/App_TestKernelTestDebugContainer.xml
+        containerXmlPath: %currentWorkingDirectory%/var/cache/test/App_KernelTestDebugContainer.xml
         constantHassers: false
