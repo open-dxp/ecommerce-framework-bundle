@@ -16,13 +16,12 @@ of the E-Commerce Framework.
  
 Currently there are two types of vouchers supported - Single and Pattern.
 - Single: One single token is defined that can be used multiple times. 
-![Voucher Series Settings Single](../img/voucher-series-single.jpg)
 - Pattern: Tokens are generated based on a certain pattern definition. 
 ![Voucher Series Settings Pattern](../img/voucher-series-pattern.png)
 
 
 #### Create tokens based on the `OnlineShopVoucherSeries`
-In the Pimcore Backend UI, each `OnlineShopVoucherSeries` object has an additional tab for managing the voucher tokens. 
+In the OpenDxp Backend UI, each `OnlineShopVoucherSeries` object has an additional tab for managing the voucher tokens. 
 Depending on the token type there are different functions for managing the tokens and some statistics concerning the voucher. 
 - Simple: 'Activate' the token and specify how often it may be used. 
 ![Create Tokens Simple](../img/voucher-series-single-2.jpg)

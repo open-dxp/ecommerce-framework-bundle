@@ -47,7 +47,7 @@ to let OpenSearch know about the sub-documents:
 Now you can create a filter for the nested document field, which has to be defined in a nested manner as well:
 
 ```php
-class SelectMyAttribute extends \Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType
+class SelectMyAttribute extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType
 {
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {

@@ -10,8 +10,8 @@ const par = {
     bundleFolderName: "EcommerceFrameworkBundle",
     name: 'ecommerceFramework',
     entryNames: ["flatpickr", "bootstrap", "voucher", "leaflet"],
-    bundleName: "pimcoreecommerceframework",
-    configName: "pimcoreEcommerceFramework",
+    bundleName: "opendxpecommerceframework",
+    configName: "opendxpEcommerceFramework",
     copyFiles: {
         from: "node_modules/leaflet/dist/images",
         to: "images/[path]/[name].[ext]"

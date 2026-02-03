@@ -18,7 +18,7 @@ $orderManager = Factory::getInstance()->getOrderManager();
 $orderAgent = $orderManager->createOrderAgent($order);
 
 // change amount to 5
-/** @var \Pimcore\Model\Element\Note $log */
+/** @var \OpenDxp\Model\Element\Note $log */
 $log = $orderAgent->itemChangeAmount($orderItem, 5);
 
 // add user comment
@@ -39,7 +39,7 @@ $orderManager = Factory::getInstance()->getOrderManager();
 $orderAgent = $orderManager->createOrderAgent($order);
 
 // get changelog
-/** @var \Pimcore\Model\Element\Note $log */
+/** @var \OpenDxp\Model\Element\Note $log */
 foreach($orderAgent->getFullChangeLog() as $log) {
     ...
 }

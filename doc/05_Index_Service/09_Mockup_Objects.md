@@ -1,10 +1,10 @@
 # Mockup Objects in Product List Results
 
-Normally the result of Product Lists contain Pimcore product objects. When retrieving lists with many entries this can
-result in performance issues during rendering product listings - especially on high traffic applications when Pimcore 
+Normally the result of Product Lists contain OpenDxp product objects. When retrieving lists with many entries this can
+result in performance issues during rendering product listings - especially on high traffic applications when OpenDxp 
 product objects are very complex, heavily use content inheritance and have lots of relations. 
  
-To address this issue, Product Lists can return so called Mockup objects instead of the original Pimcore product objects. 
+To address this issue, Product Lists can return so called Mockup objects instead of the original OpenDxp product objects. 
 The idea is that these Mockup objects are a lightweight a selection of the product data, therefore are much smaller and 
 load faster.
  
@@ -14,8 +14,8 @@ transparent way and you can take advantage from the faster loading times.
 This means that the corresponding product lists return Mockup objects which contain all data that is 
 stored into the product index. If a getter is called on the Mockup object (e.g. `$product->getName()`), it first tries 
 to get the requested data from the index data. If the data is not available, the call is delegated to the original 
-Pimcore object.
-Then the call is delegated, following log message is written to Pimcore log files - if system is in debug mode as `WARN`, 
+OpenDxp object.
+Then the call is delegated, following log message is written to OpenDxp log files - if system is in debug mode as `WARN`, 
  otherwise as `INFO`. 
 ```
 "Method $method not in Mockup implemented, delegating to object with id {$this->id}."

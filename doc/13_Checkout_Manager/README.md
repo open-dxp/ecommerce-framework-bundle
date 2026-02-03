@@ -6,8 +6,8 @@ through the checkout process.
 But: The checkout manager is not an out-of-the-box checkout process! 
 It is a tool and a set of components the developer can use to create a use case specific checkout process. 
 
-> Starting with Pimcore 6.1 an optimized checkout manager architecture was introduced. This is parallel to the old 
-> architecture, which is deprecated now and will be removed in Pimcore 10. For details see [Checkout Manager Details](08_Checkout_Manager_Details.md).
+> Starting with OpenDxp 1.0 an optimized checkout manager architecture was introduced. This is parallel to the old 
+> architecture, which is deprecated now and will be removed in OpenDxp 2.0. For details see [Checkout Manager Details](08_Checkout_Manager_Details.md).
 
 ##### Involved Modules and their function
 - **Controller**: Website Controller that controls the flow.

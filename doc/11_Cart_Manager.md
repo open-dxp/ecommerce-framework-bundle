@@ -76,7 +76,7 @@ $subTotal = $cart->getPriceCalculator()->getSubTotal();
 // iterates through all price modifications
 foreach ($cart->getPriceCalculator()->getPriceModifications() as $name => $modification) {
     // $name is the label of a modification
-    // $modification is an implementation of \Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\ModificatedPriceInterface
+    // $modification is an implementation of \OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\ModificatedPriceInterface
 }
  
 // delivers sum including all price modifications
@@ -86,26 +86,26 @@ $grandTotal = $cart->getPriceCalculator()->getGrandTotal();
 
 ## Configuration of Cart Manager
 
-The configuration takes place in the `pimcore_ecommerce_framework.cart_manager` configuration section which is [tenant aware](./04_Configuration/README.md).
+The configuration takes place in the `opendxp_ecommerce_framework.cart_manager` configuration section which is [tenant aware](./04_Configuration/README.md).
 
 ```yaml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     cart_manager:
         tenants:
             # defaults for all cart managers
             _defaults:
                 # define service manager id of cart service - following value is default and can be omitted
-                cart_manager_id: Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\MultiCartManager
+                cart_manager_id: OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\MultiCartManager
 
                 # configuration for carts - the following values are set by default and can be omitted 
                 cart:
                     # service ID of a cart factory which creates individual carts at runtime                    
-                    factory_id: Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartFactory
+                    factory_id: OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartFactory
                     
                     # options passed to cart factory, e.g. the cart class (available options vary by factory implementation)
                     factory_options:
-                        cart_class_name: Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\Cart
-                        guest_cart_class_name: Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart
+                        cart_class_name: OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart
+                        guest_cart_class_name: OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart
         
             default:   
                 price_calculator:
@@ -113,13 +113,13 @@ pimcore_ecommerce_framework:
                     # key is name of modificator
                     modificators:
                         shipping:
-                            class: Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping
+                            class: OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping
                             # configuration options for price modificator
                             options:
                                 charge: "5.90"
 
             # additional checkout tenant for cart manager
-            #  - active tenant is set at \Pimcore\Bundle\EcommerceFrameworkBundle\EnvironmentInterface::setCurrentCheckoutTenant()
+            #  - active tenant is set at \OpenDxp\Bundle\EcommerceFrameworkBundle\EnvironmentInterface::setCurrentCheckoutTenant()
             noShipping: ~ # inherits from _defaults
 ```
 
@@ -132,9 +132,9 @@ Following elements are configured:
   by factory implementation
 * **Price calculator factory service ID + options and modificators**: The price calculator is a framework for calculation
   and modification (shipping costs, discounts, ...) of prices on cart level. Each modification is implemented in a 
-  [`CartPriceModificatorInterface` class](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/CartManager/CartPriceModificator/CartPriceModificatorInterface.php). 
-  See [Shipping](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/CartManager/CartPriceModificator/Shipping.php)
-  or [Discount](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/CartManager/CartPriceModificator/Discount.php)
+  [`CartPriceModificatorInterface` class](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/CartManager/CartPriceModificator/CartPriceModificatorInterface.php). 
+  See [Shipping](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/CartManager/CartPriceModificator/Shipping.php)
+  or [Discount](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/CartManager/CartPriceModificator/Discount.php)
   for examples.
 
 
@@ -142,16 +142,16 @@ Following elements are configured:
 
 ## Available Cart Implementations
 
-Following cart implementations are shipped with Pimcore core and can be configured in the `factory_options` section of 
+Following cart implementations are shipped with OpenDxp core and can be configured in the `factory_options` section of 
 the cart manager configuration: 
 
-* **Session-Cart** (class name `Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart`): This cart implementation 
+* **Session-Cart** (class name `OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart`): This cart implementation 
 stores all cart information in the **session** of the user. If the session is cleared, also the carts are deleted. 
 Use this implementation when no user login is available and storing carts in the database has no benefit.   
 
-* **Database-Cart** (class name `Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\Cart`): This cart implementation
+* **Database-Cart** (class name `OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart`): This cart implementation
 stores all cart information in the **database**. In this case, it is important that the currently logged in user is set 
-to the [E-Commerce Framework Environment](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/EnvironmentInterface.php)
+to the [E-Commerce Framework Environment](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/EnvironmentInterface.php)
 with the code snippet in the box below. 
 Use this implementation when user logins are available and the carts should be persisted beyond session lifetime. 
 
@@ -184,9 +184,9 @@ See also [Demo](https://github.com/pimcore/demo/blob/11.x/config/ecommerce/base-
 
 Following steps are necessary to add additional custom properties to cart items: 
 
-1) Extend `Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartItem` implementation and add your custom properties including getters/setters. 
+1) Extend `OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItem` implementation and add your custom properties including getters/setters. 
 2) Extend `Cart::getCartItemClassName` implementation and make sure your custom `CartItem` implementation gets returned.
 3) Provide the custom properties as key-value pairs in `$params` parameter in the following methods:
-   1) `Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\AbstractCart::addItem`
-   2) `Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\AbstractCart::updateItem`
-   3) `Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartManagerInterface::addToCart`
+   1) `OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\AbstractCart::addItem`
+   2) `OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\AbstractCart::updateItem`
+   3) `OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartManagerInterface::addToCart`

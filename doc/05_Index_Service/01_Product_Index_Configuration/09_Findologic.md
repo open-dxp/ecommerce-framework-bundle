@@ -4,7 +4,7 @@ speciality with the export:
 
 Executing `php bin/console ecommerce:indexservice:process-update-queue` does not write the data directly to 
 Findologic, but into an extra table 
-`\Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Worker\DefaultFindologic::EXPORT_TABLE_NAME` 
+`\OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\DefaultFindologic::EXPORT_TABLE_NAME` 
 (default is `ecommerceframework_productindex_export_findologic`). 
 
 Findologic then can use the endpoint `/ecommerceframework/findologic-export`, which delivers all data directly based on 

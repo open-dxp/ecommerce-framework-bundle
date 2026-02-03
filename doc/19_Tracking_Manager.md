@@ -5,10 +5,10 @@ different tracker implementations, it supports different tracking services.
 
 Current implementations of trackers are
 
-* **Google Tag Manager (GTM)**: `\\Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\GoogleTagManager`
-* **Google Analytics Classic**: `\Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\Ecommerce`
-* **Google Analytics Universal**: `\Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\UniversalEcommerce`
-* **Google Analytics Enhanced E-Commerce**: `\Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\EnhancedEcommerce`
+* **Google Tag Manager (GTM)**: `\\OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\GoogleTagManager`
+* **Google Analytics Classic**: `\OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\Ecommerce`
+* **Google Analytics Universal**: `\OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\UniversalEcommerce`
+* **Google Analytics Enhanced E-Commerce**: `\OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\EnhancedEcommerce`
 
 ## Supported Tracking Actions
 
@@ -59,18 +59,18 @@ There are 2 deprecated actions which are still supported by should be replaced w
 
 ## Configuration
 
-The configuration takes place in the `pimcore_ecommerce_framework.tracking_manager` config section.
+The configuration takes place in the `opendxp_ecommerce_framework.tracking_manager` config section.
 If no `TrackingItemBuilder` is configured, the `TrackingItemBuilder` will fall back to the default implementation 
-`\Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder`. Further information about `TrackingItemBuilder`
+`\OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder`. Further information about `TrackingItemBuilder`
 see below. 
 
 ```yaml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     # tracking manager - define which trackers (e.g. Google Analytics Universal Ecommerce) are active and should
     # be called when you track something via TrackingManager
     tracking_manager:
         # service ID of tracking manager - the following is the default value and can be omitted
-        tracking_manager_id: Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\TrackingManager
+        tracking_manager_id: OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingManager
 
         trackers:
             # enable the core enhanced_ecommerce tracker with default options
@@ -79,7 +79,7 @@ pimcore_ecommerce_framework:
                 
             my_custom_tracker:
                 # use already defined enhanced ecommerce tracker
-                id: Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\EnhancedEcommerce
+                id: OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\Tracker\Analytics\EnhancedEcommerce
                 
                 # options vary by tracker implementation
                 options:
@@ -122,8 +122,8 @@ See the following examples
 namespace App\Controller;
 
 use Knp\Component\Pager\PaginatorInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\TrackingManager;
-use Pimcore\Controller\FrontendController;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingManager;
+use OpenDxp\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -147,7 +147,7 @@ class ShopController extends FrontendController
 ```php
 <?php
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\TrackingManager;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingManager;
 
 class CheckoutController extends AbstractCartAware
 {
@@ -172,10 +172,10 @@ Define a custom item builder:
 ```php
 <?php
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\ProductInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\ProductImpressionInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\ProductInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\ProductImpressionInterface;
 
-class TrackingItemBuilder extends \Pimcore\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder
+class TrackingItemBuilder extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking\TrackingItemBuilder
 {
     private static int $impressionPosition = 0;
     

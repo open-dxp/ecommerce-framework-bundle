@@ -1,6 +1,6 @@
 # Recurring Payment
   
-Pimcore currently supports recurring payment for the payment provider Datatrans (_Alias_).
+OpenDxp currently supports recurring payment for the payment provider Datatrans (_Alias_).
 It is performed via backend operations (server-to-server) which are used to create a new order and a new payment attempt by reusing the payment information available in a previous order, the so-called source order.
 
 Recurring payment can for example be used to implement sequential payments like hiring or leasing agreements, or also to perform a one time payment for an authorized user which already committed at least one previous order successfully. 
@@ -22,7 +22,7 @@ The following code will briefly show how to perform a one time payment inside th
 ```php
 public function paymentAction(Request $request): Response
 {
-    $factory = \Pimcore\Bundle\EcommerceFrameworkBundle\Factory::getInstance();
+    $factory = \OpenDxp\Bundle\EcommerceFrameworkBundle\Factory::getInstance();
 
     $checkoutManager = $factory->getCheckoutManager($this->cart);
     $user = $this->getUser();
@@ -32,7 +32,7 @@ public function paymentAction(Request $request): Response
         if ($sourceOrderId = $request->get("recurring-payment")) {
             /* Recurring Payment */
             if ($user && $sourceOrderId) {
-                $sourceOrder = \Pimcore\Model\DataObject\OnlineShopOrder::getById($sourceOrderId);
+                $sourceOrder = \OpenDxp\Model\DataObject\OnlineShopOrder::getById($sourceOrderId);
 
                 try {
                     $targetOrder = $checkoutManager->startAndCommitRecurringOrderPayment($sourceOrder, $user->getId());
@@ -70,7 +70,7 @@ public function paymentAction(Request $request): Response
 
 ```twig
 ?>
-<form method="post" action="{{ pimcore_url({action: 'confirm'}, 'checkout', true) }}">
+<form method="post" action="{{ opendxp_url({action: 'confirm'}, 'checkout', true) }}">
 
     {% if sourceOrders is not empty %}
 

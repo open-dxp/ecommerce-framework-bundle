@@ -12,7 +12,7 @@ the Tax Management in the E-Commerce Framework at all. Just use all the default 
 If you need to deal with taxes following components are important to know of: 
 
 ### Tax Configuration with `OnlineShopTaxClass`
-The configuration of taxes is done with `OnlineShopTaxClass` Pimcore objects within in the Pimcore Backend UI. The actual 
+The configuration of taxes is done with `OnlineShopTaxClass` OpenDxp objects within in the OpenDxp Backend UI. The actual 
 tax calculation is always based on the configuration of such a tax class. So, tax configurations for different countries 
 and product groups can be established. The tax calculation is always based on one tax class, a combination of tax classes
 is not possible.
@@ -89,7 +89,7 @@ Systems.
 For setting up the tax management, following steps are necessary.
 
 ### 1) Defining Tax Classes
-Create and configure all the `OnlineShopTaxClass` objects within Pimcore.
+Create and configure all the `OnlineShopTaxClass` objects within OpenDxp.
 
 ### 2) Configuring Price System
 Setup the correct price systems and implement their methods `getTaxClassForProduct` and `getTaxClassForPriceModification`.

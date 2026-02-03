@@ -1,25 +1,25 @@
 # Basic Configuration
 
-The configuration takes place in the `pimcore_ecommerce_framework.checkout_manager` configuration section and is [tenant aware](../04_Configuration/README.md).
+The configuration takes place in the `opendxp_ecommerce_framework.checkout_manager` configuration section and is [tenant aware](../04_Configuration/README.md).
 
 ```yaml
-pimcore_ecommerce_config:
+opendxp_ecommerce_config:
     checkout_manager:
         tenants:
             _defaults:
                 # the following two values are default values an can be omitted
                 # service ID of a checkout manager factory which builds cart specific checkout managers
-                factory_id: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\CheckoutManagerFactory
+                factory_id: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\CheckoutManagerFactory
                 
                 # options passed to the factory - available options vary by implementation
                 factory_options:
-                    class: \Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
-                    handle_pending_payments_strategy: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\CancelPaymentOrRecreateOrderStrategy
+                    class: \OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
+                    handle_pending_payments_strategy: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\CancelPaymentOrRecreateOrderStrategy
 
                 # commit order processor
                 commit_order_processor:
                     # order processor service ID
-                    id: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CommitOrderProcessor
+                    id: OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CommitOrderProcessor
                     
                     # options passed to the commit order processor - available options vary by implementation
                     options:
@@ -28,7 +28,7 @@ pimcore_ecommerce_config:
                 # define different checkout steps which need to be committed before commit of order is possible
                 steps:
                     deliveryaddress:
-                        class: \Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\DeliveryAddress
+                        class: \OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\DeliveryAddress
                         
                     # example step from the Ecommerce demo, which extends AbstractStep
                     confirm:

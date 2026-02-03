@@ -1,19 +1,19 @@
 # Filter Classification Store
 
-With elasticsearch it is possible to index all attributes of [Classification Store](https://github.com/pimcore/pimcore/blob/11.x/doc/05_Objects/01_Object_Classes/01_Data_Types/15_Classification_Store.md) 
+With elasticsearch it is possible to index all attributes of [Classification Store](https://github.com/open-dxp/opendxp/blob/1.x/doc/05_Objects/01_Object_Classes/01_Data_Types/15_Classification_Store.md) 
 data without defining an attribute for each single classification store key.   
 
 To do so, follow these steps
 
 ### 1) Index Definition
 
-Pimcore ships with a special interpreter to load all classification store attributes to the index. To use this interpreter
+OpenDxp ships with a special interpreter to load all classification store attributes to the index. To use this interpreter
 add following attribute configuration into your index definition:  
 
 ```yml
 some_field_name:
     fieldname: 'my_classification_store_field_name'
-    interpreter: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\DefaultClassificationStore
+    interpreter: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\DefaultClassificationStore
     filtergroup: classificationstore
     options:
         mapping:
@@ -72,7 +72,7 @@ with elasticsearch, it is not activated by default. Following steps are necessar
 
 ```yml
 FilteSelectClsStoreAttributes:
-    filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\ElasticSearch\SelectClassificationStoreAttributes
+    filter_type_id: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\ElasticSearch\SelectClassificationStoreAttributes
     template: 'product/filters/nested_attributes.html.twig'
 ```
 

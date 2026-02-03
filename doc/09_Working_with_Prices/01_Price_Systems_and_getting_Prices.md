@@ -11,9 +11,9 @@ In terms of product availabilities and stocks, the very similar concept of Avail
 
 ## Configuration of Price Systems
 
-A price system is a class implementing `Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceSystemInterface` which is defined
-as service and registered with a name in the `pimcore_ecommerce_framework.price_systems` configuration tree. The framework
-already ships with a number of [concrete implementations](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/PriceSystem)
+A price system is a class implementing `OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceSystemInterface` which is defined
+as service and registered with a name in the `opendxp_ecommerce_framework.price_systems` configuration tree. The framework
+already ships with a number of [concrete implementations](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/PriceSystem)
 which you can use as starting point.
 
 There are 3 places where the configuration of Price Systems takes place: 
@@ -29,7 +29,7 @@ The product class returns the name of a price system:
 ```php
 <?php
 
-class MyProduct implements \Pimcore\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface
+class MyProduct implements \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface
 {
     public function getPriceSystemName(): string
     {
@@ -56,7 +56,7 @@ services:
     # this reuses a core price system, but defines a new service which sets custom options
     # on the price system (a custom price attribute). available options vary by implementation
     app.custom_attribute_price_system:
-        class: Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem
+        class: OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem
         arguments:
             $options:
                 attribute_name: customPriceField
@@ -66,12 +66,12 @@ services:
 The `price_systems` configuration maps names to service IDs:
 
 ```
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     # defines 3 price systems
     price_systems:
         # the attribute price system is already defined in core price_systems.yaml service definition
         default:
-            id: Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem
+            id: OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem
        
         foo:
             id: App\Ecommerce\PriceSystem\CustomPriceSystem
@@ -81,15 +81,15 @@ pimcore_ecommerce_framework:
 
 ```
 
-> The simplest price system is [`Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem`](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/PriceSystem/AttributePriceSystem.php) 
+> The simplest price system is [`OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\AttributePriceSystem`](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/PriceSystem/AttributePriceSystem.php) 
 > which reads the price from an attribute of the product object. For implementing custom price systems have a look at method comments 
-> of [`\Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceSystemInterface`](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/PriceSystem/PriceSystemInterface.php) 
+> of [`\OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceSystemInterface`](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/PriceSystem/PriceSystemInterface.php) 
 > and the implementations of the existing price systems. 
 
 
 ## Getting and Printing Prices
 Once the Price Systems are set up correctly, working with prices should be quite easy. Each product has the method 
-`getOSPrice()` which returns a `\Pimcore\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface` object with the price of 
+`getOSPrice()` which returns a `\OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInterface` object with the price of 
 the product. 
 
 Internally the product gets its Price System and starts the price calculation to get the price. 

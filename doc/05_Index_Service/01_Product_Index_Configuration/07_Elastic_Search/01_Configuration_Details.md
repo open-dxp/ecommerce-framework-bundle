@@ -16,18 +16,18 @@ also [elasticsearch Docs](https://www.elastic.co/guide/en/elasticsearch/client/p
 
 #### `es_client_name` (for Elasticsearch 8 only)
 Elasticsearch 8 client configuration takes place via 
-[Pimcore Elasticsearch Client Bundle](https://github.com/pimcore/elasticsearch-client) and has two parts.
+[OpenDxp Elasticsearch Client Bundle](https://github.com/open-dxp/elasticsearch-client) and has two parts.
 
 1) Configuring an elasticsearch client in separate configuration
 ```yaml
 # Configure an elasticsearch client 
-pimcore_elasticsearch_client:
+opendxp_elasticsearch_client:
     es_clients:
         default:
             hosts: ['elastic:9200']
             username: 'elastic'
             password: 'somethingsecret'
-            logger_channel: 'pimcore.elasticsearch'    
+            logger_channel: 'opendxp.elasticsearch'    
 ```
 
 2) Define the client name to be used by an elasticsearch tenant. This will be done via the `es_client_name` configuration 
@@ -39,12 +39,12 @@ For details see [Synonyms](./02_Synonyms.md).
 
 #### Sample Config
 ```yml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     index_service:
         tenants:
             MyEsTenant:
-                worker_id: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Worker\ElasticSearch\DefaultElasticSearch8
-                config_id: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Config\ElasticSearch
+                worker_id: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\ElasticSearch\DefaultElasticSearch8
+                config_id: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\ElasticSearch
                 
                 config_options:
                     client_config:
@@ -85,7 +85,7 @@ pimcore_ecommerce_framework:
 The type of the data attributes needs to be set to elasticsearch data types..
 
 ```yml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     index_service:
         tenants:
             MyEsTenant:
@@ -102,7 +102,7 @@ You can also skip the `type` and `mapping`, then ES will try to create dynamic m
 
 ```yml
 
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     index_service:
         tenants:
             MyEsTenant:

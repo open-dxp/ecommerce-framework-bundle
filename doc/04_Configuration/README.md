@@ -1,25 +1,25 @@
 # Configuration
 
 The E-Commerce Framework is implemented as semantic bundle configuration which means that you can configure the framework
-in any of the loaded config files (e.g. `/config/config.yaml` or `*Bundle/Resources/config/pimcore/config.yaml`) by
-adding configuration to the `pimcore_ecommerce_framework` node.
+in any of the loaded config files (e.g. `/config/config.yaml` or `*Bundle/Resources/config/opendxp/config.yaml`) by
+adding configuration to the `opendxp_ecommerce_framework` node.
 
 The configuration is built upon the [Symfony Config Component](https://symfony.com/doc/current/components/config.html) and
 defines a well-known configuration tree which is validated against a defined configuration structure. While configuring
-the framework you'll get instant feedback on configuration errors. As Pimcore defines a standard configuration for the 
+the framework you'll get instant feedback on configuration errors. As OpenDxp defines a standard configuration for the 
 E-Commerce Framework, your custom configuration will be merged into the standard configuration. You can dump the final
 (merged, validated and normalized) configuration at any time with the following command:
 
-    $ bin/console debug:config pimcore_ecommerce_framework 
+    $ bin/console debug:config opendxp_ecommerce_framework 
     
-A reference of available configuration entries can be found on [PimcoreEcommerceFrameworkBundle Configuration Reference](./01_PimcoreEcommerceFrameworkBundle_Configuration_Reference.md).
+A reference of available configuration entries can be found on [OpenDxpEcommerceFrameworkBundle Configuration Reference](./01_OpenDxpEcommerceFrameworkBundle_Configuration_Reference.md).
 
 As the E-Commerce Framework makes heavy use of Symfony service definitions and you'll need to reference IDs of custom
 services in the configuration it's advised that you are comfortable to work with [Symfony's Service Container](https://symfony.com/doc/current/service_container.html#creating-configuring-services-in-the-container]). 
 
 ## Tenant support and `_defaults` sections
 
-As certain components of the E-Commerce Framework support different tenants, Pimcore adds a way to specify settings
+As certain components of the E-Commerce Framework support different tenants, OpenDxp adds a way to specify settings
 which are common to all tenants in a special tenant named `_defaults`. If such a tenant exists, its values will be merged
 into all other tenants and the `_defaults` tenant will be removed afterwards. The logic described below applies to all 
 components supporting tenants.
@@ -27,7 +27,7 @@ components supporting tenants.
 As example, a simple `cart_manager` configuration section which defines a `default` and a `noShipping` tenant:  
 
 ```yaml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     cart_manager:
         tenants:
             # _defaults will be automatically merged into every tenant and removed afterwards
@@ -55,7 +55,7 @@ In addition to the `_defaults` tenant, you can define additional tenants startin
 of [YAML inheritance](https://learnxinyminutes.com/docs/yaml/).
 
 ```yaml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     cart_manager:
         tenants:
             _defaults_foo:
@@ -81,14 +81,14 @@ completely free how to merge common configuration entries.
 
 When configuring tenant specific services, there are multiple configuration entries demanding a service ID as configuration
 value. This means, the system expects the configured value to be available as service definition on the container. You can
-read through the service definitions defined in [PimcoreEcommerceFrameworkBundle](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/Resources/config)
+read through the service definitions defined in [OpenDxpEcommerceFrameworkBundle](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/Resources/config)
 to get an insight of default e-commerce services.
 
 As an example let's take a look at a price system configuration:
 
 ```yaml
 # when loading the "default" price system, use a service named "App\Ecommerce\PriceSystem\CustomPriceSystem" 
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     price_systems:
         default:
             # price system defined and configured as container service
@@ -114,16 +114,16 @@ as getting `App\Ecommerce\PriceSystem\CustomPriceSystem` directly from the conta
 Now let's take a look at another example handling tenants:
 
 ```yaml
-pimcore_ecommerce_framework:
+opendxp_ecommerce_framework:
     order_manager:
         tenants:
             default:
-                order_manager_id: Pimcore\Bundle\EcommerceFrameworkBundle\OrderManager\OrderManager
+                order_manager_id: OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderManager
                 options:
                     # parent_order_folder: /orders/default/%%Y/%%m/%%d # deprecated and discouraged
                     order_parent_path: /orders/default/*Y*/*M*/*D*
             b2b:
-                order_manager_id: Pimcore\Bundle\EcommerceFrameworkBundle\OrderManager\OrderManager
+                order_manager_id: OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderManager
                 options:
                     # parent_order_folder: /orders/b2b/%%Y/%%m/%%d # deprecated and discouraged
                     order_parent_path: /orders/b2b/*Y*/*M*/*D*
@@ -134,9 +134,9 @@ each tenant. In this case it's not possible to just alias the default or the b2b
 we need multiple order manager instances based on this service definition. In this case the framework takes the configured
 service ID as *template* to configure 2 independent child services by utilizing the configured service id as [parent service](https://symfony.com/doc/current/service_container/parent_services.html).
 
-This means, that when you request the `Pimcore\Bundle\EcommerceFrameworkBundle\OrderManager\OrderManager` service from the
+This means, that when you request the `OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderManager` service from the
 container, it would be neither the default nor the b2b tenant. In fact, getting that service directly wouldn't work anyways
-as it is missing dependencies. If you take a look at the [service definition](https://github.com/pimcore/ecommerce-framework-bundle/tree/1.x/src/Resources/config/order_manager.yaml)
+as it is missing dependencies. If you take a look at the [service definition](https://github.com/open-dxp/ecommerce-framework-bundle/tree/1.x/src/Resources/config/order_manager.yaml)
 you can see that the definition is missing the `OrderAgentFactoryInterface` argument which will be resolved and set for each
 tenant specific order manager.
 

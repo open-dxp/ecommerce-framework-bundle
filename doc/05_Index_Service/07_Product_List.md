@@ -2,16 +2,16 @@
 
 ## Working with Product Lists
 The API for getting (and filtering, ...) products out of the *Product Index* are so called Product Lists. They all 
-implement the interface `\Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface` and need to be 
+implement the interface `\OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList\ProductListInterface` and need to be 
 Product Index implementation specific. Detailed method documentation is available in 
-[in-source documentation](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/IndexService/ProductList/ProductListInterface.php). 
+[in-source documentation](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/IndexService/ProductList/ProductListInterface.php). 
 
 For how to get a Product List instance suitable for the current Product Index implementation and filter for products see 
 following code sample: 
 
 ```php
 <?php 
-$list = \Pimcore\Bundle\EcommerceFrameworkBundle\Factory::getInstance()->getIndexService()->getProductListForCurrentTenant();
+$list = \OpenDxp\Bundle\EcommerceFrameworkBundle\Factory::getInstance()->getIndexService()->getProductListForCurrentTenant();
 $list->addCondition("name = 'testproduct'", 'name');
 $list->addRelationCondition('category', "dest IN (1024,1025,1026)");
 $list->setOrder("ASC");
@@ -23,5 +23,5 @@ All filtered attributes need to be in the *Product Index*. The Product List impl
 interfaces and can be used in foreach loops and in combination with `Knp\Paginator`. 
 
 > For logging standard Symfony logging is used. E-Commerce Framework Product Indices log into special channels like
-> `pimcore_ecommerce_indexupdater`, `pimcore_ecommerce_sql`, `pimcore_ecommerce_es`
-> and `pimcore_ecommerce_findologic`. 
+> `opendxp_ecommerce_indexupdater`, `opendxp_ecommerce_sql`, `opendxp_ecommerce_es`
+> and `opendxp_ecommerce_findologic`. 

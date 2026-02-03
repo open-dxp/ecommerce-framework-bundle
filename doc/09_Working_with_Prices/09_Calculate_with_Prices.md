@@ -2,18 +2,18 @@
 
 As floating point numbers (`float`, `double`) are not able to represent numbers exactly (see [here](http://floating-point-gui.de/)
 if you want to know details), and exact numbers are a strict demand to e-commerce applications the E-Commerce Framrwork
-uses [`Decimal`](https://github.com/pimcore/ecommerce-framework-bundle/tree/1.x/src/Type/Decimal.php)
+uses [`Decimal`](https://github.com/open-dxp/ecommerce-framework-bundle/tree/1.x/src/Type/Decimal.php)
 value objects instead of floats to represent prices. These value objects internally store the represented value as integer
 by defining a fixed amount of supported digits (so-called `scale`) after the comma and by multiplying the actual value
-with the given scale on construction. The scale is set to 4 by default, but can be changed globally in the `pimcore_ecommerce_framework.decimal_scale`
+with the given scale on construction. The scale is set to 4 by default, but can be changed globally in the `opendxp_ecommerce_framework.decimal_scale`
 config entry.
 
 An example: Given a scale of 4, a `Decimal` will internally represent a number of `123.45` as `1234500` by calculating
 `123.45 * 10^4 = 1234500`. 
  
 To calculate with these values, the `Decimal` class exposes methods like `add()`, `sub()`, `mul()`, `div()` and others
-to run calculations without having to deal with the internal scale representation. For details see the [Decimal class definition](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/src/Type/Decimal.php)
-and the corresponding [test](https://github.com/pimcore/ecommerce-framework-bundle/blob/1.x/tests/Ecommerce/Type/DecimalTest.php)
+to run calculations without having to deal with the internal scale representation. For details see the [Decimal class definition](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/src/Type/Decimal.php)
+and the corresponding [test](https://github.com/open-dxp/ecommerce-framework-bundle/blob/1.x/tests/Ecommerce/Type/DecimalTest.php)
 which contains a lot of usage examples and describes the `Decimal` behaviour quite well.
 
 > **Important**: The `Decimal` is designed as *immutable* value object. Every operation yields a *new* instance of a `Decimal`
@@ -29,7 +29,7 @@ A usage example:
 ```php
 <?php
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 
 $a = Decimal::create(10);
 $b = Decimal::create(20);
@@ -76,7 +76,7 @@ You can influence how rounding is applied by specifying the `$roundingMode` para
 ```
 <?php
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 
 var_dump(Decimal::create('123.55555', 4, PHP_ROUND_HALF_DOWN)->asString()); // 123.5555
 var_dump(Decimal::create('123.55555', 4, PHP_ROUND_HALF_UP)->asString());   // 123.5556
@@ -87,7 +87,7 @@ Please be aware that as rounding is applied only when exceeding the scale, the f
 ```
 <?php
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 
 // supported by scale -> 1.9999
 var_dump(Decimal::create('1.9999')->asString());
@@ -106,7 +106,7 @@ tax or discount calculations, reports), you're free to calculate at a higher sca
 ```php
 <?php
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 
 // operate at a high scale supporting 8 digits after the comma
 $a = Decimal::create(10, 8);
