@@ -8,16 +8,16 @@ declare(strict_types=1);
  * - scriptPath [input]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
-class FilterSelectFromMultiSelect extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType
+class FilterSelectFromMultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType
 {
 protected string $type = "FilterSelectFromMultiSelect";
 protected ?string $label;
-protected ?\Pimcore\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection $field;
+protected ?\OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection $field;
 protected ?string $scriptPath;
 
 
@@ -28,7 +28,7 @@ protected ?string $scriptPath;
 public function getLabel(): ?string
 {
 	$data = $this->label;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -49,12 +49,12 @@ public function setLabel(?string $label): static
 
 /**
 * Get field - Field
-* @return \Pimcore\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection|null
+* @return \OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection|null
 */
-public function getField(): ?\Pimcore\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection
+public function getField(): ?\OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection
 {
 	$data = $this->field;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -63,10 +63,10 @@ public function getField(): ?\Pimcore\Bundle\EcommerceFrameworkBundle\CoreExtens
 
 /**
 * Set field - Field
-* @param \Pimcore\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection|null $field
+* @param \OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection|null $field
 * @return $this
 */
-public function setField(?\Pimcore\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection $field): static
+public function setField(?\OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection $field): static
 {
 	$this->field = $field;
 
@@ -80,7 +80,7 @@ public function setField(?\Pimcore\Bundle\EcommerceFrameworkBundle\CoreExtension
 public function getScriptPath(): ?string
 {
 	$data = $this->scriptPath;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 

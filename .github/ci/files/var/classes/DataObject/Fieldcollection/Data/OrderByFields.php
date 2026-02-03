@@ -7,10 +7,10 @@ declare(strict_types=1);
  * - direction [select]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
 class OrderByFields extends DataObject\Fieldcollection\Data\AbstractData
 {
@@ -26,7 +26,7 @@ protected ?string $direction;
 public function getField(): ?string
 {
 	$data = $this->field;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -52,7 +52,7 @@ public function setField(?string $field): static
 public function getDirection(): ?string
 {
 	$data = $this->direction;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 

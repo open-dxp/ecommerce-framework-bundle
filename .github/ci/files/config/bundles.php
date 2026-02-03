@@ -1,6 +1,6 @@
 <?php
 
 return [
-    "Pimcore\\Bundle\\AdminBundle\\PimcoreAdminBundle" => ['all' => true],
-    "Pimcore\\Bundle\\EcommerceFrameworkBundle\\PimcoreEcommerceFrameworkBundle" =>  ['all' => true],
+    OpenDxp\Bundle\AdminBundle\OpenDxpAdminBundle::class                           => ['all' => true],
+    OpenDxp\Bundle\EcommerceFrameworkBundle\OpenDxpEcommerceFrameworkBundle::class => ['all' => true],
 ];

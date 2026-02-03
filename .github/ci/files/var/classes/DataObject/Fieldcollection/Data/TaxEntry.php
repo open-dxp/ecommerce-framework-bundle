@@ -8,10 +8,10 @@ declare(strict_types=1);
  * - percent [numeric]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
 class TaxEntry extends DataObject\Fieldcollection\Data\AbstractData
 {
@@ -22,15 +22,15 @@ protected ?float $percent;
 
 /**
 * Get localizedfields -
-* @return \Pimcore\Model\DataObject\Localizedfield|null
+* @return \OpenDxp\Model\DataObject\Localizedfield|null
 */
-public function getLocalizedfields(): ?\Pimcore\Model\DataObject\Localizedfield
+public function getLocalizedfields(): ?\OpenDxp\Model\DataObject\Localizedfield
 {
 	$container = $this;
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Localizedfields $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Localizedfields $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("localizedfields");
 	$data = $fd->preGetData($container);
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -43,7 +43,7 @@ public function getLocalizedfields(): ?\Pimcore\Model\DataObject\Localizedfield
 public function getName($language = null): ?string
 {
 	$data = $this->getLocalizedfields()->getLocalizedValue("name", $language);
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -52,15 +52,15 @@ public function getName($language = null): ?string
 
 /**
 * Set localizedfields -
-* @param \Pimcore\Model\DataObject\Localizedfield|null $localizedfields
+* @param \OpenDxp\Model\DataObject\Localizedfield|null $localizedfields
 * @return $this
 */
-public function setLocalizedfields(?\Pimcore\Model\DataObject\Localizedfield $localizedfields): static
+public function setLocalizedfields(?\OpenDxp\Model\DataObject\Localizedfield $localizedfields): static
 {
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getLocalizedfields();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$this->markFieldDirty("localizedfields", true);
 	$this->localizedfields = $localizedfields;
 
@@ -87,7 +87,7 @@ public function setName (?string $name, $language = null): static
 public function getPercent(): ?float
 {
 	$data = $this->percent;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -101,7 +101,7 @@ public function getPercent(): ?float
 */
 public function setPercent(?float $percent): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("percent");
 	$this->percent = $fd->preSetData($this, $percent);
 	return $this;

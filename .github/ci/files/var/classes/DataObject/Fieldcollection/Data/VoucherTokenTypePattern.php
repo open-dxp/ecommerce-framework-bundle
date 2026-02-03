@@ -13,12 +13,12 @@ declare(strict_types=1);
  * - onlyTokenPerCart [checkbox]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
-class VoucherTokenTypePattern extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractVoucherTokenType
+class VoucherTokenTypePattern extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractVoucherTokenType
 {
 protected string $type = "VoucherTokenTypePattern";
 protected ?int $count;
@@ -38,7 +38,7 @@ protected ?bool $onlyTokenPerCart;
 public function getCount(): ?int
 {
 	$data = $this->count;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -52,7 +52,7 @@ public function getCount(): ?int
 */
 public function setCount(?int $count): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("count");
 	$this->count = $fd->preSetData($this, $count);
 	return $this;
@@ -65,7 +65,7 @@ public function setCount(?int $count): static
 public function getPrefix(): ?string
 {
 	$data = $this->prefix;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -91,7 +91,7 @@ public function setPrefix(?string $prefix): static
 public function getLength(): ?int
 {
 	$data = $this->length;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -105,7 +105,7 @@ public function getLength(): ?int
 */
 public function setLength(?int $length): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("length");
 	$this->length = $fd->preSetData($this, $length);
 	return $this;
@@ -118,7 +118,7 @@ public function setLength(?int $length): static
 public function getCharacterType(): ?string
 {
 	$data = $this->characterType;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -144,7 +144,7 @@ public function setCharacterType(?string $characterType): static
 public function getSeparator(): ?string
 {
 	$data = $this->separator;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -170,7 +170,7 @@ public function setSeparator(?string $separator): static
 public function getSeparatorCount(): ?int
 {
 	$data = $this->separatorCount;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -184,7 +184,7 @@ public function getSeparatorCount(): ?int
 */
 public function setSeparatorCount(?int $separatorCount): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("separatorCount");
 	$this->separatorCount = $fd->preSetData($this, $separatorCount);
 	return $this;
@@ -197,7 +197,7 @@ public function setSeparatorCount(?int $separatorCount): static
 public function getAllowOncePerCart(): ?bool
 {
 	$data = $this->allowOncePerCart;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -223,7 +223,7 @@ public function setAllowOncePerCart(?bool $allowOncePerCart): static
 public function getOnlyTokenPerCart(): ?bool
 {
 	$data = $this->onlyTokenPerCart;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 

@@ -4,12 +4,12 @@ parameters:
         - src
     bootstrapFiles:
         - phpstan-bootstrap.php
-
-    checkGenericClassInNonGenericObjectType: false
-    checkMissingIterableValueType: false
-
     ignoreErrors:
-        - '~^Unsafe usage of new static\(\)~'
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+
+    symfony:
+        containerXmlPath: var/cache/test/App_KernelTestDebugContainer.xml
 
 includes:
     - vendor/phpstan/phpstan-symfony/extension.neon

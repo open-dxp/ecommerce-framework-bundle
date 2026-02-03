@@ -1,9 +1,9 @@
 <?php
 
-namespace Pimcore\Model\DataObject\OnlineShopOrderItem;
+namespace OpenDxp\Model\DataObject\OnlineShopOrderItem;
 
-use Pimcore\Model;
-use Pimcore\Model\DataObject;
+use OpenDxp\Model;
+use OpenDxp\Model\DataObject;
 
 /**
  * @method DataObject\OnlineShopOrderItem|false current()

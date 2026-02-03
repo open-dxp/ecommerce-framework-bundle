@@ -10,17 +10,17 @@ declare(strict_types=1);
  * - tokenSettings [fieldcollections]
  */
 
-namespace Pimcore\Model\DataObject;
+namespace OpenDxp\Model\DataObject;
 
-use Pimcore\Model\DataObject\Exception\InheritanceParentNotFoundException;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject\Exception\InheritanceParentNotFoundException;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
 /**
-* @method static \Pimcore\Model\DataObject\OnlineShopVoucherSeries\Listing getList(array $config = [])
-* @method static \Pimcore\Model\DataObject\OnlineShopVoucherSeries\Listing|\Pimcore\Model\DataObject\OnlineShopVoucherSeries|null getByName(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopVoucherSeries\Listing getList(array $config = [])
+* @method static \OpenDxp\Model\DataObject\OnlineShopVoucherSeries\Listing|\OpenDxp\Model\DataObject\OnlineShopVoucherSeries|null getByName(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 */
 
-class OnlineShopVoucherSeries extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractVoucherSeries
+class OnlineShopVoucherSeries extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractVoucherSeries
 {
 protected $classId = "EF_OSVS";
 protected $className = "OnlineShopVoucherSeries";
@@ -41,7 +41,7 @@ public static function create(array $values = []): static
 */
 public function getName(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("name");
 		if ($preValue !== null) {
 			return $preValue;
@@ -50,7 +50,7 @@ public function getName(): ?string
 
 	$data = $this->name;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -71,7 +71,7 @@ public function setName(?string $name): static
 
     public function getTokenSettings(): ?Fieldcollection
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("tokenSettings");
 		if ($preValue !== null) {
 			return $preValue;
@@ -84,12 +84,12 @@ public function setName(?string $name): static
 
 /**
 * Set tokenSettings - Token Settings
-* @param \Pimcore\Model\DataObject\Fieldcollection|null $tokenSettings
+* @param \OpenDxp\Model\DataObject\Fieldcollection|null $tokenSettings
 * @return $this
 */
-public function setTokenSettings(?\Pimcore\Model\DataObject\Fieldcollection $tokenSettings): static
+public function setTokenSettings(?\OpenDxp\Model\DataObject\Fieldcollection $tokenSettings): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
 	$fd = $this->getClass()->getFieldDefinition("tokenSettings");
 	$this->tokenSettings = $fd->preSetData($this, $tokenSettings);
 	return $this;

@@ -46,50 +46,50 @@ declare(strict_types=1);
  * - customized [objectbricks]
  */
 
-namespace Pimcore\Model\DataObject;
+namespace OpenDxp\Model\DataObject;
 
-use Pimcore\Model\DataObject\Exception\InheritanceParentNotFoundException;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
-use Pimcore\Model\Element\AbstractElement;
+use OpenDxp\Model\DataObject\Exception\InheritanceParentNotFoundException;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\Element\AbstractElement;
 
 /**
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing getList(array $config = [])
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByOrdernumber(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByOrderState(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByOrderdate(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByItems(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByComment(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerOrderData(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByVoucherTokens(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByGiftItems(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getBySubTotalNetPrice(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getBySubTotalPrice(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByTotalNetPrice(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByTotalPrice(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCurrency(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCartId(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getBySuccessorOrder(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCartHash(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomer(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerFirstname(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerLastname(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerCompany(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerStreet(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerZip(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerCity(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerCountry(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByCustomerEmail(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByDeliveryFirstname(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByDeliveryLastname(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByDeliveryCompany(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByDeliveryStreet(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByDeliveryZip(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByDeliveryCity(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByDeliveryCountry(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\OnlineShopOrder\Listing|\Pimcore\Model\DataObject\OnlineShopOrder|null getByPaymentReference(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing getList(array $config = [])
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByOrdernumber(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByOrderState(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByOrderdate(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByItems(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByComment(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerOrderData(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByVoucherTokens(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByGiftItems(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getBySubTotalNetPrice(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getBySubTotalPrice(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByTotalNetPrice(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByTotalPrice(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCurrency(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCartId(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getBySuccessorOrder(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCartHash(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomer(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerFirstname(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerLastname(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerCompany(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerStreet(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerZip(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerCity(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerCountry(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByCustomerEmail(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByDeliveryFirstname(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByDeliveryLastname(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByDeliveryCompany(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByDeliveryStreet(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByDeliveryZip(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByDeliveryCity(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByDeliveryCountry(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \OpenDxp\Model\DataObject\OnlineShopOrder\Listing|\OpenDxp\Model\DataObject\OnlineShopOrder|null getByPaymentReference(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 */
 
-class OnlineShopOrder extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder
+class OnlineShopOrder extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder
 {
 protected $classId = "EF_OSO";
 protected $className = "OnlineShopOrder";
@@ -109,9 +109,9 @@ protected ?string $totalPrice;
 protected array $taxInfo;
 protected ?string $currency;
 protected ?string $cartId;
-protected \Pimcore\Model\Element\AbstractElement|null|OnlineShopOrder $successorOrder;
+protected \OpenDxp\Model\Element\AbstractElement|null|OnlineShopOrder $successorOrder;
 protected ?int $cartHash;
-protected \Pimcore\Model\Element\AbstractElement|Customer|null $customer;
+protected \OpenDxp\Model\Element\AbstractElement|Customer|null $customer;
 protected ?string $customerFirstname;
 protected ?string $customerLastname;
 protected ?string $customerCompany;
@@ -146,7 +146,7 @@ public static function create(array $values = []): static
 */
 public function getOrdernumber(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("ordernumber");
 		if ($preValue !== null) {
 			return $preValue;
@@ -155,7 +155,7 @@ public function getOrdernumber(): ?string
 
 	$data = $this->ordernumber;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -180,7 +180,7 @@ public function setOrdernumber(?string $ordernumber): static
 */
 public function getOrderState(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("orderState");
 		if ($preValue !== null) {
 			return $preValue;
@@ -189,7 +189,7 @@ public function getOrderState(): ?string
 
 	$data = $this->orderState;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -214,7 +214,7 @@ public function setOrderState(?string $orderState): static
 */
 public function getOrderdate(): ?\Carbon\Carbon
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("orderdate");
 		if ($preValue !== null) {
 			return $preValue;
@@ -223,7 +223,7 @@ public function getOrderdate(): ?\Carbon\Carbon
 
 	$data = $this->orderdate;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -244,11 +244,11 @@ public function setOrderdate(?\Carbon\Carbon $orderdate): static
 
 /**
 * Get items - Items
-* @return \Pimcore\Model\DataObject\OnlineShopOrderItem[]
+* @return \OpenDxp\Model\DataObject\OnlineShopOrderItem[]
 */
 public function getItems(): array
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("items");
 		if ($preValue !== null) {
 			return $preValue;
@@ -257,7 +257,7 @@ public function getItems(): array
 
 	$data = $this->getClass()->getFieldDefinition("items")->preGetData($this);
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -266,17 +266,17 @@ public function getItems(): array
 
 /**
 * Set items - Items
-* @param \Pimcore\Model\DataObject\OnlineShopOrderItem[] $items
+* @param \OpenDxp\Model\DataObject\OnlineShopOrderItem[] $items
 * @return $this
 */
 public function setItems(?array $items): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
 	$fd = $this->getClass()->getFieldDefinition("items");
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getItems();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$isEqual = $fd->isEqual($currentData, $items);
 	if (!$isEqual) {
 		$this->markFieldDirty("items", true);
@@ -291,7 +291,7 @@ public function setItems(?array $items): static
 */
 public function getComment(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("comment");
 		if ($preValue !== null) {
 			return $preValue;
@@ -300,7 +300,7 @@ public function getComment(): ?string
 
 	$data = $this->comment;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -325,7 +325,7 @@ public function setComment(?string $comment): static
 */
 public function getCustomerOrderData(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerOrderData");
 		if ($preValue !== null) {
 			return $preValue;
@@ -334,7 +334,7 @@ public function getCustomerOrderData(): ?string
 
 	$data = $this->customerOrderData;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -355,11 +355,11 @@ public function setCustomerOrderData(?string $customerOrderData): static
 
 /**
 * Get voucherTokens - Voucher Tokens
-* @return \Pimcore\Model\DataObject\OnlineShopVoucherToken[]
+* @return \OpenDxp\Model\DataObject\OnlineShopVoucherToken[]
 */
 public function getVoucherTokens(): array
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("voucherTokens");
 		if ($preValue !== null) {
 			return $preValue;
@@ -368,7 +368,7 @@ public function getVoucherTokens(): array
 
 	$data = $this->getClass()->getFieldDefinition("voucherTokens")->preGetData($this);
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -377,17 +377,17 @@ public function getVoucherTokens(): array
 
 /**
 * Set voucherTokens - Voucher Tokens
-* @param \Pimcore\Model\DataObject\OnlineShopVoucherToken[] $voucherTokens
+* @param \OpenDxp\Model\DataObject\OnlineShopVoucherToken[] $voucherTokens
 * @return $this
 */
 public function setVoucherTokens(?array $voucherTokens): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
 	$fd = $this->getClass()->getFieldDefinition("voucherTokens");
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getVoucherTokens();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$isEqual = $fd->isEqual($currentData, $voucherTokens);
 	if (!$isEqual) {
 		$this->markFieldDirty("voucherTokens", true);
@@ -398,11 +398,11 @@ public function setVoucherTokens(?array $voucherTokens): static
 
 /**
 * Get giftItems - Gift Items
-* @return \Pimcore\Model\DataObject\OnlineShopOrderItem[]
+* @return \OpenDxp\Model\DataObject\OnlineShopOrderItem[]
 */
 public function getGiftItems(): array
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("giftItems");
 		if ($preValue !== null) {
 			return $preValue;
@@ -411,7 +411,7 @@ public function getGiftItems(): array
 
 	$data = $this->getClass()->getFieldDefinition("giftItems")->preGetData($this);
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -420,17 +420,17 @@ public function getGiftItems(): array
 
 /**
 * Set giftItems - Gift Items
-* @param \Pimcore\Model\DataObject\OnlineShopOrderItem[] $giftItems
+* @param \OpenDxp\Model\DataObject\OnlineShopOrderItem[] $giftItems
 * @return $this
 */
 public function setGiftItems(?array $giftItems): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
 	$fd = $this->getClass()->getFieldDefinition("giftItems");
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getGiftItems();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$isEqual = $fd->isEqual($currentData, $giftItems);
 	if (!$isEqual) {
 		$this->markFieldDirty("giftItems", true);
@@ -441,7 +441,7 @@ public function setGiftItems(?array $giftItems): static
 
     public function getPriceModifications(): ?Fieldcollection
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("priceModifications");
 		if ($preValue !== null) {
 			return $preValue;
@@ -454,12 +454,12 @@ public function setGiftItems(?array $giftItems): static
 
 /**
 * Set priceModifications - PriceModifications
-* @param \Pimcore\Model\DataObject\Fieldcollection|null $priceModifications
+* @param \OpenDxp\Model\DataObject\Fieldcollection|null $priceModifications
 * @return $this
 */
-public function setPriceModifications(?\Pimcore\Model\DataObject\Fieldcollection $priceModifications): static
+public function setPriceModifications(?\OpenDxp\Model\DataObject\Fieldcollection $priceModifications): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
 	$fd = $this->getClass()->getFieldDefinition("priceModifications");
 	$this->priceModifications = $fd->preSetData($this, $priceModifications);
 	return $this;
@@ -471,7 +471,7 @@ public function setPriceModifications(?\Pimcore\Model\DataObject\Fieldcollection
 */
 public function getSubTotalNetPrice(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("subTotalNetPrice");
 		if ($preValue !== null) {
 			return $preValue;
@@ -480,7 +480,7 @@ public function getSubTotalNetPrice(): ?string
 
 	$data = $this->subTotalNetPrice;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -494,7 +494,7 @@ public function getSubTotalNetPrice(): ?string
 */
 public function setSubTotalNetPrice(?string $subTotalNetPrice): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getClass()->getFieldDefinition("subTotalNetPrice");
 	$this->subTotalNetPrice = $fd->preSetData($this, $subTotalNetPrice);
 	return $this;
@@ -506,7 +506,7 @@ public function setSubTotalNetPrice(?string $subTotalNetPrice): static
 */
 public function getSubTotalPrice(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("subTotalPrice");
 		if ($preValue !== null) {
 			return $preValue;
@@ -515,7 +515,7 @@ public function getSubTotalPrice(): ?string
 
 	$data = $this->subTotalPrice;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -529,7 +529,7 @@ public function getSubTotalPrice(): ?string
 */
 public function setSubTotalPrice(?string $subTotalPrice): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getClass()->getFieldDefinition("subTotalPrice");
 	$this->subTotalPrice = $fd->preSetData($this, $subTotalPrice);
 	return $this;
@@ -541,7 +541,7 @@ public function setSubTotalPrice(?string $subTotalPrice): static
 */
 public function getTotalNetPrice(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("totalNetPrice");
 		if ($preValue !== null) {
 			return $preValue;
@@ -550,7 +550,7 @@ public function getTotalNetPrice(): ?string
 
 	$data = $this->totalNetPrice;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -564,7 +564,7 @@ public function getTotalNetPrice(): ?string
 */
 public function setTotalNetPrice(?string $totalNetPrice): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getClass()->getFieldDefinition("totalNetPrice");
 	$this->totalNetPrice = $fd->preSetData($this, $totalNetPrice);
 	return $this;
@@ -576,7 +576,7 @@ public function setTotalNetPrice(?string $totalNetPrice): static
 */
 public function getTotalPrice(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("totalPrice");
 		if ($preValue !== null) {
 			return $preValue;
@@ -585,7 +585,7 @@ public function getTotalPrice(): ?string
 
 	$data = $this->totalPrice;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -599,7 +599,7 @@ public function getTotalPrice(): ?string
 */
 public function setTotalPrice(?string $totalPrice): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getClass()->getFieldDefinition("totalPrice");
 	$this->totalPrice = $fd->preSetData($this, $totalPrice);
 	return $this;
@@ -611,7 +611,7 @@ public function setTotalPrice(?string $totalPrice): static
 */
 public function getTaxInfo(): array
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("taxInfo");
 		if ($preValue !== null) {
 			return $preValue;
@@ -620,7 +620,7 @@ public function getTaxInfo(): array
 
 	$data = $this->taxInfo;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain() ?? [];
 	}
 
@@ -645,7 +645,7 @@ public function setTaxInfo(?array $taxInfo): static
 */
 public function getCurrency(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("currency");
 		if ($preValue !== null) {
 			return $preValue;
@@ -654,7 +654,7 @@ public function getCurrency(): ?string
 
 	$data = $this->currency;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -679,7 +679,7 @@ public function setCurrency(?string $currency): static
 */
 public function getCartId(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("cartId");
 		if ($preValue !== null) {
 			return $preValue;
@@ -688,7 +688,7 @@ public function getCartId(): ?string
 
 	$data = $this->cartId;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -709,11 +709,11 @@ public function setCartId(?string $cartId): static
 
 /**
 * Get successorOrder - Successor Order
-* @return OnlineShopOrder|\Pimcore\Model\Element\AbstractElement|\Pimcore\Model\Element\ElementInterface|null
+* @return OnlineShopOrder|\OpenDxp\Model\Element\AbstractElement|\OpenDxp\Model\Element\ElementInterface|null
 */
-public function getSuccessorOrder(): OnlineShopOrder|\Pimcore\Model\Element\ElementInterface|\Pimcore\Model\Element\AbstractElement|null
+public function getSuccessorOrder(): OnlineShopOrder|\OpenDxp\Model\Element\ElementInterface|\OpenDxp\Model\Element\AbstractElement|null
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("successorOrder");
 		if ($preValue !== null) {
 			return $preValue;
@@ -722,7 +722,7 @@ public function getSuccessorOrder(): OnlineShopOrder|\Pimcore\Model\Element\Elem
 
 	$data = $this->getClass()->getFieldDefinition("successorOrder")->preGetData($this);
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -731,17 +731,17 @@ public function getSuccessorOrder(): OnlineShopOrder|\Pimcore\Model\Element\Elem
 
 /**
 * Set successorOrder - Successor Order
-* @param \Pimcore\Model\DataObject\OnlineShopOrder|null $successorOrder
+* @param \OpenDxp\Model\DataObject\OnlineShopOrder|null $successorOrder
 * @return $this
 */
-public function setSuccessorOrder(?\Pimcore\Model\Element\AbstractElement $successorOrder): static
+public function setSuccessorOrder(?\OpenDxp\Model\Element\AbstractElement $successorOrder): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
 	$fd = $this->getClass()->getFieldDefinition("successorOrder");
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getSuccessorOrder();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$isEqual = $fd->isEqual($currentData, $successorOrder);
 	if (!$isEqual) {
 		$this->markFieldDirty("successorOrder", true);
@@ -756,7 +756,7 @@ public function setSuccessorOrder(?\Pimcore\Model\Element\AbstractElement $succe
 */
 public function getCartHash(): ?int
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("cartHash");
 		if ($preValue !== null) {
 			return $preValue;
@@ -765,7 +765,7 @@ public function getCartHash(): ?int
 
 	$data = $this->cartHash;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -779,7 +779,7 @@ public function getCartHash(): ?int
 */
 public function setCartHash(?int $cartHash): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getClass()->getFieldDefinition("cartHash");
 	$this->cartHash = $fd->preSetData($this, $cartHash);
 	return $this;
@@ -787,11 +787,11 @@ public function setCartHash(?int $cartHash): static
 
 /**
 * Get customer - Customer
-* @return Customer|\Pimcore\Model\Element\AbstractElement|\Pimcore\Model\Element\ElementInterface|null
+* @return Customer|\OpenDxp\Model\Element\AbstractElement|\OpenDxp\Model\Element\ElementInterface|null
 */
-public function getCustomer(): Customer|\Pimcore\Model\Element\ElementInterface|\Pimcore\Model\Element\AbstractElement|null
+public function getCustomer(): Customer|\OpenDxp\Model\Element\ElementInterface|\OpenDxp\Model\Element\AbstractElement|null
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customer");
 		if ($preValue !== null) {
 			return $preValue;
@@ -800,7 +800,7 @@ public function getCustomer(): Customer|\Pimcore\Model\Element\ElementInterface|
 
 	$data = $this->getClass()->getFieldDefinition("customer")->preGetData($this);
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -809,17 +809,17 @@ public function getCustomer(): Customer|\Pimcore\Model\Element\ElementInterface|
 
 /**
 * Set customer - Customer
-* @param \Pimcore\Model\DataObject\Customer|null $customer
+* @param \OpenDxp\Model\DataObject\Customer|null $customer
 * @return $this
 */
-public function setCustomer(?\Pimcore\Model\Element\AbstractElement $customer): static
+public function setCustomer(?\OpenDxp\Model\Element\AbstractElement $customer): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
 	$fd = $this->getClass()->getFieldDefinition("customer");
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getCustomer();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$isEqual = $fd->isEqual($currentData, $customer);
 	if (!$isEqual) {
 		$this->markFieldDirty("customer", true);
@@ -834,7 +834,7 @@ public function setCustomer(?\Pimcore\Model\Element\AbstractElement $customer): 
 */
 public function getCustomerFirstname(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerFirstname");
 		if ($preValue !== null) {
 			return $preValue;
@@ -843,7 +843,7 @@ public function getCustomerFirstname(): ?string
 
 	$data = $this->customerFirstname;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -868,7 +868,7 @@ public function setCustomerFirstname(?string $customerFirstname): static
 */
 public function getCustomerLastname(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerLastname");
 		if ($preValue !== null) {
 			return $preValue;
@@ -877,7 +877,7 @@ public function getCustomerLastname(): ?string
 
 	$data = $this->customerLastname;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -902,7 +902,7 @@ public function setCustomerLastname(?string $customerLastname): static
 */
 public function getCustomerCompany(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerCompany");
 		if ($preValue !== null) {
 			return $preValue;
@@ -911,7 +911,7 @@ public function getCustomerCompany(): ?string
 
 	$data = $this->customerCompany;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -936,7 +936,7 @@ public function setCustomerCompany(?string $customerCompany): static
 */
 public function getCustomerStreet(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerStreet");
 		if ($preValue !== null) {
 			return $preValue;
@@ -945,7 +945,7 @@ public function getCustomerStreet(): ?string
 
 	$data = $this->customerStreet;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -970,7 +970,7 @@ public function setCustomerStreet(?string $customerStreet): static
 */
 public function getCustomerZip(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerZip");
 		if ($preValue !== null) {
 			return $preValue;
@@ -979,7 +979,7 @@ public function getCustomerZip(): ?string
 
 	$data = $this->customerZip;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1004,7 +1004,7 @@ public function setCustomerZip(?string $customerZip): static
 */
 public function getCustomerCity(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerCity");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1013,7 +1013,7 @@ public function getCustomerCity(): ?string
 
 	$data = $this->customerCity;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1038,7 +1038,7 @@ public function setCustomerCity(?string $customerCity): static
 */
 public function getCustomerCountry(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerCountry");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1047,7 +1047,7 @@ public function getCustomerCountry(): ?string
 
 	$data = $this->customerCountry;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1072,7 +1072,7 @@ public function setCustomerCountry(?string $customerCountry): static
 */
 public function getCustomerEmail(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customerEmail");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1081,7 +1081,7 @@ public function getCustomerEmail(): ?string
 
 	$data = $this->customerEmail;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1106,7 +1106,7 @@ public function setCustomerEmail(?string $customerEmail): static
 */
 public function getDeliveryFirstname(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("deliveryFirstname");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1115,7 +1115,7 @@ public function getDeliveryFirstname(): ?string
 
 	$data = $this->deliveryFirstname;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1140,7 +1140,7 @@ public function setDeliveryFirstname(?string $deliveryFirstname): static
 */
 public function getDeliveryLastname(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("deliveryLastname");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1149,7 +1149,7 @@ public function getDeliveryLastname(): ?string
 
 	$data = $this->deliveryLastname;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1174,7 +1174,7 @@ public function setDeliveryLastname(?string $deliveryLastname): static
 */
 public function getDeliveryCompany(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("deliveryCompany");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1183,7 +1183,7 @@ public function getDeliveryCompany(): ?string
 
 	$data = $this->deliveryCompany;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1208,7 +1208,7 @@ public function setDeliveryCompany(?string $deliveryCompany): static
 */
 public function getDeliveryStreet(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("deliveryStreet");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1217,7 +1217,7 @@ public function getDeliveryStreet(): ?string
 
 	$data = $this->deliveryStreet;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1242,7 +1242,7 @@ public function setDeliveryStreet(?string $deliveryStreet): static
 */
 public function getDeliveryZip(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("deliveryZip");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1251,7 +1251,7 @@ public function getDeliveryZip(): ?string
 
 	$data = $this->deliveryZip;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1276,7 +1276,7 @@ public function setDeliveryZip(?string $deliveryZip): static
 */
 public function getDeliveryCity(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("deliveryCity");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1285,7 +1285,7 @@ public function getDeliveryCity(): ?string
 
 	$data = $this->deliveryCity;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1310,7 +1310,7 @@ public function setDeliveryCity(?string $deliveryCity): static
 */
 public function getDeliveryCountry(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("deliveryCountry");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1319,7 +1319,7 @@ public function getDeliveryCountry(): ?string
 
 	$data = $this->deliveryCountry;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1338,18 +1338,18 @@ public function setDeliveryCountry(?string $deliveryCountry): static
 	return $this;
 }
 
-    public function getPaymentProvider(): ?\Pimcore\Model\DataObject\Objectbrick
+    public function getPaymentProvider(): ?\OpenDxp\Model\DataObject\Objectbrick
 {
 	$data = $this->paymentProvider;
 	if (!$data) {
-		if (\Pimcore\Tool::classExists("\\Pimcore\\Model\\DataObject\\OnlineShopOrder\\PaymentProvider")) {
-			$data = new \Pimcore\Model\DataObject\OnlineShopOrder\PaymentProvider($this, "paymentProvider");
+		if (\OpenDxp\Tool::classExists("\\OpenDxp\\Model\\DataObject\\OnlineShopOrder\\PaymentProvider")) {
+			$data = new \OpenDxp\Model\DataObject\OnlineShopOrder\PaymentProvider($this, "paymentProvider");
 			$this->paymentProvider = $data;
 		} else {
 			return null;
 		}
 	}
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("paymentProvider");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1361,12 +1361,12 @@ public function setDeliveryCountry(?string $deliveryCountry): static
 
 /**
 * Set paymentProvider - Payment Provider
-* @param \Pimcore\Model\DataObject\Objectbrick|null $paymentProvider
+* @param \OpenDxp\Model\DataObject\Objectbrick|null $paymentProvider
 * @return $this
 */
-public function setPaymentProvider(?\Pimcore\Model\DataObject\Objectbrick $paymentProvider): static
+public function setPaymentProvider(?\OpenDxp\Model\DataObject\Objectbrick $paymentProvider): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Objectbricks $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Objectbricks $fd */
 	$fd = $this->getClass()->getFieldDefinition("paymentProvider");
 	$this->paymentProvider = $fd->preSetData($this, $paymentProvider);
 	return $this;
@@ -1374,7 +1374,7 @@ public function setPaymentProvider(?\Pimcore\Model\DataObject\Objectbrick $payme
 
     public function getPaymentInfo(): ?Fieldcollection
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("paymentInfo");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1387,12 +1387,12 @@ public function setPaymentProvider(?\Pimcore\Model\DataObject\Objectbrick $payme
 
 /**
 * Set paymentInfo - Payment Informations
-* @param \Pimcore\Model\DataObject\Fieldcollection|null $paymentInfo
+* @param \OpenDxp\Model\DataObject\Fieldcollection|null $paymentInfo
 * @return $this
 */
-public function setPaymentInfo(?\Pimcore\Model\DataObject\Fieldcollection $paymentInfo): static
+public function setPaymentInfo(?\OpenDxp\Model\DataObject\Fieldcollection $paymentInfo): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
 	$fd = $this->getClass()->getFieldDefinition("paymentInfo");
 	$this->paymentInfo = $fd->preSetData($this, $paymentInfo);
 	return $this;
@@ -1404,7 +1404,7 @@ public function setPaymentInfo(?\Pimcore\Model\DataObject\Fieldcollection $payme
 */
 public function getPaymentReference(): ?string
 {
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("paymentReference");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1413,7 +1413,7 @@ public function getPaymentReference(): ?string
 
 	$data = $this->paymentReference;
 
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -1432,18 +1432,18 @@ public function setPaymentReference(?string $paymentReference): static
 	return $this;
 }
 
-    public function getCustomized(): ?\Pimcore\Model\DataObject\Objectbrick
+    public function getCustomized(): ?\OpenDxp\Model\DataObject\Objectbrick
 {
 	$data = $this->customized;
 	if (!$data) {
-		if (\Pimcore\Tool::classExists("\\Pimcore\\Model\\DataObject\\OnlineShopOrder\\Customized")) {
-			$data = new \Pimcore\Model\DataObject\OnlineShopOrder\Customized($this, "customized");
+		if (\OpenDxp\Tool::classExists("\\OpenDxp\\Model\\DataObject\\OnlineShopOrder\\Customized")) {
+			$data = new \OpenDxp\Model\DataObject\OnlineShopOrder\Customized($this, "customized");
 			$this->customized = $data;
 		} else {
 			return null;
 		}
 	}
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+	if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
 		$preValue = $this->preGetValue("customized");
 		if ($preValue !== null) {
 			return $preValue;
@@ -1455,12 +1455,12 @@ public function setPaymentReference(?string $paymentReference): static
 
 /**
 * Set customized - Customized
-* @param \Pimcore\Model\DataObject\Objectbrick|null $customized
+* @param \OpenDxp\Model\DataObject\Objectbrick|null $customized
 * @return $this
 */
-public function setCustomized(?\Pimcore\Model\DataObject\Objectbrick $customized): static
+public function setCustomized(?\OpenDxp\Model\DataObject\Objectbrick $customized): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Objectbricks $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Objectbricks $fd */
 	$fd = $this->getClass()->getFieldDefinition("customized");
 	$this->customized = $fd->preSetData($this, $customized);
 	return $this;

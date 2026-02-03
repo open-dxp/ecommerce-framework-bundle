@@ -1,9 +1,9 @@
 <?php
 
-namespace Pimcore\Model\DataObject\OnlineShopVoucherSeries;
+namespace OpenDxp\Model\DataObject\OnlineShopVoucherSeries;
 
-use Pimcore\Model;
-use Pimcore\Model\DataObject;
+use OpenDxp\Model;
+use OpenDxp\Model\DataObject;
 
 /**
  * @method DataObject\OnlineShopVoucherSeries|false current()

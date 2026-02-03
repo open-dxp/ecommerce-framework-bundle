@@ -14,7 +14,7 @@
 
 namespace App;
 
-use Pimcore\Kernel as BaseKernel;
+use OpenDxp\Kernel as BaseKernel;
 
 class Kernel extends BaseKernel
 {

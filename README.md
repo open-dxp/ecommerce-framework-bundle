@@ -1,6 +1,6 @@
 # E-Commerce Framework
 
-## Why Pimcore E-Commerce Framework
+## Why OpenDXP E-Commerce Framework
 The e-commerce environment has fundamentally changed and e-commerce projects often face new challenges like: 
  - **complex product structures:** lots of data attributes, complex product relations, configurable product systems, 
     different sources for products
@@ -20,11 +20,11 @@ is not the tool to go for.
 
 We think for these challenges you need...
 - a **framework for developers** to build **outstanding e-commerce solutions for customers**,
-- with a native integration into Pimcore,
+- with a native integration into OpenDXP,
 - with a component based architecture
 - and a strict separation between backend functionality and frontend presentation. 
 
-That is the idea behind the E-Commerce Framework of Pimcore. Like Pimcore itself, it is not a ready made system,
+That is the idea behind the E-Commerce Framework of OpenDXP. Like OpenDXP itself, it is not a ready made system,
 it is a set of tools and functionality to help building e-commerce applications really fast and flexible. 
 
  
@@ -36,9 +36,6 @@ it is a set of tools and functionality to help building e-commerce applications 
 - Pricing Rules and Vouchers
 - Tools for working with and managing Orders
 - Concepts for setting up multi tenant and multi shop solutions
-
-For a first impression have a look at our [Demo](https://demo.pimcore.fun). For more complex solutions
-have a look at our [case studies](https://pimcore.com/en/customers?industry=&capability=618). 
 
 
 ## Working With E-Commerce Framework

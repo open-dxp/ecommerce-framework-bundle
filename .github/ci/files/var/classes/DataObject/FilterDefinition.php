@@ -22,27 +22,27 @@
  * - similarityFields [fieldcollections]
  */
 
-namespace Pimcore\Model\DataObject;
+namespace OpenDxp\Model\DataObject;
 
-use Pimcore\Model\DataObject\Exception\InheritanceParentNotFoundException;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject\Exception\InheritanceParentNotFoundException;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
 /**
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing getList(array $config = [])
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByPageLimit(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByDefaultOrderByInheritance(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByOrderByAsc(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByOrderByDesc(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByAjaxReload(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByInfiniteScroll(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByLimitOnFirstLoad(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByConditionsInheritance(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByFiltersInheritance(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getByCrossSellingCategory(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
- * @method static \Pimcore\Model\DataObject\FilterDefinition\Listing|\Pimcore\Model\DataObject\FilterDefinition|null getBySimilarityFieldsInheritance(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing getList(array $config = [])
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByPageLimit(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByDefaultOrderByInheritance(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByOrderByAsc(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByOrderByDesc(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByAjaxReload(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByInfiniteScroll(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByLimitOnFirstLoad(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByConditionsInheritance(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByFiltersInheritance(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getByCrossSellingCategory(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+ * @method static \OpenDxp\Model\DataObject\FilterDefinition\Listing|\OpenDxp\Model\DataObject\FilterDefinition|null getBySimilarityFieldsInheritance(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
  */
 
-class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinition
+class FilterDefinition extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinition
 {
     public const FIELD_PAGE_LIMIT = 'pageLimit';
     public const FIELD_DEFAULT_ORDER_BY_INHERITANCE = 'defaultOrderByInheritance';
@@ -96,7 +96,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getPageLimit(): ?float
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("pageLimit");
             if ($preValue !== null) {
                 return $preValue;
@@ -105,7 +105,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->pageLimit;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("pageLimit")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("pageLimit")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("pageLimit");
             } catch (InheritanceParentNotFoundException $e) {
@@ -113,7 +113,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -127,7 +127,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function setPageLimit(?float $pageLimit): static
     {
-        /** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+        /** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
         $fd = $this->getClass()->getFieldDefinition("pageLimit");
         $this->pageLimit = $fd->preSetData($this, $pageLimit);
         return $this;
@@ -139,7 +139,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getDefaultOrderByInheritance(): ?string
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("defaultOrderByInheritance");
             if ($preValue !== null) {
                 return $preValue;
@@ -148,7 +148,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->defaultOrderByInheritance;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("defaultOrderByInheritance")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("defaultOrderByInheritance")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("defaultOrderByInheritance");
             } catch (InheritanceParentNotFoundException $e) {
@@ -156,7 +156,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -176,11 +176,11 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
     }
 
     /**
-     * @return \Pimcore\Model\DataObject\Fieldcollection|null
+     * @return \OpenDxp\Model\DataObject\Fieldcollection|null
      */
-    public function getDefaultOrderBy(): ?\Pimcore\Model\DataObject\Fieldcollection
+    public function getDefaultOrderBy(): ?\OpenDxp\Model\DataObject\Fieldcollection
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("defaultOrderBy");
             if ($preValue !== null) {
                 return $preValue;
@@ -193,12 +193,12 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
     /**
      * Set defaultOrderBy - Default OrderBy
-     * @param \Pimcore\Model\DataObject\Fieldcollection|null $defaultOrderBy
+     * @param \OpenDxp\Model\DataObject\Fieldcollection|null $defaultOrderBy
      * @return $this
      */
-    public function setDefaultOrderBy(?\Pimcore\Model\DataObject\Fieldcollection $defaultOrderBy): static
+    public function setDefaultOrderBy(?\OpenDxp\Model\DataObject\Fieldcollection $defaultOrderBy): static
     {
-        /** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
+        /** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
         $fd = $this->getClass()->getFieldDefinition("defaultOrderBy");
         $this->defaultOrderBy = $fd->preSetData($this, $defaultOrderBy);
         return $this;
@@ -210,7 +210,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getOrderByAsc(): ?string
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("orderByAsc");
             if ($preValue !== null) {
                 return $preValue;
@@ -219,7 +219,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->orderByAsc;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("orderByAsc")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("orderByAsc")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("orderByAsc");
             } catch (InheritanceParentNotFoundException $e) {
@@ -227,7 +227,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -252,7 +252,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getOrderByDesc(): ?string
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("orderByDesc");
             if ($preValue !== null) {
                 return $preValue;
@@ -261,7 +261,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->orderByDesc;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("orderByDesc")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("orderByDesc")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("orderByDesc");
             } catch (InheritanceParentNotFoundException $e) {
@@ -269,7 +269,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -294,7 +294,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getAjaxReload(): ?bool
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("ajaxReload");
             if ($preValue !== null) {
                 return $preValue;
@@ -303,7 +303,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->ajaxReload;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("ajaxReload")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("ajaxReload")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("ajaxReload");
             } catch (InheritanceParentNotFoundException $e) {
@@ -311,7 +311,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -336,7 +336,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getInfiniteScroll(): ?bool
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("infiniteScroll");
             if ($preValue !== null) {
                 return $preValue;
@@ -345,7 +345,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->infiniteScroll;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("infiniteScroll")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("infiniteScroll")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("infiniteScroll");
             } catch (InheritanceParentNotFoundException $e) {
@@ -353,7 +353,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -378,7 +378,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getLimitOnFirstLoad(): ?float
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("limitOnFirstLoad");
             if ($preValue !== null) {
                 return $preValue;
@@ -387,7 +387,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->limitOnFirstLoad;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("limitOnFirstLoad")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("limitOnFirstLoad")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("limitOnFirstLoad");
             } catch (InheritanceParentNotFoundException $e) {
@@ -395,7 +395,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -409,7 +409,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function setLimitOnFirstLoad(?float $limitOnFirstLoad): static
     {
-        /** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+        /** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
         $fd = $this->getClass()->getFieldDefinition("limitOnFirstLoad");
         $this->limitOnFirstLoad = $fd->preSetData($this, $limitOnFirstLoad);
         return $this;
@@ -421,7 +421,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getConditionsInheritance(): ?string
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("conditionsInheritance");
             if ($preValue !== null) {
                 return $preValue;
@@ -430,7 +430,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->conditionsInheritance;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("conditionsInheritance")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("conditionsInheritance")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("conditionsInheritance");
             } catch (InheritanceParentNotFoundException $e) {
@@ -438,7 +438,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -458,11 +458,11 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
     }
 
     /**
-     * @return \Pimcore\Model\DataObject\Fieldcollection|null
+     * @return \OpenDxp\Model\DataObject\Fieldcollection|null
      */
-    public function getConditions(): ?\Pimcore\Model\DataObject\Fieldcollection
+    public function getConditions(): ?\OpenDxp\Model\DataObject\Fieldcollection
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("conditions");
             if ($preValue !== null) {
                 return $preValue;
@@ -475,12 +475,12 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
     /**
      * Set conditions - Conditions
-     * @param \Pimcore\Model\DataObject\Fieldcollection|null $conditions
+     * @param \OpenDxp\Model\DataObject\Fieldcollection|null $conditions
      * @return $this
      */
-    public function setConditions(?\Pimcore\Model\DataObject\Fieldcollection $conditions): static
+    public function setConditions(?\OpenDxp\Model\DataObject\Fieldcollection $conditions): static
     {
-        /** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
+        /** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
         $fd = $this->getClass()->getFieldDefinition("conditions");
         $this->conditions = $fd->preSetData($this, $conditions);
         return $this;
@@ -492,7 +492,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getFiltersInheritance(): ?string
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("filtersInheritance");
             if ($preValue !== null) {
                 return $preValue;
@@ -501,7 +501,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->filtersInheritance;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("filtersInheritance")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("filtersInheritance")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("filtersInheritance");
             } catch (InheritanceParentNotFoundException $e) {
@@ -509,7 +509,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -529,11 +529,11 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
     }
 
     /**
-     * @return \Pimcore\Model\DataObject\Fieldcollection|null
+     * @return \OpenDxp\Model\DataObject\Fieldcollection|null
      */
-    public function getFilters(): ?\Pimcore\Model\DataObject\Fieldcollection
+    public function getFilters(): ?\OpenDxp\Model\DataObject\Fieldcollection
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("filters");
             if ($preValue !== null) {
                 return $preValue;
@@ -546,12 +546,12 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
     /**
      * Set filters - Filters
-     * @param \Pimcore\Model\DataObject\Fieldcollection|null $filters
+     * @param \OpenDxp\Model\DataObject\Fieldcollection|null $filters
      * @return $this
      */
-    public function setFilters(?\Pimcore\Model\DataObject\Fieldcollection $filters): static
+    public function setFilters(?\OpenDxp\Model\DataObject\Fieldcollection $filters): static
     {
-        /** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
+        /** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
         $fd = $this->getClass()->getFieldDefinition("filters");
         $this->filters = $fd->preSetData($this, $filters);
         return $this;
@@ -559,11 +559,11 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
     /**
      * Get crossSellingCategory - Base category for recommendations
-     * @return \Pimcore\Model\DataObject\ProductCategory|null
+     * @return \OpenDxp\Model\DataObject\ProductCategory|null
      */
-    public function getCrossSellingCategory(): ?\Pimcore\Model\Element\AbstractElement
+    public function getCrossSellingCategory(): ?\OpenDxp\Model\Element\AbstractElement
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("crossSellingCategory");
             if ($preValue !== null) {
                 return $preValue;
@@ -572,7 +572,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->getClass()->getFieldDefinition("crossSellingCategory")->preGetData($this);
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("crossSellingCategory")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("crossSellingCategory")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("crossSellingCategory");
             } catch (InheritanceParentNotFoundException $e) {
@@ -580,7 +580,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -589,19 +589,19 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
     /**
      * Set crossSellingCategory - Base category for recommendations
-     * @param \Pimcore\Model\DataObject\ProductCategory|null $crossSellingCategory
+     * @param \OpenDxp\Model\DataObject\ProductCategory|null $crossSellingCategory
      * @return $this
      */
-    public function setCrossSellingCategory(?\Pimcore\Model\Element\AbstractElement $crossSellingCategory): static
+    public function setCrossSellingCategory(?\OpenDxp\Model\Element\AbstractElement $crossSellingCategory): static
     {
-        /** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
+        /** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
         $fd = $this->getClass()->getFieldDefinition("crossSellingCategory");
-        $hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-        \Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
-        $currentData = \Pimcore\Model\DataObject\Service::useInheritedValues(false, function() {
+        $hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+        \OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
+        $currentData = \OpenDxp\Model\DataObject\Service::useInheritedValues(false, function() {
             return $this->getCrossSellingCategory();
         });
-        \Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+        \OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
         $isEqual = $fd->isEqual($currentData, $crossSellingCategory);
         if (!$isEqual) {
             $this->markFieldDirty("crossSellingCategory", true);
@@ -616,7 +616,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
      */
     public function getSimilarityFieldsInheritance(): ?string
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("similarityFieldsInheritance");
             if ($preValue !== null) {
                 return $preValue;
@@ -625,7 +625,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
         $data = $this->similarityFieldsInheritance;
 
-        if (\Pimcore\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("similarityFieldsInheritance")->isEmpty($data)) {
+        if (\OpenDxp\Model\DataObject::doGetInheritedValues() && $this->getClass()->getFieldDefinition("similarityFieldsInheritance")->isEmpty($data)) {
             try {
                 return $this->getValueFromParent("similarityFieldsInheritance");
             } catch (InheritanceParentNotFoundException $e) {
@@ -633,7 +633,7 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
             }
         }
 
-        if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+        if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
             return $data->getPlain();
         }
 
@@ -653,11 +653,11 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
     }
 
     /**
-     * @return \Pimcore\Model\DataObject\Fieldcollection|null
+     * @return \OpenDxp\Model\DataObject\Fieldcollection|null
      */
-    public function getSimilarityFields(): ?\Pimcore\Model\DataObject\Fieldcollection
+    public function getSimilarityFields(): ?\OpenDxp\Model\DataObject\Fieldcollection
     {
-        if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+        if ($this instanceof PreGetValueHookInterface && !\OpenDxp::inAdmin()) {
             $preValue = $this->preGetValue("similarityFields");
             if ($preValue !== null) {
                 return $preValue;
@@ -670,12 +670,12 @@ class FilterDefinition extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\Ab
 
     /**
      * Set similarityFields - SimilarityFields
-     * @param \Pimcore\Model\DataObject\Fieldcollection|null $similarityFields
+     * @param \OpenDxp\Model\DataObject\Fieldcollection|null $similarityFields
      * @return $this
      */
-    public function setSimilarityFields(?\Pimcore\Model\DataObject\Fieldcollection $similarityFields): static
+    public function setSimilarityFields(?\OpenDxp\Model\DataObject\Fieldcollection $similarityFields): static
     {
-        /** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
+        /** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Fieldcollections $fd */
         $fd = $this->getClass()->getFieldDefinition("similarityFields");
         $this->similarityFields = $fd->preSetData($this, $similarityFields);
         return $this;

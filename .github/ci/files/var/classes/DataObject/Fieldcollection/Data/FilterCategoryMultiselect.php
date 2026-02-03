@@ -11,12 +11,12 @@ declare(strict_types=1);
  * - availableCategories [manyToManyObjectRelation]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
-class FilterCategoryMultiselect extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\CategoryFilterDefinitionType
+class FilterCategoryMultiselect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CategoryFilterDefinitionType
 {
 protected string $type = "FilterCategoryMultiselect";
 protected ?string $label;
@@ -34,7 +34,7 @@ protected array $availableCategories;
 public function getLabel(): ?string
 {
 	$data = $this->label;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -55,15 +55,15 @@ public function setLabel(?string $label): static
 
 /**
 * Get preSelect - Pre Select
-* @return \Pimcore\Model\DataObject\ProductCategory[]
+* @return \OpenDxp\Model\DataObject\ProductCategory[]
 */
 public function getPreSelect(): array
 {
 	$container = $this;
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("preSelect");
 	$data = $fd->preGetData($container);
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -72,17 +72,17 @@ public function getPreSelect(): array
 
 /**
 * Set preSelect - Pre Select
-* @param \Pimcore\Model\DataObject\ProductCategory[] $preSelect
+* @param \OpenDxp\Model\DataObject\ProductCategory[] $preSelect
 * @return $this
 */
 public function setPreSelect(?array $preSelect): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("preSelect");
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getPreSelect();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$isEqual = $fd->isEqual($currentData, $preSelect);
 	if (!$isEqual) {
 		$this->markFieldDirty("preSelect", true);
@@ -98,7 +98,7 @@ public function setPreSelect(?array $preSelect): static
 public function getUseAndCondition(): ?bool
 {
 	$data = $this->useAndCondition;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -124,7 +124,7 @@ public function setUseAndCondition(?bool $useAndCondition): static
 public function getIncludeParentCategories(): ?bool
 {
 	$data = $this->includeParentCategories;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -150,7 +150,7 @@ public function setIncludeParentCategories(?bool $includeParentCategories): stat
 public function getScriptPath(): ?string
 {
 	$data = $this->scriptPath;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -171,15 +171,15 @@ public function setScriptPath(?string $scriptPath): static
 
 /**
 * Get availableCategories - Available Categories
-* @return \Pimcore\Model\DataObject\ProductCategory[]
+* @return \OpenDxp\Model\DataObject\ProductCategory[]
 */
 public function getAvailableCategories(): array
 {
 	$container = $this;
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("availableCategories");
 	$data = $fd->preGetData($container);
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -188,17 +188,17 @@ public function getAvailableCategories(): array
 
 /**
 * Set availableCategories - Available Categories
-* @param \Pimcore\Model\DataObject\ProductCategory[] $availableCategories
+* @param \OpenDxp\Model\DataObject\ProductCategory[] $availableCategories
 * @return $this
 */
 public function setAvailableCategories(?array $availableCategories): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("availableCategories");
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$hideUnpublished = \OpenDxp\Model\DataObject\Concrete::getHideUnpublished();
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished(false);
 	$currentData = $this->getAvailableCategories();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	\OpenDxp\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
 	$isEqual = $fd->isEqual($currentData, $availableCategories);
 	if (!$isEqual) {
 		$this->markFieldDirty("availableCategories", true);

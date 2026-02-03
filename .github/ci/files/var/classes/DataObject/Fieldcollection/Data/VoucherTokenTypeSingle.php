@@ -8,12 +8,12 @@ declare(strict_types=1);
  * - onlyTokenPerCart [checkbox]
  */
 
-namespace Pimcore\Model\DataObject\Fieldcollection\Data;
+namespace OpenDxp\Model\DataObject\Fieldcollection\Data;
 
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\PreGetValueHookInterface;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\PreGetValueHookInterface;
 
-class VoucherTokenTypeSingle extends \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractVoucherTokenType
+class VoucherTokenTypeSingle extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractVoucherTokenType
 {
 protected string $type = "VoucherTokenTypeSingle";
 protected ?string $token;
@@ -28,7 +28,7 @@ protected ?bool $onlyTokenPerCart;
 public function getToken(): ?string
 {
 	$data = $this->token;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -54,7 +54,7 @@ public function setToken(?string $token): static
 public function getUsages(): ?int
 {
 	$data = $this->usages;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 
@@ -68,7 +68,7 @@ public function getUsages(): ?int
 */
 public function setUsages(?int $usages): static
 {
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	/** @var \OpenDxp\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("usages");
 	$this->usages = $fd->preSetData($this, $usages);
 	return $this;
@@ -81,7 +81,7 @@ public function setUsages(?int $usages): static
 public function getOnlyTokenPerCart(): ?bool
 {
 	$data = $this->onlyTokenPerCart;
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+	if ($data instanceof \OpenDxp\Model\DataObject\Data\EncryptedField) {
 		return $data->getPlain();
 	}
 

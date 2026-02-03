@@ -1,9 +1,9 @@
 <?php
 
-namespace Pimcore\Model\DataObject\OnlineShopVoucherToken;
+namespace OpenDxp\Model\DataObject\OnlineShopVoucherToken;
 
-use Pimcore\Model;
-use Pimcore\Model\DataObject;
+use OpenDxp\Model;
+use OpenDxp\Model\DataObject;
 
 /**
  * @method DataObject\OnlineShopVoucherToken|false current()
