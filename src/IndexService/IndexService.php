@@ -27,8 +27,6 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 
 class IndexService
 {
-    protected EnvironmentInterface $environment;
-
     /**
      * @var WorkerInterface[]
      */
@@ -39,15 +37,13 @@ class IndexService
     /**
      * @param WorkerInterface[] $tenantWorkers
      */
-    public function __construct(EnvironmentInterface $environment, array $tenantWorkers = [], string $defaultTenant = 'default')
+    public function __construct(protected EnvironmentInterface $environment, array $tenantWorkers = [], string $defaultTenant = 'default')
     {
-        $this->environment = $environment;
-
         foreach ($tenantWorkers as $tenantWorker) {
             $this->registerTenantWorker($tenantWorker);
         }
 
-        if (null !== $defaultTenant && !empty($defaultTenant)) {
+        if (!empty($defaultTenant)) {
             $this->defaultTenant = $defaultTenant;
         }
     }
@@ -108,7 +104,7 @@ class IndexService
             $tenantWorker = $this->resolveTenantWorker($tenant);
 
             return $tenantWorker->getGeneralSearchAttributes();
-        } catch (DefaultWorkerNotFoundException $e) {
+        } catch (DefaultWorkerNotFoundException) {
             return [];
         }
     }
@@ -118,7 +114,7 @@ class IndexService
      */
     public function createOrUpdateIndexStructures(): void
     {
-        foreach ($this->tenantWorkers as $tenant => $tenantWorker) {
+        foreach ($this->tenantWorkers as $tenantWorker) {
             $tenantWorker->createOrUpdateIndexStructures();
         }
     }
@@ -128,7 +124,7 @@ class IndexService
      */
     public function deleteFromIndex(IndexableInterface $object): void
     {
-        foreach ($this->tenantWorkers as $tenant => $tenantWorker) {
+        foreach ($this->tenantWorkers as $tenantWorker) {
             $tenantWorker->deleteFromIndex($object);
         }
     }
@@ -138,7 +134,7 @@ class IndexService
      */
     public function updateIndex(IndexableInterface $object): void
     {
-        foreach ($this->tenantWorkers as $tenant => $tenantWorker) {
+        foreach ($this->tenantWorkers as $tenantWorker) {
             $tenantWorker->updateIndex($object);
         }
     }
@@ -152,7 +148,7 @@ class IndexService
             $tenantWorker = $this->resolveTenantWorker($tenant);
 
             return $tenantWorker->getIndexAttributes($considerHideInFieldList);
-        } catch (DefaultWorkerNotFoundException $e) {
+        } catch (DefaultWorkerNotFoundException) {
             return [];
         }
     }
@@ -166,7 +162,7 @@ class IndexService
             $tenantWorker = $this->resolveTenantWorker($tenant);
 
             return $tenantWorker->getAllFilterGroups();
-        } catch (DefaultWorkerNotFoundException $e) {
+        } catch (DefaultWorkerNotFoundException) {
             return [];
         }
     }
@@ -180,7 +176,7 @@ class IndexService
             $tenantWorker = $this->resolveTenantWorker($tenant);
 
             return $tenantWorker->getIndexAttributesByFilterGroup($filterType);
-        } catch (DefaultWorkerNotFoundException $e) {
+        } catch (DefaultWorkerNotFoundException) {
             return [];
         }
     }

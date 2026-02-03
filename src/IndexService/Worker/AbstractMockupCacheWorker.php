@@ -81,7 +81,7 @@ abstract class AbstractMockupCacheWorker extends ProductCentricBatchProcessingWo
         $result = Cache::load($key);
 
         if ($success && $result) {
-            $this->executeTransactionalQuery(function () use ($objectId) {
+            $this->executeTransactionalQuery(function () use ($objectId): void {
                 $this->db->executeQuery('UPDATE ' . $this->getStoreTableName() . ' SET crc_index = crc_current WHERE id = ? and tenant = ?', [$objectId, $this->name]);
             });
         } else {

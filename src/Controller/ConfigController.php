@@ -34,9 +34,8 @@ class ConfigController extends UserAwareController implements KernelControllerEv
     /**
      * ConfigController constructor.
      */
-    public function __construct(private RouterInterface $router)
+    public function __construct(private readonly RouterInterface $router)
     {
-        $this->router = $router;
     }
 
     public function onKernelControllerEvent(ControllerEvent $event): void

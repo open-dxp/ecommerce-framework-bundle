@@ -23,28 +23,22 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxCalcula
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxEntry;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 
-class Price implements PriceInterface
+class Price implements PriceInterface, \Stringable
 {
-    private Currency $currency;
-
     private Decimal $grossAmount;
 
     private Decimal $netAmount;
 
     private ?string $taxEntryCombinationMode = TaxEntry::CALCULATION_MODE_COMBINE;
 
-    private bool $minPrice;
-
     /**
      * @var TaxEntry[]
      */
     private array $taxEntries = [];
 
-    public function __construct(Decimal $amount, Currency $currency, bool $minPrice = false)
+    public function __construct(Decimal $amount, private Currency $currency, private readonly bool $minPrice = false)
     {
         $this->grossAmount = $this->netAmount = $amount;
-        $this->currency = $currency;
-        $this->minPrice = $minPrice;
     }
 
     public function __toString(): string
@@ -61,18 +55,11 @@ class Price implements PriceInterface
 
     public function setAmount(Decimal $amount, string $priceMode = self::PRICE_MODE_GROSS, bool $recalc = false): void
     {
-        switch ($priceMode) {
-            case self::PRICE_MODE_GROSS:
-                $this->setGrossAmount($amount, $recalc);
-
-                break;
-            case self::PRICE_MODE_NET:
-                $this->setNetAmount($amount, $recalc);
-
-                break;
-            default:
-                throw new InvalidArgumentException(sprintf('Price mode "%s" is not supported', $priceMode));
-        }
+        match ($priceMode) {
+            self::PRICE_MODE_GROSS => $this->setGrossAmount($amount, $recalc),
+            self::PRICE_MODE_NET => $this->setNetAmount($amount, $recalc),
+            default => throw new InvalidArgumentException(sprintf('Price mode "%s" is not supported', $priceMode)),
+        };
     }
 
     public function getAmount(): Decimal

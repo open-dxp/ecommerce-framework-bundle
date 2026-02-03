@@ -29,19 +29,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AttributePriceSystem extends CachingPriceSystem implements PriceSystemInterface
 {
-    protected EnvironmentInterface $environment;
-
     protected string $attributeName;
 
     protected string $priceType;
 
     protected string $priceClass;
 
-    public function __construct(PricingManagerLocatorInterface $pricingManagers, EnvironmentInterface $environment, array $options = [])
+    public function __construct(PricingManagerLocatorInterface $pricingManagers, protected EnvironmentInterface $environment, array $options = [])
     {
         parent::__construct($pricingManagers);
-
-        $this->environment = $environment;
 
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
@@ -97,7 +93,7 @@ class AttributePriceSystem extends CachingPriceSystem implements PriceSystemInte
 
     public function filterProductIds(array $productIds, ?float $fromPrice, ?float $toPrice, string $order, int $offset, int $limit): array
     {
-        throw new UnsupportedException(__METHOD__  . ' is not supported for ' . get_class($this));
+        throw new UnsupportedException(__METHOD__  . ' is not supported for ' . static::class);
     }
 
     /**
@@ -110,7 +106,7 @@ class AttributePriceSystem extends CachingPriceSystem implements PriceSystemInte
         $getter = 'get' . ucfirst($this->attributeName);
 
         if (is_callable([$product, $getter])) {
-            if (!empty($products)) {
+            if ($products !== []) {
                 // TODO where to start using price value object?
                 $sum = 0;
                 foreach ($products as $p) {
@@ -122,9 +118,8 @@ class AttributePriceSystem extends CachingPriceSystem implements PriceSystemInte
                 }
 
                 return Decimal::create($sum);
-            } else {
-                return Decimal::create((float) $product->$getter());
             }
+            return Decimal::create((float) $product->$getter());
         }
 
         return Decimal::zero();
@@ -144,8 +139,7 @@ class AttributePriceSystem extends CachingPriceSystem implements PriceSystemInte
     protected function getPriceClassInstance(Decimal $amount): PriceInterface
     {
         $priceClass = $this->priceClass;
-        $price = new $priceClass($amount, $this->getDefaultCurrency(), false);
 
-        return $price;
+        return new $priceClass($amount, $this->getDefaultCurrency(), false);
     }
 }

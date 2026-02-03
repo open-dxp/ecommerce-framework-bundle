@@ -25,17 +25,11 @@ class CommitOrderProcessorEvent extends Event
 {
     use ArgumentsAwareTrait;
 
-    protected CommitOrderProcessorInterface $commitOrderProcessor;
-
-    protected ?AbstractOrder $order = null;
-
     /**
      * CommitOrderProcessorEvent constructor.
      */
-    public function __construct(CommitOrderProcessorInterface $commitOrderProcessor, ?AbstractOrder $order, array $arguments = [])
+    public function __construct(protected CommitOrderProcessorInterface $commitOrderProcessor, protected ?AbstractOrder $order, array $arguments = [])
     {
-        $this->commitOrderProcessor = $commitOrderProcessor;
-        $this->order = $order;
         $this->arguments = $arguments;
     }
 

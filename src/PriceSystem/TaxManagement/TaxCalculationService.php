@@ -35,14 +35,11 @@ class TaxCalculationService
      */
     public function updateTaxes(PriceInterface $price, string $calculationMode = self::CALCULATION_FROM_NET): PriceInterface
     {
-        switch ($calculationMode) {
-            case self::CALCULATION_FROM_NET:
-                return $this->calculationFromNet($price);
-            case self::CALCULATION_FROM_GROSS:
-                return $this->calculationFromGross($price);
-            default:
-                throw new UnsupportedException('Calculation Mode [' . $calculationMode . '] not supported.');
-        }
+        return match ($calculationMode) {
+            self::CALCULATION_FROM_NET => $this->calculationFromNet($price),
+            self::CALCULATION_FROM_GROSS => $this->calculationFromGross($price),
+            default => throw new UnsupportedException('Calculation Mode [' . $calculationMode . '] not supported.'),
+        };
     }
 
     /**
@@ -58,7 +55,7 @@ class TaxCalculationService
         $grossAmount = $netAmount;
 
         $taxEntries = $price->getTaxEntries();
-        if (empty($taxEntries)) {
+        if ($taxEntries === []) {
             $price->setGrossAmount($grossAmount);
 
             return $price;
@@ -107,7 +104,7 @@ class TaxCalculationService
         $netAmount = $grossAmount;
 
         $taxEntries = $price->getTaxEntries();
-        if (empty($taxEntries)) {
+        if ($taxEntries === []) {
             $price->setNetAmount($netAmount);
 
             return $price;

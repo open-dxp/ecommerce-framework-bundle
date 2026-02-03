@@ -20,15 +20,12 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder;
 
 class SnippetResponse extends AbstractResponse
 {
-    protected string $snippet;
-
     /**
      * SnippetResponse constructor.
      */
-    public function __construct(AbstractOrder $order, string $snippet)
+    public function __construct(AbstractOrder $order, protected string $snippet)
     {
         parent::__construct($order);
-        $this->snippet = $snippet;
     }
 
     public function getSnippet(): string

@@ -110,7 +110,7 @@ class CatalogCategory extends AbstractObjectListCondition implements CategoryInt
     {
         foreach ($environment->getCategories() as $category) {
             foreach ($this->getCategories() as $allow) {
-                if (strpos($category->getFullPath(), $allow->getFullPath()) !== false) {
+                if (str_contains($category->getFullPath(), $allow->getFullPath())) {
                     return true;
                 }
             }

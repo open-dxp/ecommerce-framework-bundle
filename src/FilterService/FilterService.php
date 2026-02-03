@@ -24,8 +24,6 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 
 class FilterService
 {
-    protected FilterGroupHelper $filterGroupHelper;
-
     /**
      * @var AbstractFilterType[]
      */
@@ -34,10 +32,8 @@ class FilterService
     /**
      * @param AbstractFilterType[] $filterTypes
      */
-    public function __construct(FilterGroupHelper $filterGroupHelper, array $filterTypes)
+    public function __construct(protected FilterGroupHelper $filterGroupHelper, array $filterTypes)
     {
-        $this->filterGroupHelper = $filterGroupHelper;
-
         foreach ($filterTypes as $name => $filterType) {
             $this->registerFilterType($name, $filterType);
         }

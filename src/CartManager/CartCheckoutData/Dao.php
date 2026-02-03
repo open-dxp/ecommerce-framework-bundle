@@ -83,7 +83,7 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
 
         try {
             $this->db->insert(self::TABLE_NAME, Helper::quoteDataIdentifiers($this->db, $data));
-        } catch (Exception $e) {
+        } catch (Exception) {
             $this->db->update(self::TABLE_NAME, Helper::quoteDataIdentifiers($this->db, $data), ['key' => $this->db->quote($this->model->getKey()), 'cartId' => $this->db->quote($this->model->getCartId())]);
         }
     }

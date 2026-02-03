@@ -41,18 +41,11 @@ class TrackingManager implements TrackingManagerInterface
 
     protected ?string $cachedCheckoutTenant = null;
 
-    protected ?EnvironmentInterface $enviroment = null;
-
-    protected RequestStack $requestStack;
-
-    public function __construct(RequestStack $requestStack, EnvironmentInterface $environment, array $trackers = [])
+    public function __construct(protected RequestStack $requestStack, protected ?EnvironmentInterface $enviroment, array $trackers = [])
     {
         foreach ($trackers as $tracker) {
             $this->registerTracker($tracker);
         }
-
-        $this->requestStack = $requestStack;
-        $this->enviroment = $environment;
     }
 
     /**
@@ -229,11 +222,13 @@ class TrackingManager implements TrackingManagerInterface
     {
         $result = '';
         foreach ($this->getTrackers() as $tracker) {
-            if ($tracker instanceof TrackingCodeAwareInterface) {
-                if (count($tracker->getTrackedCodes())) {
-                    $result .= implode(PHP_EOL, $tracker->getTrackedCodes()).PHP_EOL.PHP_EOL;
-                }
+            if (!$tracker instanceof TrackingCodeAwareInterface) {
+                continue;
             }
+            if (!count($tracker->getTrackedCodes())) {
+                continue;
+            }
+            $result .= implode(PHP_EOL, $tracker->getTrackedCodes()).PHP_EOL.PHP_EOL;
         }
 
         return $result;
@@ -244,11 +239,13 @@ class TrackingManager implements TrackingManagerInterface
         $trackedCodes = [];
 
         foreach ($this->getTrackers() as $tracker) {
-            if ($tracker instanceof TrackingCodeAwareInterface) {
-                if (count($tracker->getTrackedCodes())) {
-                    $trackedCodes[get_class($tracker)] = $tracker->getTrackedCodes();
-                }
+            if (!$tracker instanceof TrackingCodeAwareInterface) {
+                continue;
             }
+            if (!count($tracker->getTrackedCodes())) {
+                continue;
+            }
+            $trackedCodes[$tracker::class] = $tracker->getTrackedCodes();
         }
 
         /** @var Session $session */

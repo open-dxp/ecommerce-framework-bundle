@@ -24,14 +24,11 @@ class OrderAgentEvent extends Event
 {
     use ArgumentsAwareTrait;
 
-    protected OrderAgentInterface $orderAgent;
-
     /**
      * OrderAgentEvent constructor.
      */
-    public function __construct(OrderAgentInterface $orderAgent, array $arguments = [])
+    public function __construct(protected OrderAgentInterface $orderAgent, array $arguments = [])
     {
-        $this->orderAgent = $orderAgent;
         $this->arguments = $arguments;
     }
 

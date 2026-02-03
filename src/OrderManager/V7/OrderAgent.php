@@ -50,31 +50,15 @@ class OrderAgent implements OrderAgentInterface
 
     public const PAYMENT_PROVIDER_BRICK_PREFIX = 'PaymentProvider';
 
-    protected AbstractOrder $order;
-
-    protected EnvironmentInterface $environment;
-
-    protected PaymentManagerInterface $paymentManager;
-
     protected ?PaymentInterface $paymentProvider = null;
-
-    protected EventDispatcherInterface $eventDispatcher;
 
     /**
      * @var Note[]|null
      */
     protected ?array $fullChangeLog = null;
 
-    public function __construct(
-        AbstractOrder $order,
-        EnvironmentInterface $environment,
-        PaymentManagerInterface $paymentManager,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->order = $order;
-        $this->environment = $environment;
-        $this->paymentManager = $paymentManager;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(protected AbstractOrder $order, protected EnvironmentInterface $environment, protected PaymentManagerInterface $paymentManager, protected EventDispatcherInterface $eventDispatcher)
+    {
     }
 
     public function getOrder(): AbstractOrder
@@ -133,9 +117,6 @@ class OrderAgent implements OrderAgentInterface
      */
     public function itemChangeAmount(AbstractOrderItem $item, float $amount): Note
     {
-        // init
-        $amount = (float)$amount;
-
         // add log note
         $note = $this->createNote($item);
         $note->setTitle(__FUNCTION__);
@@ -211,11 +192,7 @@ class OrderAgent implements OrderAgentInterface
     public function hasPayment(): bool
     {
         $paymentInfo = $this->getOrder()->getPaymentInfo();
-        if (!$paymentInfo || empty($paymentInfo->getItems())) {
-            return false;
-        } else {
-            return true;
-        }
+        return $paymentInfo && !empty($paymentInfo->getItems());
     }
 
     public function getCurrency(): Currency
@@ -328,7 +305,7 @@ class OrderAgent implements OrderAgentInterface
         if ($paymentInformation) {
             /** @var AbstractPaymentInformation $paymentInfo */
             foreach ($paymentInformation as $paymentInfo) {
-                if ($paymentInfo->getPaymentState() == $order::ORDER_STATE_PAYMENT_PENDING || $paymentInfo->getPaymentState() == $order::ORDER_STATE_PAYMENT_INIT) {
+                if ($paymentInfo->getPaymentState() == \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_PENDING || $paymentInfo->getPaymentState() == \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_INIT) {
                     return $paymentInfo;
                 }
             }
@@ -381,7 +358,7 @@ class OrderAgent implements OrderAgentInterface
 
                 //if order fingerprint changed, abort initialized payment and create new payment information (so set it to null)
                 if ($currentPaymentInformation->getInternalPaymentId() != $internalPaymentIdForCurrentOrderVersion) {
-                    $currentPaymentInformation->setPaymentState($order::ORDER_STATE_ABORTED);
+                    $currentPaymentInformation->setPaymentState(\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_ABORTED);
                     $currentPaymentInformation->setMessage($currentPaymentInformation->getMessage() . ' - aborted be because order changed after payment was initialized.');
                     $order->save(['versionNote' => 'Agent::initPayment - save order to abort existing PaymentInformation.']);
 
@@ -417,7 +394,7 @@ class OrderAgent implements OrderAgentInterface
         $order = $this->getOrder();
 
         //set payment information state to pending
-        $currentPaymentInformation->setPaymentState($order::ORDER_STATE_PAYMENT_PENDING);
+        $currentPaymentInformation->setPaymentState(\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_PENDING);
         $order->save(['versionNote' => 'Agent::startPayment - save order to update PaymentInformation.']);
 
         $this->eventDispatcher->dispatch(new OrderAgentEvent($this, ['currentPaymentInformation' => $currentPaymentInformation]), OrderAgentEvents::POST_START_PAYMENT);
@@ -479,7 +456,7 @@ class OrderAgent implements OrderAgentInterface
         $currentPaymentInformation = $event->getArgument('currentPaymentInformation');
 
         if ($currentPaymentInformation) {
-            $currentPaymentInformation->setPaymentState($order::ORDER_STATE_CANCELLED);
+            $currentPaymentInformation->setPaymentState(\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_CANCELLED);
             $currentPaymentInformation->setMessage("Payment cancelled by 'cancelStartedOrderPayment'");
             $order->setOrderState(null);
             $order->save(['versionNote' => 'OrderAgent::cancelStartedOrderPayment - empty order state.']);
@@ -571,7 +548,6 @@ class OrderAgent implements OrderAgentInterface
 
         $event = new OrderAgentEvent($this, ['status' => $status]);
         $this->eventDispatcher->dispatch($event, OrderAgentEvents::POST_UPDATE_PAYMENT);
-
         if ($abortedByResponseReceived) {
             // if we got an response even if payment state was already aborted throw exception
             $paymentStateBackup = $currentPaymentInformation->getPaymentState();
@@ -582,20 +558,18 @@ class OrderAgent implements OrderAgentInterface
                 $paymentStateBackup . '". throwing exception!'
             );
             $order->save(['versionNote' => 'OrderAgent::updatePayment - aborted response received.']);
-
             throw new ResponseWithAbortedPaymentStateException($paymentStateBackup);
-        } elseif ($currentOrderFingerPrint != $status->getInternalPaymentId()) {
+        }
+
+        if ($currentOrderFingerPrint != $status->getInternalPaymentId()) {
             // check, if order finger print has changed since start payment - if so, throw exception because something wired is going on
             // but finish update order first in order to have logging information
-
             $currentPaymentInformation->setMessage($currentPaymentInformation->getMessage() . ' -> order fingerprint changed since start payment. throwing exception!');
             $order->setOrderState(null);
             $order->save(['versionNote' => 'OrderAgent::updatePayment - finger print of order changed.']);
-
             throw new UnsupportedException('order fingerprint changed since start payment. Old internal status = ' . $status->getInternalPaymentId() . ' -> current internal status id = ' . $currentOrderFingerPrint);
-        } else {
-            $order->save(['versionNote' => 'OrderAgent::updatePayment.']);
         }
+        $order->save(['versionNote' => 'OrderAgent::updatePayment.']);
 
         return $this;
     }

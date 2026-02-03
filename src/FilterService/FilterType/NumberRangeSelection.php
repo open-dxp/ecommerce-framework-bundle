@@ -90,10 +90,10 @@ class NumberRangeSelection extends AbstractFilterType
             if (!empty($data['from'])) {
                 if (!empty($data['to'])) {
                     return $data['from'] . ' - ' . $data['to'];
-                } else {
-                    return $this->translator->trans('more than') . ' ' . $data['from'];
                 }
-            } elseif (!empty($data['to'])) {
+                return $this->translator->trans('more than') . ' ' . $data['from'];
+            }
+            if (!empty($data['to'])) {
                 return $this->translator->trans('less than') . ' ' . $data['to'];
             }
         }

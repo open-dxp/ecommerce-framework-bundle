@@ -52,9 +52,8 @@ class Sold extends AbstractOrder implements ConditionInterface
             }
 
             return ($this->getSoldCount($rule) + $cartUsedCount) < $this->getCount();
-        } else {
-            return false;
         }
+        return false;
     }
 
     public function toJSON(): string
@@ -84,7 +83,7 @@ class Sold extends AbstractOrder implements ConditionInterface
 
     public function setCount(int $count): void
     {
-        $this->count = (int)$count;
+        $this->count = $count;
     }
 
     public function isCountCart(): bool
@@ -94,7 +93,7 @@ class Sold extends AbstractOrder implements ConditionInterface
 
     public function setCountCart(bool $countCart): static
     {
-        $this->countCart = (bool)$countCart;
+        $this->countCart = $countCart;
 
         return $this;
     }
@@ -121,10 +120,8 @@ class Sold extends AbstractOrder implements ConditionInterface
             } else {
                 // get rules
                 $priceInfo = $item->getPriceInfo();
-                if ($priceInfo instanceof PriceInfoInterface) {
-                    if (($cartItem && $priceInfo->hasRulesApplied()) || $cartItem === null) {
-                        $rules = $priceInfo->getRules();
-                    }
+                if ($priceInfo instanceof PriceInfoInterface && ($cartItem && $priceInfo->hasRulesApplied() || !$cartItem instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItemInterface)) {
+                    $rules = $priceInfo->getRules();
                 }
             }
 

@@ -20,7 +20,7 @@ use Exception;
 
 class SessionCartCheckoutData extends AbstractCartCheckoutData
 {
-    protected string|int|null $cartId;
+    protected string|int|null $cartId = null;
 
     public function save(): void
     {
@@ -41,12 +41,14 @@ class SessionCartCheckoutData extends AbstractCartCheckoutData
         }
     }
 
+    #[\Override]
     public function setCart(CartInterface $cart): void
     {
         $this->cart = $cart;
         $this->cartId = $cart->getId();
     }
 
+    #[\Override]
     public function getCart(): ?CartInterface
     {
         if (empty($this->cart)) {
@@ -56,6 +58,7 @@ class SessionCartCheckoutData extends AbstractCartCheckoutData
         return $this->cart;
     }
 
+    #[\Override]
     public function getCartId(): int|string|null
     {
         return $this->cartId;
@@ -69,6 +72,7 @@ class SessionCartCheckoutData extends AbstractCartCheckoutData
     /**
      * @internal
      */
+    #[\Override]
     public function __sleep(): array
     {
         $vars = parent::__sleep();

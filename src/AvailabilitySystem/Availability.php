@@ -21,14 +21,8 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 
 class Availability implements AvailabilityInterface
 {
-    private CheckoutableInterface $product;
-
-    private bool $available;
-
-    public function __construct(CheckoutableInterface $product, bool $available)
+    public function __construct(private readonly CheckoutableInterface $product, private readonly bool $available)
     {
-        $this->product = $product;
-        $this->available = $available;
     }
 
     public function getProduct(): CheckoutableInterface

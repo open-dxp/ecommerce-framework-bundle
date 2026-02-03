@@ -25,22 +25,13 @@ class SendConfirmationMailEvent extends Event
 {
     use ArgumentsAwareTrait;
 
-    protected CommitOrderProcessorInterface $commitOrderProcessor;
-
-    protected AbstractOrder $order;
-
-    protected string $confirmationMailConfig;
-
     protected bool $skipDefaultBehaviour = false;
 
     /**
      * SendConfirmationMailEvent constructor.
      */
-    public function __construct(CommitOrderProcessorInterface $commitOrderProcessor, AbstractOrder $order, string $confirmationMailConfig)
+    public function __construct(protected CommitOrderProcessorInterface $commitOrderProcessor, protected AbstractOrder $order, protected string $confirmationMailConfig)
     {
-        $this->commitOrderProcessor = $commitOrderProcessor;
-        $this->order = $order;
-        $this->confirmationMailConfig = $confirmationMailConfig;
     }
 
     public function getCommitOrderProcessor(): CommitOrderProcessorInterface

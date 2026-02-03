@@ -27,20 +27,17 @@ class CancelPaymentOrRecreateOrderStrategy implements HandlePendingPaymentsStrat
     {
         if ($orderManager->orderNeedsUpdate($cart, $order)) {
             return $orderManager->recreateOrder($cart);
-        } else {
-            $orderAgent = $orderManager->createOrderAgent($order);
-            $orderAgent->cancelStartedOrderPayment();
-
-            if ($orderManager->cartHasPendingPayments($cart)) {
-                throw new PaymentNotAllowedException(
-                    'There are still pending payments after started payment was cancelled. Try recreate order.',
-                    $order,
-                    $cart,
-                    $orderManager->orderNeedsUpdate($cart, $order)
-                );
-            } else {
-                return $order;
-            }
         }
+        $orderAgent = $orderManager->createOrderAgent($order);
+        $orderAgent->cancelStartedOrderPayment();
+        if ($orderManager->cartHasPendingPayments($cart)) {
+            throw new PaymentNotAllowedException(
+                'There are still pending payments after started payment was cancelled. Try recreate order.',
+                $order,
+                $cart,
+                $orderManager->orderNeedsUpdate($cart, $order)
+            );
+        }
+        return $order;
     }
 }

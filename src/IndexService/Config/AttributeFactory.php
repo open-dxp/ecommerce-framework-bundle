@@ -26,16 +26,8 @@ use Psr\Container\ContainerInterface;
  */
 class AttributeFactory
 {
-    private ContainerInterface $getters;
-
-    private ContainerInterface $interpreters;
-
-    public function __construct(
-        ContainerInterface $getters,
-        ContainerInterface $interpreters
-    ) {
-        $this->getters = $getters;
-        $this->interpreters = $interpreters;
+    public function __construct(private readonly ContainerInterface $getters, private readonly ContainerInterface $interpreters)
+    {
     }
 
     public function createAttribute(array $config): Attribute

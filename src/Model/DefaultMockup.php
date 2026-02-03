@@ -23,27 +23,17 @@ use OpenDxp\Model\DataObject;
 
 class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, IndexableInterface
 {
-    protected int $id;
-
-    protected array $params;
-
-    protected array $relations;
+    protected array $relations = [];
 
     /**
      * contains link generators by class type (just for caching)
      */
     protected static array $linkGenerators = [];
 
-    public function __construct(int $id, array $params, array $relations)
+    public function __construct(protected int $id, protected array $params, array $relations)
     {
-        $this->id = $id;
-        $this->params = $params;
-
-        $this->relations = [];
-        if ($relations) {
-            foreach ($relations as $relation) {
-                $this->relations[$relation['fieldname']][] = ['id' => $relation['dest'], 'type' => $relation['type']];
-            }
+        foreach ($relations as $relation) {
+            $this->relations[$relation['fieldname']][] = ['id' => $relation['dest'], 'type' => $relation['type']];
         }
     }
 
@@ -106,21 +96,21 @@ class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, In
                 }
             }
         }
-
-        if (count($relationObjectArray) == 1) {
+        if (count($relationObjectArray) === 1) {
             return $relationObjectArray[0];
-        } elseif (count($relationObjectArray) > 1) {
-            return $relationObjectArray;
-        } else {
-            return null;
         }
+
+        if (count($relationObjectArray) > 1) {
+            return $relationObjectArray;
+        }
+        return null;
     }
 
     public function __call(string $method, array $args): mixed
     {
         $attributeName = $method;
 
-        if (substr($method, 0, 3) == 'get') {
+        if (str_starts_with($method, 'get')) {
             $attributeName = substr($method, 3);
         }
 

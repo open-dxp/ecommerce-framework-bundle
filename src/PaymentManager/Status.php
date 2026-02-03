@@ -19,40 +19,28 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager;
 class Status implements StatusInterface
 {
     /**
-     * internal opendxp order status - see also constants \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_*
-     */
-    protected string $status;
-
-    /**
-     * pimcore internal payment id, necessary to identify payment information in order object
-     */
-    protected string $internalPaymentId;
-
-    /**
-     * payment reference from payment provider
-     */
-    protected string $paymentReference;
-
-    /**
-     * payment message provided from payment provider - e.g. error message on error
-     */
-    protected string $message;
-
-    /**
-     * additional payment data
-     */
-    protected array $data = [];
-
-    /**
      * @param array  $data  extended data
      */
-    public function __construct(string $internalPaymentId, string $paymentReference, string $message, string $status, array $data = [])
+    public function __construct(
+        /**
+         * pimcore internal payment id, necessary to identify payment information in order object
+         */
+        protected string $internalPaymentId,
+        /**
+         * payment reference from payment provider
+         */
+        protected string $paymentReference,
+        /**
+         * payment message provided from payment provider - e.g. error message on error
+         */
+        protected string $message,
+        /**
+         * internal opendxp order status - see also constants \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_*
+         */
+        protected string $status,
+        protected array $data = []
+    )
     {
-        $this->internalPaymentId = $internalPaymentId;
-        $this->paymentReference = $paymentReference;
-        $this->message = $message;
-        $this->status = $status;
-        $this->data = $data;
     }
 
     public function getInternalPaymentId(): string

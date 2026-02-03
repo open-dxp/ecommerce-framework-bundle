@@ -42,7 +42,7 @@ class Reservation extends AbstractModel
             $config->getDao()->get($code, $cart);
 
             return $config;
-        } catch (NotFoundException $ex) {
+        } catch (NotFoundException) {
             //            Logger::debug($ex->getMessage());
             return null;
         }
@@ -55,7 +55,7 @@ class Reservation extends AbstractModel
             $config->getDao()->create($code, $cart);
 
             return $config;
-        } catch (Exception $ex) {
+        } catch (Exception) {
             //            Logger::debug($ex->getMessage());
             return null;
         }
@@ -77,7 +77,7 @@ class Reservation extends AbstractModel
             $db->executeQuery($query, $params);
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }
@@ -106,7 +106,7 @@ class Reservation extends AbstractModel
             $db->executeQuery($query, $params);
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }
@@ -118,7 +118,7 @@ class Reservation extends AbstractModel
 
         try {
             return (bool)$db->fetchOne($query, [$code, $cart->getId()]);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }
@@ -132,7 +132,7 @@ class Reservation extends AbstractModel
             $count = $db->fetchOne($query, [$code]);
 
             return (int)$count;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }

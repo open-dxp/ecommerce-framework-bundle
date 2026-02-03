@@ -29,19 +29,7 @@ class PricingManager implements PricingManagerInterface
 {
     protected bool $enabled = true;
 
-    /**
-     * Condition name => class mapping
-     */
-    protected array $conditionMapping = [];
-
-    /**
-     * Action name => class mapping
-     */
-    protected array $actionMapping = [];
-
     protected array $options;
-
-    protected ?VisitorInfoStorageInterface $visitorInfoStorage = null;
 
     /**
      * @var RuleInterface[]|null
@@ -49,17 +37,19 @@ class PricingManager implements PricingManagerInterface
     protected ?array $rules = null;
 
     public function __construct(
-        array $conditionMapping,
-        array $actionMapping,
+        /**
+         * Condition name => class mapping
+         */
+        protected array $conditionMapping,
+        /**
+         * Action name => class mapping
+         */
+        protected array $actionMapping,
         array $options = [],
-        VisitorInfoStorageInterface $visitorInfoStorage = null
+        protected ?VisitorInfoStorageInterface $visitorInfoStorage = null
     ) {
-        $this->conditionMapping = $conditionMapping;
-        $this->actionMapping = $actionMapping;
-
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
-        $this->visitorInfoStorage = $visitorInfoStorage;
 
         $this->options = $resolver->resolve($options);
     }

@@ -21,14 +21,8 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Model;
  */
 class AbstractSetProductEntry
 {
-    private int $quantity;
-
-    private CheckoutableInterface $product;
-
-    public function __construct(CheckoutableInterface $product, int $quantity = 1)
+    public function __construct(private CheckoutableInterface $product, private int $quantity = 1)
     {
-        $this->product = $product;
-        $this->quantity = $quantity;
     }
 
     public function setProduct(CheckoutableInterface $product): void

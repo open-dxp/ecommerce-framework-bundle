@@ -61,13 +61,14 @@ class IndexFieldSelectionField extends Textarea
         return $this->considerTenants;
     }
 
+    #[\Override]
     public function isEmpty(mixed $data): bool
     {
         if (is_string($data)) {
             return strlen($data) < 1;
         }
         if (is_array($data)) {
-            return empty($data);
+            return $data === [];
         }
 
         return true;
@@ -76,15 +77,17 @@ class IndexFieldSelectionField extends Textarea
     /**
      * @param null|\OpenDxp\Model\DataObject\AbstractObject $object
      */
+    #[\Override]
     public function getDataFromEditmode(mixed $data, $object = null, array $params = []): string
     {
         if (is_array($data)) {
-            $data = implode(',', $data);
+            return implode(',', $data);
         }
 
         return $data;
     }
 
+    #[\Override]
     public function getFieldType(): string
     {
         return 'indexFieldSelectionField';

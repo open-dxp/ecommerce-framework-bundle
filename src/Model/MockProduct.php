@@ -116,6 +116,7 @@ class MockProduct extends Concrete implements ProductInterface, IndexableInterfa
         return 0;
     }
 
+    #[\Override]
     public function __call(string $method, array $args): mixed
     {
         return null;

@@ -21,15 +21,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class FormResponse extends AbstractResponse
 {
-    protected FormBuilderInterface $form;
-
     /**
      * FormResponse constructor.
      */
-    public function __construct(AbstractOrder $order, FormBuilderInterface $form)
+    public function __construct(AbstractOrder $order, protected FormBuilderInterface $form)
     {
         parent::__construct($order);
-        $this->form = $form;
     }
 
     public function getForm(): FormBuilderInterface

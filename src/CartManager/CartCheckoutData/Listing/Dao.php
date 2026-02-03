@@ -55,7 +55,7 @@ class Dao extends \OpenDxp\Model\Listing\Dao\AbstractDao
                 $this->model->getConditionVariables(),
                 $this->model->getConditionVariableTypes(),
             );
-        } catch (Exception $e) {
+        } catch (Exception) {
             return 0;
         }
     }

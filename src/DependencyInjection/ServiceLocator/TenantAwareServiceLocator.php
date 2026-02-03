@@ -23,25 +23,17 @@ use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 abstract class TenantAwareServiceLocator
 {
-    protected PsrContainerInterface $locator;
-
-    protected EnvironmentInterface $environment;
-
-    /**
-     * If true the locator will not fall back to the default tenant if a tenant is requested but not existing
-     */
-    protected bool $strictTenants = false;
-
     protected string $defaultTenant = 'default';
 
     public function __construct(
-        PsrContainerInterface $locator,
-        EnvironmentInterface $environment,
-        bool $strictTenants = false
-    ) {
-        $this->locator = $locator;
-        $this->environment = $environment;
-        $this->strictTenants = $strictTenants;
+        protected PsrContainerInterface $locator,
+        protected EnvironmentInterface $environment,
+        /**
+         * If true the locator will not fall back to the default tenant if a tenant is requested but not existing
+         */
+        protected bool $strictTenants = false
+    )
+    {
     }
 
     protected function locate(string $tenant = null): mixed
@@ -64,13 +56,11 @@ abstract class TenantAwareServiceLocator
             $tenant = $this->getEnvironmentTenant();
         }
 
-        if (!empty($tenant)) {
-            // if tenant isn't available and we're not in strict tenant mode, fall
-            // back to the default tenant
-            // in strict tenant mode, just return the tenant, no matter if it exists or not
-            if ($this->strictTenants || $this->locator->has($tenant)) {
-                return $tenant;
-            }
+        // if tenant isn't available and we're not in strict tenant mode, fall
+        // back to the default tenant
+        // in strict tenant mode, just return the tenant, no matter if it exists or not
+        if (!empty($tenant) && ($this->strictTenants || $this->locator->has($tenant))) {
+            return $tenant;
         }
 
         return $this->defaultTenant;

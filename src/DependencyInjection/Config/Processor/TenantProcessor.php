@@ -78,7 +78,7 @@ class TenantProcessor
                 if ($this->isArrayAssociative($v)) {
                     $values[$k] = $this->mergeDefaults($defaults[$k], $values[$k]);
                 } else {
-                    $values[$k] = array_merge($defaults[$k], $values[$k]);
+                    $values[$k] = [...$defaults[$k], ...$values[$k]];
                 }
             }
         }

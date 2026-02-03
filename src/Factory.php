@@ -46,73 +46,47 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Factory
 {
-    private ContainerInterface $container;
-
-    /**
-     * Tenant specific cart managers
-     */
-    private CartManagerLocatorInterface $cartManagers;
-
-    /**
-     * Tenant specific order managers
-     */
-    private OrderManagerLocatorInterface $orderManagers;
-
-    /**
-     * Pricing managers registered by tenant
-     */
-    private PricingManagerLocatorInterface $pricingManagers;
-
-    /**
-     * Price systems registered by name
-     */
-    private PriceSystemLocatorInterface $priceSystems;
-
-    /**
-     * Availability systems registered by name
-     */
-    private AvailabilitySystemLocatorInterface $availabilitySystems;
-
-    /**
-     * Checkout manager factories registered by tenant
-     */
-    private CheckoutManagerFactoryLocatorInterface $checkoutManagerFactories;
-
-    /**
-     * Commit order processors registered by tenant
-     */
-    private CommitOrderProcessorLocatorInterface $commitOrderProcessors;
-
-    /**
-     * Filter services registered by ^tenant
-     */
-    private FilterServiceLocatorInterface $filterServices;
-
     /**
      * Systems with multiple instances (e.g. price systems or tenant specific systems) are
      * injected through a service locator which is indexed by tenant/name. All other services
      * are loaded from the container on demand to make sure only services needed are built.
      */
     public function __construct(
-        ContainerInterface $container,
-        CartManagerLocatorInterface $cartManagers,
-        OrderManagerLocatorInterface $orderManagers,
-        PricingManagerLocatorInterface $pricingManagers,
-        PriceSystemLocatorInterface $priceSystems,
-        AvailabilitySystemLocatorInterface $availabilitySystems,
-        CheckoutManagerFactoryLocatorInterface $checkoutManagerFactories,
-        CommitOrderProcessorLocatorInterface $commitOrderProcessors,
-        FilterServiceLocatorInterface $filterServices
-    ) {
-        $this->container = $container;
-        $this->cartManagers = $cartManagers;
-        $this->orderManagers = $orderManagers;
-        $this->pricingManagers = $pricingManagers;
-        $this->priceSystems = $priceSystems;
-        $this->availabilitySystems = $availabilitySystems;
-        $this->checkoutManagerFactories = $checkoutManagerFactories;
-        $this->commitOrderProcessors = $commitOrderProcessors;
-        $this->filterServices = $filterServices;
+        private readonly ContainerInterface $container,
+        /**
+         * Tenant specific cart managers
+         */
+        private readonly CartManagerLocatorInterface $cartManagers,
+        /**
+         * Tenant specific order managers
+         */
+        private readonly OrderManagerLocatorInterface $orderManagers,
+        /**
+         * Pricing managers registered by tenant
+         */
+        private readonly PricingManagerLocatorInterface $pricingManagers,
+        /**
+         * Price systems registered by name
+         */
+        private readonly PriceSystemLocatorInterface $priceSystems,
+        /**
+         * Availability systems registered by name
+         */
+        private readonly AvailabilitySystemLocatorInterface $availabilitySystems,
+        /**
+         * Checkout manager factories registered by tenant
+         */
+        private readonly CheckoutManagerFactoryLocatorInterface $checkoutManagerFactories,
+        /**
+         * Commit order processors registered by tenant
+         */
+        private readonly CommitOrderProcessorLocatorInterface $commitOrderProcessors,
+        /**
+         * Filter services registered by ^tenant
+         */
+        private readonly FilterServiceLocatorInterface $filterServices
+    )
+    {
     }
 
     public static function getInstance(): self

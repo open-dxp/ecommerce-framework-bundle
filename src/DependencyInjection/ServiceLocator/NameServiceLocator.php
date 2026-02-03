@@ -22,13 +22,10 @@ use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 abstract class NameServiceLocator
 {
-    protected PsrContainerInterface $locator;
-
     protected string $defaultName = 'default';
 
-    public function __construct(PsrContainerInterface $locator)
+    public function __construct(protected PsrContainerInterface $locator)
     {
-        $this->locator = $locator;
     }
 
     protected function locate(string $name = null): mixed

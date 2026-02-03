@@ -29,17 +29,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractTokenManager implements TokenManagerInterface, ExportableTokenManagerInterface
 {
-    public AbstractVoucherTokenType $configuration;
-
     public int|null $seriesId;
 
     public AbstractVoucherSeries $series;
 
-    public function __construct(AbstractVoucherTokenType $configuration)
+    public function __construct(public AbstractVoucherTokenType $configuration)
     {
-        $this->configuration = $configuration;
         /** @var AbstractVoucherSeries $series */
-        $series = $configuration->getObject();
+        $series = $this->configuration->getObject();
         $this->seriesId = $series->getId();
         $this->series = $series;
     }
@@ -96,7 +93,7 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
             if (is_array($cartCodes)) {
                 foreach ($cartCodes as $cartCode) {
                     $cartToken = Token::getByCode($cartCode);
-                    if ($token->getVoucherSeriesId() == $cartToken->getVoucherSeriesId()) {
+                    if ($token->getVoucherSeriesId() === $cartToken->getVoucherSeriesId()) {
                         throw new VoucherServiceException('OncePerCart: Only one token of this series is allowed per cart.', VoucherServiceException::ERROR_CODE_ONCE_PER_CART_VIOLATED);
                     }
                 }

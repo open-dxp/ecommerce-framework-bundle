@@ -49,7 +49,7 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
 
     protected ?CartInterface $cart = null;
 
-    protected string|int|null $cartId;
+    protected string|int|null $cartId = null;
 
     /**
      * @var int|null unix timestamp
@@ -206,9 +206,8 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
     {
         if ($this->getProduct() instanceof AbstractSetProduct) {
             return $this->getProduct()->getOSAvailabilityInfo($this->getCount(), $this->getSetEntries());
-        } else {
-            return $this->getProduct()->getOSAvailabilityInfo($this->getCount());
         }
+        return $this->getProduct()->getOSAvailabilityInfo($this->getCount());
     }
 
     /**
@@ -243,21 +242,15 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
 
     public function setAddedDate(DateTime $date = null): void
     {
-        if ($date) {
-            $this->addedDateTimestamp = intval($date->format('Uu'));
-        } else {
-            $this->addedDateTimestamp = null;
-        }
+        $this->addedDateTimestamp = $date ? intval($date->format('Uu')) : null;
     }
 
     public function getAddedDate(): DateTime
     {
-        $datetime = null;
         if ($this->addedDateTimestamp) {
-            $datetime = DateTime::createFromFormat('U', (string) intval($this->addedDateTimestamp / 1000000));
+            return DateTime::createFromFormat('U', (string) intval($this->addedDateTimestamp / 1000000));
         }
-
-        return $datetime;
+        return null;
     }
 
     public function getAddedDateTimestamp(): int

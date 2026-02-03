@@ -59,6 +59,7 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
      */
     protected array $trackedCodes = [];
 
+    #[\Override]
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -256,16 +257,20 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
      */
     protected function transformTransaction(Transaction $transaction): array
     {
-        return array_merge([
-            'id' => $transaction->getId(),                           // order ID - required
-            'affiliation' => $transaction->getAffiliation() ?: '',            // affiliation or store name
-            'revenue' => round($transaction->getTotal(), 2),     // total - required
-            'tax' => round($transaction->getTax(), 2),       // tax
-            'coupon' => $transaction->getCoupon(), // voucher code - optional
-            'shipping' => round($transaction->getShipping(), 2),  // shipping
-        ],
-            $transaction->getAdditionalAttributes()
-        );
+        return [
+            'id' => $transaction->getId(),
+            // order ID - required
+            'affiliation' => $transaction->getAffiliation() ?: '',
+            // affiliation or store name
+            'revenue' => round($transaction->getTotal(), 2),
+            // total - required
+            'tax' => round($transaction->getTax(), 2),
+            // tax
+            'coupon' => $transaction->getCoupon(),
+            // voucher code - optional
+            'shipping' => round($transaction->getShipping(), 2),
+            ...$transaction->getAdditionalAttributes(),
+        ];
     }
 
     protected function buildCheckoutCalls(array $items): array
@@ -284,18 +289,7 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
     protected function transformProductAction(ProductAction $item): array
     {
         return $this->filterNullValues(
-            array_merge([
-                'id' => $item->getId(),
-                'name' => $item->getName(),
-                'category' => $item->getCategory(),
-                'brand' => $item->getBrand(),
-                'variant' => $item->getVariant(),
-                'price' => $item->getPrice() ? Decimal::fromNumeric($item->getPrice())->asString() : '',
-                'quantity' => $item->getQuantity() ?: 1,
-                'position' => $item->getPosition(),
-                'coupon' => $item->getCoupon(),
-            ],
-                $item->getAdditionalAttributes())
+            ['id' => $item->getId(), 'name' => $item->getName(), 'category' => $item->getCategory(), 'brand' => $item->getBrand(), 'variant' => $item->getVariant(), 'price' => $item->getPrice() ? Decimal::fromNumeric($item->getPrice())->asString() : '', 'quantity' => $item->getQuantity() ?: 1, 'position' => $item->getPosition(), 'coupon' => $item->getCoupon(), ...$item->getAdditionalAttributes()]
         );
     }
 
@@ -304,18 +298,7 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
      */
     protected function transformProductImpression(ProductImpression $item): array
     {
-        $data = $this->filterNullValues(array_merge([
-            'id' => $item->getId(),
-            'name' => $item->getName(),
-            'category' => $item->getCategory(),
-            'brand' => $item->getBrand(),
-            'variant' => $item->getVariant(),
-            'price' => $item->getPrice() ? Decimal::fromNumeric($item->getPrice())->asString() : '',
-            'list' => $item->getList(),
-            'position' => $item->getPosition(),
-        ], $item->getAdditionalAttributes()));
-
-        return $data;
+        return $this->filterNullValues(['id' => $item->getId(), 'name' => $item->getName(), 'category' => $item->getCategory(), 'brand' => $item->getBrand(), 'variant' => $item->getVariant(), 'price' => $item->getPrice() ? Decimal::fromNumeric($item->getPrice())->asString() : '', 'list' => $item->getList(), 'position' => $item->getPosition(), ...$item->getAdditionalAttributes()]);
     }
 
     /**
@@ -323,7 +306,7 @@ class EnhancedEcommerce extends AbstractAnalyticsTracker implements
      */
     protected function ensureDependencies(): void
     {
-        if ($this->dependenciesIncluded || empty($this->dependencies)) {
+        if ($this->dependenciesIncluded || $this->dependencies === []) {
             return;
         }
 

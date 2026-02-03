@@ -160,7 +160,7 @@ class CatalogProduct extends AbstractObjectListCondition implements CatalogProdu
             trigger_error(
                 sprintf(
                     'Undefined property: %s::$%s in %s on line %s',
-                    $this::class,
+                    static::class,
                     $name,
                     $backtrace[0]['file'],
                     $backtrace[0]['line'],
@@ -175,14 +175,14 @@ class CatalogProduct extends AbstractObjectListCondition implements CatalogProdu
 
         // verify that access to lazy properties is not happening from outside allowed scopes
         $caller = $backtrace[1]['class'];
-        if (!($caller === $this::class
-            || is_subclass_of($caller, $this::class)
+        if (!($caller === static::class
+            || is_subclass_of($caller, static::class)
             || $caller === ReflectionProperty::class
             || is_subclass_of($caller, ReflectionProperty::class)
         )) {
             throw new Error(sprintf(
                 'Cannot access protected property %s::$%s in %s:%s',
-                $this::class,
+                static::class,
                 $name,
                 $backtrace[1]['file'],
                 $backtrace[1]['line'],

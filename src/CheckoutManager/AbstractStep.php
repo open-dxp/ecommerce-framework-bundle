@@ -20,16 +20,10 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 
 abstract class AbstractStep implements CheckoutStepInterface
 {
-    protected CartInterface $cart;
-
-    protected array $options = [];
-
     /**
      * AbstractStep constructor.
      */
-    public function __construct(CartInterface $cart, array $options = [])
+    public function __construct(protected CartInterface $cart, protected array $options = [])
     {
-        $this->cart = $cart;
-        $this->options = $options;
     }
 }

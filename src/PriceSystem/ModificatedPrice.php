@@ -23,15 +23,11 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 
 class ModificatedPrice extends Price implements ModificatedPriceInterface
 {
-    protected ?string $description = null;
-
     protected ?RuleInterface $rule = null;
 
-    public function __construct(Decimal $amount, Currency $currency, bool $minPrice = false, string $description = null)
+    public function __construct(Decimal $amount, Currency $currency, bool $minPrice = false, protected ?string $description = null)
     {
         parent::__construct($amount, $currency, $minPrice);
-
-        $this->description = $description;
     }
 
     public function getRule(): ?RuleInterface

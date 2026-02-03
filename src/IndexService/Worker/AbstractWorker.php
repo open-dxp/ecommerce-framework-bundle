@@ -23,26 +23,17 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractWorker implements WorkerInterface
 {
-    protected Connection $db;
-
-    protected ConfigInterface $tenantConfig;
-
     protected string $name;
 
     protected ?array $indexColumns = null;
 
     protected ?array $filterGroups = null;
 
-    protected EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(ConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher)
+    public function __construct(protected ConfigInterface $tenantConfig, protected Connection $db, protected EventDispatcherInterface $eventDispatcher)
     {
-        $this->tenantConfig = $tenantConfig;
-        $tenantConfig->setTenantWorker($this);
+        $this->tenantConfig->setTenantWorker($this);
 
-        $this->name = $tenantConfig->getTenantName();
-        $this->db = $db;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->name = $this->tenantConfig->getTenantName();
     }
 
     public function getTenantConfig(): ConfigInterface

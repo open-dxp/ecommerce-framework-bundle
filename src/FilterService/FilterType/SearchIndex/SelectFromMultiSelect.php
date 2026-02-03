@@ -22,11 +22,13 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractFilterDefinitionType;
 
 class SelectFromMultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectFromMultiSelect
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         $productList->prepareGroupByValues($this->getField($filterDefinition), true);
     }
 
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);

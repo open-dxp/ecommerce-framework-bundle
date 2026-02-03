@@ -51,9 +51,8 @@ abstract class AbstractData implements JsonSerializable
             if (method_exists($this, $getter) && method_exists($this, $setter)) {
                 if (null !== $this->$getter() && !$overwrite) {
                     continue;
-                } else {
-                    $this->$setter($value);
                 }
+                $this->$setter($value);
             }
         }
 

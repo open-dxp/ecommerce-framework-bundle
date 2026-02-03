@@ -22,17 +22,13 @@ final class IndexServiceEvents
      * Fired when error occurs during processing attributes for index. Event can influence handling of that error (like ignoring, throwing exceptions, etc.)
      *
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\IndexService\PreprocessAttributeErrorEvent")
-     *
-     * @var string
      */
-    const ATTRIBUTE_PROCESSING_ERROR = 'opendxp.ecommerce.indexservice.preProcessAttributeError';
+    const string ATTRIBUTE_PROCESSING_ERROR = 'opendxp.ecommerce.indexservice.preProcessAttributeError';
 
     /**
      * Fired when error occurs during pre processing index data. Event can influence handling of that error (like throwing exceptions, etc.)
      *
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\IndexService\PreprocessErrorEvent")
-     *
-     * @var string
      */
-    const GENERAL_PREPROCESSING_ERROR = 'opendxp.ecommerce.indexservice.generalPreProcessingError';
+    const string GENERAL_PREPROCESSING_ERROR = 'opendxp.ecommerce.indexservice.generalPreProcessingError';
 }

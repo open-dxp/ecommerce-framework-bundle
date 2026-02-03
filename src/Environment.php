@@ -25,8 +25,6 @@ class Environment implements EnvironmentInterface
 {
     const USER_ID_NOT_SET = -1;
 
-    protected LocaleServiceInterface $localeService;
-
     protected Currency $defaultCurrency;
 
     protected array $customItems = [];
@@ -49,10 +47,8 @@ class Environment implements EnvironmentInterface
      */
     protected ?string $currentTransientCheckoutTenant = null;
 
-    public function __construct(LocaleServiceInterface $localeService, array $options = [])
+    public function __construct(protected LocaleServiceInterface $localeService, array $options = [])
     {
-        $this->localeService = $localeService;
-
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
@@ -91,11 +87,7 @@ class Environment implements EnvironmentInterface
     {
         $this->load();
 
-        if (isset($this->customItems[$key])) {
-            return $this->customItems[$key];
-        }
-
-        return $defaultValue;
+        return $this->customItems[$key] ?? $defaultValue;
     }
 
     public function setCustomItem(string $key, mixed $value): void
@@ -119,7 +111,7 @@ class Environment implements EnvironmentInterface
     {
         $this->load();
 
-        $this->userId = (int)$userId;
+        $this->userId = $userId;
 
         return $this;
     }
@@ -174,7 +166,7 @@ class Environment implements EnvironmentInterface
     {
         $this->load();
 
-        $this->useGuestCart = (bool)$useGuestCart;
+        $this->useGuestCart = $useGuestCart;
     }
 
     /**
@@ -251,7 +243,7 @@ class Environment implements EnvironmentInterface
     {
         $locale = $this->localeService->findLocale();
         if (Tool::isValidLanguage($locale)) {
-            return (string)$locale;
+            return $locale;
         }
 
         return Tool::getDefaultLanguage();

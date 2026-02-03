@@ -27,6 +27,7 @@ class LazyLoadingPriceInfo extends AbstractPriceInfo implements PriceInfoInterfa
      */
     protected array $priceRegistry = [];
 
+    #[\Override]
     public static function getInstance(): static
     {
         return parent::getInstance();
@@ -36,20 +37,19 @@ class LazyLoadingPriceInfo extends AbstractPriceInfo implements PriceInfoInterfa
     {
         if (array_key_exists($name, $this->priceRegistry)) {
             return $this->priceRegistry[$name];
-        } else {
-            if (method_exists($this, '_' . $name)) {
-                $priceInfo = $this->{'_' . $name}();
-            } elseif (method_exists($this->getPriceSystem(), $name)) {
-                $method = $name;
-                $priceInfo = $this->getPriceSystem()->$method($this->getProduct(), $this->getQuantity(), $this->getProducts());
-            } else {
-                throw new \OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException($name . ' is not supported for ' . get_class($this));
-            }
-            if ($priceInfo != null && method_exists($priceInfo, 'setPriceSystem')) {
-                $priceInfo->setPriceSystem($this->getPriceSystem());
-            }
-            $this->priceRegistry[$name] = $priceInfo;
         }
+        if (method_exists($this, '_' . $name)) {
+            $priceInfo = $this->{'_' . $name}();
+        } elseif (method_exists($this->getPriceSystem(), $name)) {
+            $method = $name;
+            $priceInfo = $this->getPriceSystem()->$method($this->getProduct(), $this->getQuantity(), $this->getProducts());
+        } else {
+            throw new \OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException($name . ' is not supported for ' . static::class);
+        }
+        if ($priceInfo != null && method_exists($priceInfo, 'setPriceSystem')) {
+            $priceInfo->setPriceSystem($this->getPriceSystem());
+        }
+        $this->priceRegistry[$name] = $priceInfo;
 
         return $this->priceRegistry[$name];
     }

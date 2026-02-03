@@ -37,10 +37,6 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
 
     public array $predefinedPreSelectOptions = [];
 
-    public function __construct()
-    {
-    }
-
     public function setConsiderTenants(bool $considerTenants): void
     {
         $this->considerTenants = $considerTenants;
@@ -168,6 +164,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
      *
      * @see Data::getVersionPreview
      */
+    #[\Override]
     public function getVersionPreview(mixed $data, $object = null, array $params = []): string
     {
         if ($data instanceof ObjectData\IndexFieldSelection) {
@@ -177,11 +174,12 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
         return '';
     }
 
+    #[\Override]
     public function checkValidity(mixed $data, bool $omitMandatoryCheck = false, array $params = []): void
     {
         if (!$omitMandatoryCheck && $this->getMandatory() &&
             ($data === null || $data->getField() === null)) {
-            throw new Exception(get_class($this).': Empty mandatory field [ '.$this->getName().' ]');
+            throw new Exception(static::class.': Empty mandatory field [ '.$this->getName().' ]');
         }
     }
 
@@ -192,6 +190,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
      *
      * @internal
      */
+    #[\Override]
     public function getForCsvExport(DataObject\Localizedfield|DataObject\Fieldcollection\Data\AbstractData|DataObject\Objectbrick\Data\AbstractData|DataObject\Concrete $object, array $params = []): string
     {
         $key = $this->getName();
@@ -211,6 +210,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
     /**
      * True if change is allowed in edit mode.
      */
+    #[\Override]
     public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
     {
         return false;

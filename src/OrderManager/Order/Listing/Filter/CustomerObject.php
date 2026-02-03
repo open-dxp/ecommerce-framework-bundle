@@ -22,11 +22,8 @@ use OpenDxp\Model\Element\ElementInterface;
 
 class CustomerObject implements OrderListFilterInterface
 {
-    protected ElementInterface $customer;
-
-    public function __construct(ElementInterface $customer)
+    public function __construct(protected ElementInterface $customer)
     {
-        $this->customer = $customer;
     }
 
     public function apply(OrderListInterface $orderList): static

@@ -33,6 +33,7 @@ class DefaultFindologic extends AbstractConfig implements FindologicConfigInterf
 
     protected array $clientConfig;
 
+    #[\Override]
     protected function processOptions(array $options): void
     {
         $options = $this->resolveOptions($options);
@@ -84,6 +85,7 @@ class DefaultFindologic extends AbstractConfig implements FindologicConfigInterf
     {
     }
 
+    #[\Override]
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof DefaultFindologicWorker) {
@@ -96,6 +98,7 @@ class DefaultFindologic extends AbstractConfig implements FindologicConfigInterf
         parent::setTenantWorker($tenantWorker);
     }
 
+    #[\Override]
     public function getTenantWorker(): DefaultFindologicWorker
     {
         $tenantWorker = parent::getTenantWorker();

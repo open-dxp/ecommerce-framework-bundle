@@ -37,7 +37,7 @@ final class RegisterConfiguredServicesPass implements CompilerPassInterface
     public function registerIndexServiceWorkers(ContainerBuilder $container): void
     {
         $workers = [];
-        foreach ($container->findTaggedServiceIds('opendxp_ecommerce.index_service.worker') as $id => $tags) {
+        foreach (array_keys($container->findTaggedServiceIds('opendxp_ecommerce.index_service.worker')) as $id) {
             $workers[] = new Reference($id);
         }
 
@@ -49,7 +49,7 @@ final class RegisterConfiguredServicesPass implements CompilerPassInterface
     {
         $trackers = [];
 
-        foreach ($container->findTaggedServiceIds('opendxp_ecommerce.tracking.tracker') as $id => $tags) {
+        foreach (array_keys($container->findTaggedServiceIds('opendxp_ecommerce.tracking.tracker')) as $id) {
             $trackers[] = new Reference($id);
         }
 

@@ -67,11 +67,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
 
     public function isValidSetting(): bool
     {
-        if ($this->characterPoolExists($this->configuration->getCharacterType()) && $this->configuration->getLength() > 0) {
-            return true;
-        }
-
-        return false;
+        return $this->characterPoolExists($this->configuration->getCharacterType()) && $this->configuration->getLength() > 0;
     }
 
     /**
@@ -85,6 +81,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
     /**
      * @throws VoucherServiceException
      */
+    #[\Override]
     public function checkToken(string $code, CartInterface $cart): bool
     {
         parent::checkToken($code, $cart);
@@ -153,9 +150,8 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
             $tokenObject->delete();
 
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public function releaseToken(string $code, CartInterface $cart): bool
@@ -250,7 +246,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
         $dbCount = Token\Listing::getCountByLength($this->getFinalTokenLength(), $this->seriesId);
 
         if ($dbCount !== null && $maxCount >= 0) {
-            return ((int)$dbCount + $this->configuration->getCount()) / $maxCount;
+            return ($dbCount + $this->configuration->getCount()) / $maxCount;
         }
 
         return 1.0;
@@ -262,11 +258,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
             return false;
         }
         $insertProbability = $this->getInsertProbability();
-        if ($insertProbability <= self::MAX_PROBABILITY) {
-            return true;
-        }
-
-        return false;
+        return $insertProbability <= self::MAX_PROBABILITY;
     }
 
     /**
@@ -276,7 +268,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
     {
         $count = strlen($this->getCharacterPool());
 
-        return pow($count, $this->configuration->getLength());
+        return $count ** $this->configuration->getLength();
     }
 
     /**
@@ -331,12 +323,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
             $tokens = [$tokens];
         }
         $check = array_intersect_key($tokens, $cTokens);
-
-        if (!empty($check)) {
-            return true;
-        }
-
-        return false;
+        return $check !== [];
     }
 
     /**
@@ -417,7 +404,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
                     // if not so, merge the checkTokens array with the array of tokens to insert and
                     // increase the overall count by the length of the checkArray i.e. the checkTokenStep
                     if (!Token\Listing::tokensExist($checkTokens)) {
-                        $insertTokens = array_merge($insertTokens, $checkTokens);
+                        $insertTokens = [...$insertTokens, ...$checkTokens];
                         $insertCount += $tokenCheckStep;
                     }
                     $checkTokenCount = 0;
@@ -427,7 +414,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
                     if ($possibleMaxQuerySizeError) {
                         if (($insertCount * $finalTokenLength / 1024 / 1024) > 15) {
                             $resultTokenSet[] = $insertTokens;
-                            $insertCheckTokens = array_merge($insertTokens, $insertCheckTokens);
+                            $insertCheckTokens = [...$insertTokens, ...$insertCheckTokens];
                             $insertTokens = [];
                         }
                     } else {
@@ -459,7 +446,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
         $periodData = [];
         for ($i = $usagePeriod; $i > 0; $i--) {
             $index = $now->format('Y-m-d');
-            $periodData[$index] = isset($data[$index]) ? $data[$index] : 0;
+            $periodData[$index] = $data[$index] ?? 0;
             $now->modify('-1 day');
         }
         $data = $periodData;
@@ -529,6 +516,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
      *
      * @throws Exception
      */
+    #[\Override]
     protected function getExportData(array $params): array
     {
         $tokens = new Token\Listing();
@@ -609,7 +597,7 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
      */
     public function addCharacterPool(array $pool): void
     {
-        $this->characterPools = array_merge($this->characterPools, $pool);
+        $this->characterPools = [...$this->characterPools, ...$pool];
     }
 
     public function setTemplate(string $template): void

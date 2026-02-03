@@ -40,12 +40,9 @@ class BootstrapCommand extends AbstractIndexServiceCommand
         Parallelization::runAfterBatch as parentRunAfterBatch;
     }
 
-    protected IndexService $indexService;
-
-    public function __construct(IndexService $indexService, string $name = null)
+    public function __construct(protected IndexService $indexService, string $name = null)
     {
         parent::__construct($name);
-        $this->indexService = $indexService;
     }
 
     protected function configure(): void
@@ -130,7 +127,7 @@ class BootstrapCommand extends AbstractIndexServiceCommand
     protected function runAfterBatch(InputInterface $input, OutputInterface $output, array $items): void
     {
         $this->parentRunAfterBatch($input, $output, $items);
-        $this->handleTimeout(function (string $abortMessage) use ($output) {
+        $this->handleTimeout(function (string $abortMessage) use ($output): void {
             $output->writeln($abortMessage);
             exit(0); //exit with success
         });

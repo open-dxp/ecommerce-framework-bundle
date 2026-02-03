@@ -103,6 +103,7 @@ class IndexFieldSelectionCombo extends Select
         return $this->considerTenants;
     }
 
+    #[\Override]
     public function jsonSerialize(): mixed
     {
         if (Service::doRemoveDynamicOptions()) {
@@ -112,6 +113,7 @@ class IndexFieldSelectionCombo extends Select
         return parent::jsonSerialize();
     }
 
+    #[\Override]
     public function getFieldType(): string
     {
         return 'indexFieldSelectionCombo';

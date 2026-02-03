@@ -90,7 +90,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
         if (empty($itemKey)) {
             $itemKey = (string) $product->getId();
 
-            if (!empty($subProducts)) {
+            if ($subProducts !== []) {
                 $itemKey = $itemKey . '_' . uniqid();
             }
         }
@@ -126,7 +126,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
             $item->setCount($item->getCount() + $count);
         }
 
-        if (!empty($subProducts)) {
+        if ($subProducts !== []) {
             $subItems = [];
             foreach ($subProducts as $subProduct) {
                 if (array_key_exists($subProduct->getProduct()->getId(), $subItems)) {
@@ -181,7 +181,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
         if (empty($itemKey)) {
             $itemKey = (string) $product->getId();
 
-            if (!empty($subProducts)) {
+            if ($subProducts !== []) {
                 $itemKey = $itemKey . '_' . uniqid();
             }
         }
@@ -214,7 +214,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
         }
 
         // handle sub products
-        if (!empty($subProducts)) {
+        if ($subProducts !== []) {
             $subItems = [];
             foreach ($subProducts as $subProduct) {
                 if (isset($subItems[$subProduct->getProduct()->getId()])) {
@@ -262,16 +262,14 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
                 if ($this->subItemAmount == null) {
                     $count = 0;
                     $items = $this->getItems();
-                    if (!empty($items)) {
-                        foreach ($items as $item) {
-                            $subItems = $item->getSubItems();
-                            if ($subItems) {
-                                foreach ($subItems as $subItem) {
-                                    $count += ($subItem->getCount() * $item->getCount());
-                                }
-                            } else {
-                                $count += $item->getCount();
+                    foreach ($items as $item) {
+                        $subItems = $item->getSubItems();
+                        if ($subItems) {
+                            foreach ($subItems as $subItem) {
+                                $count += ($subItem->getCount() * $item->getCount());
                             }
+                        } else {
+                            $count += $item->getCount();
                         }
                     }
                     $this->subItemAmount = $count;
@@ -284,16 +282,14 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
                 if ($this->mainAndSubItemAmount == null) {
                     $count = 0;
                     $items = $this->getItems();
-                    if (!empty($items)) {
-                        foreach ($items as $item) {
-                            $subItems = $item->getSubItems();
-                            if ($subItems) {
-                                foreach ($subItems as $subItem) {
-                                    $count += ($subItem->getCount() * $item->getCount());
-                                }
+                    foreach ($items as $item) {
+                        $subItems = $item->getSubItems();
+                        if ($subItems) {
+                            foreach ($subItems as $subItem) {
+                                $count += ($subItem->getCount() * $item->getCount());
                             }
-                            $count += $item->getCount();
                         }
+                        $count += $item->getCount();
                     }
                     $this->mainAndSubItemAmount = $count;
                 }
@@ -305,10 +301,8 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
                 if ($this->itemAmount == null) {
                     $count = 0;
                     $items = $this->getItems();
-                    if (!empty($items)) {
-                        foreach ($items as $item) {
-                            $count += $item->getCount();
-                        }
+                    foreach ($items as $item) {
+                        $count += $item->getCount();
                     }
                     $this->itemAmount = $count;
                 }
@@ -334,14 +328,12 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
                     $items = $this->getItems();
                     $count = 0;
 
-                    if (!empty($items)) {
-                        foreach ($items as $item) {
-                            $subItems = $item->getSubItems();
-                            if (!empty($subItems)) {
-                                $count += count($subItems);
-                            } else {
-                                $count++;
-                            }
+                    foreach ($items as $item) {
+                        $subItems = $item->getSubItems();
+                        if (!empty($subItems)) {
+                            $count += count($subItems);
+                        } else {
+                            $count++;
                         }
                     }
                     $this->subItemCount = $count;
@@ -355,11 +347,9 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
                     $items = $this->getItems();
                     $count = count($items);
 
-                    if (!empty($items)) {
-                        foreach ($items as $item) {
-                            $subItems = $item->getSubItems();
-                            $count += count($subItems);
-                        }
+                    foreach ($items as $item) {
+                        $subItems = $item->getSubItems();
+                        $count += count($subItems);
                     }
                     $this->mainAndSubItemCount = $count;
                 }
@@ -382,7 +372,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
 
     public function getItems(): array
     {
-        $this->items = $this->items ? $this->items : [];
+        $this->items = $this->items ?: [];
 
         return $this->items;
     }
@@ -392,7 +382,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
         //load items first in order to lazyload items (if they are lazy loaded)
         $this->getItems();
 
-        return array_key_exists($itemKey, $this->items) ? $this->items[$itemKey] : null;
+        return $this->items[$itemKey] ?? null;
     }
 
     public function isEmpty(): bool
@@ -420,7 +410,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
             $this->getPriceCalculator()->calculate();
         }
 
-        return array_key_exists($itemKey, $this->giftItems) ? $this->giftItems[$itemKey] : null;
+        return $this->giftItems[$itemKey] ?? null;
     }
 
     /**
@@ -489,11 +479,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     public function setCreationDate(DateTime $creationDate = null): void
     {
         $this->creationDate = $creationDate;
-        if ($creationDate) {
-            $this->creationDateTimestamp = $creationDate->getTimestamp();
-        } else {
-            $this->creationDateTimestamp = null;
-        }
+        $this->creationDateTimestamp = $creationDate ? $creationDate->getTimestamp() : null;
     }
 
     public function setCreationDateTimestamp(int $creationDateTimestamp): void
@@ -520,11 +506,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     public function setModificationDate(DateTime $modificationDate = null): void
     {
         $this->modificationDate = $modificationDate;
-        if ($modificationDate) {
-            $this->modificationDateTimestamp = $modificationDate->getTimestamp();
-        } else {
-            $this->modificationDateTimestamp = null;
-        }
+        $this->modificationDateTimestamp = $modificationDate ? $modificationDate->getTimestamp() : null;
     }
 
     public function setModificationDateTimestamp(int $modificationDateTimestamp): void
@@ -545,7 +527,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
 
     public function setUserId(int $userId): void
     {
-        $this->userId = (int)$userId;
+        $this->userId = $userId;
     }
 
     abstract public function save(): void;
@@ -645,16 +627,12 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     public function addVoucherToken(string $code): bool
     {
         $service = Factory::getInstance()->getVoucherService();
-        if ($service->checkToken($code, $this)) {
-            if ($service->reserveToken($code, $this)) {
-                $index = 'voucher_' . $code;
-                $this->setCheckoutData($index, $code);
-                $this->save();
-
-                $this->modified();
-
-                return true;
-            }
+        if ($service->checkToken($code, $this) && $service->reserveToken($code, $this)) {
+            $index = 'voucher_' . $code;
+            $this->setCheckoutData($index, $code);
+            $this->save();
+            $this->modified();
+            return true;
         }
 
         return false;
@@ -763,7 +741,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     protected static function isValidCartItem(CartItemInterface $item): bool
     {
         $product = $item->getProduct();
-        if ($product instanceof CheckoutableInterface && !$product instanceof MockProduct) {
+        if (!$product instanceof MockProduct) {
             return true;
         }
 

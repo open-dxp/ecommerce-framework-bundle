@@ -28,11 +28,8 @@ class Discount implements DiscountInterface
 {
     protected Decimal $amount;
 
-    protected ?RuleInterface $rule = null;
-
-    public function __construct(RuleInterface $rule)
+    public function __construct(protected ?RuleInterface $rule)
     {
-        $this->rule = $rule;
         $this->amount = Decimal::create(0);
     }
 

@@ -22,11 +22,8 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager;
  */
 abstract class AbstractOrderListItem
 {
-    protected array $resultRow;
-
-    public function __construct(array $resultRow)
+    public function __construct(protected array $resultRow)
     {
-        $this->resultRow = $resultRow;
     }
 
     abstract public function getId(): int;

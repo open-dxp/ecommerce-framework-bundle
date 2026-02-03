@@ -100,16 +100,12 @@ class DefaultService implements VoucherServiceInterface
 
     public function applyToken(string $code, CartInterface $cart, AbstractOrder $order): bool
     {
-        if ($tokenManager = $this->getTokenManager($code)) {
-            if ($orderToken = $tokenManager->applyToken($code, $cart, $order)) {
-                $voucherTokens = $order->getVoucherTokens();
-                $voucherTokens[] = $orderToken;
-                $order->setVoucherTokens($voucherTokens);
-
-                $this->releaseToken($code, $cart);
-
-                return true;
-            }
+        if (($tokenManager = $this->getTokenManager($code)) && $orderToken = $tokenManager->applyToken($code, $cart, $order)) {
+            $voucherTokens = $order->getVoucherTokens();
+            $voucherTokens[] = $orderToken;
+            $order->setVoucherTokens($voucherTokens);
+            $this->releaseToken($code, $cart);
+            return true;
         }
 
         return false;
@@ -181,9 +177,7 @@ class DefaultService implements VoucherServiceInterface
         }
 
         // calculate not applied rules with voucher conditions
-        $notAppliedRules = array_udiff($validRules, $appliedRules, function ($rule1, $rule2) {
-            return $rule1->getId() <=> $rule2->getId();
-        });
+        $notAppliedRules = array_udiff($validRules, $appliedRules, fn($rule1, $rule2) => $rule1->getId() <=> $rule2->getId());
         $notAppliedRulesWithVoucherCondition = [];
         foreach ($notAppliedRules as $notAppliedRule) {
             $conditions = $notAppliedRule->getConditionsByType(VoucherToken::class);
@@ -254,17 +248,17 @@ class DefaultService implements VoucherServiceInterface
     {
         if (isset($seriesId)) {
             return Statistic::cleanUpStatistics($this->statisticsDaysThreshold, $seriesId);
-        } else {
-            return Statistic::cleanUpStatistics($this->statisticsDaysThreshold);
         }
+        return Statistic::cleanUpStatistics($this->statisticsDaysThreshold);
     }
 
     public function getTokenManager(string $code): ?TokenManager\TokenManagerInterface
     {
-        if ($token = Token::getByCode($code)) {
-            if ($series = \OpenDxp\Model\DataObject\OnlineShopVoucherSeries::getById($token->getVoucherSeriesId())) {
-                return $series->getTokenManager();
-            }
+        if (!$token = Token::getByCode($code)) {
+            return null;
+        }
+        if ($series = \OpenDxp\Model\DataObject\OnlineShopVoucherSeries::getById($token->getVoucherSeriesId())) {
+            return $series->getTokenManager();
         }
 
         return null;

@@ -39,15 +39,9 @@ class ProcessPreparationQueueCommand extends AbstractIndexServiceCommand
         Parallelization::runAfterBatch as parentRunAfterBatch;
     }
 
-    protected IndexUpdateService $indexUpdateService;
-
-    protected IndexService $indexService;
-
-    public function __construct(IndexUpdateService $indexUpdateService, IndexService $indexService, string $name = null)
+    public function __construct(protected IndexUpdateService $indexUpdateService, protected IndexService $indexService, string $name = null)
     {
         parent::__construct($name);
-        $this->indexUpdateService = $indexUpdateService;
-        $this->indexService = $indexService;
     }
 
     protected function configure(): void
@@ -74,11 +68,8 @@ class ProcessPreparationQueueCommand extends AbstractIndexServiceCommand
     {
         $tenantNameFilterList = $input->getOption('tenant');
         $combinedRows = $this->indexUpdateService->fetchProductIdsForPreparation($tenantNameFilterList);
-        $rowsWithSerializedItems = array_map(function ($row) {
-            return serialize($row);
-        }, $combinedRows);
 
-        return $rowsWithSerializedItems;
+        return array_map(fn($row) => serialize($row), $combinedRows);
     }
 
     protected function runSingleCommand(string $serializedRow, InputInterface $input, OutputInterface $output): void
@@ -104,7 +95,7 @@ class ProcessPreparationQueueCommand extends AbstractIndexServiceCommand
     protected function runAfterBatch(InputInterface $input, OutputInterface $output, array $items): void
     {
         $this->parentRunAfterBatch($input, $output, $items);
-        $this->handleTimeout(function (string $abortMessage) use ($output) {
+        $this->handleTimeout(function (string $abortMessage) use ($output): void {
             $output->writeln($abortMessage);
             exit(0); //exit with success
         });

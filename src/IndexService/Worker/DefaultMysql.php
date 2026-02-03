@@ -40,13 +40,9 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
 
     protected Helper\MySql $mySqlHelper;
 
-    protected LoggerInterface $logger;
-
-    public function __construct(MysqlConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, LoggerInterface $opendxpEcommerceSqlLogger)
+    public function __construct(MysqlConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
     {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
-
-        $this->logger = $opendxpEcommerceSqlLogger;
         $this->mySqlHelper = new Helper\MySql($tenantConfig, $db);
     }
 
@@ -113,11 +109,7 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
                         while ($currentCategory instanceof AbstractCategory) {
                             $parentCategoryIds[$currentCategory->getId()] = $currentCategory->getId();
 
-                            if ($currentCategory->getOSProductsInParentCategoryVisible()) {
-                                $currentCategory = $currentCategory->getParent();
-                            } else {
-                                $currentCategory = null;
-                            }
+                            $currentCategory = $currentCategory->getOSProductsInParentCategoryVisible() ? $currentCategory->getParent() : null;
                         }
                     }
                 }
@@ -245,6 +237,7 @@ class DefaultMysql extends AbstractWorker implements WorkerInterface
     /**
      * @return string[]
      */
+    #[\Override]
     protected function getSystemAttributes(): array
     {
         return $this->mySqlHelper->getSystemAttributes();

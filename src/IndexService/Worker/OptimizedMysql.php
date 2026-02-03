@@ -37,13 +37,9 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
 
     protected Helper\MySql $mySqlHelper;
 
-    protected LoggerInterface $logger;
-
-    public function __construct(OptimizedMysqlConfig $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, LoggerInterface $opendxpEcommerceSqlLogger)
+    public function __construct(OptimizedMysqlConfig $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
     {
         parent::__construct($tenantConfig, $db, $eventDispatcher);
-
-        $this->logger = $opendxpEcommerceSqlLogger;
         $this->mySqlHelper = new Helper\MySql($tenantConfig, $db);
     }
 
@@ -156,6 +152,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
     /**
      * @return string[]
      */
+    #[\Override]
     protected function getSystemAttributes(): array
     {
         return $this->mySqlHelper->getSystemAttributes();

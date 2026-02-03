@@ -52,7 +52,7 @@ class CartDiscount implements DiscountInterface, CartActionInterface
 
         //make sure that one rule is applied only once
         foreach ($priceCalculator->getModificators() as &$modificator) {
-            if ($modificator instanceof Discount && $modificator->getRuleId() == $environment->getRule()->getId()) {
+            if ($modificator instanceof Discount && $modificator->getRuleId() === $environment->getRule()->getId()) {
                 $modificator->setAmount($amount);
                 $priceCalculator->calculate(true);
 

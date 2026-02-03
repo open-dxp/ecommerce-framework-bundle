@@ -52,7 +52,7 @@ class FilterGroupHelper
 
         $data = [];
 
-        if ($columnType == 'relation') {
+        if ($columnType === 'relation') {
             $productList->prepareGroupByRelationValues($field);
             $values = $productList->getGroupByRelationValues($field);
 
@@ -69,7 +69,7 @@ class FilterGroupHelper
                     $data[$v] = ['key' => $v, 'value' => $name . ' (' . $obj->getId() . ')'];
                 }
             }
-        } elseif ($columnType == 'multiselect') {
+        } elseif ($columnType === 'multiselect') {
             $productList->prepareGroupByValues($field);
             $values = $productList->getGroupByValues($field);
 
@@ -80,7 +80,7 @@ class FilterGroupHelper
                     $data[$h] = ['key' => $h, 'value' => $h];
                 }
             }
-        } elseif ($columnType == 'category') {
+        } elseif ($columnType === 'category') {
             $values = $productList->getGroupByValues($field);
 
             foreach ($values as $v) {

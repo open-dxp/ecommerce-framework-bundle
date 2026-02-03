@@ -39,7 +39,10 @@ class DefaultClassificationAttributeGetter implements GetterInterface
 
         foreach ($sourceList as $source) {
             $attributeGetter = 'get' . ucfirst($source['fieldname']);
-            if (!method_exists($object, $attributeGetter) || !($classificationStore = $object->$attributeGetter()) instanceof Classificationstore) {
+            if (!method_exists($object, $attributeGetter)) {
+                continue;
+            }
+            if (!($classificationStore = $object->$attributeGetter()) instanceof Classificationstore) {
                 continue;
             }
             /** @var Classificationstore $classificationStore */

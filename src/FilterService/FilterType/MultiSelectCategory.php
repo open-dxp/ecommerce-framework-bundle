@@ -45,14 +45,10 @@ class MultiSelectCategory extends AbstractFilterType
 
         foreach ($rawValues as $v) {
             if ($v['value']) {
-                $explode = array_map('intval', explode(',', $v['value']));
+                $explode = array_map(intval(...), explode(',', $v['value']));
                 foreach ($explode as $e) {
                     if (empty($availableRelations) || ($availableRelations[$e] ?? false)) {
-                        if (!empty($values[$e])) {
-                            $count = $values[$e]['count'] + $v['count'];
-                        } else {
-                            $count = $v['count'];
-                        }
+                        $count = empty($values[$e]) ? $v['count'] : $values[$e]['count'] + $v['count'];
                         $values[$e] = ['value' => $e, 'count' => $count];
                     }
                 }
@@ -108,11 +104,7 @@ class MultiSelectCategory extends AbstractFilterType
                 $useAndCondition = $filterDefinition->getUseAndCondition();
             }
 
-            if ($useAndCondition) {
-                $conditions = implode(' AND ', $conditions);
-            } else {
-                $conditions = '(' . implode(' OR ', $conditions) . ')';
-            }
+            $conditions = $useAndCondition ? implode(' AND ', $conditions) : '(' . implode(' OR ', $conditions) . ')';
 
             if ($isPrecondition) {
                 $productList->addCondition($conditions, 'PRECONDITION_' . $filterDefinition->getField());

@@ -232,7 +232,7 @@ class AdminOrderController extends UserAwareController implements KernelControll
                         $json = $json[0];
                     }
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // noting to do
             }
 
@@ -279,7 +279,7 @@ class AdminOrderController extends UserAwareController implements KernelControll
             }
 
             // order count
-            $addOrderCount = function () use ($customer, &$arrCustomerAccount) {
+            $addOrderCount = function () use ($customer, &$arrCustomerAccount): void {
                 $order = new OnlineShopOrder();
                 $field = $order->getClass()->getFieldDefinition('customer');
                 if ($field instanceof ManyToOneRelation) {

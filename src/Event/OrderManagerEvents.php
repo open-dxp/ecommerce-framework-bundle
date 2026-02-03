@@ -20,36 +20,26 @@ final class OrderManagerEvents
 {
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
-     *
-     * @var string
      */
-    const PRE_GET_OR_CREATE_ORDER_FROM_CART = 'opendxp.ecommerce.ordermanager.preGetOrCreateOrderFromCart';
+    const string PRE_GET_OR_CREATE_ORDER_FROM_CART = 'opendxp.ecommerce.ordermanager.preGetOrCreateOrderFromCart';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
-     *
-     * @var string
      */
-    const PRE_UPDATE_ORDER = 'opendxp.ecommerce.ordermanager.preUpdateOrder';
+    const string PRE_UPDATE_ORDER = 'opendxp.ecommerce.ordermanager.preUpdateOrder';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
-     *
-     * @var string
      */
-    const POST_UPDATE_ORDER = 'opendxp.ecommerce.ordermanager.postUpdateOrder';
+    const string POST_UPDATE_ORDER = 'opendxp.ecommerce.ordermanager.postUpdateOrder';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerItemEvent")
-     *
-     * @var string
      */
-    const POST_CREATE_ORDER_ITEM = 'opendxp.ecommerce.ordermanager.postCreateOrderItem';
+    const string POST_CREATE_ORDER_ITEM = 'opendxp.ecommerce.ordermanager.postCreateOrderItem';
 
     /**
      * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerItemEvent")
-     *
-     * @var string
      */
-    const BUILD_ORDER_ITEM_KEY = 'opendxp.ecommerce.ordermanager.buildOrderItemKey';
+    const string BUILD_ORDER_ITEM_KEY = 'opendxp.ecommerce.ordermanager.buildOrderItemKey';
 }

@@ -23,6 +23,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\FilterNumberRange;
 
 class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\NumberRange
 {
+    #[\Override]
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
         //$productList->prepareGroupByValues($this->getField($filterDefinition), true);
@@ -33,6 +34,7 @@ class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
      *
      * @throws Exception
      */
+    #[\Override]
     public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array
     {
         $currentField = $this->getField($filterDefinition);
@@ -75,6 +77,7 @@ class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
     /**
      * @param FilterNumberRange $filterDefinition
      */
+    #[\Override]
     public function addCondition(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter, array $params, bool $isPrecondition = false): array
     {
         $field = $this->getField($filterDefinition);
@@ -92,11 +95,7 @@ class NumberRange extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService
 
         if ($value['from'] || $value['to']) {
             $v = [];
-            if ($value['from']) {
-                $v['min'] = $value['from'];
-            } else {
-                $v['min'] = 0;
-            }
+            $v['min'] = $value['from'] ?: 0;
 
             if ($value['to']) {
                 $v['max'] = $value['to'];

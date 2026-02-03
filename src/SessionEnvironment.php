@@ -37,15 +37,11 @@ class SessionEnvironment extends Environment implements EnvironmentInterface
 
     const SESSION_KEY_CHECKOUT_TENANT = 'currentcheckouttenant';
 
-    protected RequestStack $requestStack;
-
     protected bool $sessionLoaded = false;
 
-    public function __construct(RequestStack $requestStack, LocaleServiceInterface $localeService, array $options = [])
+    public function __construct(protected RequestStack $requestStack, LocaleServiceInterface $localeService, array $options = [])
     {
         parent::__construct($localeService, $options);
-
-        $this->requestStack = $requestStack;
     }
 
     protected function load(): void
@@ -71,6 +67,7 @@ class SessionEnvironment extends Environment implements EnvironmentInterface
         $this->sessionLoaded = true;
     }
 
+    #[\Override]
     public function save(): mixed
     {
         if ($this->isCli()) {
@@ -90,6 +87,7 @@ class SessionEnvironment extends Environment implements EnvironmentInterface
         return $this;
     }
 
+    #[\Override]
     public function clearEnvironment(): void
     {
         parent::clearEnvironment();

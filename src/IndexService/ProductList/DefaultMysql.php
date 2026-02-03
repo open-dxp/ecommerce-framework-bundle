@@ -52,14 +52,10 @@ class DefaultMysql implements ProductListInterface
 
     protected bool $inProductList = true;
 
-    protected LoggerInterface $logger;
-
-    public function __construct(MysqlConfigInterface $tenantConfig, LoggerInterface $opendxpEcommerceSqlLogger)
+    public function __construct(MysqlConfigInterface $tenantConfig, protected LoggerInterface $logger)
     {
         $this->tenantName = $tenantConfig->getTenantName();
         $this->tenantConfig = $tenantConfig;
-
-        $this->logger = $opendxpEcommerceSqlLogger;
         $this->resource = new DefaultMysql\Dao($this, $this->logger);
     }
 
@@ -209,7 +205,7 @@ class DefaultMysql implements ProductListInterface
 
     public function setOffset(int $offset): void
     {
-        if ($this->offset != $offset) {
+        if ($this->offset !== $offset) {
             $this->products = null;
         }
         $this->offset = $offset;
@@ -305,11 +301,11 @@ class DefaultMysql implements ProductListInterface
         foreach ($objectRaws as $raw) {
             $priceSystemArrays[$raw['priceSystemName']][] = $raw['id'];
         }
-        if (count($priceSystemArrays) == 1) {
+        if (count($priceSystemArrays) === 1) {
             $priceSystemName = key($priceSystemArrays);
             $priceSystem = Factory::getInstance()->getPriceSystem($priceSystemName);
             $objectRaws = $priceSystem->filterProductIds($priceSystemArrays[$priceSystemName], null, null, $this->order, $this->getOffset(), $this->getLimit());
-        } elseif (count($priceSystemArrays) == 0) {
+        } elseif (count($priceSystemArrays) === 0) {
             //nothing to do
         } else {
             throw new Exception('Not implemented yet - multiple pricing systems are not supported yet');
@@ -417,9 +413,8 @@ class DefaultMysql implements ProductListInterface
         }
         if ($this->conditionPriceFrom === null && $this->conditionPriceTo === null) {
             return $this->resource->loadGroupByValues($fieldname, $this->buildQueryFromConditions(false, $excludedFieldName, $this->getVariantMode()), $countValues);
-        } else {
-            throw new Exception('Not supported yet');
         }
+        throw new Exception('Not supported yet');
     }
 
     /**
@@ -435,9 +430,8 @@ class DefaultMysql implements ProductListInterface
         }
         if ($this->conditionPriceFrom === null && $this->conditionPriceTo === null) {
             return $this->resource->loadGroupByRelationValues($fieldname, $this->buildQueryFromConditions(false, $excludedFieldName), $countValues);
-        } else {
-            throw new Exception('Not supported yet');
         }
+        throw new Exception('Not supported yet');
     }
 
     protected function buildQueryFromConditions(bool $excludeConditions = false, ?string $excludedFieldname = null, ?string $variantMode = null): string
@@ -536,9 +530,7 @@ class DefaultMysql implements ProductListInterface
                     }
 
                     $condition .= is_array($cond)
-                        ? sprintf(' ( %1$s IN (%2$s) )', $fieldname, implode(',', array_map(function ($value) {
-                            return $this->quote($value);
-                        }, $cond)))
+                        ? sprintf(' ( %1$s IN (%2$s) )', $fieldname, implode(',', array_map(fn($value) => $this->quote($value), $cond)))
                         : '(' . $cond . ')'
                     ;
                 }
@@ -563,11 +555,7 @@ class DefaultMysql implements ProductListInterface
 
             $directionOrderKeys = [];
             foreach ($orderKeys as $key) {
-                if (is_array($key)) {
-                    $directionOrderKeys[] = $key;
-                } else {
-                    $directionOrderKeys[] = [$key, $this->order];
-                }
+                $directionOrderKeys[] = is_array($key) ? $key : [$key, $this->order];
             }
 
             $orderByStringArray = [];
@@ -578,8 +566,8 @@ class DefaultMysql implements ProductListInterface
                 }
                 $direction = $keyDirection[1];
 
-                if ($this->getVariantMode() == ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
-                    if (strtoupper($this->order) == 'DESC') {
+                if ($this->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
+                    if (strtoupper($this->order) === 'DESC') {
                         $orderByStringArray[] = 'max(' . $this->resource->quoteIdentifier($key) . ') ' . $direction;
                     } else {
                         $orderByStringArray[] = 'min(' . $this->resource->quoteIdentifier($key) . ') ' . $direction;

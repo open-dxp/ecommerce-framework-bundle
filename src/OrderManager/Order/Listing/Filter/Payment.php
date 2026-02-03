@@ -47,17 +47,11 @@ class Payment implements OrderListFilterInterface
 
     public function apply(OrderListInterface $orderList): static
     {
-        switch ($this->value) {
-            case self::PAYMENT_STATE_OK:
-                $orderList->addCondition('order.paymentAuthorizedData_aliasCC IS NOT NULL');
-
-                break;
-
-            case self::PAYMENT_STATE_FAIL:
-                $orderList->addCondition('order.paymentAuthorizedData_aliasCC IS NULL');
-
-                break;
-        }
+        match ($this->value) {
+            self::PAYMENT_STATE_OK => $orderList->addCondition('order.paymentAuthorizedData_aliasCC IS NOT NULL'),
+            self::PAYMENT_STATE_FAIL => $orderList->addCondition('order.paymentAuthorizedData_aliasCC IS NULL'),
+            default => $this,
+        };
 
         return $this;
     }

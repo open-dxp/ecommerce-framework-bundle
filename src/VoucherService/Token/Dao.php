@@ -54,14 +54,14 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
     {
         $reservation = Reservation::get($this->model->getToken(), $cart);
 
-        return $reservation !== null;
+        return $reservation instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Reservation;
     }
 
     public function getTokenUsages(string $code): ?int
     {
         try {
             return (int) $this->db->fetchOne('SELECT usages FROM ' . self::TABLE_NAME . ' WHERE token = ?', [$code]);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }
@@ -72,7 +72,7 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
             $this->db->executeQuery('UPDATE ' . self::TABLE_NAME . ' SET usages=usages+1 WHERE token = ?', [$this->model->getToken()]);
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }
@@ -83,7 +83,7 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
             $this->db->executeQuery('UPDATE ' . self::TABLE_NAME . ' SET usages=usages-1 WHERE token = ?', [$this->model->getToken()]);
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }

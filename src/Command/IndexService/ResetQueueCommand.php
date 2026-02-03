@@ -53,11 +53,7 @@ class ResetQueueCommand extends AbstractIndexServiceCommand
 
         $updater = Factory::getInstance()->getIndexService();
 
-        if ($tenant == '*') {
-            $tenants = $updater->getTenants();
-        } else {
-            $tenants = [$tenant];
-        }
+        $tenants = $tenant == '*' ? $updater->getTenants() : [$tenant];
 
         foreach ($tenants as $tenant) {
             /** @var ProductCentricBatchProcessingWorker $worker */

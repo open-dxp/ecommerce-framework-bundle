@@ -48,19 +48,6 @@ class CheckoutManager implements CheckoutManagerInterface
 
     const FINISHED = 'checkout_finished';
 
-    protected CartInterface $cart;
-
-    protected EnvironmentInterface $environment;
-
-    protected OrderManagerLocatorInterface $orderManagers;
-
-    protected CommitOrderProcessorLocatorInterface $commitOrderProcessors;
-
-    /**
-     * Payment Provider
-     */
-    protected ?PaymentInterface $payment = null;
-
     /**
      * Needed for effective access to one specific checkout step
      *
@@ -81,28 +68,20 @@ class CheckoutManager implements CheckoutManagerInterface
 
     protected bool $paid = true;
 
-    protected EventDispatcherInterface $eventDispatcher;
-
     protected ?HandlePendingPaymentsStrategyInterface $handlePendingPaymentsStrategy = null;
 
     public function __construct(
-        CartInterface $cart,
-        EnvironmentInterface $environment,
-        OrderManagerLocatorInterface $orderManagers,
-        CommitOrderProcessorLocatorInterface $commitOrderProcessors,
+        protected CartInterface $cart,
+        protected EnvironmentInterface $environment,
+        protected OrderManagerLocatorInterface $orderManagers,
+        protected CommitOrderProcessorLocatorInterface $commitOrderProcessors,
         array $checkoutSteps,
-        EventDispatcherInterface $eventDispatcher,
-        PaymentInterface $paymentProvider = null
+        protected EventDispatcherInterface $eventDispatcher,
+        /**
+         * Payment Provider
+         */
+        protected ?PaymentInterface $payment = null
     ) {
-        $this->cart = $cart;
-        $this->environment = $environment;
-
-        $this->orderManagers = $orderManagers;
-        $this->commitOrderProcessors = $commitOrderProcessors;
-
-        $this->payment = $paymentProvider;
-        $this->eventDispatcher = $eventDispatcher;
-
         $this->setCheckoutSteps($checkoutSteps);
     }
 
@@ -111,7 +90,7 @@ class CheckoutManager implements CheckoutManagerInterface
      */
     protected function setCheckoutSteps(array $checkoutSteps): void
     {
-        if (empty($checkoutSteps)) {
+        if ($checkoutSteps === []) {
             return;
         }
 
@@ -146,7 +125,7 @@ class CheckoutManager implements CheckoutManagerInterface
         }
 
         // if no step is set and cart is not finished -> set current step to first step of checkout
-        if (null === $this->currentStep && !$this->isFinished()) {
+        if (!$this->currentStep instanceof \OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\CheckoutStepInterface && !$this->isFinished()) {
             $this->currentStep = $this->checkoutStepOrder[0];
         }
 
@@ -202,9 +181,7 @@ class CheckoutManager implements CheckoutManagerInterface
             }
         }
 
-        $order = $orderManager->getOrCreateOrderFromCart($cart);
-
-        return $order;
+        return $orderManager->getOrCreateOrderFromCart($cart);
     }
 
     public function initOrderPayment(): \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractPaymentInformation
@@ -229,9 +206,9 @@ class CheckoutManager implements CheckoutManagerInterface
         $orderAgent->startPayment();
 
         // always set order state to payment pending when calling start payment
-        if ($order->getOrderState() != $order::ORDER_STATE_PAYMENT_PENDING) {
-            $order->setOrderState($order::ORDER_STATE_PAYMENT_PENDING);
-            $order->save(['versionNote' => 'CheckoutManager::startOrderPayment - set order state to ' . $order::ORDER_STATE_PAYMENT_PENDING . '.']);
+        if ($order->getOrderState() != \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_PENDING) {
+            $order->setOrderState(\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_PENDING);
+            $order->save(['versionNote' => 'CheckoutManager::startOrderPayment - set order state to ' . \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_PENDING . '.']);
         }
 
         $cart = $this->getCart();
@@ -360,9 +337,9 @@ class CheckoutManager implements CheckoutManagerInterface
         $targetPaymentInfo = $targetOrderAgent->startPayment();
 
         // always set order state to payment pending when calling start payment
-        if ($targetOrder->getOrderState() != $targetOrder::ORDER_STATE_PAYMENT_PENDING) {
-            $targetOrder->setOrderState($targetOrder::ORDER_STATE_PAYMENT_PENDING);
-            $targetOrder->save(['versionNote' => 'CheckoutManager::startAndCommitRecurringOrderPayment - set order state to ' . $targetOrder::ORDER_STATE_PAYMENT_PENDING . '.']);
+        if ($targetOrder->getOrderState() != \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_PENDING) {
+            $targetOrder->setOrderState(\OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_PENDING);
+            $targetOrder->save(['versionNote' => 'CheckoutManager::startAndCommitRecurringOrderPayment - set order state to ' . \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_PAYMENT_PENDING . '.']);
         }
 
         $targetOrderAgent->setPaymentProvider($paymentProvider, $sourceOrder);
@@ -491,7 +468,7 @@ class CheckoutManager implements CheckoutManagerInterface
 
     protected function validateCheckoutSteps(): void
     {
-        if (empty($this->checkoutSteps)) {
+        if ($this->checkoutSteps === []) {
             throw new RuntimeException('Checkout manager does not define any checkout steps');
         }
     }
@@ -505,7 +482,7 @@ class CheckoutManager implements CheckoutManagerInterface
     {
         $order = $this->orderManagers->getOrderManager()->getOrderFromCart($this->cart);
 
-        return $order && $order->getOrderState() === $order::ORDER_STATE_COMMITTED;
+        return $order && $order->getOrderState() === \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_COMMITTED;
     }
 
     public function getPayment(): ?PaymentInterface

@@ -26,13 +26,10 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartCheckoutData;
  */
 class Listing extends \OpenDxp\Model\Listing\AbstractListing
 {
+    #[\Override]
     public function isValidOrderKey(string $key): bool
     {
-        if ($key == 'key' || $key == 'cartId') {
-            return true;
-        }
-
-        return false;
+        return $key === 'key' || $key === 'cartId';
     }
 
     public function getCartCheckoutDataItems(): array

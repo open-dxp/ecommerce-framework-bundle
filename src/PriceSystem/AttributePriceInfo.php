@@ -22,14 +22,8 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem;
  */
 class AttributePriceInfo extends AbstractPriceInfo implements PriceInfoInterface
 {
-    protected PriceInterface $price;
-
-    protected PriceInterface $totalPrice;
-
-    public function __construct(PriceInterface $price, int $quantity, PriceInterface $totalPrice)
+    public function __construct(protected PriceInterface $price, int $quantity, protected PriceInterface $totalPrice)
     {
-        $this->price = $price;
-        $this->totalPrice = $totalPrice;
         $this->quantity = $quantity;
     }
 

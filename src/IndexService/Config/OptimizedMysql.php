@@ -39,6 +39,7 @@ class OptimizedMysql extends DefaultMysql implements MockupConfigInterface
      * Gets object mockup by id, can consider subIds and therefore return e.g. an array of values
      * always returns a object mockup if available
      */
+    #[\Override]
     public function getObjectMockupById(int $objectId): DefaultMockup
     {
         /** @var AbstractMockupCacheWorker $worker */
@@ -47,6 +48,7 @@ class OptimizedMysql extends DefaultMysql implements MockupConfigInterface
         return $worker->getMockupFromCache($objectId);
     }
 
+    #[\Override]
     public function setTenantWorker(WorkerInterface $tenantWorker): void
     {
         if (!$tenantWorker instanceof OptimizedMysqlWorker) {

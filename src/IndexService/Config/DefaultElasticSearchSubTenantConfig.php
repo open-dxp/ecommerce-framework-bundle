@@ -26,6 +26,7 @@ class DefaultElasticSearchSubTenantConfig extends ElasticSearch
     /**
      * checks, if product should be in index for current tenant (not subtenant)
      */
+    #[\Override]
     public function inIndex(IndexableInterface $object): bool
     {
         $tenants = null;
@@ -45,6 +46,7 @@ class DefaultElasticSearchSubTenantConfig extends ElasticSearch
      *
      * @return array $subTenantData
      */
+    #[\Override]
     public function prepareSubTenantEntries(IndexableInterface $object, int $subObjectId = null): array
     {
         $subTenantData = [];

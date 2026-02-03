@@ -29,11 +29,7 @@ abstract class AbstractFilterType
 {
     const EMPTY_STRING = '$$EMPTY$$';
 
-    protected TranslatorInterface $translator;
-
     protected EngineInterface $templatingEngine;
-
-    protected string $template;
 
     protected ?Request $request = null;
 
@@ -42,15 +38,13 @@ abstract class AbstractFilterType
      * @param array $options for additional options
      */
     public function __construct(
-        TranslatorInterface $translator,
+        protected TranslatorInterface $translator,
         EngineInterface $templatingEngine,
         RequestStack $requestStack,
-        string $template,
+        protected string $template,
         array $options = []
     ) {
-        $this->translator = $translator;
         $this->templatingEngine = $templatingEngine;
-        $this->template = $template;
         $this->request = $requestStack->getCurrentRequest();
 
         $this->processOptions($options);
@@ -73,12 +67,10 @@ abstract class AbstractFilterType
 
     protected function getTemplate(AbstractFilterDefinitionType $filterDefinition): ?string
     {
-        $template = $this->template;
         if (!empty($filterDefinition->getScriptPath())) {
-            $template = $filterDefinition->getScriptPath();
+            return $filterDefinition->getScriptPath();
         }
-
-        return $template;
+        return $this->template;
     }
 
     protected function getPreSelect(AbstractFilterDefinitionType $filterDefinition): array|string|int|null
@@ -86,7 +78,8 @@ abstract class AbstractFilterType
         $field = $filterDefinition->getField();
         if ($field instanceof IndexFieldSelection) {
             return $field->getPreSelect();
-        } elseif (method_exists($filterDefinition, 'getPreSelect')) {
+        }
+        if (method_exists($filterDefinition, 'getPreSelect')) {
             return $filterDefinition->getPreSelect();
         }
 

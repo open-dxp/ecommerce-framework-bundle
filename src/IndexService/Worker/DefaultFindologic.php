@@ -48,11 +48,8 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
 
     protected SimpleXMLElement $batchData;
 
-    protected LoggerInterface $logger;
-
-    public function __construct(FindologicConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, LoggerInterface $opendxpEcommerceFindologic)
+    public function __construct(FindologicConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
     {
-        $this->logger = $opendxpEcommerceFindologic;
         parent::__construct($tenantConfig, $db, $eventDispatcher);
     }
 
@@ -139,7 +136,10 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
         // add default data
         foreach ($data['data'] as $field => $value) {
             // skip empty values
-            if ((string)$value === '' || (is_array($value) && empty($value))) {
+            if ((string)$value === '') {
+                continue;
+            }
+            if ($value === []) {
                 continue;
             }
             $value = is_string($value) ? htmlspecialchars(strip_tags($value)) : $value;
@@ -196,11 +196,7 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
                                 while ($currentCategory instanceof AbstractCategory) {
                                     $categoryIds[$currentCategory->getId()] = $currentCategory->getId();
 
-                                    if ($currentCategory->getOSProductsInParentCategoryVisible()) {
-                                        $currentCategory = $currentCategory->getParent();
-                                    } else {
-                                        $currentCategory = null;
-                                    }
+                                    $currentCategory = $currentCategory->getOSProductsInParentCategoryVisible() ? $currentCategory->getParent() : null;
                                 }
 
                                 $values->addChild('value', implode('_', array_reverse($categoryIds, true)));

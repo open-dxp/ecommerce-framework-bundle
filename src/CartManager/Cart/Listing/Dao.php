@@ -24,7 +24,7 @@ use Exception;
  */
 class Dao extends \OpenDxp\Model\Listing\Dao\AbstractDao
 {
-    protected string $cartClass = '\OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart';
+    protected string $cartClass = \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart::class;
 
     public function load(): array
     {
@@ -56,7 +56,7 @@ class Dao extends \OpenDxp\Model\Listing\Dao\AbstractDao
                 $this->model->getConditionVariables(),
                 $this->model->getConditionVariableTypes(),
             );
-        } catch (Exception $e) {
+        } catch (Exception) {
             return 0;
         }
     }

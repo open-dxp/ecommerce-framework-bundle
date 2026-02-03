@@ -24,8 +24,6 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 
 class PriceInfo implements PriceInfoInterface
 {
-    protected PriceSystemPriceInfoInterface $priceInfo;
-
     protected Decimal $amount;
 
     /**
@@ -42,13 +40,9 @@ class PriceInfo implements PriceInfoInterface
 
     protected string $priceEnvironmentHash = '';
 
-    protected EnvironmentInterface $environment;
-
-    public function __construct(PriceSystemPriceInfoInterface $priceInfo, EnvironmentInterface $environment)
+    public function __construct(protected PriceSystemPriceInfoInterface $priceInfo, protected EnvironmentInterface $environment)
     {
         $this->amount = Decimal::create(0);
-        $this->priceInfo = $priceInfo;
-        $this->environment = $environment;
     }
 
     public function addRule(RuleInterface $rule): static
@@ -77,7 +71,7 @@ class PriceInfo implements PriceInfoInterface
     protected function environmentHashChanged(): bool
     {
         $hash = $this->getEnvironment()->getHash();
-        if ($this->priceEnvironmentHash != $hash) {
+        if ($this->priceEnvironmentHash !== $hash) {
             $this->validRules = null;
             $this->rulesApplied = false;
             $this->priceEnvironmentHash = $hash;
@@ -250,6 +244,6 @@ class PriceInfo implements PriceInfoInterface
 
     public function hasRulesApplied(): bool
     {
-        return (bool)$this->rulesApplied;
+        return $this->rulesApplied;
     }
 }

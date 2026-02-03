@@ -21,35 +21,21 @@ use Twig\Environment;
 
 abstract class Tracker implements TrackerInterface
 {
-    protected TrackingItemBuilderInterface $trackingItemBuilder;
-
-    protected Environment $twig;
-
     protected string $templatePrefix;
-
-    protected array $assortmentTenants;
-
-    protected array $checkoutTenants;
 
     /**
      * Tracker constructor.
      */
     public function __construct(
-        TrackingItemBuilderInterface $trackingItemBuilder,
-        Environment $twig,
+        protected TrackingItemBuilderInterface $trackingItemBuilder,
+        protected Environment $twig,
         array $options = [],
-        array $assortmentTenants = [],
-        array $checkoutTenants = []
+        protected array $assortmentTenants = [],
+        protected array $checkoutTenants = []
     ) {
-        $this->trackingItemBuilder = $trackingItemBuilder;
-        $this->twig = $twig;
-
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $this->processOptions($resolver->resolve($options));
-
-        $this->assortmentTenants = $assortmentTenants;
-        $this->checkoutTenants = $checkoutTenants;
     }
 
     protected function processOptions(array $options): void

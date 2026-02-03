@@ -84,19 +84,14 @@ class DefaultFindologic implements ProductListInterface
 
     protected string|array $orderKey;
 
-    protected LoggerInterface $logger;
-
     protected array $supportedOrderKeys = ['label', 'price', 'salesFrequency', 'dateAdded'];
 
     protected int $timeout = 3;
 
-    public function __construct(FindologicConfigInterface $tenantConfig, LoggerInterface $opendxpEcommerceFindologicLogger)
+    public function __construct(FindologicConfigInterface $tenantConfig, protected LoggerInterface $logger)
     {
         $this->tenantName = $tenantConfig->getTenantName();
         $this->tenantConfig = $tenantConfig;
-
-        // init logger
-        $this->logger = $opendxpEcommerceFindologicLogger;
 
         // set defaults for required params
         $this->userIp = $_SERVER['HTTP_X_FORWARDED_FOR'] ?: $_SERVER['REMOTE_ADDR'];
@@ -172,7 +167,7 @@ class DefaultFindologic implements ProductListInterface
     public function setInProductList(bool $inProductList): void
     {
         $this->products = null;
-        $this->inProductList = (bool)$inProductList;
+        $this->inProductList = $inProductList;
     }
 
     public function getInProductList(): bool
@@ -207,7 +202,7 @@ class DefaultFindologic implements ProductListInterface
 
     public function setLimit(int $limit): void
     {
-        if ($this->limit != $limit) {
+        if ($this->limit !== $limit) {
             $this->products = null;
         }
         $this->limit = $limit;
@@ -220,7 +215,7 @@ class DefaultFindologic implements ProductListInterface
 
     public function setOffset(int $offset): void
     {
-        if ($this->offset != $offset) {
+        if ($this->offset !== $offset) {
             $this->products = null;
         }
         $this->offset = $offset;
@@ -334,10 +329,8 @@ class DefaultFindologic implements ProductListInterface
         // variant handling
         switch ($this->getVariantMode()) {
             case self::VARIANT_MODE_HIDE:
-                break;
 
             case self::VARIANT_MODE_INCLUDE:
-                break;
 
             default:
             case self::VARIANT_MODE_INCLUDE_PARENT_OBJECT:
@@ -355,7 +348,7 @@ class DefaultFindologic implements ProductListInterface
         foreach ($this->conditions as $fieldname => $condition) {
             if (is_array($condition)) {
                 foreach ($condition as $cond) {
-                    $params['attrib'][$fieldname] = array_merge($params['attrib'][$fieldname] ?: [], $cond);
+                    $params['attrib'][$fieldname] = [...$params['attrib'][$fieldname] ?: [], ...$cond];
                 }
             } else {
                 $params['attrib'][$fieldname] = $condition;
@@ -398,7 +391,7 @@ class DefaultFindologic implements ProductListInterface
     {
         $query = '';
 
-        foreach ($this->queryConditions as $fieldname => $condition) {
+        foreach ($this->queryConditions as $condition) {
             $query .= is_array($condition)
                 ? implode(' ', $condition)
                 : $condition
@@ -419,13 +412,11 @@ class DefaultFindologic implements ProductListInterface
             if (is_array($this->getOrderKey())) {
                 $orderKey = $this->getOrderKey();
                 $order = reset($orderKey);
-                if (true === in_array($order[0], $this->supportedOrderKeys)) {
+                if (in_array($order[0], $this->supportedOrderKeys)) {
                     $params['order'] = $order[0] . ($order[1] ? ' ' . $order[1] : '');
                 }
-            } else {
-                if (true === in_array($this->getOrderKey(), $this->supportedOrderKeys)) {
-                    $params['order'] = $this->getOrderKey() . ($this->getOrder() ? ' ' . $this->getOrder() : '');
-                }
+            } elseif (in_array($this->getOrderKey(), $this->supportedOrderKeys)) {
+                $params['order'] = $this->getOrderKey() . ($this->getOrder() ? ' ' . $this->getOrder() : '');
             }
         }
 
@@ -521,7 +512,7 @@ class DefaultFindologic implements ProductListInterface
                     'value' => null, 'label' => null, 'count' => null, 'parameter' => $field->attributes->totalRange,
                 ];
             } elseif ($fieldname === SelectCategory::FIELDNAME) {
-                $rec = function (array $items) use (&$rec, &$groups) {
+                $rec = function (array $items) use (&$rec, &$groups): void {
                     foreach ($items as $item) {
                         $groups[$item->name] = [
                             'value' => $item->name, 'label' => $item->name, 'count' => $item->frequency, 'parameter' => $item->parameters,

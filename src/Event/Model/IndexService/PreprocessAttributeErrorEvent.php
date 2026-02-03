@@ -21,18 +21,12 @@ use Throwable;
 
 class PreprocessAttributeErrorEvent extends PreprocessErrorEvent
 {
-    protected Attribute $attribute;
-
-    protected bool $skipAttribute = false;
-
     /**
      * PreprocessAttributeErrorEvent constructor.
      */
-    public function __construct(Attribute $attribute, Throwable $exception, bool $skipAttribute = false, bool $throwException = true)
+    public function __construct(protected Attribute $attribute, Throwable $exception, protected bool $skipAttribute = false, bool $throwException = true)
     {
         parent::__construct($exception, $throwException);
-        $this->attribute = $attribute;
-        $this->skipAttribute = $skipAttribute;
     }
 
     public function getAttribute(): Attribute

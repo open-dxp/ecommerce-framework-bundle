@@ -32,15 +32,13 @@ class TargetGroup implements ConditionInterface
     {
         $visitorInfo = $environment->getVisitorInfo();
 
-        if ($visitorInfo) {
-            if ($visitorInfo->hasTargetGroupAssignment($this->getTargetGroup())) {
-                if ($visitorInfo->getTargetGroupAssignment($this->getTargetGroup())->getCount() > $this->getThreshold()) {
-                    return true;
-                }
-            }
+        if (!$visitorInfo) {
+            return false;
         }
-
-        return false;
+        if (!$visitorInfo->hasTargetGroupAssignment($this->getTargetGroup())) {
+            return false;
+        }
+        return $visitorInfo->getTargetGroupAssignment($this->getTargetGroup())->getCount() > $this->getThreshold();
     }
 
     /**
@@ -65,7 +63,7 @@ class TargetGroup implements ConditionInterface
     {
         // basic
         $json = [
-            'type' => 'TargetGroup', 'targetGroupId' => $this->targetGroupId, 'threshold' => (int) $this->threshold,
+            'type' => 'TargetGroup', 'targetGroupId' => $this->targetGroupId, 'threshold' => $this->threshold,
         ];
 
         return json_encode($json);

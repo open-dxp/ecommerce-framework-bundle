@@ -81,7 +81,7 @@ class Bracket implements BracketInterface
                         return false;
                     }
                     //consider current state with check, if not default.
-                    $state = $state ?? true;
+                    $state ??= true;
 
                     break;
 
@@ -91,7 +91,7 @@ class Bracket implements BracketInterface
                         return false;
                     }
                     //consider current state with check, if not default.
-                    $state = $state ?? true;
+                    $state ??= true;
 
                     break;
 
@@ -150,7 +150,7 @@ class Bracket implements BracketInterface
 
         foreach ($this->conditions as $condition) {
             if ($condition instanceof BracketInterface) {
-                $conditions = array_merge($conditions, $condition->getConditionsByType($typeClass));
+                $conditions = [...$conditions, ...$condition->getConditionsByType($typeClass)];
             } elseif ($condition instanceof $typeClass) {
                 $conditions[] = $condition;
             }

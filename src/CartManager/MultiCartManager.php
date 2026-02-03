@@ -25,16 +25,6 @@ use Psr\Log\LoggerInterface;
 
 class MultiCartManager implements CartManagerInterface
 {
-    protected EnvironmentInterface $environment;
-
-    protected CartFactoryInterface $cartFactory;
-
-    protected CartPriceCalculatorFactoryInterface $cartPriceCalculatorFactory;
-
-    protected OrderManagerLocatorInterface $orderManagers;
-
-    protected LoggerInterface $logger;
-
     /**
      * @var CartInterface[]
      */
@@ -42,18 +32,8 @@ class MultiCartManager implements CartManagerInterface
 
     protected bool $initialized = false;
 
-    public function __construct(
-        EnvironmentInterface $environment,
-        CartFactoryInterface $cartFactory,
-        CartPriceCalculatorFactoryInterface $cartPriceCalculatorFactory,
-        OrderManagerLocatorInterface $orderManagers,
-        LoggerInterface $logger
-    ) {
-        $this->environment = $environment;
-        $this->cartFactory = $cartFactory;
-        $this->cartPriceCalculatorFactory = $cartPriceCalculatorFactory;
-        $this->orderManagers = $orderManagers;
-        $this->logger = $logger;
+    public function __construct(protected EnvironmentInterface $environment, protected CartFactoryInterface $cartFactory, protected CartPriceCalculatorFactoryInterface $cartPriceCalculatorFactory, protected OrderManagerLocatorInterface $orderManagers, protected LoggerInterface $logger)
+    {
     }
 
     public function getCartClassName(): string
@@ -82,7 +62,7 @@ class MultiCartManager implements CartManagerInterface
             foreach ($carts as $cart) {
                 // check for order state of cart - remove it, when corresponding order is already committed
                 $order = $this->orderManagers->getOrderManager()->getOrderFromCart($cart);
-                if (empty($order) || $order->getOrderState() !== $order::ORDER_STATE_COMMITTED) {
+                if (empty($order) || $order->getOrderState() !== \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_COMMITTED) {
                     $this->carts[$cart->getId()] = $cart;
                 } else {
                     // cart is already committed - cleanup cart and environment

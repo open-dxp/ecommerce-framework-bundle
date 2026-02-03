@@ -21,18 +21,12 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\StatusInterface;
 
 class PaymentNotSuccessfulException extends AbstractEcommerceException
 {
-    protected AbstractOrder $order;
-
-    protected StatusInterface $status;
-
     /**
      * PaymentNotSuccessfulException constructor.
      */
-    public function __construct(AbstractOrder $order, StatusInterface $status, string $message)
+    public function __construct(protected AbstractOrder $order, protected StatusInterface $status, string $message)
     {
         parent::__construct($message);
-        $this->order = $order;
-        $this->status = $status;
     }
 
     public function getOrder(): AbstractOrder

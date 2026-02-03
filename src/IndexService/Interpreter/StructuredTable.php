@@ -28,16 +28,16 @@ class StructuredTable implements InterpreterInterface
         $config = $this->resolveOptions($config ?? []);
 
         $getter = 'get' . ucfirst($config['tablerow']) . '__' . ucfirst($config['tablecolumn']);
-
-        if ($value && $value instanceof \OpenDxp\Model\DataObject\Data\StructuredTable) {
-            if (isset($config['defaultUnit'])) {
-                return $value->$getter() . ' ' . $config['defaultUnit'];
-            } else {
-                return $value->$getter();
-            }
+        if (!$value) {
+            return null;
         }
-
-        return null;
+        if (!$value instanceof \OpenDxp\Model\DataObject\Data\StructuredTable) {
+            return null;
+        }
+        if (isset($config['defaultUnit'])) {
+            return $value->$getter() . ' ' . $config['defaultUnit'];
+        }
+        return $value->$getter();
     }
 
     protected function configureOptionsResolver(string $resolverName, OptionsResolver $resolver): void

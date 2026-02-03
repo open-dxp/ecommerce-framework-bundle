@@ -36,7 +36,7 @@ class Item extends AbstractOrderListItem implements OrderListItemInterface
     public function __call(string $method, array $args): mixed
     {
         $field = substr($method, 3);
-        if (substr($method, 0, 3) == 'get' && array_key_exists($field, $this->resultRow)) {
+        if (str_starts_with($method, 'get') && array_key_exists($field, $this->resultRow)) {
             return $this->resultRow[$field];
         }
 

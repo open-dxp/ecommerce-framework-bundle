@@ -28,11 +28,8 @@ use OpenDxp\Model\WebsiteSetting;
 
 abstract class AbstractPriceSystem implements PriceSystemInterface
 {
-    protected PricingManagerLocatorInterface $pricingManagers;
-
-    public function __construct(PricingManagerLocatorInterface $pricingManagers)
+    public function __construct(protected PricingManagerLocatorInterface $pricingManagers)
     {
-        $this->pricingManagers = $pricingManagers;
     }
 
     public function getPriceInfo(CheckoutableInterface $product, int|string $quantityScale = null, array $products = null): PriceInfoInterface

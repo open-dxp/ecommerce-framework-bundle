@@ -43,7 +43,7 @@ class Cart extends AbstractCart implements CartInterface
 
         $this->getDao()->save();
         CartItem::removeAllFromCart($this->getId());
-        foreach ((array)$items as $item) {
+        foreach ($items as $item) {
             $item->save();
         }
 
@@ -65,6 +65,7 @@ class Cart extends AbstractCart implements CartInterface
         $this->getDao()->delete();
     }
 
+    #[\Override]
     public function sortItems(callable $value_compare_func): static
     {
         //call get items to lazy load items
@@ -88,9 +89,9 @@ class Cart extends AbstractCart implements CartInterface
 
         try {
             $cart = RuntimeCache::get($cacheKey);
-        } catch (Exception $e) {
+        } catch (Exception) {
             try {
-                $cartClass = get_called_class();
+                $cartClass = static::class;
                 /** @var Cart $cart */
                 $cart = new $cartClass;
                 $cart->getDao()->getById($id);
@@ -116,6 +117,7 @@ class Cart extends AbstractCart implements CartInterface
         return $cart;
     }
 
+    #[\Override]
     public function getItems(): array
     {
         if ($this->items === null) {
@@ -143,6 +145,7 @@ class Cart extends AbstractCart implements CartInterface
     /**
      * @param string $countSubItems - use one of COUNT_MAIN_ITEMS_ONLY, COUNT_MAIN_OR_SUB_ITEMS, COUNT_MAIN_AND_SUB_ITEMS
      */
+    #[\Override]
     public function getItemCount(string $countSubItems = self::COUNT_MAIN_ITEMS_ONLY): int
     {
         if ($countSubItems === self::COUNT_MAIN_ITEMS_ONLY) {
@@ -154,11 +157,11 @@ class Cart extends AbstractCart implements CartInterface
             }
 
             return $this->itemCount;
-        } else {
-            return parent::getItemCount($countSubItems);
         }
+        return parent::getItemCount($countSubItems);
     }
 
+    #[\Override]
     public function getItemAmount(string $countSubItems = self::COUNT_MAIN_ITEMS_ONLY): int
     {
         if ($countSubItems === self::COUNT_MAIN_ITEMS_ONLY) {
@@ -170,9 +173,8 @@ class Cart extends AbstractCart implements CartInterface
             }
 
             return $this->itemAmount;
-        } else {
-            return parent::getItemAmount($countSubItems);
         }
+        return parent::getItemAmount($countSubItems);
     }
 
     /**
@@ -181,9 +183,9 @@ class Cart extends AbstractCart implements CartInterface
     public static function getAllCartsForUser(int $userId): array
     {
         $list = new Cart\Listing();
-        $db = \OpenDxp\Db::get();
+        \OpenDxp\Db::get();
         $list->setCondition('userid = ' . $userId);
-        $list->setCartClass(get_called_class());
+        $list->setCartClass(static::class);
 
         return $list->getCarts();
     }

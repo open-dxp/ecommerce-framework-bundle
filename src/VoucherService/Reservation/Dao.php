@@ -93,7 +93,7 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
             }
 
             return $count;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return true;
         }
     }
@@ -106,12 +106,8 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
         $params[] = $token;
 
         try {
-            if ($db->fetchOne($query, $params) === 0) {
-                return false;
-            }
-
-            return true;
-        } catch (Exception $e) {
+            return $db->fetchOne($query, $params) !== 0;
+        } catch (Exception) {
             return true;
         }
     }

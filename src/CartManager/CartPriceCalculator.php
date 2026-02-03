@@ -34,10 +34,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CartPriceCalculator implements CartPriceCalculatorInterface
 {
-    protected EnvironmentInterface $environment;
-
-    protected CartInterface $cart;
-
     protected bool $isCalculated = false;
 
     protected PriceInterface $subTotal;
@@ -67,11 +63,8 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
 
     protected ?PricingManagerInterface $pricingManager = null;
 
-    public function __construct(EnvironmentInterface $environment, CartInterface $cart, array $modificatorConfig = [])
+    public function __construct(protected EnvironmentInterface $environment, protected CartInterface $cart, array $modificatorConfig = [])
     {
-        $this->environment = $environment;
-        $this->cart = $cart;
-
         $this->setModificatorConfig($modificatorConfig);
         $this->initModificators();
     }
@@ -92,17 +85,12 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
 
     protected function buildModificator(array $config): CartPriceModificatorInterface
     {
-        /** @var CartPriceModificatorInterface $modificator */
-        $modificator = null;
-
         $className = $config['class'];
         if (!empty($config['options'])) {
-            $modificator = new $className($config['options']);
-        } else {
-            $modificator = new $className();
+            return new $className($config['options']);
         }
 
-        return $modificator;
+        return new $className();
     }
 
     protected function setModificatorConfig(array $modificatorConfig): void
@@ -357,19 +345,15 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
         foreach ($this->cart->getItems() as $item) {
             $priceInfo = $item->getPriceInfo();
             if ($priceInfo instanceof PriceInfoInterface) {
-                $itemRules = array_merge($itemRules, $priceInfo->getRules());
+                $itemRules = [...$itemRules, ...$priceInfo->getRules()];
             }
         }
 
-        $itemRules = array_filter($itemRules, function (RuleInterface $rule) {
-            return $rule->hasProductActions();
-        });
+        $itemRules = array_filter($itemRules, fn(RuleInterface $rule) => $rule->hasProductActions());
 
-        $cartRules = array_filter($this->appliedPricingRules, function (RuleInterface $rule) {
-            return $rule->hasCartActions();
-        });
+        $cartRules = array_filter($this->appliedPricingRules, fn(RuleInterface $rule) => $rule->hasCartActions());
 
-        $itemRules = array_merge($cartRules, $itemRules);
+        $itemRules = [...$cartRules, ...$itemRules];
         $uniqueItemRules = [];
         foreach ($itemRules as $rule) {
             $uniqueItemRules[$rule->getId()] = $rule;

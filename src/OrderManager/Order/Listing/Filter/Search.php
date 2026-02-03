@@ -21,15 +21,12 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Fil
  */
 class Search extends AbstractSearch
 {
-    /**
+    public function __construct(string $value, /**
      * Search column
      */
-    protected string $column;
-
-    public function __construct(string $value, string $column)
+    protected string $column)
     {
         parent::__construct($value);
-        $this->column = $column;
     }
 
     protected function getConditionColumn(): string

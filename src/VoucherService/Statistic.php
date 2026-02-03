@@ -39,7 +39,7 @@ class Statistic extends \OpenDxp\Model\AbstractModel
             $config->getDao()->getById($id);
 
             return $config;
-        } catch (NotFoundException $ex) {
+        } catch (NotFoundException) {
             //            Logger::debug($ex->getMessageN());
             return false;
         }
@@ -62,9 +62,7 @@ class Statistic extends \OpenDxp\Model\AbstractModel
         $query .= ' GROUP BY date';
 
         try {
-            $result = Helper::fetchPairs($db, $query, $params);
-
-            return $result;
+            return Helper::fetchPairs($db, $query, $params);
         } catch (Exception $e) {
             Logger::error('VoucherService', [$e]);
 
@@ -77,7 +75,7 @@ class Statistic extends \OpenDxp\Model\AbstractModel
         $db = $db = \OpenDxp\Db::get();
 
         try {
-            $db->executeQuery('INSERT INTO ' . \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Statistic\Dao::TABLE_NAME . ' (voucherSeriesId,date) VALUES (?,NOW())', [(int)$seriesId]);
+            $db->executeQuery('INSERT INTO ' . \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Statistic\Dao::TABLE_NAME . ' (voucherSeriesId,date) VALUES (?,NOW())', [$seriesId]);
 
             return true;
         } catch (Exception $e) {
@@ -106,7 +104,7 @@ class Statistic extends \OpenDxp\Model\AbstractModel
             $db->executeQuery($query, $params);
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
     }

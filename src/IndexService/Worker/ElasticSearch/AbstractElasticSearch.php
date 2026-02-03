@@ -73,16 +73,13 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
      */
     protected string $routingParamName = 'routing';
 
-    protected LoggerInterface $logger;
-
-    public function __construct(ElasticSearchConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, LoggerInterface $opendxpEcommerceEsLogger)
+    public function __construct(ElasticSearchConfigInterface $tenantConfig, Connection $db, EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
     {
         trigger_error(
             'ElasticSearchConfigInterface is deprecated. Use SearchConfigInterface instead.',
             E_USER_DEPRECATED
         );
         parent::__construct($tenantConfig, $db, $eventDispatcher);
-        $this->logger = $opendxpEcommerceEsLogger;
         $this->indexName = ($tenantConfig->getClientConfig('indexName')) ? strtolower($tenantConfig->getClientConfig('indexName')) : strtolower($this->name);
     }
 
@@ -130,7 +127,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
                 if (is_array($result)) {
                     $aliasIndexName = array_key_first($result);
                     preg_match('/'.$this->indexName.'-(\d+)/', $aliasIndexName, $matches);
-                    if (is_array($matches) && count($matches) > 1) {
+                    if (count($matches) > 1) {
                         $version = (int)$matches[1];
                         if ($version > $this->indexVersion) {
                             $this->indexVersion = $version;
@@ -212,11 +209,9 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
 
                 //check, if interpreter is set and if this interpreter is instance of relation interpreter
                 // -> then set type to long
-                if (null !== $attribute->getInterpreter()) {
-                    if ($attribute->getInterpreter() instanceof RelationInterpreterInterface) {
-                        $type = 'long';
-                        $isRelation = true;
-                    }
+                if (null !== $attribute->getInterpreter() && $attribute->getInterpreter() instanceof RelationInterpreterInterface) {
+                    $type = 'long';
+                    $isRelation = true;
                 }
 
                 if (!empty($attribute->getOption('mapper'))) {
@@ -269,6 +264,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
      * creates mapping attributes based on system attributes, in product index defined attributes and relations
      * can be overwritten in order to consider additional mappings for sub tenants
      */
+    #[\Override]
     public function getSystemAttributes(bool $includeTypes = false): array
     {
         $systemAttributes = [
@@ -287,9 +283,8 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
 
         if ($includeTypes) {
             return $systemAttributes;
-        } else {
-            return array_keys($systemAttributes);
         }
+        return array_keys($systemAttributes);
     }
 
     /**
@@ -402,9 +397,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
             }
 
             $this->bulkIndexData[] = ['index' => ['_index' => $this->getIndexNameVersion(), '_id' => $objectId, $this->routingParamName => $routingId]];
-            $bulkIndexData = array_filter(['system' => array_filter($indexSystemData), 'type' => $indexSystemData['type'], 'attributes' => array_filter($indexAttributeData, function ($value) {
-                return $value !== null;
-            }), 'relations' => $indexRelationData, 'subtenants' => $data['subtenants']]);
+            $bulkIndexData = array_filter(['system' => array_filter($indexSystemData), 'type' => $indexSystemData['type'], 'attributes' => array_filter($indexAttributeData, fn($value) => $value !== null), 'relations' => $indexRelationData, 'subtenants' => $data['subtenants']]);
 
             if ($indexSystemData['type'] == ProductListInterface::PRODUCT_TYPE_VARIANT) {
                 $bulkIndexData[self::RELATION_FIELD] = ['name' => $indexSystemData['type'], 'parent' => $indexSystemData['virtualProductId']];
@@ -428,6 +421,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
     /**
      * actually sending data to elastic search
      */
+    #[\Override]
     public function commitBatchToIndex(): void
     {
         if (count($this->bulkIndexData)) {
@@ -449,7 +443,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
                     $data = [
                         'update_status' => $response[$operation]['status'],
                         'update_error' => null,
-                        'metadata' => isset($this->indexStoreMetaData[$response[$operation]['_id']]) ? $this->indexStoreMetaData[$response[$operation]['_id']] : null,
+                        'metadata' => $this->indexStoreMetaData[$response[$operation]['_id']] ?? null,
                     ];
                     if (isset($response[$operation]['error']) && $response[$operation]['error']) {
                         $data['update_error'] = json_encode($response[$operation]['error']);
@@ -529,7 +523,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
         $stats = $esClient->indices()->stats()->asArray();
         foreach ($stats['indices'] as $key => $data) {
             preg_match('/'.$this->indexName.'-(\d+)/', $key, $matches);
-            if (is_array($matches) && count($matches) > 1) {
+            if (count($matches) > 1) {
                 $version = (int)$matches[1];
                 if ($version != $this->indexVersion) {
                     $indexNameVersion = $this->getIndexNameVersion($version);
@@ -545,6 +539,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
      *
      * return array in this case
      */
+    #[\Override]
     protected function convertArray(array|string $data): array|string
     {
         return $data;
@@ -639,14 +634,12 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
 
     protected function getMappingParams(): array
     {
-        $params = [
+        return [
             'index' => $this->getIndexNameVersion(),
             'body' => [
                 'properties' => $this->createMappingAttributes(),
             ],
         ];
-
-        return $params;
     }
 
     /**
@@ -666,10 +659,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
             return null;
         }
 
-        reset($result);
-        $currentIndexName = key($result);
-
-        return $currentIndexName;
+        return array_key_first($result);
     }
 
     /**
@@ -924,7 +914,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
             $indexName = $indexNameOverride ?: $this->getIndexNameVersion();
 
             $indexSettingsSynonymPartLocalConfig = $this->extractMinimalSynonymFiltersTreeFromTenantConfig();
-            if (empty($indexSettingsSynonymPartLocalConfig)) {
+            if ($indexSettingsSynonymPartLocalConfig === []) {
                 Logger::info('No index update required, as no synonym providers are configured. '.
                     'If filters have been removed, then reindexing will help to get rid of old configurations.'
                 );
@@ -1010,13 +1000,13 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
      */
     public function extractMinimalSynonymFiltersTreeFromIndexSettings(array $indexSettings): array
     {
-        $filters = isset($indexSettings['analysis']['filter']) ? $indexSettings['analysis']['filter'] : [];
+        $filters = $indexSettings['analysis']['filter'] ?? [];
         $indexPart = [];
         if ($filters) {
             $synonymProviderMap = $this->tenantConfig->getSynonymProviders();
             foreach ($filters as $filterName => $filter) {
                 if (array_key_exists($filterName, $synonymProviderMap)) {
-                    if (empty($indexPart)) {
+                    if ($indexPart === []) {
                         $indexPart = [
                             'analysis' =>
                                 [
@@ -1048,12 +1038,11 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
             $errorMessage = sprintf('Index is currently locked by "%s" as reindex is in progress.', self::REINDEXING_LOCK_KEY);
             if ($throwException) {
                 throw new Exception($errorMessage);
-            } else {
+            }
+            if ($this->lastLockLogTimestamp < time() - 60) {
                 //only write log message once a minute to not spam up log file when running update index
-                if ($this->lastLockLogTimestamp < time() - 60) {
-                    $this->lastLockLogTimestamp = time();
-                    Logger::warning($errorMessage . ' (will suppress subsequent log messages of same type for next 60 seconds)');
-                }
+                $this->lastLockLogTimestamp = time();
+                Logger::warning($errorMessage . ' (will suppress subsequent log messages of same type for next 60 seconds)');
             }
 
             return true;
