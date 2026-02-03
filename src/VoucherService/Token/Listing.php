@@ -24,7 +24,7 @@ use OpenDxp\Model\Paginator\PaginateListingInterface;
  * @method Token[] load()
  * @method Token|false current()
  * @method int getTotalCount()
- * @method \Pimcore\Bundle\EcommerceFrameworkBundle\VoucherService\Token\Listing\Dao getDao()
+ * @method \OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Token\Listing\Dao getDao()
  */
 class Listing extends \OpenDxp\Model\Listing\AbstractListing implements PaginateListingInterface
 {

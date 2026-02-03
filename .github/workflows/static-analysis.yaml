@@ -79,3 +79,5 @@ jobs:
             composer_options: ${{ matrix.matrix.composer_options }}
             composer_root_version: ${{ matrix.matrix.composer_root_version || '1.99.9' }}
             cache_clear: true
+        secrets:
+            COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}

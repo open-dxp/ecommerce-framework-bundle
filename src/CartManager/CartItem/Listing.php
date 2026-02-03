@@ -23,7 +23,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItemInterface;
  * @method CartItemInterface|false current()
  * @method int getTotalCount()
  * @method int getTotalAmount()
- * @method \Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartItem\Listing\Dao getDao()
+ * @method \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItem\Listing\Dao getDao()
  */
 class Listing extends \OpenDxp\Model\Listing\AbstractListing
 {

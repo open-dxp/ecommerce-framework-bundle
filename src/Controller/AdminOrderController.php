@@ -285,7 +285,7 @@ class AdminOrderController extends UserAwareController implements KernelControll
                 if ($field instanceof ManyToOneRelation) {
                     $classes = $field->getClasses();
                     if (count($classes) === 1) {
-                        /** @var \Pimcore\Model\DataObject\Concrete $class */
+                        /** @var \OpenDxp\Model\DataObject\Concrete $class */
                         $class = 'OpenDxp\Model\DataObject\\' . reset($classes)['classes'];
 
                         $orderList = $this->orderManager->createOrderList();

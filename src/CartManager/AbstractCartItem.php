@@ -212,7 +212,7 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
     }
 
     /**
-     * @return \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractSetProductEntry[]
+     * @return \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractSetProductEntry[]
      */
     public function getSetEntries(): array
     {

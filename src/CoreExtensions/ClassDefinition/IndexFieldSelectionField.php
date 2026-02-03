@@ -74,7 +74,7 @@ class IndexFieldSelectionField extends Textarea
     }
 
     /**
-     * @param null|\Pimcore\Model\DataObject\AbstractObject $object
+     * @param null|\OpenDxp\Model\DataObject\AbstractObject $object
      */
     public function getDataFromEditmode(mixed $data, $object = null, array $params = []): string
     {

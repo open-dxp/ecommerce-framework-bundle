@@ -26,7 +26,7 @@ interface CartManagerInterface extends ComponentInterface
      * Returns cart class name configured in the ecommerce framework config
      *
      * Is also responsible for checking if guest cart class should be used or not,
-     * by calling \Pimcore\Bundle\EcommerceFrameworkBundle\Environment::getUseGuestCart();
+     * by calling \OpenDxp\Bundle\EcommerceFrameworkBundle\Environment::getUseGuestCart();
      */
     public function getCartClassName(): string;
 

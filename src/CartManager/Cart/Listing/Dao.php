@@ -20,7 +20,7 @@ use Exception;
 /**
  * @internal
  *
- * @property \Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\Cart\Listing $model
+ * @property \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart\Listing $model
  */
 class Dao extends \OpenDxp\Model\Listing\Dao\AbstractDao
 {

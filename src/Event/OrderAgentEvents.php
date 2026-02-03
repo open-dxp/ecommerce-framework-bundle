@@ -19,63 +19,63 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Event;
 final class OrderAgentEvents
 {
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */
     const PRE_INIT_PAYMENT = 'opendxp.ecommerce.orderagent.preInitPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */
     const POST_INIT_PAYMENT = 'opendxp.ecommerce.orderagent.postInitPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */
     const PRE_START_PAYMENT = 'opendxp.ecommerce.orderagent.preStartPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */
     const POST_START_PAYMENT = 'opendxp.ecommerce.orderagent.postStartPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */
     const PRE_CANCEL_PAYMENT = 'opendxp.ecommerce.orderagent.preCancelPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */
     const POST_CANCEL_PAYMENT = 'opendxp.ecommerce.orderagent.postCancelPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */
     const FINGERPRINT_GENERATED = 'opendxp.ecommerce.orderagent.fingerPrintGenerated';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */
     const PRE_UPDATE_PAYMENT = 'opendxp.ecommerce.orderagent.preUpdatePayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderAgentEvent")
      *
      * @var string
      */

@@ -82,7 +82,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
     }
 
     /**
-     * @param null|\Pimcore\Model\DataObject\AbstractObject $object
+     * @param null|\OpenDxp\Model\DataObject\AbstractObject $object
      *
      * @see ResourcePersistenceAwareInterface::getDataForResource
      */
@@ -104,7 +104,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
     }
 
     /**
-     * @param null|\Pimcore\Model\DataObject\AbstractObject $object
+     * @param null|\OpenDxp\Model\DataObject\AbstractObject $object
      *
      * @see ResourcePersistenceAwareInterface::getDataFromResource
      */
@@ -118,7 +118,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
     }
 
     /**
-     * @param null|\Pimcore\Model\DataObject\AbstractObject $object
+     * @param null|\OpenDxp\Model\DataObject\AbstractObject $object
      *
      * @see QueryResourcePersistenceAwareInterface::getDataForQueryResource
      */
@@ -128,7 +128,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
     }
 
     /**
-     * @param null|\Pimcore\Model\DataObject\AbstractObject $object
+     * @param null|\OpenDxp\Model\DataObject\AbstractObject $object
      *
      * @see Data::getDataForEditmode
      */
@@ -146,7 +146,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
     }
 
     /**
-     * @param null|\Pimcore\Model\DataObject\AbstractObject $object
+     * @param null|\OpenDxp\Model\DataObject\AbstractObject $object
      *
      * @see Data::getDataFromEditmode
      */

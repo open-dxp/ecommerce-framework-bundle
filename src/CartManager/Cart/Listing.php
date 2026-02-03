@@ -19,10 +19,10 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
 
 /**
- * @method \Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\Cart[] load()
- * @method \Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\Cart|false current()
+ * @method \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart[] load()
+ * @method \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart|false current()
  * @method int getTotalCount()
- * @method \Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\Cart\Listing\Dao getDao()
+ * @method \OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\Cart\Listing\Dao getDao()
  * @method void setCartClass(string $cartClass)
  */
 class Listing extends \OpenDxp\Model\Listing\AbstractListing
