@@ -4,12 +4,12 @@ set -eu
 
 mkdir -p var/config
 mkdir -p bin
+mkdir -p kernel
 
 cp -r .github/ci/files/config/. config
 cp -r .github/ci/files/templates/. templates
 cp -r .github/ci/files/bin/console bin/console
 cp -r .github/ci/files/public/. public
-cp .github/ci/files/.env ./
 
 chmod 755 bin/console
 
