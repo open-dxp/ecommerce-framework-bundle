@@ -27,7 +27,7 @@ class ThrowExceptionStrategy implements HandlePendingPaymentsStrategyInterface
      *
      *
      * @throws PaymentNotAllowedException
-     * @throws \Pimcore\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException
+     * @throws \OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException
      */
     public function handlePaymentNotAllowed(AbstractOrder $order, CartInterface $cart, OrderManagerInterface $orderManager): AbstractOrder
     {

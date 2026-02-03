@@ -22,7 +22,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\RuleInterface;
 /**
  * @method Rule[] load()
  * @method Rule|false current()
- * @method \Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Rule\Listing\Dao getDao()
+ * @method \OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule\Listing\Dao getDao()
  */
 class Listing extends \OpenDxp\Model\Listing\AbstractListing
 {

@@ -33,7 +33,7 @@ use OpenDxp\Model\DataObject\OnlineShopVoucherSeries;
 use OpenDxp\Model\DataObject\OnlineShopVoucherToken;
 
 /**
- * @property \Pimcore\Model\DataObject\Fieldcollection\Data\VoucherTokenTypePattern $configuration
+ * @property \OpenDxp\Model\DataObject\Fieldcollection\Data\VoucherTokenTypePattern $configuration
  */
 class Pattern extends AbstractTokenManager implements ExportableTokenManagerInterface
 {

@@ -70,7 +70,7 @@ interface ConfigInterface
      * Possible hook to filter categories for specific tenants.
      *
      *
-     * @return \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory[]
+     * @return \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory[]
      */
     public function getCategories(IndexableInterface $object, int $subObjectId = null): array;
 

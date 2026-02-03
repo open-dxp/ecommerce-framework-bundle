@@ -803,7 +803,7 @@ class OrderManager implements OrderManagerInterface
      * Get source order for performing recurring payment
      *
      *
-     * @return \Pimcore\Model\DataObject\Concrete|null|false
+     * @return \OpenDxp\Model\DataObject\Concrete|null|false
      *
      * @throws \Exception
      */

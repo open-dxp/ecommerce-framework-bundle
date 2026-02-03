@@ -301,14 +301,14 @@ abstract class AbstractOrder extends Concrete
     /**
      * Get voucherTokens - Voucher Tokens
      *
-     * @return \Pimcore\Model\DataObject\OnlineShopVoucherToken[]
+     * @return \OpenDxp\Model\DataObject\OnlineShopVoucherToken[]
      */
     abstract public function getVoucherTokens(): array;
 
     /**
      * Set voucherTokens - Voucher Tokens
      *
-     * @param \Pimcore\Model\DataObject\OnlineShopVoucherToken[]|null $voucherTokens
+     * @param \OpenDxp\Model\DataObject\OnlineShopVoucherToken[]|null $voucherTokens
      *
      * @return $this
      */

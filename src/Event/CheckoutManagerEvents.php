@@ -19,21 +19,21 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Event;
 final class CheckoutManagerEvents
 {
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
      *
      * @var string
      */
     const PRE_COMMIT_STEP = 'opendxp.ecommerce.checkoutmanager.preCommitStep';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
      *
      * @var string
      */
     const POST_COMMIT_STEP = 'opendxp.ecommerce.checkoutmanager.postCommitStep';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CheckoutManagerStepsEvent")
      *
      * @var string
      */

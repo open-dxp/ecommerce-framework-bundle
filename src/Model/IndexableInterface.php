@@ -64,7 +64,7 @@ interface IndexableInterface
      * returns array of categories.
      * has to be overwritten either in pimcore object or mapped sub class.
      *
-     * @return \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory[]|null
+     * @return \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory[]|null
      */
     public function getCategories(): ?array;
 

@@ -48,7 +48,7 @@ interface StatusInterface
     public function getMessage(): string;
 
     /**
-     * internal pimcore order status - see also constants \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_*
+     * internal pimcore order status - see also constants \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_*
      *
      */
     public function getStatus(): string;

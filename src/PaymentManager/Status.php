@@ -19,7 +19,7 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager;
 class Status implements StatusInterface
 {
     /**
-     * internal pimcore order status - see also constants \Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_*
+     * internal pimcore order status - see also constants \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_*
      *
      */
     protected string $status;

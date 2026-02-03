@@ -49,7 +49,7 @@ interface TokenManagerInterface
      *
      *
      *
-     * @throws \Pimcore\Bundle\EcommerceFrameworkBundle\Exception\VoucherServiceException
+     * @throws \OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\VoucherServiceException
      */
     public function checkToken(string $code, CartInterface $cart): bool;
 
@@ -58,7 +58,7 @@ interface TokenManagerInterface
      *
      *
      *
-     * @throws \Pimcore\Bundle\EcommerceFrameworkBundle\Exception\VoucherServiceException
+     * @throws \OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\VoucherServiceException
      */
     public function reserveToken(string $code, CartInterface $cart): bool;
 
@@ -68,7 +68,7 @@ interface TokenManagerInterface
      *
      *
      *
-     * @throws \Pimcore\Bundle\EcommerceFrameworkBundle\Exception\VoucherServiceException
+     * @throws \OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\VoucherServiceException
      */
     public function applyToken(string $code, CartInterface $cart, AbstractOrder $order): OnlineShopVoucherToken|bool;
 

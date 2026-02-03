@@ -19,49 +19,49 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Event;
 final class CommitOrderProcessorEvents
 {
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
      *
      * @var string
      */
     const PRE_COMMIT_ORDER_PAYMENT = 'opendxp.ecommerce.commitorderprocessor.preCommitOrderPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
      *
      * @var string
      */
     const POST_COMMIT_ORDER_PAYMENT = 'opendxp.ecommerce.commitorderprocessor.postCommitOrderPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
      *
      * @var string
      */
     const PRE_COMMIT_ORDER = 'opendxp.ecommerce.commitorderprocessor.preCommitOrder';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
      *
      * @var string
      */
     const POST_COMMIT_ORDER = 'opendxp.ecommerce.commitorderprocessor.postCommitOrder';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
      *
      * @var string
      */
     const PRE_CLEANUP_PENDING_ORDER = 'opendxp.ecommerce.commitorderprocessor.preCleanupPendingOrder';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\CommitOrderProcessorEvent")
      *
      * @var string
      */
     const PRE_CLEANUP_PENDING_PAYMENT = 'opendxp.ecommerce.commitorderprocessor.preCleanupPendingPayment';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\SendConfirmationMailEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\SendConfirmationMailEvent")
      *
      * @var string
      */

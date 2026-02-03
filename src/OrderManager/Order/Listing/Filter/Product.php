@@ -39,7 +39,7 @@ class Product implements OrderListFilterInterface
             \OpenDxp\Model\DataObject\Concrete::OBJECT_TYPE_VARIANT,
         ]);
 
-        /** @var \Pimcore\Model\DataObject\Concrete $variant */
+        /** @var \OpenDxp\Model\DataObject\Concrete $variant */
         foreach ($variants as $variant) {
             $ids[] = $variant->getId() ?? 0;
         }

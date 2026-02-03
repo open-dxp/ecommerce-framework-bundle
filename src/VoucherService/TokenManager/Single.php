@@ -30,7 +30,7 @@ use OpenDxp\Model\DataObject\Fieldcollection\Data\VoucherTokenTypeSingle;
 use OpenDxp\Model\DataObject\OnlineShopVoucherToken;
 
 /**
- * @property \Pimcore\Model\DataObject\Fieldcollection\Data\VoucherTokenTypeSingle $configuration
+ * @property \OpenDxp\Model\DataObject\Fieldcollection\Data\VoucherTokenTypeSingle $configuration
  */
 class Single extends AbstractTokenManager implements ExportableTokenManagerInterface
 {

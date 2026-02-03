@@ -19,35 +19,35 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Event;
 final class OrderManagerEvents
 {
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
      *
      * @var string
      */
     const PRE_GET_OR_CREATE_ORDER_FROM_CART = 'opendxp.ecommerce.ordermanager.preGetOrCreateOrderFromCart';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
      *
      * @var string
      */
     const PRE_UPDATE_ORDER = 'opendxp.ecommerce.ordermanager.preUpdateOrder';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerEvent")
      *
      * @var string
      */
     const POST_UPDATE_ORDER = 'opendxp.ecommerce.ordermanager.postUpdateOrder';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerItemEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerItemEvent")
      *
      * @var string
      */
     const POST_CREATE_ORDER_ITEM = 'opendxp.ecommerce.ordermanager.postCreateOrderItem';
 
     /**
-     * @Event("Pimcore\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerItemEvent")
+     * @Event("OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\OrderManagerItemEvent")
      *
      * @var string
      */
