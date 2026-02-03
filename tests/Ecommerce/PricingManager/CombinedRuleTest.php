@@ -14,15 +14,15 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager;
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Action\CartDiscount;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Action\FreeShipping;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Action\ProductDiscount;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Bracket;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CartAmount;
-use Pimcore\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogProduct;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager\Rule\AbstractRuleTest;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\CartDiscount;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\FreeShipping;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\ProductDiscount;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Bracket;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CartAmount;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogProduct;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\PricingManager\Rule\AbstractRuleTest;
 
 class CombinedRuleTest extends AbstractRuleTest
 {

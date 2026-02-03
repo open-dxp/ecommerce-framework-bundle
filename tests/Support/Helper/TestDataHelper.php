@@ -14,13 +14,13 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper;
 
-use Pimcore\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection;
-use Pimcore\Model\DataObject;
-use Pimcore\Model\DataObject\ClassDefinition\Data;
-use Pimcore\Model\DataObject\Concrete;
-use Pimcore\Tests\Support\Helper\AbstractTestDataHelper;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CoreExtensions\ObjectData\IndexFieldSelection;
+use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\ClassDefinition\Data;
+use OpenDxp\Model\DataObject\Concrete;
+use OpenDxp\Tests\Support\Helper\AbstractTestDataHelper;
 
 class TestDataHelper extends AbstractTestDataHelper
 {

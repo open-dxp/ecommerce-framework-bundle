@@ -15,20 +15,20 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\Type;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\Type;
 
 use DateTime;
 use DivisionByZeroError;
 use DomainException;
 use InvalidArgumentException;
 use OverflowException;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
-use Pimcore\Tests\Support\Test\TestCase;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OpenDxp\Tests\Support\Test\TestCase;
 use TypeError;
 use UnderflowException;
 
 /**
- * @covers \Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal
+ * @covers \OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal
  */
 class DecimalTest extends TestCase
 {

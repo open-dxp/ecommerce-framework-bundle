@@ -6,20 +6,20 @@ services:
         command: [ mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --innodb-file-per-table=1 ]
         environment:
             MYSQL_ROOT_PASSWORD: ROOT
-            MYSQL_DATABASE: pimcore_test
-            MYSQL_USER: pimcore
-            MYSQL_PASSWORD: pimcore
+            MYSQL_DATABASE: opendxp_test
+            MYSQL_USER: opendxp
+            MYSQL_PASSWORD: opendxp
 
     php:
         #user: '1000:1000' # set to your uid:gid
-        image: pimcore/pimcore:PHP8.1-fpm
+        image: open-dxp/opendxp:PHP8.1-fpm
         environment:
             PHP_IDE_CONFIG: "serverName=localhost"
             COMPOSER_HOME: /var/www/html
-            PIMCORE_PROJECT_ROOT: /var/www/html
+            OPENDXP_PROJECT_ROOT: /var/www/html
             APP_ENV: test
-            PIMCORE_TEST: 1
-            PIMCORE_TEST_DB_DSN: "mysql://pimcore:pimcore@db:3306/pimcore_test"
+            OPENDXP_TEST: 1
+            OPENDXP_TEST_DB_DSN: "mysql://opendxp:opendxp@db:3306/opendxp_test"
         depends_on:
             - db
         volumes:

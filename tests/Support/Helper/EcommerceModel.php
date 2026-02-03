@@ -14,11 +14,11 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper;
 
-use Pimcore\Model\DataObject\ClassDefinition;
-use Pimcore\Model\DataObject\ClassDefinition\Data;
-use Pimcore\Tests\Support\Helper\Model;
+use OpenDxp\Model\DataObject\ClassDefinition;
+use OpenDxp\Model\DataObject\ClassDefinition\Data;
+use OpenDxp\Tests\Support\Helper\Model;
 
 class EcommerceModel extends Model
 {
@@ -42,9 +42,9 @@ class EcommerceModel extends Model
         }
 
         if (strpos($type, 'indexField') === 0) {
-            $classname = 'Pimcore\\Bundle\\EcommerceFrameworkBundle\\CoreExtensions\\ClassDefinition\\' . ucfirst($type);
+            $classname = 'OpenDxp\\Bundle\\EcommerceFrameworkBundle\\CoreExtensions\\ClassDefinition\\' . ucfirst($type);
         } else {
-            $classname = 'Pimcore\\Model\\DataObject\\ClassDefinition\Data\\' . ucfirst($type);
+            $classname = 'OpenDxp\\Model\\DataObject\\ClassDefinition\Data\\' . ucfirst($type);
         }
         /** @var Data $child */
         $child = new $classname();

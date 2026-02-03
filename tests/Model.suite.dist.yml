@@ -1,7 +1,7 @@
 actor: ModelTester
 modules:
   enabled:
-    - \Pimcore\Tests\Support\Helper\Pimcore:
+    - \OpenDxp\Tests\Support\Helper\OpenDxp:
         connect_db: true
-    - \Pimcore\Tests\Support\Helper\ClassManager
-    - \Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper\EcommerceModel
+    - \OpenDxp\Tests\Support\Helper\ClassManager
+    - \OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper\EcommerceModel

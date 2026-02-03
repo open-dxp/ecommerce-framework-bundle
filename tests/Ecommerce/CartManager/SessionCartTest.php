@@ -14,15 +14,15 @@ declare(strict_types=1);
  * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
-namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\CartManager;
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\CartManager;
 
 use Codeception\Stub;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
-use Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Model\AbstractSetProductEntry;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\EcommerceTester;
-use Pimcore\Tests\Support\Test\TestCase;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractProduct;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractSetProductEntry;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\EcommerceTester;
+use OpenDxp\Tests\Support\Test\TestCase;
 
 class SessionCartTest extends TestCase
 {
@@ -32,7 +32,7 @@ class SessionCartTest extends TestCase
 
     protected function buildCart(): SessionCart
     {
-        $cart = Stub::construct('\\Pimcore\\Bundle\\EcommerceFrameworkBundle\\CartManager\\SessionCart', [], [
+        $cart = Stub::construct('\\OpenDxp\\Bundle\\EcommerceFrameworkBundle\\CartManager\\SessionCart', [], [
             'getSession' => function () {
                 return [];
             },
