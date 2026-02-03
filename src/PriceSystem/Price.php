@@ -3,20 +3,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem;
 
+use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\Currency;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxCalculationService;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\TaxManagement\TaxEntry;
@@ -70,7 +71,7 @@ class Price implements PriceInterface
 
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf('Price mode "%s" is not supported', $priceMode));
+                throw new InvalidArgumentException(sprintf('Price mode "%s" is not supported', $priceMode));
         }
     }
 
@@ -142,7 +143,6 @@ class Price implements PriceInterface
 
     /**
      * Calls calculation service and updates taxes
-     *
      */
     protected function updateTaxes(string $calculationMode): void
     {

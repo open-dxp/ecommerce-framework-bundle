@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config;
@@ -26,13 +26,11 @@ interface SearchConfigInterface extends ConfigInterface
 {
     /**
      * returns condition for current subtenant
-     *
      */
     public function getSubTenantCondition(): array;
 
     /**
      * creates and returns tenant worker suitable for this tenant configuration
-     *
      */
     public function getTenantWorker(): WorkerInterface;
 
@@ -51,7 +49,6 @@ interface SearchConfigInterface extends ConfigInterface
      * returns the full field name
      *
      * @param bool $considerSubFieldNames - activate to consider subfield names like name.analyzed or score definitions like name^3
-     *
      */
     public function getFieldNameMapped(string $fieldName, bool $considerSubFieldNames = false): string;
 

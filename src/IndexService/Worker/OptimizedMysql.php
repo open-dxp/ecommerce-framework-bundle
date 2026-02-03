@@ -2,21 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\OptimizedMysql as OptimizedMysqlConfig;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Logger;
@@ -82,7 +83,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
             $this->deleteFromMockupCache($subObjectId);
             $this->deleteFromStoreTable($subObjectId);
             $this->db->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->db->rollBack();
             Logger::warn("Error during deleting from index tables for object $subObjectId: " . $e);
         }
@@ -110,7 +111,6 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
 
     /**
      * updates all index tables, delegates subtenant updates to tenant config and updates mockup cache
-     *
      */
     public function doUpdateIndex(int $objectId, array $data = null, array $metadata = null): void
     {
@@ -138,7 +138,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
                 $this->saveToMockupCache($objectId, $data);
 
                 $this->db->commit();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->db->rollBack();
                 Logger::warn("Error during updating index table for object $objectId: " . $e->getMessage());
             }

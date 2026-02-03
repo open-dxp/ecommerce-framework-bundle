@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config;
@@ -31,7 +31,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * Default configuration for open search as product index implementation.
- *
  */
 class OpenSearch extends AbstractConfig implements MockupConfigInterface, SearchConfigInterface
 {
@@ -43,7 +42,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
 
     /**
      * contains the mapping for the fields in Elasticsearch
-     *
      */
     protected array $fieldMapping = [
         'id' => 'system.id',
@@ -66,8 +64,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
     protected iterable $synonymProviders = [];
 
     /**
-     *
-     *
      * @param SynonymProviderInterface[] $synonymProviders
      */
     public function __construct(
@@ -112,7 +108,7 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
             }
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'The search attribute "%s" in product index tenant "%s" is not defined as attribute',
             $searchAttribute,
             $this->tenantName
@@ -232,8 +228,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
 
     /**
      * checks, if product should be in index for current tenant
-     *
-     *
      */
     public function inIndex(IndexableInterface $object): bool
     {
@@ -253,8 +247,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
 
     /**
      * populates index for tenant relations based on gived data
-     *
-     *
      */
     public function updateSubTenantEntries(mixed $objectId, mixed $subTenantData, mixed $subObjectId = null): void
     {
@@ -264,7 +256,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
 
     /**
      * returns condition for current subtenant
-     *
      */
     public function getSubTenantCondition(): array
     {
@@ -289,8 +280,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
 
     /**
      * creates object mockup for given data
-     *
-     *
      */
     public function createMockupObject(int $objectId, array $data, array $relations): DefaultMockup
     {
@@ -300,8 +289,6 @@ class OpenSearch extends AbstractConfig implements MockupConfigInterface, Search
     /**
      * Gets object mockup by id, can consider subIds and therefore return e.g. an array of values
      * always returns a object mockup if available
-     *
-     *
      */
     public function getObjectMockupById(int $objectId): ?IndexableInterface
     {

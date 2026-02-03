@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
 
+use Exception;
 use OpenDxp\Cache\RuntimeCache;
 use OpenDxp\Logger;
 use OpenDxp\Model\Exception\NotFoundException;
@@ -87,7 +88,7 @@ class Cart extends AbstractCart implements CartInterface
 
         try {
             $cart = RuntimeCache::get($cacheKey);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             try {
                 $cartClass = get_called_class();
                 /** @var Cart $cart */
@@ -141,7 +142,6 @@ class Cart extends AbstractCart implements CartInterface
 
     /**
      * @param string $countSubItems - use one of COUNT_MAIN_ITEMS_ONLY, COUNT_MAIN_OR_SUB_ITEMS, COUNT_MAIN_AND_SUB_ITEMS
-     *
      */
     public function getItemCount(string $countSubItems = self::COUNT_MAIN_ITEMS_ONLY): int
     {
@@ -177,8 +177,6 @@ class Cart extends AbstractCart implements CartInterface
 
     /**
      * @static
-     *
-     *
      */
     public static function getAllCartsForUser(int $userId): array
     {

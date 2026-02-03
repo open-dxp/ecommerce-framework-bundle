@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\V7;
@@ -87,7 +87,7 @@ class OrderAgent implements OrderAgentInterface
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function itemCancel(AbstractOrderItem $item): Note
     {
@@ -155,8 +155,6 @@ class OrderAgent implements OrderAgentInterface
 
     /**
      * start item complaint
-     *
-     *
      */
     public function itemComplaint(AbstractOrderItem $item, float $quantity): Note
     {
@@ -269,7 +267,6 @@ class OrderAgent implements OrderAgentInterface
     }
 
     /**
-     *
      * @return $this
      *
      * @throws Exception
@@ -359,8 +356,6 @@ class OrderAgent implements OrderAgentInterface
     }
 
     /**
-     *
-     *
      * @throws PaymentNotAllowedException
      * @throws Exception
      */
@@ -407,7 +402,6 @@ class OrderAgent implements OrderAgentInterface
     }
 
     /**
-     *
      * @throws Exception
      * @throws UnsupportedException
      */
@@ -433,8 +427,6 @@ class OrderAgent implements OrderAgentInterface
 
     /**
      * generates internal payment id for current order
-     *
-     *
      */
     protected function generateInternalPaymentId(int $paymentInfoCount = null): string
     {
@@ -452,7 +444,6 @@ class OrderAgent implements OrderAgentInterface
      *  - total price
      *  - creation date
      *  - all product numbers
-     *
      */
     protected function getFingerprintOfOrder(): int
     {
@@ -475,7 +466,6 @@ class OrderAgent implements OrderAgentInterface
     }
 
     /**
-     *
      * @throws Exception
      * @throws UnsupportedException
      */
@@ -503,7 +493,6 @@ class OrderAgent implements OrderAgentInterface
     }
 
     /**
-     *
      * @return $this
      *
      * @throws Exception
@@ -613,7 +602,6 @@ class OrderAgent implements OrderAgentInterface
 
     /**
      * Hook to extract and save additional information in payment information
-     *
      */
     protected function extractAdditionalPaymentInformation(StatusInterface $status, AbstractPaymentInformation $currentPaymentInformation): void
     {

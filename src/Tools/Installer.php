@@ -2,22 +2,24 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tools;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Exception;
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Migrations\Version20210430124911;
 use OpenDxp\Extension\Bundle\Installer\AbstractInstaller;
 use OpenDxp\Extension\Bundle\Installer\Exception\InstallationException;
@@ -27,6 +29,7 @@ use OpenDxp\Model\DataObject\Fieldcollection;
 use OpenDxp\Model\User\Permission;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Throwable;
 
 /**
  * @internal
@@ -147,19 +150,19 @@ class Installer extends AbstractInstaller
     public function installDependentBundles(): void
     {
         //Install ApplicationLoggerBundle Bundle
-        $appLoggerInstaller = \OpenDxp::getContainer()->get(\OpenDxp\Bundle\ApplicationLoggerBundle\Installer::class);
+        $appLoggerInstaller = OpenDxp::getContainer()->get(\OpenDxp\Bundle\ApplicationLoggerBundle\Installer::class);
         if (!$appLoggerInstaller->isInstalled()) {
             $appLoggerInstaller->install();
         }
 
         //Install PersonalizationBundle
-        $personalizationInstaller = \OpenDxp::getContainer()->get(\OpenDxp\Bundle\PersonalizationBundle\Installer::class);
+        $personalizationInstaller = OpenDxp::getContainer()->get(\OpenDxp\Bundle\PersonalizationBundle\Installer::class);
         if (!$personalizationInstaller->isInstalled()) {
             $personalizationInstaller->install();
         }
 
         //Install GoogleMarketingBundle
-        $googleMarketingInstaller = \OpenDxp::getContainer()->get(\OpenDxp\Bundle\GoogleMarketingBundle\Installer::class);
+        $googleMarketingInstaller = OpenDxp::getContainer()->get(\OpenDxp\Bundle\GoogleMarketingBundle\Installer::class);
         if (!$googleMarketingInstaller->isInstalled()) {
             $googleMarketingInstaller->install();
         }
@@ -189,7 +192,7 @@ class Installer extends AbstractInstaller
             $installed = $this->db->fetchOne('SELECT `key` FROM users_permission_definitions WHERE `key` = :key', [
                 'key' => $this->permissionsToInstall[0],
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // nothing to do
         }
 
@@ -313,7 +316,7 @@ class Installer extends AbstractInstaller
 
             try {
                 Permission\Definition::create($permission);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 throw new InstallationException(sprintf(
                     'Failed to create permission "%s": %s',
                     $permission, $e->getMessage()

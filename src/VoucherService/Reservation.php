@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\Reservation\Dao;
 use OpenDxp\Model\AbstractModel;
@@ -54,7 +55,7 @@ class Reservation extends AbstractModel
             $config->getDao()->create($code, $cart);
 
             return $config;
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             //            Logger::debug($ex->getMessage());
             return null;
         }
@@ -76,7 +77,7 @@ class Reservation extends AbstractModel
             $db->executeQuery($query, $params);
 
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -105,7 +106,7 @@ class Reservation extends AbstractModel
             $db->executeQuery($query, $params);
 
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -117,7 +118,7 @@ class Reservation extends AbstractModel
 
         try {
             return (bool)$db->fetchOne($query, [$code, $cart->getId()]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -131,7 +132,7 @@ class Reservation extends AbstractModel
             $count = $db->fetchOne($query, [$code]);
 
             return (int)$count;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }

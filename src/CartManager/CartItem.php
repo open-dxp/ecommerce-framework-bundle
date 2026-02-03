@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItem\Dao;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
 use OpenDxp\Cache\RuntimeCache;
@@ -66,7 +67,7 @@ class CartItem extends AbstractCartItem implements CartItemInterface
 
         try {
             $cartItem = RuntimeCache::get($cacheKey);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             try {
                 $cartItem = new static();
                 $cartItem->getDao()->getByCartIdItemKey($cartId, $itemKey, $parentKey);
@@ -100,7 +101,7 @@ class CartItem extends AbstractCartItem implements CartItemInterface
             if (!\OpenDxp\Tool::classExists($itemClass)) {
                 $itemClass = get_class($this) . '_List';
                 if (!\OpenDxp\Tool::classExists($itemClass)) {
-                    throw new \Exception("Class $itemClass does not exist.");
+                    throw new Exception("Class $itemClass does not exist.");
                 }
             }
             $itemList = new $itemClass();

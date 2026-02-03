@@ -2,20 +2,23 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker;
 
+use Closure;
+use Exception;
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Event\IndexServiceEvents;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\IndexService\PreprocessAttributeErrorEvent;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Event\Model\IndexService\PreprocessErrorEvent;
@@ -28,6 +31,9 @@ use OpenDxp\Logger;
 use OpenDxp\Model\DataObject;
 use OpenDxp\Model\DataObject\Concrete;
 use OpenDxp\Model\DataObject\Localizedfield;
+use ReflectionClass;
+use Throwable;
+use function json_last_error;
 
 abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implements BatchProcessingWorkerInterface
 {
@@ -122,7 +128,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
     /**
      * fills queue based on path
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function fillupPreparationQueue(IndexableInterface $object): void
     {
@@ -226,9 +232,9 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
              */
             $insertData = [];
             if ($object->getOSDoIndexProduct() && $this->tenantConfig->inIndex($object)) {
-                $a = \OpenDxp::inAdmin();
+                $a = OpenDxp::inAdmin();
                 $b = DataObject::doGetInheritedValues();
-                \OpenDxp::unsetAdminMode();
+                OpenDxp::unsetAdminMode();
                 DataObject::setGetInheritedValues(true);
                 $hidePublishedMemory = DataObject::doHideUnpublished();
                 DataObject::setHideUnpublished(false);
@@ -266,7 +272,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
                         if (array_key_exists($attribute->getName(), $data) && is_array($data[$attribute->getName()])) {
                             $data[$attribute->getName()] = $this->convertArray($data[$attribute->getName()]);
                         }
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         $event = new PreprocessAttributeErrorEvent($attribute, $e);
                         $event->setSubObjectId($subObjectId);
                         $this->eventDispatcher->dispatch($event, IndexServiceEvents::ATTRIBUTE_PROCESSING_ERROR);
@@ -288,7 +294,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
                 }
 
                 if ($a) {
-                    \OpenDxp::setAdminMode();
+                    OpenDxp::setAdminMode();
                 }
                 DataObject::setGetInheritedValues($b);
                 DataObject::setHideUnpublished($hidePublishedMemory);
@@ -301,10 +307,10 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
                     'subtenants' => ($subTenantData ? $subTenantData : []),
                 ]);
 
-                $jsonLastError = \json_last_error();
+                $jsonLastError = json_last_error();
                 $generalErrors = [];
                 if ($jsonLastError !== JSON_ERROR_NONE) {
-                    $e = new \Exception("Could not encode product data for updating index. Json encode error code was {$jsonLastError}, ObjectId was {$subObjectId}.");
+                    $e = new Exception("Could not encode product data for updating index. Json encode error code was {$jsonLastError}, ObjectId was {$subObjectId}.");
                     $event = new PreprocessErrorEvent($e);
                     $event->setSubObjectId($subObjectId);
                     $this->eventDispatcher->dispatch($event, IndexServiceEvents::GENERAL_PREPROCESSING_ERROR);
@@ -369,7 +375,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
     public function resetPreparationQueue(): void
     {
         Logger::info('Index-Actions - Resetting preparation queue');
-        $className = (new \ReflectionClass($this))->getShortName();
+        $className = (new ReflectionClass($this))->getShortName();
         $query = 'UPDATE '. $this->getStoreTableName() .' SET
                     preparation_status = ' . self::INDEX_STATUS_PREPARATION_STATUS_DONE . ",
                     preparation_error = '',
@@ -384,7 +390,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
     public function resetIndexingQueue(): void
     {
         Logger::info('Index-Actions - Resetting index queue');
-        $className = (new \ReflectionClass($this))->getShortName();
+        $className = (new ReflectionClass($this))->getShortName();
         $query = 'UPDATE '. $this->getStoreTableName() .' SET
                     trigger_info = ?,
                     crc_index = 0 WHERE tenant = ?';
@@ -395,9 +401,9 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function executeTransactionalQuery(\Closure $fn, int $maxTries = 3, float $sleep = .5): bool
+    protected function executeTransactionalQuery(Closure $fn, int $maxTries = 3, float $sleep = .5): bool
     {
         for ($i = 1; $i <= $maxTries; $i++) {
             $this->db->beginTransaction();
@@ -406,7 +412,7 @@ abstract class ProductCentricBatchProcessingWorker extends AbstractWorker implem
                 $fn();
 
                 return $this->db->commit();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->db->rollBack();
                 Logger::warning("Executing transational query, no. {$i} of {$maxTries} tries failed. " . $e->getMessage());
                 if ($i === $maxTries) {

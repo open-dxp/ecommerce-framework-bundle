@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService;
@@ -53,7 +53,6 @@ class IndexService
     }
 
     /**
-     *
      * @internal
      */
     protected function registerTenantWorker(WorkerInterface $tenantWorker): void
@@ -102,9 +101,6 @@ class IndexService
 
     /**
      * Returns all attributes marked as general search attributes for full text search
-     *
-     *
-     *
      */
     public function getGeneralSearchAttributes(string $tenant = null): array
     {
@@ -129,7 +125,6 @@ class IndexService
 
     /**
      * Deletes given element from index
-     *
      */
     public function deleteFromIndex(IndexableInterface $object): void
     {
@@ -140,7 +135,6 @@ class IndexService
 
     /**
      * Updates given element in index
-     *
      */
     public function updateIndex(IndexableInterface $object): void
     {
@@ -151,9 +145,6 @@ class IndexService
 
     /**
      * Returns all index attributes
-     *
-     *
-     *
      */
     public function getIndexAttributes(bool $considerHideInFieldList = false, string $tenant = null): array
     {
@@ -168,9 +159,6 @@ class IndexService
 
     /**
      * Returns all filter groups
-     *
-     *
-     *
      */
     public function getAllFilterGroups(string $tenant = null): array
     {
@@ -185,9 +173,6 @@ class IndexService
 
     /**
      * Returns all index attributes for a given filter group
-     *
-     *
-     *
      */
     public function getIndexAttributesByFilterGroup(string $filterType, string $tenant = null): array
     {
@@ -202,8 +187,6 @@ class IndexService
 
     /**
      * Returns current tenant configuration
-     *
-     *
      */
     public function getCurrentTenantConfig(): ConfigInterface
     {

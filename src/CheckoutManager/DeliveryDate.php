@@ -2,21 +2,23 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager;
 
+use DateTime;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
+use stdClass;
 
 /**
  * Sample implementation for delivery date
@@ -41,7 +43,7 @@ class DeliveryDate extends AbstractStep implements CheckoutStepInterface
         $this->cart->setCheckoutData(self::INSTANTLY, $data->instantly);
 
         $date = null;
-        if ($data->date instanceof \DateTime) {
+        if ($data->date instanceof DateTime) {
             $date = $data->date->getTimestamp();
         }
 
@@ -52,11 +54,11 @@ class DeliveryDate extends AbstractStep implements CheckoutStepInterface
 
     public function getData(): mixed
     {
-        $data = new \stdClass();
+        $data = new stdClass();
         $data->instantly = $this->cart->getCheckoutData(self::INSTANTLY);
 
         if ($this->cart->getCheckoutData(self::DATE)) {
-            $data->date = new \DateTime();
+            $data->date = new DateTime();
             $data->date->setTimestamp((int) $this->cart->getCheckoutData(self::DATE));
         } else {
             $data->instantly = true;

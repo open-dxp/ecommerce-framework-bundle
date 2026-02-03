@@ -2,20 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Model;
 
+use Exception;
+use OpenDxp;
 use OpenDxp\Logger;
 use OpenDxp\Model\DataObject;
 
@@ -138,7 +140,7 @@ class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, In
         }
         $msg = "Method $method not in Mockup implemented, delegating to object with id {$this->id}.";
 
-        if (\OpenDxp::inDebugMode()) {
+        if (OpenDxp::inDebugMode()) {
             Logger::warn($msg);
         } else {
             Logger::info($msg);
@@ -156,7 +158,7 @@ class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, In
             }
         }
 
-        throw new \Exception("Object with {$this->id} not found.");
+        throw new Exception("Object with {$this->id} not found.");
     }
 
     public function getOriginalObject(): DataObject|DataObject\AbstractObject|DataObject\Concrete|null
@@ -169,7 +171,6 @@ class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, In
     /**
      * called by default CommitOrderProcessor to get the product name to store it in the order item
      * should be overwritten in mapped sub classes of product classes
-     *
      */
     public function getOSName(): ?string
     {
@@ -179,7 +180,6 @@ class DefaultMockup implements ProductInterface, LinkGeneratorAwareInterface, In
     /**
      * called by default CommitOrderProcessor to get the product number to store it in the order item
      * should be overwritten in mapped sub classes of product classes
-     *
      */
     public function getOSProductNumber(): ?string
     {

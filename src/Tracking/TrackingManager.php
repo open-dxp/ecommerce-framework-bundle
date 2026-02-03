@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tracking;
@@ -57,7 +57,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Register a tracker
-     *
      */
     public function registerTracker(TrackerInterface $tracker): void
     {
@@ -124,7 +123,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Track product impression
-     *
      */
     public function trackProductImpression(ProductInterface $product, string $list = 'default'): void
     {
@@ -137,7 +135,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Track product view
-     *
      */
     public function trackProductView(ProductInterface $product): void
     {
@@ -150,7 +147,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Track a cart update
-     *
      */
     public function trackCartUpdate(CartInterface $cart): void
     {
@@ -163,7 +159,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Track product add to cart
-     *
      */
     public function trackCartProductActionAdd(CartInterface $cart, ProductInterface $product, float|int $quantity = 1): void
     {
@@ -176,7 +171,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Track product remove from cart
-     *
      */
     public function trackCartProductActionRemove(CartInterface $cart, ProductInterface $product, float|int $quantity = 1): void
     {
@@ -189,7 +183,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Track start checkout with first step
-     *
      */
     public function trackCheckout(CartInterface $cart): void
     {
@@ -202,7 +195,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Track checkout complete
-     *
      */
     public function trackCheckoutComplete(AbstractOrder $order): void
     {
@@ -223,7 +215,6 @@ class TrackingManager implements TrackingManagerInterface
 
     /**
      * Track checkout step
-     *
      */
     public function trackCheckoutStep(CheckoutManagerCheckoutStepInterface $step, CartInterface $cart, string $stepNumber = null, string $checkoutOption = null): void
     {

@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use OpenDxp\Model\Paginator\PaginateListingInterface;
@@ -66,7 +67,6 @@ interface ProductListInterface extends PaginateListingInterface
      * Adds filter condition to product list
      * Fieldname is optional but highly recommended - needed for resetting condition based on fieldname
      * and exclude functionality in group by results
-     *
      */
     public function addCondition(array|string $condition, string $fieldname = ''): void;
 
@@ -74,26 +74,21 @@ interface ProductListInterface extends PaginateListingInterface
      * Adds query condition to product list for fulltext search
      * Fieldname is optional but highly recommended - needed for resetting condition based on fieldname
      * and exclude functionality in group by results
-     *
      */
     public function addQueryCondition(string|array $condition, string $fieldname = ''): void;
 
     /**
      * Reset filter condition for fieldname
-     *
-     *
      */
     public function resetCondition(string $fieldname): void;
 
     /**
      * Reset query condition for fieldname
-     *
      */
     public function resetQueryCondition(string $fieldname): void;
 
     /**
      * Adds relation condition to product list
-     *
      */
     public function addRelationCondition(string $fieldname, string|array $condition): void;
 
@@ -104,7 +99,6 @@ interface ProductListInterface extends PaginateListingInterface
 
     /**
      * Adds price condition to product list
-     *
      */
     public function addPriceCondition(float $from = null, float $to = null): void;
 
@@ -114,7 +108,6 @@ interface ProductListInterface extends PaginateListingInterface
 
     /**
      * sets order direction
-     *
      */
     public function setOrder(string $order): void;
 
@@ -158,30 +151,23 @@ interface ProductListInterface extends PaginateListingInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void;
 
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupByRelationValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void;
 
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void;
 
     /**
      * resets all set prepared group by values
-     *
      */
     public function resetPreparedGroupByValues(): void;
 
@@ -190,7 +176,7 @@ interface ProductListInterface extends PaginateListingInterface
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array;
 
@@ -199,7 +185,7 @@ interface ProductListInterface extends PaginateListingInterface
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupByRelationValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array;
 
@@ -208,7 +194,7 @@ interface ProductListInterface extends PaginateListingInterface
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array;
 }

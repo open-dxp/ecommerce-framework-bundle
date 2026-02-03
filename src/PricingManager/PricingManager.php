@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager;
@@ -22,6 +22,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\PriceInfoInterface as PriceSystemPriceInfoInterface;
 use OpenDxp\Bundle\PersonalizationBundle\Targeting\VisitorInfoStorageInterface;
+use RuntimeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PricingManager implements PricingManagerInterface
@@ -30,13 +31,11 @@ class PricingManager implements PricingManagerInterface
 
     /**
      * Condition name => class mapping
-     *
      */
     protected array $conditionMapping = [];
 
     /**
      * Action name => class mapping
-     *
      */
     protected array $actionMapping = [];
 
@@ -110,7 +109,6 @@ class PricingManager implements PricingManagerInterface
     }
 
     /**
-     *
      * @return RuleInterface[]
      */
     public function applyCartRules(CartInterface $cart): array
@@ -260,15 +258,13 @@ class PricingManager implements PricingManagerInterface
     }
 
     /**
-     *
-     *
      * @throws InvalidConfigException
      */
     public function getPriceInfo(PriceSystemPriceInfoInterface $priceInfo): PriceInfoInterface
     {
         // TODO make getPriceInfo private as this call is only used internally where the enabled check is alread applied?
         if (!$this->enabled) {
-            throw new \RuntimeException('Can\'t build a pricing manager price info as the pricing manager is disabled');
+            throw new RuntimeException('Can\'t build a pricing manager price info as the pricing manager is disabled');
         }
 
         $class = $this->options['price_info_class'];

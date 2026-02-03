@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Command\IndexService;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\ProductCentricBatchProcessingWorker;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,12 +43,12 @@ class ResetQueueCommand extends AbstractIndexServiceCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!($tenant = $input->getOption('tenant'))) {
-            throw new \Exception('No tenant given');
+            throw new Exception('No tenant given');
         }
 
         $queue = $input->getArgument('queue');
         if (!in_array($queue, ['preparation', 'update-index'])) {
-            throw new \Exception("Invalid queue {$queue}");
+            throw new Exception("Invalid queue {$queue}");
         }
 
         $updater = Factory::getInstance()->getIndexService();
@@ -65,7 +66,7 @@ class ResetQueueCommand extends AbstractIndexServiceCommand
             $output->writeln("<info>Process tenant {$tenant}...</info>");
 
             if (!$worker instanceof ProductCentricBatchProcessingWorker) {
-                throw new \Exception('Tenant is not of type AbstractBatchProcessingWorker');
+                throw new Exception('Tenant is not of type AbstractBatchProcessingWorker');
             }
 
             if ($queue == 'preparation') {

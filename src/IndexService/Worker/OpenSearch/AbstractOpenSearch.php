@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OpenSearch;
@@ -30,6 +30,7 @@ use OpenDxp\Model\Tool\TmpStore;
 use OpenSearch\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Throwable;
 
 /**
  * @property OpenSearch $tenantConfig
@@ -44,7 +45,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
 
     /**
      * Default value for the mapping of custom attributes
-     *
      */
     protected bool $storeCustomAttributes = true;
 
@@ -53,13 +53,11 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
     /**
      * index name of elastic search must be lower case
      * the index name is an alias to indexname-versionnumber
-     *
      */
     protected string $indexName;
 
     /**
      * The Version number of the Index (we increase the Version number if the mapping cant be changed (reindexing process))
-     *
      */
     protected ?int $indexVersion = null;
 
@@ -71,7 +69,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
 
     /**
      * name for routing param for ES bulk requests
-     *
      */
     protected string $routingParamName = 'routing';
 
@@ -86,7 +83,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
 
     /**
      * should custom attributes be stored separately
-     *
      */
     public function getStoreCustomAttributes(): bool
     {
@@ -95,7 +91,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
 
     /**
      * Do store custom attributes
-     *
      */
     public function setStoreCustomAttributes(bool $storeCustomAttributes): void
     {
@@ -267,8 +262,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
     /**
      * creates mapping attributes based on system attributes, in product index defined attributes and relations
      * can be overwritten in order to consider additional mappings for sub tenants
-     *
-     *
      */
     public function getSystemAttributes(bool $includeTypes = false): array
     {
@@ -320,7 +313,7 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      * updates given element in index
      *
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function updateIndex(IndexableInterface $object): void
     {
@@ -420,8 +413,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
     /**
      * override this method if you need to add custom data
      * which should not be stored in the store data
-     *
-     *
      */
     protected function doPreIndexDataModification(array|string $data): array|string
     {
@@ -547,8 +538,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      * Checks if given data is array and returns converted data suitable for search backend.
      *
      * return array in this case
-     *
-     *
      */
     protected function convertArray(array|string $data): array|string
     {
@@ -556,7 +545,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
     }
 
     /**
-     *
      * @throws Exception
      */
     protected function doDeleteFromIndex(int $objectId, IndexableInterface $object = null): void
@@ -854,7 +842,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
 
     /**
      * Get the next index version, e.g. if currently 13, then 14 will be returned.
-     *
      */
     protected function getNextIndexVersion(): int
     {
@@ -867,7 +854,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
      *
      * @param string $sourceIndexName the name of the source index in ES.
      * @param string $targetIndexName the name of the target index in ES. If existing, will be deleted
-     *
      */
     protected function performReindex(string $sourceIndexName, string $targetIndexName): void
     {
@@ -940,7 +926,6 @@ abstract class AbstractOpenSearch extends ProductCentricBatchProcessingWorker
     }
 
     /**
-     *
      * Perform a synonym update on the currently selected ES index, if necessary.
      *
      * Attention: the current index will be closed and opened, so it won't be available for a tiny moment (typically some milliseconds).

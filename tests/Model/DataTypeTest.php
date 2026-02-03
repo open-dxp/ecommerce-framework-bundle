@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Model;
 
+use InvalidArgumentException;
 use Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper\TestDataHelper;
 use Pimcore\Model\DataObject\AbstractObject;
 use Pimcore\Model\DataObject\Concrete;
@@ -67,7 +68,6 @@ class DataTypeTest extends TestCase
 
     /**
      * Calls fill* methods on the object as needed in test
-     *
      */
     protected function fillObject(Concrete $object, array|string $fields = [], ?array &$returnData = []): void
     {
@@ -82,18 +82,18 @@ class DataTypeTest extends TestCase
         }
 
         if (!is_array($fields)) {
-            throw new \InvalidArgumentException('Fields needs to be an array');
+            throw new InvalidArgumentException('Fields needs to be an array');
         }
 
         foreach ($fields as $field) {
             $method = $field['method'];
 
             if (!$method) {
-                throw new \InvalidArgumentException(sprintf('Need a method to call'));
+                throw new InvalidArgumentException(sprintf('Need a method to call'));
             }
 
             if (!method_exists($this->testDataHelper, $method)) {
-                throw new \InvalidArgumentException(sprintf('Method %s does not exist', $method));
+                throw new InvalidArgumentException(sprintf('Method %s does not exist', $method));
             }
 
             $methodArguments = [$object, $field['field'], $this->seed];

@@ -3,22 +3,29 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace Pimcore\Bundle\EcommerceFrameworkBundle\Tests\Ecommerce\Type;
 
+use DateTime;
+use DivisionByZeroError;
+use DomainException;
+use InvalidArgumentException;
+use OverflowException;
 use Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 use Pimcore\Tests\Support\Test\TestCase;
+use TypeError;
+use UnderflowException;
 
 /**
  * @covers \Pimcore\Bundle\EcommerceFrameworkBundle\Type\Decimal
@@ -66,7 +73,7 @@ class DecimalTest extends TestCase
 
     public function testInvalidScaleThrowsException(): void
     {
-        $this->expectException(\DomainException::class);
+        $this->expectException(DomainException::class);
         Decimal::create(10000, -1);
     }
 
@@ -107,13 +114,13 @@ class DecimalTest extends TestCase
      */
     public function testErrorOnInvalidCreateArgument(mixed $value): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         Decimal::create($value);
     }
 
     public function testInvalidScaleThrowsExceptionOnCreate(): void
     {
-        $this->expectException(\DomainException::class);
+        $this->expectException(DomainException::class);
         Decimal::create('10.0', -1);
     }
 
@@ -152,7 +159,7 @@ class DecimalTest extends TestCase
 
     public function testExceptionOnInvalidFromNumeric(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         Decimal::fromNumeric('ABC');
     }
 
@@ -235,7 +242,7 @@ class DecimalTest extends TestCase
 
         $this->assertEquals(30, $valA->add($scaledB)->asNumeric());
 
-        $this->expectException(\DomainException::class);
+        $this->expectException(DomainException::class);
         $valA->add($valB);
     }
 
@@ -249,7 +256,7 @@ class DecimalTest extends TestCase
 
         $this->assertEquals(-10, $valA->sub($scaledB)->asNumeric());
 
-        $this->expectException(\DomainException::class);
+        $this->expectException(DomainException::class);
         $valA->sub($valB);
     }
 
@@ -433,7 +440,7 @@ class DecimalTest extends TestCase
      */
     public function testExceptionOnDivisionByZero(float|int|string|Decimal $val): void
     {
-        $this->expectException(\DivisionByZeroError::class);
+        $this->expectException(DivisionByZeroError::class);
         $valA = Decimal::fromRawValue(159900, 4);
         $valA->div(Decimal::create($val));
     }
@@ -447,7 +454,7 @@ class DecimalTest extends TestCase
         $val->div(0.001);
         $val->div(0.0001);
 
-        $this->expectException(\DivisionByZeroError::class);
+        $this->expectException(DivisionByZeroError::class);
 
         $val->div(0.00001);
     }
@@ -521,7 +528,7 @@ class DecimalTest extends TestCase
 
         $maxInt = $val->add($other);
 
-        $this->expectException(\OverflowException::class);
+        $this->expectException(OverflowException::class);
 
         $maxInt->add(Decimal::fromRawValue(1));
     }
@@ -535,7 +542,7 @@ class DecimalTest extends TestCase
 
         $minInt = $val->add($other);
 
-        $this->expectException(\UnderflowException::class);
+        $this->expectException(UnderflowException::class);
 
         $minInt->sub(Decimal::fromRawValue(1));
     }
@@ -564,7 +571,7 @@ class DecimalTest extends TestCase
     public function invalidValueCreateProvider(): array
     {
         return [
-            [new \DateTime()],
+            [new DateTime()],
             [true],
             [false],
         ];

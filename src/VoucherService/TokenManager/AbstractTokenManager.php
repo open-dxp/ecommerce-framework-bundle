@@ -2,20 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\VoucherService\TokenManager;
 
+use Exception;
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\VoucherServiceException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractVoucherSeries;
@@ -47,8 +49,6 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
     abstract public function cleanUpCodes(?array $filter = []): bool;
 
     /**
-     *
-     *
      * @throws VoucherServiceException When validation fails for any reason
      */
     public function checkToken(string $code, CartInterface $cart): bool
@@ -130,12 +130,10 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
 
     /**
      * Export tokens to CSV
-     *
-     *
      */
     public function exportCsv(array $params): string
     {
-        $translator = \OpenDxp::getContainer()->get(TranslatorInterface::class);
+        $translator = OpenDxp::getContainer()->get(TranslatorInterface::class);
 
         $stream = fopen('php://temp', 'w+');
         fputcsv($stream, [
@@ -149,7 +147,7 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
 
         try {
             $data = $this->getExportData($params);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             fputcsv($stream, [$e->getMessage()]);
             fputcsv($stream, ['']);
         }
@@ -177,8 +175,6 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
 
     /**
      * Export tokens to plain text list
-     *
-     *
      */
     public function exportPlain(array $params): string
     {
@@ -187,7 +183,7 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
 
         try {
             $data = $this->getExportData($params);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result[] = $e->getMessage();
             $result[] = '';
         }
@@ -206,7 +202,7 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getExportData(array $params): array
     {
@@ -227,7 +223,6 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
 
     /**
      * Returns bool false if failed - otherwise an array or a string with the codes
-     *
      */
     abstract public function insertOrUpdateVoucherSeries(): bool|string|array;
 
@@ -236,7 +231,6 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
     abstract public function cleanUpReservations(int $duration = 0, ?int $seriesId = null): bool;
 
     /**
-     *
      * @return string The path of the template to display
      */
     abstract public function prepareConfigurationView(array &$viewParamsBag, array $params): string;

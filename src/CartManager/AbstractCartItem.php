@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
 
+use DateTime;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\AvailabilitySystem\AvailabilityInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractSetProduct;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractSetProductEntry;
@@ -29,7 +30,6 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
 {
     /**
      * flag needed for preventing call modified on cart when loading cart from storage
-     *
      */
     protected bool $isLoading = false;
 
@@ -58,7 +58,7 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
 
     public function __construct()
     {
-        $this->setAddedDate(new \DateTime());
+        $this->setAddedDate(new DateTime());
     }
 
     public function setCount(int $count, bool $fireModified = true): void
@@ -165,7 +165,6 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
 
     /**
      * @param CartItemInterface[] $subItems
-     *
      */
     public function setSubItems(array $subItems): void
     {
@@ -242,7 +241,7 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
         return $this->getPriceInfo()->getTotalPrice();
     }
 
-    public function setAddedDate(\DateTime $date = null): void
+    public function setAddedDate(DateTime $date = null): void
     {
         if ($date) {
             $this->addedDateTimestamp = intval($date->format('Uu'));
@@ -251,11 +250,11 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
         }
     }
 
-    public function getAddedDate(): \DateTime
+    public function getAddedDate(): DateTime
     {
         $datetime = null;
         if ($this->addedDateTimestamp) {
-            $datetime = \DateTime::createFromFormat('U', (string) intval($this->addedDateTimestamp / 1000000));
+            $datetime = DateTime::createFromFormat('U', (string) intval($this->addedDateTimestamp / 1000000));
         }
 
         return $datetime;
@@ -273,7 +272,6 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
 
     /**
      * get item name
-     *
      */
     public function getName(): string
     {
@@ -294,8 +292,6 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
 
     /**
      * Sets custom properties to CartItem when provided in AbstractCart::addItem
-     *
-     *
      */
     public function setCustomProperties(array $params): void
     {

@@ -3,19 +3,26 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Type;
+
+use DivisionByZeroError;
+use DomainException;
+use InvalidArgumentException;
+use OverflowException;
+use TypeError;
+use UnderflowException;
 
 /**
  * This value object is used throughout the ecommerce framework to represent a price value.
@@ -33,14 +40,12 @@ class Decimal
 
     /**
      * Precision after comma - actual amount will be amount divided by 10^scale
-     *
      */
     private int $scale;
 
     /**
      * Builds a value from an integer. The integer amount here must be the final value with
      * conversion factor already applied.
-     *
      */
     protected function __construct(int $amount, int $scale)
     {
@@ -50,7 +55,6 @@ class Decimal
 
     /**
      * Sets the global default scale to be used
-     *
      */
     public static function setDefaultScale(int $scale): void
     {
@@ -64,7 +68,7 @@ class Decimal
     private static function validateScale(int $scale): void
     {
         if ($scale < 0) {
-            throw new \DomainException('Scale must be greater or equal than 0');
+            throw new DomainException('Scale must be greater or equal than 0');
         }
     }
 
@@ -74,15 +78,15 @@ class Decimal
      *
      * Adapted from moneyphp/money PhpCalculator
      *
-     * @throws \OverflowException  If integer overflow occured
-     * @throws \UnderflowException If integer underflow occured
+     * @throws OverflowException  If integer overflow occured
+     * @throws UnderflowException If integer underflow occured
      */
     private static function validateIntegerBounds(int|float $amount): void
     {
         if ($amount > (PHP_INT_MAX - 1)) {
-            throw new \OverflowException('The maximum allowed integer (PHP_INT_MAX) was reached');
+            throw new OverflowException('The maximum allowed integer (PHP_INT_MAX) was reached');
         } elseif ($amount < (~PHP_INT_MAX + 1)) {
-            throw new \UnderflowException('The minimum allowed integer (PHP_INT_MAX) was reached');
+            throw new UnderflowException('The minimum allowed integer (PHP_INT_MAX) was reached');
         }
     }
 
@@ -111,7 +115,7 @@ class Decimal
      *
      *
      *
-     * @throws \TypeError
+     * @throws TypeError
      */
     public static function create(float|int|string|Decimal $amount, int $scale = null, int $roundingMode = null): self
     {
@@ -122,7 +126,7 @@ class Decimal
         } elseif ($amount instanceof self) {
             return static::fromDecimal($amount, $scale);
         } else {
-            throw new \TypeError(
+            throw new TypeError(
                 'Expected (int, float, string, self), but received ' .
                 get_debug_type($amount)
             );
@@ -198,7 +202,7 @@ class Decimal
     public static function fromNumeric(float|int|string $amount, int $scale = null, int $roundingMode = null): static
     {
         if (!is_numeric($amount)) {
-            throw new \InvalidArgumentException('Value is not numeric');
+            throw new InvalidArgumentException('Value is not numeric');
         }
 
         $scale = $scale ?? static::$defaultScale;
@@ -217,8 +221,6 @@ class Decimal
      * the input value will be returned, otherwise the scale will be converted and a
      * new object will be returned. Please note that this will potentially imply precision
      * loss when converting to a lower scale.
-     *
-     *
      */
     public static function fromDecimal(Decimal $amount, int $scale = null): self
     {
@@ -235,8 +237,6 @@ class Decimal
 
     /**
      * Create a zero value object
-     *
-     *
      */
     public static function zero(int $scale = null): self
     {
@@ -245,7 +245,6 @@ class Decimal
 
     /**
      * Returns the used scale factor
-     *
      */
     public function getScale(): int
     {
@@ -256,7 +255,6 @@ class Decimal
      * Returns the internal representation value
      *
      * WARNING: use this with caution as the represented value depends on the scale!
-     *
      */
     public function asRawValue(): int
     {
@@ -265,7 +263,6 @@ class Decimal
 
     /**
      * Returns a numeric representation
-     *
      */
     public function asNumeric(): float|int
     {
@@ -275,8 +272,6 @@ class Decimal
     /**
      * Returns a string representation. Digits default to the scale. If $digits is passed,
      * the string will be truncated to the given amount of digits without any rounding.
-     *
-     *
      */
     public function asString(int $digits = null): string
     {
@@ -367,7 +362,6 @@ class Decimal
      *
      *
      * @todo Assert same scale before comparing?
-     *
      */
     public function equals(Decimal $other): bool
     {
@@ -376,8 +370,6 @@ class Decimal
 
     /**
      * Checks if value is not equal to other value
-     *
-     *
      */
     public function notEquals(Decimal $other): bool
     {
@@ -386,8 +378,6 @@ class Decimal
 
     /**
      * Compares a value to another one
-     *
-     *
      */
     public function compare(Decimal $other): int
     {
@@ -402,8 +392,6 @@ class Decimal
 
     /**
      * Compares this > other
-     *
-     *
      */
     public function greaterThan(Decimal $other): bool
     {
@@ -412,8 +400,6 @@ class Decimal
 
     /**
      * Compares this >= other
-     *
-     *
      */
     public function greaterThanOrEqual(Decimal $other): bool
     {
@@ -422,8 +408,6 @@ class Decimal
 
     /**
      * Compares this < other
-     *
-     *
      */
     public function lessThan(Decimal $other): bool
     {
@@ -432,8 +416,6 @@ class Decimal
 
     /**
      * Compares this <= other
-     *
-     *
      */
     public function lessThanOrEqual(Decimal $other): bool
     {
@@ -442,7 +424,6 @@ class Decimal
 
     /**
      * Checks if amount is zero
-     *
      */
     public function isZero(): bool
     {
@@ -451,7 +432,6 @@ class Decimal
 
     /**
      * Checks if amount is positive. Not: zero is NOT handled as positive.
-     *
      */
     public function isPositive(): bool
     {
@@ -460,7 +440,6 @@ class Decimal
 
     /**
      * Checks if amount is negative
-     *
      */
     public function isNegative(): bool
     {
@@ -535,7 +514,7 @@ class Decimal
      * a simple scalar factor (e.g. 2) as dividing prices is rarely needed. However, if
      * a Decimal is passed, its float representation will be used for calculations.
      *
-     * @throws \DivisionByZeroError
+     * @throws DivisionByZeroError
      */
     public function div(float|int|string|Decimal $other, int $roundingMode = null): static
     {
@@ -543,7 +522,7 @@ class Decimal
         $epsilon = pow(10, -1 * $this->scale);
 
         if (abs(0 - $operand) < $epsilon) {
-            throw new \DivisionByZeroError('Division by zero is not allowed');
+            throw new DivisionByZeroError('Division by zero is not allowed');
         }
 
         $result = $this->amount / $operand;
@@ -559,7 +538,6 @@ class Decimal
      *
      * @example Decimal::create(5)->toAdditiveInverse() = -5
      * @example Decimal::create(-5)->toAdditiveInverse() = 5
-     *
      */
     public function toAdditiveInverse(): self
     {
@@ -571,8 +549,6 @@ class Decimal
      *
      * @example Decimal::create(100)->toPercentage(30) = 30
      * @example Decimal::create(50)->toPercentage(50) = 25
-     *
-     *
      */
     public function toPercentage(mixed $percentage, int $roundingMode = null): self
     {
@@ -600,8 +576,6 @@ class Decimal
      *
      * @example Decimal::create(100)->percentageOf(Decimal::create(50)) = 200
      * @example Decimal::create(50)->percentageOf(Decimal::create(100)) = 50
-     *
-     *
      */
     public function percentageOf(Decimal $other): float|int
     {
@@ -618,8 +592,6 @@ class Decimal
      * Get the discount percentage starting from a discounted price
      *
      * @example Decimal::create(30)->discountPercentageOf(Decimal::create(100)) = 70
-     *
-     *
      */
     public function discountPercentageOf(Decimal $other): float|int
     {
@@ -644,7 +616,7 @@ class Decimal
             return (float) $operand->asNumeric();
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'Value "%s" with type "%s" is no valid operand',
             (is_scalar($operand)) ? $operand : (string)$operand,
             get_debug_type($operand)
@@ -656,7 +628,7 @@ class Decimal
         if ($other->scale !== $this->scale) {
             $message = $message ?? 'Can\'t operate on amounts with different scales. Please convert both amounts to the same scale before proceeding.';
 
-            throw new \DomainException($message);
+            throw new DomainException($message);
         }
     }
 }

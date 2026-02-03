@@ -2,20 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7;
 
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\CheckoutStepInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\CommitOrderProcessorLocatorInterface;
@@ -34,6 +35,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\V7\Payment\StartPayme
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager\V7\Payment\StartPaymentResponse\StartPaymentResponseInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem\Price;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CheckoutManager implements CheckoutManagerInterface
@@ -56,7 +58,6 @@ class CheckoutManager implements CheckoutManagerInterface
 
     /**
      * Payment Provider
-     *
      */
     protected ?PaymentInterface $payment = null;
 
@@ -134,7 +135,7 @@ class CheckoutManager implements CheckoutManagerInterface
 
         if ($currentStepItem = $this->environment->getCustomItem(self::CURRENT_STEP . '_' . $this->cart->getId())) {
             if (!isset($this->checkoutSteps[$currentStepItem])) {
-                throw new \RuntimeException(sprintf(
+                throw new RuntimeException(sprintf(
                     'Environment defines current step as "%s", but step "%s" does not exist',
                     $currentStepItem,
                     $currentStepItem
@@ -169,7 +170,6 @@ class CheckoutManager implements CheckoutManagerInterface
     }
 
     /**
-     *
      * @throws UnsupportedException
      */
     protected function checkIfPaymentIsPossible(): AbstractOrder
@@ -218,9 +218,7 @@ class CheckoutManager implements CheckoutManagerInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     public function startOrderPaymentWithPaymentProvider(AbstractRequest $paymentConfig): StartPaymentResponseInterface
     {
@@ -265,7 +263,6 @@ class CheckoutManager implements CheckoutManagerInterface
 
     /**
      * Updates and cleans up environment after order is committed
-     *
      */
     protected function updateEnvironmentAfterOrderCommit(?AbstractOrder $order): void
     {
@@ -286,10 +283,8 @@ class CheckoutManager implements CheckoutManagerInterface
     }
 
     /**
-     *
-     *
      * @throws UnsupportedException
-     * @throws \Exception
+     * @throws Exception
      */
     public function handlePaymentResponseAndCommitOrderPayment(StatusInterface|array $paymentResponseParams): AbstractOrder
     {
@@ -312,7 +307,7 @@ class CheckoutManager implements CheckoutManagerInterface
 
         try {
             $order = $commitOrderProcessor->handlePaymentResponseAndCommitOrderPayment($paymentResponseParams, $this->getPayment());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         } finally {
             $this->updateEnvironmentAfterOrderCommit($order);
@@ -325,31 +320,29 @@ class CheckoutManager implements CheckoutManagerInterface
      * Verifies if the payment provider is supported for recurring payment
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function verifyRecurringPayment(RecurringPaymentInterface $provider, AbstractOrder $sourceOrder, string $customerId): void
     {
         $orderManager = $this->orderManagers->getOrderManager();
 
         if (!$provider->isRecurringPaymentEnabled()) {
-            throw new \Exception("Recurring Payment is not enabled or is not supported by payment provider [{$provider->getName()}].");
+            throw new Exception("Recurring Payment is not enabled or is not supported by payment provider [{$provider->getName()}].");
         }
 
         $payment = $this->getPayment();
         if (!$payment instanceof RecurringPaymentInterface) {
-            throw new \Exception("Recurring Payment is not supported by payment provider [{$payment->getName()}].");
+            throw new Exception("Recurring Payment is not supported by payment provider [{$payment->getName()}].");
         }
 
         if ($orderManager instanceof OrderManager && !$orderManager->isValidOrderForRecurringPayment($sourceOrder, $payment, $customerId)) {
-            throw new \Exception('The given source order is not valid for recurring payment.');
+            throw new Exception('The given source order is not valid for recurring payment.');
         }
     }
 
     /**
-     *
-     *
      * @throws UnsupportedException
-     * @throws \Exception
+     * @throws Exception
      */
     public function startAndCommitRecurringOrderPayment(AbstractOrder $sourceOrder, string $customerId): AbstractOrder
     {
@@ -394,8 +387,6 @@ class CheckoutManager implements CheckoutManagerInterface
     }
 
     /**
-     *
-     *
      * @throws UnsupportedException
      */
     public function commitOrder(): AbstractOrder
@@ -420,8 +411,6 @@ class CheckoutManager implements CheckoutManagerInterface
     }
 
     /**
-     *
-     *
      * @throws UnsupportedException
      */
     public function commitStep(CheckoutStepInterface $step, mixed $data): bool
@@ -503,7 +492,7 @@ class CheckoutManager implements CheckoutManagerInterface
     protected function validateCheckoutSteps(): void
     {
         if (empty($this->checkoutSteps)) {
-            throw new \RuntimeException('Checkout manager does not define any checkout steps');
+            throw new RuntimeException('Checkout manager does not define any checkout steps');
         }
     }
 

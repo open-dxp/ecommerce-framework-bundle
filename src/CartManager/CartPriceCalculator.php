@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
@@ -47,7 +47,6 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
     /**
      * Standard modificators are handled as configuration as they may
      * be reinitialized on demand (e.g. inside AJAX calls).
-     *
      */
     protected array $modificatorConfig = [];
 
@@ -127,8 +126,6 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
     }
 
     /**
-     *
-     *
      * @throws UnsupportedException
      */
     public function calculate(bool $ignorePricingRules = false): void
@@ -262,7 +259,6 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
 
     /**
      * gets default currency object based on the default currency locale defined in the environment
-     *
      */
     protected function getDefaultCurrency(): Currency
     {
@@ -271,8 +267,6 @@ class CartPriceCalculator implements CartPriceCalculatorInterface
 
     /**
      * Possibility to overwrite the price object that should be used
-     *
-     *
      */
     protected function getDefaultPriceObject(Decimal $amount, Currency $currency): PriceInterface
     {

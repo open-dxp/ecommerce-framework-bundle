@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PriceSystem;
@@ -46,7 +46,6 @@ abstract class AbstractPriceSystem implements PriceSystemInterface
      *
      * @param int|string|null $quantityScale Numeric or string (allowed values: PriceInfoInterface::MIN_PRICE)
      * @param CheckoutableInterface[] $products
-     *
      */
     protected function initPriceInfoInstance(int|string|null $quantityScale, CheckoutableInterface $product, array $products): PriceInfoInterface
     {
@@ -74,7 +73,6 @@ abstract class AbstractPriceSystem implements PriceSystemInterface
     /**
      * @param int|string|null $quantityScale Numeric or string (allowed values: PriceInfoInterface::MIN_PRICE)
      * @param CheckoutableInterface[] $products
-     *
      */
     abstract public function createPriceInfoInstance(int|string|null $quantityScale, CheckoutableInterface $product, array $products): AbstractPriceInfo;
 
@@ -83,7 +81,6 @@ abstract class AbstractPriceSystem implements PriceSystemInterface
      * Website Setting and if no Website Setting is set it creates an empty new Tax Class.
      *
      * Should be overwritten in custom price systems with suitable implementation.
-     *
      */
     protected function getDefaultTaxClass(): OnlineShopTaxClass
     {
@@ -103,8 +100,6 @@ abstract class AbstractPriceSystem implements PriceSystemInterface
 
     /**
      * Returns OnlineShopTaxClass for given CheckoutableInterface.
-     *
-     *
      */
     public function getTaxClassForProduct(CheckoutableInterface $product): OnlineShopTaxClass
     {
@@ -113,8 +108,6 @@ abstract class AbstractPriceSystem implements PriceSystemInterface
 
     /**
      * Returns OnlineShopTaxClass for given CartPriceModificatorInterface
-     *
-     *
      */
     public function getTaxClassForPriceModification(CartPriceModificatorInterface $modificator): OnlineShopTaxClass
     {

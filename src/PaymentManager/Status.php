@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager;
@@ -19,32 +19,27 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\PaymentManager;
 class Status implements StatusInterface
 {
     /**
-     * internal pimcore order status - see also constants \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_*
-     *
+     * internal opendxp order status - see also constants \OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractOrder::ORDER_STATE_*
      */
     protected string $status;
 
     /**
      * pimcore internal payment id, necessary to identify payment information in order object
-     *
      */
     protected string $internalPaymentId;
 
     /**
      * payment reference from payment provider
-     *
      */
     protected string $paymentReference;
 
     /**
      * payment message provided from payment provider - e.g. error message on error
-     *
      */
     protected string $message;
 
     /**
      * additional payment data
-     *
      */
     protected array $data = [];
 

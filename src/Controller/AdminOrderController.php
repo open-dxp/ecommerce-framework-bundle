@@ -2,20 +2,23 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Controller;
 
+use DateInterval;
+use DateTime;
+use Exception;
 use GuzzleHttp\ClientInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use OpenDxp\Bundle\AdminBundle\Security\CsrfProtectionHandler;
@@ -134,16 +137,16 @@ class AdminOrderController extends UserAwareController implements KernelControll
         // add Date Filter
         if ($request->query->has('from') === false && $request->query->has('till') === false) {
             // als default, nehmen wir den ersten des aktuellen monats
-            $from = new \DateTime('first day of this month');
+            $from = new DateTime('first day of this month');
             $request->query->set('from', $from->format('Y-m-d'));
         }
 
         $filterDate = new OrderDateTime();
         if ($request->get('from') || $request->get('till')) {
-            $from = $request->get('from') ? new \DateTime($request->get('from')) : null;
-            $till = $request->get('till') ? new \DateTime($request->get('till')) : null;
+            $from = $request->get('from') ? new DateTime($request->get('from')) : null;
+            $till = $request->get('till') ? new DateTime($request->get('till')) : null;
             if ($till) {
-                $till->add(new \DateInterval('P1D'));
+                $till->add(new DateInterval('P1D'));
             }
 
             if ($from) {
@@ -229,7 +232,7 @@ class AdminOrderController extends UserAwareController implements KernelControll
                         $json = $json[0];
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // noting to do
             }
 
@@ -267,7 +270,7 @@ class AdminOrderController extends UserAwareController implements KernelControll
             $customer = $order->getCustomer();
 
             // register
-            $register = \DateTime::createFromFormat('U', (string) $order->getCreationDate());
+            $register = DateTime::createFromFormat('U', (string) $order->getCreationDate());
             $arrCustomerAccount['created'] = $formatter->formatDateTime($register, IntlFormatter::DATE_MEDIUM);
 
             // mail
@@ -307,7 +310,7 @@ class AdminOrderController extends UserAwareController implements KernelControll
         ];
 
         $arrTimeline = [];
-        $date = new \DateTime();
+        $date = new DateTime();
         foreach ($orderAgent->getFullChangeLog() as $note) {
             $quantity = null;
 

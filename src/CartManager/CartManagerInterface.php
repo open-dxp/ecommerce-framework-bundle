@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
@@ -27,7 +27,6 @@ interface CartManagerInterface extends ComponentInterface
      *
      * Is also responsible for checking if guest cart class should be used or not,
      * by calling \OpenDxp\Bundle\EcommerceFrameworkBundle\Environment::getUseGuestCart();
-     *
      */
     public function getCartClassName(): string;
 
@@ -58,7 +57,6 @@ interface CartManagerInterface extends ComponentInterface
      * Removes item from given cart
      *
      * @param string|null $key     - optional identification of cart in case of multi cart
-     *
      */
     public function removeFromCart(string $itemKey, string $key = null): void;
 
@@ -66,21 +64,16 @@ interface CartManagerInterface extends ComponentInterface
      * Returns cart
      *
      * @param string|null $key - optional identification of cart in case of multi cart
-     *
      */
     public function getCart(string $key = null): CartInterface;
 
     /**
      * Returns cart by name
-     *
-     *
      */
     public function getCartByName(string $name): ?CartInterface;
 
     /**
      * Returns cart by name, if it does not exist, it will be created
-     *
-     *
      */
     public function getOrCreateCartByName(string $name): CartInterface;
 
@@ -95,7 +88,6 @@ interface CartManagerInterface extends ComponentInterface
      * Clears given cart
      *
      * @param string|null $key - optional identification of cart in case of multi cart
-     *
      */
     public function clearCart(string $key = null): void;
 
@@ -112,19 +104,16 @@ interface CartManagerInterface extends ComponentInterface
      * Deletes cart
      *
      * @param string|null $key - optional identification of cart in case of multi cart
-     *
      */
     public function deleteCart(string $key = null): void;
 
     /**
      * Creates price calculator for given cart
-     *
      */
     public function getCartPriceCalculator(CartInterface $cart): CartPriceCalculatorInterface;
 
     /**
      * Resets cart manager - carts need to be reloaded after reset() is called
-     *
      */
     public function reset(): void;
 }

@@ -2,22 +2,24 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OfferTool;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Exception;
+use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartItemInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
@@ -27,6 +29,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
 use OpenDxp\Model\DataObject\AbstractObject;
 use OpenDxp\Model\DataObject\Folder;
 use OpenDxp\Model\DataObject\Service;
+use RuntimeException;
 
 class DefaultService implements ServiceInterface
 {
@@ -41,11 +44,11 @@ class DefaultService implements ServiceInterface
     public function __construct(string $offerClass, string $offerItemClass, string $parentFolderPath)
     {
         if (!class_exists($offerClass)) {
-            throw new \InvalidArgumentException(sprintf('Offer class "%s" does not exist.', $offerClass));
+            throw new InvalidArgumentException(sprintf('Offer class "%s" does not exist.', $offerClass));
         }
 
         if (!class_exists($offerItemClass)) {
-            throw new \InvalidArgumentException(sprintf('Offer item class "%s" does not exist.', $offerItemClass));
+            throw new InvalidArgumentException(sprintf('Offer item class "%s" does not exist.', $offerItemClass));
         }
 
         $this->offerClass = $offerClass;
@@ -77,7 +80,7 @@ class DefaultService implements ServiceInterface
         }
 
         if (!$folder) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Unable to create/load parent folder from path "%s"',
                 $this->parentFolderPath
             ));
@@ -88,7 +91,6 @@ class DefaultService implements ServiceInterface
 
     /**
      * @param CartItemInterface[] $excludeItems
-     *
      */
     public function createNewOfferFromCart(CartInterface $cart, array $excludeItems = []): AbstractOffer
     {
@@ -238,8 +240,6 @@ class DefaultService implements ServiceInterface
     /**
      * transforms price before set to the offer tool item.
      * can be used e.g. for adding vat, ...
-     *
-     *
      */
     protected function priceTransformationHook(Decimal $price): Decimal
     {
@@ -263,7 +263,7 @@ class DefaultService implements ServiceInterface
         $excludedItemKeys = $this->getExcludedItemKeys($excludeItems);
 
         if ($cart->getId() != $offer->getCartId()) {
-            throw new \Exception('Cart does not match to the offer given, update is not possible');
+            throw new Exception('Cart does not match to the offer given, update is not possible');
         }
 
         //Update existing offer items

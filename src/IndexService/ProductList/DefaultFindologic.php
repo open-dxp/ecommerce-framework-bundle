@@ -2,26 +2,30 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\ProductList;
 
+use Exception;
+use OpenDxp;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\Findologic\SelectCategory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\FindologicConfigInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\AbstractCategory;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 use Psr\Log\LoggerInterface;
+use SimpleXMLElement;
+use stdClass;
 
 class DefaultFindologic implements ProductListInterface
 {
@@ -60,12 +64,11 @@ class DefaultFindologic implements ProductListInterface
 
     /**
      * json result from findologic
-     *
      */
-    protected \SimpleXMLElement $response;
+    protected SimpleXMLElement $response;
 
     /**
-     * @var array<string,\stdClass>
+     * @var array<string,stdClass>
      */
     protected ?array $groupedValues = null;
 
@@ -125,7 +128,6 @@ class DefaultFindologic implements ProductListInterface
      * Adds query condition to product list for fulltext search
      * Fieldname is optional but highly recommended - needed for resetting condition based on fieldname
      * and exclude functionality in group by results
-     *
      */
     public function addQueryCondition(string|array $condition, string $fieldname = ''): void
     {
@@ -135,7 +137,6 @@ class DefaultFindologic implements ProductListInterface
 
     /**
      * Reset query condition for fieldname
-     *
      */
     public function resetQueryCondition(string $fieldname): void
     {
@@ -321,8 +322,6 @@ class DefaultFindologic implements ProductListInterface
 
     /**
      * builds system conditions
-     *
-     *
      */
     protected function buildSystemConditions(array $filter): array
     {
@@ -350,8 +349,6 @@ class DefaultFindologic implements ProductListInterface
 
     /**
      * builds filter condition of user specific conditions
-     *
-     *
      */
     protected function buildFilterConditions(array $params): array
     {
@@ -382,8 +379,6 @@ class DefaultFindologic implements ProductListInterface
 
     /**
      * create category path
-     *
-     *
      */
     public function buildCategoryTree(AbstractCategory $currentCat): string
     {
@@ -398,8 +393,6 @@ class DefaultFindologic implements ProductListInterface
 
     /**
      * builds query condition of query filters
-     *
-     *
      */
     protected function buildQueryConditions(array $params): array
     {
@@ -444,7 +437,7 @@ class DefaultFindologic implements ProductListInterface
      * considers both - normal values and relation values
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function prepareGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -453,7 +446,6 @@ class DefaultFindologic implements ProductListInterface
 
     /**
      * resets all set prepared group by values
-     *
      */
     public function resetPreparedGroupByValues(): void
     {
@@ -463,8 +455,6 @@ class DefaultFindologic implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupByRelationValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -474,8 +464,6 @@ class DefaultFindologic implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
      */
     public function prepareGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {
@@ -487,7 +475,7 @@ class DefaultFindologic implements ProductListInterface
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -553,7 +541,7 @@ class DefaultFindologic implements ProductListInterface
             }
 
             if ($field->items->item) {
-                $hits = $field->items->item instanceof \stdClass
+                $hits = $field->items->item instanceof stdClass
                     ? [$field->items->item]
                     : $field->items->item
                 ;
@@ -621,11 +609,9 @@ class DefaultFindologic implements ProductListInterface
     }
 
     /**
-     *
-     *
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function sendRequest(array $params): \SimpleXMLElement
+    protected function sendRequest(array $params): SimpleXMLElement
     {
         // add system params
         $params = [
@@ -650,14 +636,14 @@ class DefaultFindologic implements ProductListInterface
 
         // start request
         $start = microtime(true);
-        $client = \OpenDxp::getContainer()->get('opendxp.http_client');
+        $client = OpenDxp::getContainer()->get('opendxp.http_client');
         $response = $client->request('GET', $url, [
             'timeout' => $this->timeout,
         ]);
         $this->getLogger()->info('Duration: ' . number_format(microtime(true) - $start, 3));
 
         if ($response->getStatusCode() != 200) {
-            throw new \Exception((string)$response->getBody());
+            throw new Exception((string)$response->getBody());
         }
 
         return simplexml_load_string((string)$response->getBody());
@@ -690,7 +676,6 @@ class DefaultFindologic implements ProductListInterface
      *
      * @param int $offset Page offset
      * @param int $itemCountPerPage Number of items per page
-     *
      */
     public function getItems(int $offset, int $itemCountPerPage): array
     {

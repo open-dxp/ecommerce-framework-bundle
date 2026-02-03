@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7;
@@ -38,20 +38,16 @@ interface CheckoutManagerInterface
 
     /**
      * Returns checkout step with given name
-     *
-     *
      */
     public function getCheckoutStep(string $stepName): ?CheckoutStepInterface;
 
     /**
      * Returns current checkout step
-     *
      */
     public function getCurrentStep(): CheckoutStepInterface;
 
     /**
      * Returns the cart the checkout is started with
-     *
      */
     public function getCart(): CartInterface;
 
@@ -59,21 +55,17 @@ interface CheckoutManagerInterface
      * Commits checkout step
      *
      * All previous steps must be committed, otherwise committing step is not allowed
-     *
-     *
      */
     public function commitStep(CheckoutStepInterface $step, mixed $data): bool;
 
     /**
      * Checks if checkout is finished (= all checkout steps are committed)
      * only a finished checkout can be committed
-     *
      */
     public function isFinished(): bool;
 
     /**
      * Returns if there currently is an active payment (init or pending)
-     *
      */
     public function hasActivePayment(): bool;
 
@@ -114,7 +106,6 @@ interface CheckoutManagerInterface
 
     /**
      * Returns order (creates it if not available yet)
-     *
      */
     public function getOrder(): AbstractOrder;
 
@@ -130,8 +121,6 @@ interface CheckoutManagerInterface
      * Use this for committing order when payment is activated
      *
      * Delegates to commit order processor
-     *
-     *
      */
     public function handlePaymentResponseAndCommitOrderPayment(StatusInterface|array $paymentResponseParams): AbstractOrder;
 
@@ -140,7 +129,6 @@ interface CheckoutManagerInterface
      * provided via the source order.
      *
      * @param string $customerId             Only allow recurring payment to be performed on source-orders of the same user
-     *
      */
     public function startAndCommitRecurringOrderPayment(AbstractOrder $sourceOrder, string $customerId): AbstractOrder;
 
@@ -150,26 +138,22 @@ interface CheckoutManagerInterface
      * Use this for committing order when no payment is activated
      *
      * Delegates to commit order processor
-     *
      */
     public function commitOrder(): AbstractOrder;
 
     /**
      * Returns if checkout process and subsequently order is committed
      * basically checks, if order is available and if this order is committed
-     *
      */
     public function isCommitted(): bool;
 
     /**
      * Returns payment adapter
-     *
      */
     public function getPayment(): ?PaymentInterface;
 
     /**
      * Cleans up orders with state pending payment after 1h -> delegates this to commit order processor
-     *
      */
     public function cleanUpPendingOrders(): void;
 }

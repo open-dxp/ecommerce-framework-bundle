@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType;
@@ -96,8 +96,6 @@ abstract class AbstractFilterType
     /**
      * renders and returns the rendered html snippet for the current filter
      * based on settings in the filter definition and the current filter params.
-     *
-     *
      */
     public function getFilterFrontend(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): string
     {
@@ -110,9 +108,6 @@ abstract class AbstractFilterType
     /**
      * returns the raw data for the current filter based on settings in the
      * filter definition and the current filter params.
-     *
-     *
-     *
      */
     abstract public function getFilterValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList, array $currentFilter): array;
 
@@ -128,8 +123,6 @@ abstract class AbstractFilterType
 
     /**
      * calls prepareGroupByValues of productlist if necessary
-     *
-     *
      */
     public function prepareGroupByValues(AbstractFilterDefinitionType $filterDefinition, ProductListInterface $productList): void
     {
@@ -138,8 +131,6 @@ abstract class AbstractFilterType
 
     /**
      * sort result
-     *
-     *
      */
     protected function sortResult(AbstractFilterDefinitionType $filterDefinition, array $result): array
     {
@@ -148,8 +139,6 @@ abstract class AbstractFilterType
 
     /**
      * renders filter template
-     *
-     *
      */
     protected function render(string $template, array $parameters = []): string
     {

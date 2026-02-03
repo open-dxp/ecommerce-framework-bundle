@@ -2,28 +2,29 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\Order\Listing\Filter;
 
+use DateTime;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListFilterInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\OrderListInterface;
 
 class OrderDateTime implements OrderListFilterInterface
 {
-    protected ?\DateTime $from = null;
+    protected ?DateTime $from = null;
 
-    protected ?\DateTime $till = null;
+    protected ?DateTime $till = null;
 
     protected string $column = 'order.orderDate';
 
@@ -43,24 +44,24 @@ class OrderDateTime implements OrderListFilterInterface
         return $this;
     }
 
-    public function getFrom(): ?\DateTime
+    public function getFrom(): ?DateTime
     {
         return $this->from;
     }
 
-    public function setFrom(\DateTime $from): static
+    public function setFrom(DateTime $from): static
     {
         $this->from = $from;
 
         return $this;
     }
 
-    public function getTill(): ?\DateTime
+    public function getTill(): ?DateTime
     {
         return $this->till;
     }
 
-    public function setTill(\DateTime $till): static
+    public function setTill(DateTime $till): static
     {
         $this->till = $till;
 

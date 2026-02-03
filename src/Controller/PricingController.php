@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Controller;
@@ -23,6 +23,7 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule;
 use OpenDxp\Controller\KernelControllerEventInterface;
 use OpenDxp\Controller\Traits\JsonHelperTrait;
 use OpenDxp\Controller\UserAwareController;
+use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -139,7 +140,7 @@ class PricingController extends UserAwareController implements KernelControllerE
 
             $return['success'] = true;
             $return['id'] = $rule->getId();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $return['message'] = $e->getMessage();
         }
 
@@ -164,7 +165,7 @@ class PricingController extends UserAwareController implements KernelControllerE
             $rule = Rule::getById((int) $request->get('id'));
             $rule->delete();
             $return['success'] = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $return['message'] = $e->getMessage();
         }
 
@@ -214,7 +215,7 @@ class PricingController extends UserAwareController implements KernelControllerE
             $newRule->save();
 
             $return['success'] = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $return['message'] = $e->getMessage();
         }
 
@@ -294,7 +295,7 @@ class PricingController extends UserAwareController implements KernelControllerE
             }
 
             // create root condition
-            $rootContainer = new \stdClass();
+            $rootContainer = new stdClass();
             $rootContainer->parent = null;
             $rootContainer->operator = null;
             $rootContainer->type = 'Bracket';
@@ -305,7 +306,7 @@ class PricingController extends UserAwareController implements KernelControllerE
             foreach ($data->conditions as $settings) {
                 // handle brackets
                 if ($settings->bracketLeft == true) {
-                    $newContainer = new \stdClass();
+                    $newContainer = new stdClass();
                     $newContainer->parent = $currentContainer;
                     $newContainer->type = 'Bracket';
                     $newContainer->conditions = [];
@@ -347,7 +348,7 @@ class PricingController extends UserAwareController implements KernelControllerE
             // finish
             $return['success'] = true;
             $return['id'] = $rule->getId();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $return['message'] = $e->getMessage();
         }
 

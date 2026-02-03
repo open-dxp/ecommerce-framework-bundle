@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle;
@@ -25,7 +25,6 @@ interface EnvironmentInterface extends ComponentInterface
 {
     /**
      * Returns current user id
-     *
      */
     public function getCurrentUserId(): int;
 
@@ -39,34 +38,28 @@ interface EnvironmentInterface extends ComponentInterface
 
     /**
      * Checks if a user id is set
-     *
      */
     public function hasCurrentUserId(): bool;
 
     /**
      * Sets custom item to environment - which is saved to the session then
      * save()-call is needed to save the custom items
-     *
      */
     public function setCustomItem(string $key, mixed $value): void;
 
     /**
      * Removes custom item from the environment
      * save()-call is needed to save the custom items
-     *
      */
     public function removeCustomItem(string $key): void;
 
     /**
      * Returns custom saved item from environment
-     *
-     *
      */
     public function getCustomItem(string $key, mixed $defaultValue = null): mixed;
 
     /**
      * Returns all custom items from environment
-     *
      */
     public function getAllCustomItems(): array;
 
@@ -78,25 +71,21 @@ interface EnvironmentInterface extends ComponentInterface
 
     /**
      * Sets current assortment tenant which is used for indexing and product lists
-     *
      */
     public function setCurrentAssortmentTenant(?string $tenant): void;
 
     /**
      * Returns current assortment tenant which is used for indexing and product lists
-     *
      */
     public function getCurrentAssortmentTenant(): ?string;
 
     /**
      * Sets current assortment sub tenant which is used for indexing and product lists
-     *
      */
     public function setCurrentAssortmentSubTenant(?string $subTenant): void;
 
     /**
      * Returns current sub assortment tenant which is used for indexing and product lists
-     *
      */
     public function getCurrentAssortmentSubTenant(): ?string;
 
@@ -109,19 +98,16 @@ interface EnvironmentInterface extends ComponentInterface
 
     /**
      * Returns current assortment tenant which is used for cart and checkout manager
-     *
      */
     public function getCurrentCheckoutTenant(): ?string;
 
     /**
      * Set the default currency in a multi-currency environment.
-     *
      */
     public function setDefaultCurrency(Currency $currency): void;
 
     /**
      * Returns instance of default currency
-     *
      */
     public function getDefaultCurrency(): Currency;
 
@@ -131,7 +117,6 @@ interface EnvironmentInterface extends ComponentInterface
 
     /**
      * Returns current system locale
-     *
      */
     public function getSystemLocale(): ?string;
 }

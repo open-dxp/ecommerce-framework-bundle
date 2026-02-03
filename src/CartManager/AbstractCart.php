@@ -2,20 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
+ * OpenDXP
  *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is licensed under the GNU General Public License version 3 (GPLv3).
+ *
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ * @copyright  Copyright (c) Pimcore GmbH (https://pimcore.com)
+ * @copyright  Modification Copyright (c) OpenDXP (https://www.opendxp.io)
+ * @license    https://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3 (GPLv3)
  */
 
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager;
 
+use DateTime;
+use Exception;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\InvalidConfigException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Exception\VoucherServiceException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Factory;
@@ -41,11 +43,11 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
 
     protected string $name;
 
-    protected ?\DateTime $creationDate = null;
+    protected ?DateTime $creationDate = null;
 
     protected ?int $creationDateTimestamp = null;
 
-    protected ?\DateTime $modificationDate = null;
+    protected ?DateTime $modificationDate = null;
 
     protected ?int $modificationDateTimestamp = null;
 
@@ -72,7 +74,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
 
     public function __construct()
     {
-        $this->setCreationDate(new \DateTime());
+        $this->setCreationDate(new DateTime());
     }
 
     abstract protected function getCartItemClassName(): string;
@@ -82,7 +84,6 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     /**
      * @param CheckoutableInterface&Concrete $product
      * @param AbstractSetProductEntry[] $subProducts
-     *
      */
     public function addItem(CheckoutableInterface $product, int $count, string $itemKey = null, bool $replace = false, array $params = [], array $subProducts = [], string $comment = null): string
     {
@@ -100,7 +101,6 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     /**
      * @param CheckoutableInterface&Concrete $product
      * @param AbstractSetProductEntry[] $subProducts
-     *
      */
     public function updateItem(string $itemKey, CheckoutableInterface $product, int $count, bool $replace = false, array $params = [], array $subProducts = [], string $comment = null): string
     {
@@ -160,8 +160,6 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
 
     /**
      * updates count of specific cart item
-     *
-     *
      */
     public function updateItemCount(string $itemKey, int $count): CartItemInterface
     {
@@ -177,7 +175,6 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
 
     /**
      * @param CheckoutableInterface&Concrete $product
-     *
      */
     public function addGiftItem(CheckoutableInterface $product, int $count, string $itemKey = null, bool $replace = false, array $params = [], array $subProducts = [], string $comment = null): string
     {
@@ -194,7 +191,6 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
 
     /**
      * @param CheckoutableInterface&Concrete $product
-     *
      */
     public function updateGiftItem(string $itemKey, CheckoutableInterface $product, int $count, bool $replace = false, array $params = [], array $subProducts = [], string $comment = null): string
     {
@@ -480,17 +476,17 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
         return $this->id;
     }
 
-    public function getCreationDate(): \DateTime
+    public function getCreationDate(): DateTime
     {
         if (empty($this->creationDate) && $this->creationDateTimestamp) {
-            $this->creationDate = new \DateTime();
+            $this->creationDate = new DateTime();
             $this->creationDate->setTimestamp($this->creationDateTimestamp);
         }
 
         return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTime $creationDate = null): void
+    public function setCreationDate(DateTime $creationDate = null): void
     {
         $this->creationDate = $creationDate;
         if ($creationDate) {
@@ -511,17 +507,17 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
         return $this->creationDateTimestamp;
     }
 
-    public function getModificationDate(): ?\DateTime
+    public function getModificationDate(): ?DateTime
     {
         if (empty($this->modificationDate) && $this->modificationDateTimestamp) {
-            $this->modificationDate = new \DateTime();
+            $this->modificationDate = new DateTime();
             $this->modificationDate->setTimestamp($this->modificationDateTimestamp);
         }
 
         return $this->modificationDate;
     }
 
-    public function setModificationDate(\DateTime $modificationDate = null): void
+    public function setModificationDate(DateTime $modificationDate = null): void
     {
         $this->modificationDate = $modificationDate;
         if ($modificationDate) {
@@ -614,7 +610,6 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     }
 
     /**
-     *
      * @return array<int, CartItemInterface>
      */
     public function getRecentlyAddedItems(int $count): array
@@ -645,7 +640,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function addVoucherToken(string $code): bool
     {
@@ -687,7 +682,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
      *
      *
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function removeVoucherToken(string $code): bool
     {
@@ -764,8 +759,6 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
 
     /**
      * Should be added to the cart
-     *
-     *
      */
     protected static function isValidCartItem(CartItemInterface $item): bool
     {
