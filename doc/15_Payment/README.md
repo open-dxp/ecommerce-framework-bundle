@@ -102,17 +102,16 @@ provider from the payment manager.
 ## Payment Providers
 Following Payment Providers are available as a dedicated bundle to be integrated into the E-commerce framework: 
 
-- [Datatrans](https://github.com/pimcore/payment-provider-datatrans)
-- [PayPalSmartButton](https://github.com/pimcore/payment-provider-paypal-smart-payment-button)
-- [Klarna](https://github.com/pimcore/payment-provider-klarna)
-- [OGone](https://github.com/pimcore/payment-provider-ogone)
-- [MPay24](https://github.com/pimcore/payment-provider-mpay24-seamless)
-- [PayU](https://github.com/pimcore/payment-provider-payu)
-- [Unzer (former Heidelpay)](https://github.com/pimcore/payment-provider-unzer)
-- [Hobex](https://github.com/pimcore/payment-provider-hobex)
+- [PayPalSmartButton](https://github.com/open-dxp/payment-provider-paypal-smart-payment-button-bundle)
+- [Unzer (former Heidelpay)](https://github.com/open-dxp/payment-provider-unzer-bundle)
 
-### Third-party Payment Provider Integrations
-- [BS PAYONE](https://github.com/asioso/payone)
+### Other Payment Providers (not yet migrated to OpenDXP; contact us for more information)
+- [Datatrans](https://github.com/open-dxp/payment-provider-datatrans-bundle)
+- [Klarna](https://github.com/open-dxp/payment-provider-klarna-bundle)
+- [OGone](https://github.com/open-dxp/payment-provider-ogone-bundle)
+- [MPay24](https://github.com/open-dxp/payment-provider-mpay24-seamless-bundle)
+- [PayU](https://github.com/open-dxp/payment-provider-payu-bundle)
+- [Hobex](https://github.com/open-dxp/payment-provider-hobex-bundle)
 
 ## Further Payment Aspects
 - [Recurring Payments](10_Recurring_Payments.md)
