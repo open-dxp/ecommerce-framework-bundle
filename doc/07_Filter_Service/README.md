@@ -112,7 +112,7 @@ opendxp_ecommerce_framework:
   in filter definition objects (see next chapter). 
 - `class`: Backend implementation of the filter type. 
 - `script`: Default view script of the filter type, can be overwritten in the filter definition objects. 
-  You can find some script filter examples in the Demo [here](https://github.com/pimcore/demo/tree/11.x/templates/product/filters). 
+  You can find some script filter examples in the Demo [here](https://github.com/open-dxp/demo/tree/1.x/templates/product/filters). 
 
 
 - `Helper`: Is a helper implementation that gets available values for pre select settings in the filter definition objects 
@@ -140,8 +140,8 @@ The Filter Definition class can be extended and modified to custom needs of the 
 
 Filter Definition objects can be assigned to category objects to build up automatic category pages or to area bricks in 
 OpenDxp documents to set up manual landing pages etc. 
-Both is demonstrated at our [Demo](https://demo.pimcore.fun) and also available as 
-[source code](https://github.com/pimcore/demo). 
+Both is demonstrated at our [Demo](https://demo.opendxp.io) and also available as 
+[source code](https://github.com/open-dxp/demo). 
 
 In case that a filter contains relational objects (`FilterMultiRelation`, `FilterRelation`, etc.), 
 the `getName()` method of the object is used to render the text in pre-select lists and filters. 
@@ -187,7 +187,7 @@ $templateParams['paginationVariables'] = $paginator->getPaginationData();
 return $this->render('Path/template.html.twig', $templateParams);
 ```
 
-For a sample of a controller see our demo [here](https://github.com/pimcore/demo/blob/11.x/src/Controller/ProductController.php#L118). 
+For a sample of a controller see our demo [here](https://github.com/open-dxp/demo/blob/1.x/src/Controller/ProductController.php#L118). 
 
 ### View
 For putting all filters to the frontend use following sample. It is important that this sample is inside a form in order 
