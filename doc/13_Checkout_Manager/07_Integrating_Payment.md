@@ -46,7 +46,7 @@ payment provider, also other data structures can be created:
 {{ form(form) }}
 ```
 
-For more samples see [our demo](https://github.com/pimcore/demo/blob/11.x/templates/payment/payment_frame.html.twig)
+For more samples see [our demo](https://github.com/open-dxp/demo/blob/1.x/templates/payment/payment_frame.html.twig)
 
 
 ## Handle Payment Response

@@ -4,7 +4,7 @@
 
 This bundle provides additional Events.
 
-It's recommended to have a look into the OpenDxp [Events and Event Listeners documentation](https://pimcore.com/docs/pimcore/current/Development_Documentation/Extending_OpenDxp/Event_API_and_Event_Manager.html)
+It's recommended to have a look into the OpenDxp [Events and Event Listeners documentation](https://docs.opendxp.io/docs/core-framework/Extending_OpenDxp/Event_API_and_Event_Manager)
 
 ## Available Events
 

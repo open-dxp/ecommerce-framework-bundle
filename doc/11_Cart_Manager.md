@@ -177,7 +177,7 @@ $environment->save();
 Once set, the cart manager uses all specific settings of the currently active checkout tenant which are configured
 in the configuration (identified by tenant name).
 
-See also [Demo](https://github.com/pimcore/demo/blob/11.x/config/ecommerce/base-ecommerce.yaml#L197) for some examples.  
+See also [Demo](https://github.com/open-dxp/demo/blob/1.x/config/ecommerce/base-ecommerce.yaml#L197) for some examples.  
 
 
 ## Adding Custom Properties to Cart Items
