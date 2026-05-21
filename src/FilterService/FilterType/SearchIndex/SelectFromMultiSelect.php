@@ -45,7 +45,7 @@ class SelectFromMultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Fil
         }
 
         if (!empty($value)) {
-            $value = trim($value);
+            $value = trim((string) $value);
         }
 
         $currentFilter[$field] = $value;

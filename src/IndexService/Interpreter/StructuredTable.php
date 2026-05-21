@@ -27,7 +27,7 @@ class StructuredTable implements InterpreterInterface
     {
         $config = $this->resolveOptions($config ?? []);
 
-        $getter = 'get' . ucfirst($config['tablerow']) . '__' . ucfirst($config['tablecolumn']);
+        $getter = 'get' . ucfirst((string) $config['tablerow']) . '__' . ucfirst((string) $config['tablecolumn']);
         if (!$value) {
             return null;
         }

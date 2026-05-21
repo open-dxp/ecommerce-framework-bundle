@@ -133,10 +133,10 @@ class ListHelper
         foreach ($params as $k => $p) {
             if (is_array($p)) {
                 foreach ($p as $subKey => $subValue) {
-                    $string .= $k . '[' . $subKey . ']' . '=' . urlencode($subValue) . '&';
+                    $string .= $k . '[' . $subKey . ']' . '=' . urlencode((string) $subValue) . '&';
                 }
             } else {
-                $string .= $k . '=' . urlencode($p) . '&';
+                $string .= $k . '=' . urlencode((string) $p) . '&';
             }
         }
 

@@ -439,7 +439,7 @@ abstract class AbstractElasticSearch implements ProductListInterface
                     $params['body']['sort'] = $this->orderKey[self::ADVANCED_SORT];
                 } else {
                     foreach ($this->orderKey as $orderKey) {
-                        $params['body']['sort'][] = [$this->tenantConfig->getFieldNameMapped($orderKey[0]) => (strtolower($orderKey[1]) ?: 'asc')];
+                        $params['body']['sort'][] = [$this->tenantConfig->getFieldNameMapped($orderKey[0]) => (strtolower((string) $orderKey[1]) ?: 'asc')];
                     }
                 }
             } else {

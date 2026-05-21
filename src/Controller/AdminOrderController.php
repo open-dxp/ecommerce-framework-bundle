@@ -114,7 +114,7 @@ class AdminOrderController extends UserAwareController implements KernelControll
 
         // Search
         if ($request->get('q')) {
-            $q = htmlentities($request->get('q'));
+            $q = htmlentities((string) $request->get('q'));
             $search = $request->get('search');
             switch ($search) {
                 case 'productType':

@@ -693,7 +693,7 @@ abstract class AbstractCart extends AbstractModel implements CartInterface
     {
         $tokens = [];
         foreach ($this->checkoutData as $key => $value) {
-            $exp_key = explode('_', $key);
+            $exp_key = explode('_', (string) $key);
             if ($exp_key[0] == 'voucher') {
                 $tokens[] = $value->getData();
             }

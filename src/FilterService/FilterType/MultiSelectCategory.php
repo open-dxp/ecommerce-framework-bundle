@@ -45,7 +45,7 @@ class MultiSelectCategory extends AbstractFilterType
 
         foreach ($rawValues as $v) {
             if ($v['value']) {
-                $explode = array_map(intval(...), explode(',', $v['value']));
+                $explode = array_map(intval(...), explode(',', (string) $v['value']));
                 foreach ($explode as $e) {
                     if (empty($availableRelations) || ($availableRelations[$e] ?? false)) {
                         $count = empty($values[$e]) ? $v['count'] : $values[$e]['count'] + $v['count'];

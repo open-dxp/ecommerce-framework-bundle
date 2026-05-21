@@ -43,7 +43,7 @@ class NumberRangeSelection extends \OpenDxp\Bundle\EcommerceFrameworkBundle\Filt
         $rawValue = $params[$field] ?? null;
 
         if (!empty($rawValue) && $rawValue != AbstractFilterType::EMPTY_STRING) {
-            $values = explode('-', $rawValue);
+            $values = explode('-', (string) $rawValue);
             $value['from'] = trim($values[0]);
             $value['to'] = trim($values[1]);
         } elseif ($rawValue == AbstractFilterType::EMPTY_STRING) {

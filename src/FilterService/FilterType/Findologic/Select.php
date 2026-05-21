@@ -48,7 +48,7 @@ class Select extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\Filt
             $value = $preSelect;
         }
 
-        $value = trim($value);
+        $value = trim((string) $value);
         $currentFilter[$field] = $value;
 
         if (!empty($value)) {

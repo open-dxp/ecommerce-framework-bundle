@@ -60,7 +60,7 @@ abstract class AbstractMockupCacheWorker extends ProductCentricBatchProcessingWo
     {
         if (empty($data)) {
             $data = $this->db->fetchOne('SELECT data FROM ' . $this->getStoreTableName() . ' WHERE id = ? AND tenant = ?', [$objectId, $this->name]);
-            $data = json_decode($data, true);
+            $data = json_decode((string) $data, true);
         }
 
         if ($this->tenantConfig instanceof MockupConfigInterface) {

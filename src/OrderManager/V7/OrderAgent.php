@@ -228,7 +228,7 @@ class OrderAgent implements OrderAgentInterface
                     }
                     $authorizedData = [];
                     foreach ($providerData->getObjectVars() as $field => $value) {
-                        if (preg_match('#^auth_(?<name>\w+)$#i', $field, $match)) {
+                        if (preg_match('#^auth_(?<name>\w+)$#i', (string) $field, $match)) {
                             $func = 'get' . $field;
                             $authorizedData[$match['name']] = $providerData->$func();
                         }

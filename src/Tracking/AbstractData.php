@@ -45,8 +45,8 @@ abstract class AbstractData implements JsonSerializable
     public function mergeValues(array $data, bool $overwrite = false): static
     {
         foreach ($data as $key => $value) {
-            $getter = 'get' . ucfirst($key);
-            $setter = 'set' . ucfirst($key);
+            $getter = 'get' . ucfirst((string) $key);
+            $setter = 'set' . ucfirst((string) $key);
 
             if (method_exists($this, $getter) && method_exists($this, $setter)) {
                 if (null !== $this->$getter() && !$overwrite) {

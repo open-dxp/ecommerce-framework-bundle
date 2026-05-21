@@ -130,7 +130,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
                 ])->asArray();
 
                 $aliasIndexName = array_key_first($result);
-                preg_match('/'.$this->indexName.'-(\d+)/', $aliasIndexName, $matches);
+                preg_match('/'.$this->indexName.'-(\d+)/', (string) $aliasIndexName, $matches);
                 if (count($matches) > 1) {
                     $version = (int)$matches[1];
                     if ($version > $this->indexVersion) {
@@ -353,7 +353,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
         if (empty($data)) {
             $dataEntry = $this->db->fetchAssociative('SELECT data, metadata FROM ' . $this->getStoreTableName() . ' WHERE id = ? AND tenant = ?', [$objectId, $this->name]);
             if ($dataEntry) {
-                $data = json_decode($dataEntry['data'], true);
+                $data = json_decode((string) $dataEntry['data'], true);
                 $metadata = $dataEntry['metadata'];
 
                 $jsonDecodeError = json_last_error();
@@ -384,8 +384,8 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
             }
 
             //fix categories to array
-            $indexSystemData['categoryIds'] = array_values(array_filter(explode(',', $indexSystemData['categoryIds'])));
-            $indexSystemData['parentCategoryIds'] = array_values(array_filter(explode(',', $indexSystemData['parentCategoryIds'])));
+            $indexSystemData['categoryIds'] = array_values(array_filter(explode(',', (string) $indexSystemData['categoryIds'])));
+            $indexSystemData['parentCategoryIds'] = array_values(array_filter(explode(',', (string) $indexSystemData['parentCategoryIds'])));
 
             //add relation attributes
             foreach ($data['relations'] as $relation) {
@@ -526,7 +526,7 @@ abstract class AbstractElasticSearch extends Worker\ProductCentricBatchProcessin
         $esClient = $this->getElasticSearchClient();
         $stats = $esClient->indices()->stats()->asArray();
         foreach ($stats['indices'] as $key => $data) {
-            preg_match('/'.$this->indexName.'-(\d+)/', $key, $matches);
+            preg_match('/'.$this->indexName.'-(\d+)/', (string) $key, $matches);
             if (count($matches) > 1) {
                 $version = (int)$matches[1];
                 if ($version != $this->indexVersion) {

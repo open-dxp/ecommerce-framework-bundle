@@ -31,7 +31,7 @@ class ObjectValue implements InterpreterInterface
         $targetList = $this->resolveOptions($config['target'], 'target');
 
         if ($value instanceof AbstractObject) {
-            $fieldGetter = 'get' . ucfirst($targetList['fieldname']);
+            $fieldGetter = 'get' . ucfirst((string) $targetList['fieldname']);
 
             if (method_exists($value, $fieldGetter)) {
                 return $value->$fieldGetter($targetList['locale']);

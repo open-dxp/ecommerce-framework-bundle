@@ -27,13 +27,13 @@ class DefaultBrickGetter implements GetterInterface
     {
         $config = $this->resolveOptions($config ?? []);
 
-        $brickContainerGetter = 'get' . ucfirst($config['brickfield']);
+        $brickContainerGetter = 'get' . ucfirst((string) $config['brickfield']);
         $brickContainer = $object->$brickContainerGetter();
 
-        $brickGetter = 'get' . ucfirst($config['bricktype']);
+        $brickGetter = 'get' . ucfirst((string) $config['bricktype']);
         $brick = $brickContainer->$brickGetter();
         if ($brick) {
-            $fieldGetter = 'get' . ucfirst($config['fieldname']);
+            $fieldGetter = 'get' . ucfirst((string) $config['fieldname']);
 
             return $brick->$fieldGetter();
         }

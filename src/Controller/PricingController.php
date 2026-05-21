@@ -281,7 +281,7 @@ class PricingController extends UserAwareController implements KernelControllerE
 
         // save rule config
         try {
-            $data = json_decode($request->get('data'));
+            $data = json_decode((string) $request->get('data'));
             $rule = Rule::getById((int) $request->get('id'));
 
             // apply basic settings
@@ -366,7 +366,7 @@ class PricingController extends UserAwareController implements KernelControllerE
         ];
 
         // save order
-        $rules = json_decode($request->get('rules'));
+        $rules = json_decode((string) $request->get('rules'));
         foreach ($rules as $id => $prio) {
             $rule = Rule::getById((int)$id);
             if ($rule) {

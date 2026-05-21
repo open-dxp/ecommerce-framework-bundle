@@ -89,7 +89,7 @@ class SelectRelation extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
             $value = $preSelect;
         }
 
-        $value = trim($value);
+        $value = trim((string) $value);
         $currentFilter[$field] = $value;
 
         if (!empty($value)) {
