@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Model;
 
 use OpenDxp\Model\DataObject;
+use OpenDxp\Model\DataObject\ClassDefinition\Data\PreGetDataInterface;
 use OpenDxp\Model\DataObject\Exception\InheritanceParentNotFoundException;
 use OpenDxp\Model\DataObject\Fieldcollection;
 
@@ -78,7 +79,8 @@ abstract class AbstractFilterDefinition extends DataObject\Concrete implements D
 
                 $data = $this->$key;
                 if (!$data) {
-                    $data = $this->getClass()->getFieldDefinition($key)->preGetData($this);
+                    $fd = $this->getClass()->getFieldDefinition($key);
+                    $data = $fd instanceof PreGetDataInterface ? $fd->preGetData($this) : null;
                 }
                 if (!$data) {
                     return $parentValue;

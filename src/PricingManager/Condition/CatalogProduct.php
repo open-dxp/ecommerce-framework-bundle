@@ -116,7 +116,7 @@ class CatalogProduct extends AbstractObjectListCondition implements CatalogProdu
      */
     public function __sleep(): array
     {
-        if (isset($this->products)) {
+        if ($this->products !== []) {
             return $this->handleSleep('products', 'productIds');
         }
 
