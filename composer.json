@@ -1,64 +1,63 @@
 {
-  "name": "open-dxp/ecommerce-framework-bundle",
-  "license": "GPL-3.0+",
-  "type": "opendxp-bundle",
-  "description": "OpenDXP Ecommerce Bundle",
-  "config": {
-    "sort-packages": true,
-    "preferred-install": {
-      "open-dxp/opendxp": "source",
-      "*": "dist"
+    "name": "open-dxp/ecommerce-framework-bundle",
+    "license": "GPL-3.0+",
+    "type": "opendxp-bundle",
+    "description": "OpenDXP Ecommerce Bundle",
+    "config": {
+        "sort-packages": true,
+        "preferred-install": {
+            "open-dxp/opendxp": "source",
+            "*": "dist"
+        },
+        "allow-plugins": {
+            "php-http/discovery": false,
+            "symfony/runtime": true
+        }
     },
-    "allow-plugins": {
-      "php-http/discovery": false,
-      "symfony/runtime": true
-    }
-  },
-  "prefer-stable": true,
-  "require": {
-    "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
-    "open-dxp/opendxp": "^1.0",
-    "open-dxp/personalization-bundle": "^1.0",
-    "open-dxp/google-marketing-bundle": "^1.0",
-    "knplabs/knp-paginator-bundle": "^6.0",
-    "symfony/webpack-encore-bundle": "^2.0",
-    "symfony/form": "^7.4"
-  },
-  "require-dev": {
-    "codeception/codeception": "5.2.2",
-    "codeception/module-symfony": "^3.1",
-    "codeception/module-asserts": "^3.2",
-    "phpstan/phpstan": "2.1.33",
-    "phpstan/phpstan-symfony": "^2.0.9",
-    "open-dxp/elasticsearch-client-bundle": "^1.0.0",
-    "open-dxp/opensearch-client-bundle": "^1.0.0",
-    "symfony/dotenv": "^7.4",
-    "symfony/runtime": "^7.4"
-  },
-  "suggest": {
-    "elasticsearch/elasticsearch": "Required for Elastic Search service",
-    "open-dxp/elasticsearch-client-bundle": "Required for Open Search service",
-    "webmozarts/console-parallelization": "Required for parallelization of console commands"
-  },
-  "autoload": {
-    "psr-4": {
-      "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\Tests\\": "tests",
-      "OpenDxp\\Model\\DataObject\\": "var/classes/DataObject"
+    "require": {
+        "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+        "open-dxp/opendxp": "^1.0",
+        "open-dxp/personalization-bundle": "^1.0",
+        "open-dxp/google-marketing-bundle": "^1.0",
+        "knplabs/knp-paginator-bundle": "^6.0",
+        "symfony/webpack-encore-bundle": "^2.0",
+        "symfony/form": "^7.4"
     },
-    "files": [
-      "kernel/Kernel.php"
-    ]
-  },
-  "extra": {
-    "opendxp": {
-      "bundles": [
-        "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\OpenDxpEcommerceFrameworkBundle"
-      ]
+    "require-dev": {
+        "codeception/codeception": "^5.3.5",
+        "codeception/module-symfony": "^3.8",
+        "codeception/module-asserts": "^3.2",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0.9",
+        "open-dxp/elasticsearch-client-bundle": "^1.0.0",
+        "open-dxp/opensearch-client-bundle": "^1.0.0",
+        "symfony/dotenv": "^7.4",
+        "symfony/runtime": "^7.4"
+    },
+    "suggest": {
+        "elasticsearch/elasticsearch": "Required for Elastic Search service",
+        "open-dxp/elasticsearch-client-bundle": "Required for Open Search service",
+        "webmozarts/console-parallelization": "Required for parallelization of console commands"
+    },
+    "autoload": {
+        "psr-4": {
+            "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\Tests\\": "tests",
+            "OpenDxp\\Model\\DataObject\\": "var/classes/DataObject"
+        },
+        "files": [
+            "kernel/Kernel.php"
+        ]
+    },
+    "extra": {
+        "opendxp": {
+            "bundles": [
+                "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\OpenDxpEcommerceFrameworkBundle"
+            ]
+        }
     }
-  }
 }
