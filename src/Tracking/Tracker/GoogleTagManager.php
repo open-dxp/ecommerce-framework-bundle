@@ -238,7 +238,7 @@ class GoogleTagManager extends Tracker implements
 
     protected function transformCheckoutItems(array $items): array
     {
-        return array_map(fn (ProductAction $item) => $this->transformProductAction($item), $items);
+        return array_map($this->transformProductAction(...), $items);
     }
 
     private function formatPrice(mixed $price): string

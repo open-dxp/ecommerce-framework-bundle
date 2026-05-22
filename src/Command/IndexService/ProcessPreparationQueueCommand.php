@@ -72,7 +72,7 @@ class ProcessPreparationQueueCommand extends AbstractIndexServiceCommand
         $tenantNameFilterList = $input->getOption('tenant');
         $combinedRows = $this->indexUpdateService->fetchProductIdsForPreparation($tenantNameFilterList);
 
-        return array_map(fn ($row) => serialize($row), $combinedRows);
+        return array_map(serialize(...), $combinedRows);
     }
 
     protected function runSingleCommand(string $serializedRow, InputInterface $input, OutputInterface $output): void

@@ -48,7 +48,7 @@ class Tenant implements ConditionInterface
     {
         $json = json_decode($string);
 
-        $this->setTenant(explode(',', $json->tenant));
+        $this->setTenant(explode(',', (string) $json->tenant));
 
         return $this;
     }

@@ -391,8 +391,6 @@ class DefaultMysql implements ProductListInterface
      * loads group by values based on relation fieldname either from local variable if prepared or directly from product index
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
-     *
-     * @throws Exception
      */
     public function getGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {
@@ -532,7 +530,7 @@ class DefaultMysql implements ProductListInterface
                     }
 
                     $condition .= is_array($cond)
-                        ? sprintf(' ( %1$s IN (%2$s) )', $fieldname, implode(',', array_map(fn ($value) => $this->quote($value), $cond)))
+                        ? sprintf(' ( %1$s IN (%2$s) )', $fieldname, implode(',', array_map($this->quote(...), $cond)))
                         : '(' . $cond . ')'
                     ;
                 }
@@ -569,7 +567,7 @@ class DefaultMysql implements ProductListInterface
                 $direction = $keyDirection[1];
 
                 if ($this->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
-                    if (strtoupper($this->order) === 'DESC') {
+                    if (strtoupper((string) $this->order) === 'DESC') {
                         $orderByStringArray[] = 'max(' . $this->resource->quoteIdentifier($key) . ') ' . $direction;
                     } else {
                         $orderByStringArray[] = 'min(' . $this->resource->quoteIdentifier($key) . ') ' . $direction;

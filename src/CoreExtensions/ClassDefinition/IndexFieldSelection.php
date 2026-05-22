@@ -195,7 +195,7 @@ class IndexFieldSelection extends Data implements ResourcePersistenceAwareInterf
     public function getForCsvExport(DataObject\Localizedfield|DataObject\Fieldcollection\Data\AbstractData|DataObject\Objectbrick\Data\AbstractData|DataObject\Concrete $object, array $params = []): string
     {
         $key = $this->getName();
-        $getter = 'get'.ucfirst($key);
+        $getter = 'get'.ucfirst((string) $key);
         if ($object->$getter() instanceof ObjectData\IndexFieldSelection) {
             $preSelect = $object->$getter()->getPreSelect();
             if (is_array($preSelect)) {

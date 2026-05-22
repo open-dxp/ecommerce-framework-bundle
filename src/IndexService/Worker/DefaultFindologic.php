@@ -186,7 +186,7 @@ class DefaultFindologic extends AbstractMockupCacheWorker implements WorkerInter
                 switch ($field) {
                     // richtige reihenfolge der kategorie berücksichtigen
                     case 'categoryIds':
-                        $value = trim($value, ',');
+                        $value = trim((string) $value, ',');
                         if ($value) {
                             $attribute = $attributes->addChild('attribute');
                             $attribute->addChild('key', 'cat');

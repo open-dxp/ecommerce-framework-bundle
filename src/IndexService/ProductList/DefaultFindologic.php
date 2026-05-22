@@ -426,9 +426,6 @@ class DefaultFindologic implements ProductListInterface
     /**
      * prepares all group by values for given field names and cache them in local variable
      * considers both - normal values and relation values
-     *
-     *
-     * @throws Exception
      */
     public function prepareGroupByValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): void
     {

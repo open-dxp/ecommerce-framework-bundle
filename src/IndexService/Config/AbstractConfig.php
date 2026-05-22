@@ -59,10 +59,8 @@ abstract class AbstractConfig implements ConfigInterface
         array $options = [],
     ) {
         $this->tenantName = $tenantName;
-
         $this->attributeConfig = $attributes;
         $this->searchAttributeConfig = $searchAttributes;
-
         $this->filterTypes = $filterTypes;
 
         $this->attributeFactory = $attributeFactory;

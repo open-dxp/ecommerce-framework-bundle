@@ -165,10 +165,10 @@ class Decimal implements Stringable
                 $part = preg_replace('/[^0-9]/', '', substr($amount, 0, $sep));
                 $fractionalPart = preg_replace('/[^0-9]/', '', substr($amount, $sep + 1, strlen($amount)));
 
-                if (strlen($fractionalPart) <= $scale) {
+                if (strlen((string) $fractionalPart) <= $scale) {
                     // decimal part is lower/equals than scale - add zeroes as needed and concat it with the integer part
                     // e.g. 123.45 at scale 4 -> 123 (integer) . 4500 (zero padded decimal part) => 1234500
-                    $fractionalPart = str_pad($fractionalPart, $scale, '0', STR_PAD_RIGHT);
+                    $fractionalPart = str_pad((string) $fractionalPart, $scale, '0', STR_PAD_RIGHT);
                     $result = (int)($sign . $part . $fractionalPart);
                 } else {
                     // if scale is smaller than decimal part, apply rounding

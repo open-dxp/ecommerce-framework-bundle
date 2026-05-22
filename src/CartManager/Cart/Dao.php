@@ -74,7 +74,7 @@ class Dao extends \OpenDxp\Model\Dao\AbstractDao
         $data = [];
         foreach ($this->fieldsToSave as $field) {
             if (in_array($field, $this->validColumns)) {
-                $getter = 'get' . ucfirst($field);
+                $getter = 'get' . ucfirst((string) $field);
                 $value = $this->model->$getter();
 
                 if (is_array($value) || is_object($value)) {

@@ -75,7 +75,7 @@ class FilterGroupHelper
 
             sort($values);
             foreach (array_filter($values) as $v) {
-                $helper = explode(WorkerInterface::MULTISELECT_DELIMITER, $v);
+                $helper = explode(WorkerInterface::MULTISELECT_DELIMITER, (string) $v);
                 foreach ($helper as $h) {
                     $data[$h] = ['key' => $h, 'value' => $h];
                 }
@@ -84,7 +84,7 @@ class FilterGroupHelper
             $values = $productList->getGroupByValues($field);
 
             foreach ($values as $v) {
-                $helper = explode(',', $v);
+                $helper = explode(',', (string) $v);
                 foreach ($helper as $h) {
                     $obj = DataObject::getById((int) $h);
                     if ($obj) {

@@ -35,7 +35,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
         $excludedKeys = [];
 
         if (method_exists($filterDefinition, 'getExcludedKeyIds') && $filterDefinition->getExcludedKeyIds()) {
-            $excludedKeys = explode(',', $filterDefinition->getExcludedKeyIds());
+            $excludedKeys = explode(',', (string) $filterDefinition->getExcludedKeyIds());
             $excludedKeys = array_map(intval(...), $excludedKeys);
         }
 
@@ -49,7 +49,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
             return $keyCollection;
         }
 
-        $priorityKeys = explode(',', $filterDefinition->getKeyIdPriorityOrder());
+        $priorityKeys = explode(',', (string) $filterDefinition->getKeyIdPriorityOrder());
         $priorityKeys = array_map(intval(...), $priorityKeys);
 
         $sortedCollection = [];
@@ -131,7 +131,7 @@ class SelectClassificationStoreAttributes extends AbstractFilterType
 
         if (is_array($value)) {
             foreach ($value as $keyId => $keyValue) {
-                $filterValue = trim($keyValue);
+                $filterValue = trim((string) $keyValue);
                 if ($filterValue === AbstractFilterType::EMPTY_STRING) {
                     $filterValue = null;
                 }

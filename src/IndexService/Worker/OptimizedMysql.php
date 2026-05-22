@@ -117,7 +117,7 @@ class OptimizedMysql extends AbstractMockupCacheWorker implements BatchProcessin
     {
         if (empty($data)) {
             $data = $this->db->fetchOne('SELECT data FROM ' . self::STORE_TABLE_NAME . ' WHERE id = ? AND tenant = ?', [$objectId, $this->name]);
-            $data = json_decode($data, true);
+            $data = json_decode((string) $data, true);
         }
 
         if ($data) {

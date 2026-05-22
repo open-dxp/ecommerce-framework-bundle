@@ -291,7 +291,7 @@ abstract class AbstractCartItem extends \OpenDxp\Model\AbstractModel implements 
     public function setCustomProperties(array $params): void
     {
         foreach ($params as $key => $value) {
-            $method = 'set' . ucfirst($key);
+            $method = 'set' . ucfirst((string) $key);
             if (method_exists($this, $method)) {
                 $this->{$method}($value);
             }

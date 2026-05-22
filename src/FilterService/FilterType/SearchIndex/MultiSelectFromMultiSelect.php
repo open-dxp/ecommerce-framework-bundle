@@ -53,7 +53,7 @@ class MultiSelectFromMultiSelect extends \OpenDxp\Bundle\EcommerceFrameworkBundl
         $isReload = $params['is_reload'] ?? null;
 
         if (empty($value) && !$isReload) {
-            $value = is_array($preSelect) ? $preSelect : explode(',', $preSelect);
+            $value = is_array($preSelect) ? $preSelect : explode(',', (string) $preSelect);
 
             foreach ($value as $key => $v) {
                 if (!$v) {

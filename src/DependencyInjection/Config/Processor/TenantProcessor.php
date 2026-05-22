@@ -41,7 +41,7 @@ class TenantProcessor
         foreach ($config as $tenant => $tenantConfig) {
             // tenants starting with _defaults are not included in the final config
             // but can be used for yaml inheritance
-            if (preg_match('/^_defaults/i', $tenant)) {
+            if (preg_match('/^_defaults/i', (string) $tenant)) {
                 unset($config[$tenant]);
 
                 continue;

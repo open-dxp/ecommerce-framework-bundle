@@ -76,7 +76,7 @@ class ProcessUpdateIndexQueueCommand extends AbstractIndexServiceCommand
         $tenantNameFilterList = $input->getOption('tenant');
         $combinedRows = $this->indexUpdateService->fetchProductIdsForIndexUpdate($tenantNameFilterList);
 
-        return array_map(fn ($row) => serialize($row), $combinedRows);
+        return array_map(serialize(...), $combinedRows);
     }
 
     protected function runSingleCommand(string $serializedRow, InputInterface $input, OutputInterface $output): void

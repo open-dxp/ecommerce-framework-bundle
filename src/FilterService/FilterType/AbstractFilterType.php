@@ -29,8 +29,6 @@ abstract class AbstractFilterType
 {
     const EMPTY_STRING = '$$EMPTY$$';
 
-    protected Environment $twig;
-
     protected ?Request $request = null;
 
     /**
@@ -39,12 +37,11 @@ abstract class AbstractFilterType
      */
     public function __construct(
         protected TranslatorInterface $translator,
-        Environment $twig,
+        protected Environment $twig,
         RequestStack $requestStack,
         protected string $template,
         array $options = []
     ) {
-        $this->twig = $twig;
         $this->request = $requestStack->getCurrentRequest();
 
         $this->processOptions($options);

@@ -98,7 +98,7 @@ class MultiSelectRelation extends AbstractFilterType
             $value = [];
 
             if (!is_array($objects)) {
-                $objects = explode(',', $objects);
+                $objects = explode(',', (string) $objects);
             }
 
             foreach ($objects as $o) {

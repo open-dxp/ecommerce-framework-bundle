@@ -88,7 +88,7 @@ class Dao extends AbstractDao
 
         foreach ($this->fieldsToSave as $field) {
             if (in_array($field, $this->validColumns)) {
-                $getter = 'get' . ucfirst($field);
+                $getter = 'get' . ucfirst((string) $field);
 
                 if (in_array($field, $this->localizedFields)) {
                     // handle localized Fields

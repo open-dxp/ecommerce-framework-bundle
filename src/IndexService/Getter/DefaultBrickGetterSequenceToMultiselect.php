@@ -38,15 +38,15 @@ class DefaultBrickGetterSequenceToMultiselect implements GetterInterface
         foreach ($sourceList as $source) {
             $source = $this->resolveOptions((array)$source, 'source');
 
-            $brickContainerGetter = 'get' . ucfirst($source['brickfield']);
+            $brickContainerGetter = 'get' . ucfirst((string) $source['brickfield']);
 
             if (method_exists($object, $brickContainerGetter)) {
                 $brickContainer = $object->$brickContainerGetter();
 
-                $brickGetter = 'get' . ucfirst($source['bricktype']);
+                $brickGetter = 'get' . ucfirst((string) $source['bricktype']);
                 $brick = $brickContainer->$brickGetter();
                 if ($brick) {
-                    $fieldGetter = 'get' . ucfirst($source['fieldname']);
+                    $fieldGetter = 'get' . ucfirst((string) $source['fieldname']);
                     $value = $brick->$fieldGetter();
 
                     if ($source['invert']) {
@@ -64,7 +64,7 @@ class DefaultBrickGetterSequenceToMultiselect implements GetterInterface
                     }
                 }
             } else {
-                $fieldGetter = 'get' . ucfirst($source['fieldname']);
+                $fieldGetter = 'get' . ucfirst((string) $source['fieldname']);
                 if (method_exists($object, $fieldGetter)) {
                     $value = $object->$fieldGetter();
 

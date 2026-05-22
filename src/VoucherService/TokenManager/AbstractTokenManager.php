@@ -193,10 +193,6 @@ abstract class AbstractTokenManager implements TokenManagerInterface, Exportable
 
     /**
      * Get data for export - to be overridden in child classes
-     *
-     *
-     *
-     * @throws Exception
      */
     protected function getExportData(array $params): array
     {

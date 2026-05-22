@@ -38,7 +38,7 @@ class DefaultClassificationAttributeGetter implements GetterInterface
         $sourceList = $config['source'];
 
         foreach ($sourceList as $source) {
-            $attributeGetter = 'get' . ucfirst($source['fieldname']);
+            $attributeGetter = 'get' . ucfirst((string) $source['fieldname']);
             if (!method_exists($object, $attributeGetter)) {
                 continue;
             }

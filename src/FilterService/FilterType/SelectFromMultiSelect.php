@@ -68,7 +68,7 @@ class SelectFromMultiSelect extends AbstractFilterType
         }
 
         if ($value) {
-            $value = trim($value);
+            $value = trim((string) $value);
         }
 
         $currentFilter[$field] = $value;

@@ -82,7 +82,7 @@ class SelectCategory extends \OpenDxp\Bundle\EcommerceFrameworkBundle\FilterServ
         $currentFilter[$filterDefinition->getField()] = $value;
 
         if (!empty($value)) {
-            $value = trim($value);
+            $value = trim((string) $value);
             if ($category = AbstractCategory::getById((int) $value)) {
                 $productList->setCategory($category);
             }

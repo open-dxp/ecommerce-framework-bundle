@@ -435,7 +435,7 @@ abstract class AbstractOpenSearch implements ProductListInterface
                     $params['body']['sort'] = $this->orderKey[self::ADVANCED_SORT];
                 } else {
                     foreach ($this->orderKey as $orderKey) {
-                        $params['body']['sort'][] = [$this->tenantConfig->getFieldNameMapped($orderKey[0]) => (strtolower($orderKey[1]) ?: 'asc')];
+                        $params['body']['sort'][] = [$this->tenantConfig->getFieldNameMapped($orderKey[0]) => (strtolower((string) $orderKey[1]) ?: 'asc')];
                     }
                 }
             } else {
@@ -1158,8 +1158,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
      * @param int $productId the Pimcore product Id.
      *
      * @return float the score returned by OpenSearch.
-     *
-     * @throws Exception if loadFromSource mode is not true.
      */
     public function getScoreFromLoadedList(int $productId): float
     {
