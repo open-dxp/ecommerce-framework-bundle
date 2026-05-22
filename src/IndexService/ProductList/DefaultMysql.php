@@ -391,8 +391,6 @@ class DefaultMysql implements ProductListInterface
      * loads group by values based on relation fieldname either from local variable if prepared or directly from product index
      *
      * @param bool $fieldnameShouldBeExcluded => set to false for and-conditions
-     *
-     * @throws Exception
      */
     public function getGroupBySystemValues(string $fieldname, bool $countValues = false, bool $fieldnameShouldBeExcluded = true): array
     {

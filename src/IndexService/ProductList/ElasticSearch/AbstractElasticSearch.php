@@ -1164,8 +1164,6 @@ abstract class AbstractElasticSearch implements ProductListInterface
      * @param int $productId the Pimcore product Id.
      *
      * @return float the score returned by Elastic Search.
-     *
-     * @throws Exception if loadFromSource mode is not true.
      */
     public function getScoreFromLoadedList(int $productId): float
     {

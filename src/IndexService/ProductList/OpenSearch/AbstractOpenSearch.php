@@ -1158,8 +1158,6 @@ abstract class AbstractOpenSearch implements ProductListInterface
      * @param int $productId the Pimcore product Id.
      *
      * @return float the score returned by OpenSearch.
-     *
-     * @throws Exception if loadFromSource mode is not true.
      */
     public function getScoreFromLoadedList(int $productId): float
     {
