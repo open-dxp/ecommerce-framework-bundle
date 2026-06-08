@@ -13,7 +13,7 @@
 
 
 .bundle_ecommerce_nav_icon_shopping_cart{
-    background-color: var(--color-white) !important;
+    background-color: var(--color-opendxp-white) !important;
     background-image: none !important;
     mask: url(/bundles/opendxpadmin/img/material-icons/outline-shopping_cart-24px.svg) center/24px no-repeat !important;
     -webkit-mask: url(/bundles/opendxpadmin/img/material-icons/outline-shopping_cart-24px.svg) center/24x no-repeat !important;
