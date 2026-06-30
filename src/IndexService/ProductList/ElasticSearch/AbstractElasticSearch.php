@@ -28,11 +28,11 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\IndexableInterface;
 
 abstract class AbstractElasticSearch implements ProductListInterface
 {
-    const LIMIT_UNLIMITED = -1;
+    const int LIMIT_UNLIMITED = -1;
 
-    const INTEGER_MAX_VALUE = 2147483647;     // Elasticsearch Integer.MAX_VALUE is 2^31-1
+    const int INTEGER_MAX_VALUE = 2147483647;     // Elasticsearch Integer.MAX_VALUE is 2^31-1
 
-    const ADVANCED_SORT = 'advanced_sort';
+    const string ADVANCED_SORT = 'advanced_sort';
 
     /**
      * @var null|IndexableInterface[]
@@ -377,12 +377,12 @@ abstract class AbstractElasticSearch implements ProductListInterface
         }
 
         //Third case: price filtering but no price sorting
-        elseif (!$this->orderByPrice && ($this->conditionPriceFrom !== null || $this->conditionPriceTo !== null)) {
+        elseif (!$this->orderByPrice) {
             $objectRaws = $this->loadWithPriceFilterWithoutPriceSorting();
         }
 
         //Forth case: price filtering and price sorting
-        elseif ($this->orderByPrice && ($this->conditionPriceFrom !== null || $this->conditionPriceTo !== null)) {
+        else {
             $objectRaws = $this->loadWithPriceFilterWithPriceSorting();
         }
 

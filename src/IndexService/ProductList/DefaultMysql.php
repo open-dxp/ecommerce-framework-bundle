@@ -253,12 +253,12 @@ class DefaultMysql implements ProductListInterface
         }
 
         //Third case: price filtering but no price sorting
-        elseif (!$this->orderByPrice && ($this->conditionPriceFrom !== null || $this->conditionPriceTo !== null)) {
+        elseif (!$this->orderByPrice) {
             $objectRaws = $this->loadWithPriceFilterWithoutPriceSorting();
         }
 
         //Forth case: price filtering and price sorting
-        elseif ($this->orderByPrice && ($this->conditionPriceFrom !== null || $this->conditionPriceTo !== null)) {
+        else {
             $objectRaws = $this->loadWithPriceFilterWithPriceSorting();
         }
 
