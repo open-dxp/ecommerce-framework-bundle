@@ -52,8 +52,10 @@ class DefaultMysql implements ProductListInterface
 
     protected bool $inProductList = true;
 
-    public function __construct(MysqlConfigInterface $tenantConfig, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        MysqlConfigInterface $tenantConfig,
+        protected LoggerInterface $logger
+    ) {
         $this->tenantName = $tenantConfig->getTenantName();
         $this->tenantConfig = $tenantConfig;
         $this->resource = new DefaultMysql\Dao($this, $this->logger);

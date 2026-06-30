@@ -31,8 +31,10 @@ class MySql
      */
     protected array $_sqlChangeLog = [];
 
-    public function __construct(protected MysqlConfigInterface $tenantConfig, protected Connection $db)
-    {
+    public function __construct(
+        protected MysqlConfigInterface $tenantConfig,
+        protected Connection $db
+    ) {
     }
 
     /**

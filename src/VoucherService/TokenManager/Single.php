@@ -39,8 +39,10 @@ class Single extends AbstractTokenManager implements ExportableTokenManagerInter
 {
     protected string $template;
 
-    public function __construct(AbstractVoucherTokenType $configuration, protected PaginatorInterface $paginator)
-    {
+    public function __construct(
+        AbstractVoucherTokenType $configuration,
+        protected PaginatorInterface $paginator
+    ) {
         parent::__construct($configuration);
         if ($configuration instanceof VoucherTokenTypeSingle) {
             $this->template = '@OpenDxpEcommerceFramework/voucher/voucher_code_tab_single.html.twig';

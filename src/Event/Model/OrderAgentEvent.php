@@ -27,8 +27,10 @@ class OrderAgentEvent extends Event
     /**
      * OrderAgentEvent constructor.
      */
-    public function __construct(protected OrderAgentInterface $orderAgent, array $arguments = [])
-    {
+    public function __construct(
+        protected OrderAgentInterface $orderAgent,
+        array $arguments = []
+    ) {
         $this->arguments = $arguments;
     }
 

@@ -23,8 +23,10 @@ class UrlResponse extends AbstractResponse
     /**
      * UrlResponse constructor.
      */
-    public function __construct(AbstractOrder $order, protected string $url)
-    {
+    public function __construct(
+        AbstractOrder $order,
+        protected string $url
+    ) {
         parent::__construct($order);
     }
 

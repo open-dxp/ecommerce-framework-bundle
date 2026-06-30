@@ -40,8 +40,10 @@ class PriceInfo implements PriceInfoInterface
 
     protected string $priceEnvironmentHash = '';
 
-    public function __construct(protected PriceSystemPriceInfoInterface $priceInfo, protected EnvironmentInterface $environment)
-    {
+    public function __construct(
+        protected PriceSystemPriceInfoInterface $priceInfo,
+        protected EnvironmentInterface $environment
+    ) {
         $this->amount = Decimal::create(0);
     }
 

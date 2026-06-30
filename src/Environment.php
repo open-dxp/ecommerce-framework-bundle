@@ -47,8 +47,10 @@ class Environment implements EnvironmentInterface
      */
     protected ?string $currentTransientCheckoutTenant = null;
 
-    public function __construct(protected LocaleServiceInterface $localeService, array $options = [])
-    {
+    public function __construct(
+        protected LocaleServiceInterface $localeService,
+        array $options = []
+    ) {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 

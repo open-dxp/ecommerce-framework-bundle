@@ -23,8 +23,10 @@ class JsonResponse extends AbstractResponse
     /**
      * JsonResponse constructor.
      */
-    public function __construct(AbstractOrder $order, protected string $jsonString)
-    {
+    public function __construct(
+        AbstractOrder $order,
+        protected string $jsonString
+    ) {
         parent::__construct($order);
     }
 

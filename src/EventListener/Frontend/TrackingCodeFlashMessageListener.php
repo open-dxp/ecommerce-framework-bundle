@@ -39,8 +39,10 @@ class TrackingCodeFlashMessageListener implements EventSubscriberInterface
 
     const FLASH_MESSAGE_BAG_KEY = 'ecommerceframework_trackingcode_flashmessagelistener';
 
-    public function __construct(protected RequestStack $requestStack, protected TrackingManager $trackingManger)
-    {
+    public function __construct(
+        protected RequestStack $requestStack,
+        protected TrackingManager $trackingManger
+    ) {
     }
 
     public static function getSubscribedEvents(): array

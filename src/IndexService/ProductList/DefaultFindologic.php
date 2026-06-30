@@ -88,8 +88,10 @@ class DefaultFindologic implements ProductListInterface
 
     protected int $timeout = 3;
 
-    public function __construct(FindologicConfigInterface $tenantConfig, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        FindologicConfigInterface $tenantConfig,
+        protected LoggerInterface $logger
+    ) {
         $this->tenantName = $tenantConfig->getTenantName();
         $this->tenantConfig = $tenantConfig;
 

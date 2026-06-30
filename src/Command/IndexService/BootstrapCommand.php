@@ -40,8 +40,10 @@ class BootstrapCommand extends AbstractIndexServiceCommand
         Parallelization::runAfterBatch as parentRunAfterBatch;
     }
 
-    public function __construct(protected IndexService $indexService, ?string $name = null)
-    {
+    public function __construct(
+        protected IndexService $indexService,
+        ?string $name = null
+    ) {
         parent::__construct($name);
     }
 

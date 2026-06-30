@@ -23,8 +23,10 @@ class SnippetResponse extends AbstractResponse
     /**
      * SnippetResponse constructor.
      */
-    public function __construct(AbstractOrder $order, protected string $snippet)
-    {
+    public function __construct(
+        AbstractOrder $order,
+        protected string $snippet
+    ) {
         parent::__construct($order);
     }
 

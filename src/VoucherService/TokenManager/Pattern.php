@@ -56,8 +56,10 @@ class Pattern extends AbstractTokenManager implements ExportableTokenManagerInte
         'alpha' => 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ',
     ];
 
-    public function __construct(AbstractVoucherTokenType $configuration, protected PaginatorInterface $paginator)
-    {
+    public function __construct(
+        AbstractVoucherTokenType $configuration,
+        protected PaginatorInterface $paginator
+    ) {
         parent::__construct($configuration);
         if ($configuration instanceof VoucherTokenTypePattern) {
             $this->template = '@OpenDxpEcommerceFramework/voucher/voucher_code_tab_pattern.html.twig';

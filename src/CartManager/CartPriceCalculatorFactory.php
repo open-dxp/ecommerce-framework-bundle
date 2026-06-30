@@ -26,8 +26,10 @@ class CartPriceCalculatorFactory implements CartPriceCalculatorFactoryInterface
 
     protected array $options;
 
-    public function __construct(protected array $modificatorConfig, array $options = [])
-    {
+    public function __construct(
+        protected array $modificatorConfig,
+        array $options = []
+    ) {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 

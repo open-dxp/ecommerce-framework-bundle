@@ -32,8 +32,10 @@ class FilterService
     /**
      * @param AbstractFilterType[] $filterTypes
      */
-    public function __construct(protected FilterGroupHelper $filterGroupHelper, array $filterTypes)
-    {
+    public function __construct(
+        protected FilterGroupHelper $filterGroupHelper,
+        array $filterTypes
+    ) {
         foreach ($filterTypes as $name => $filterType) {
             $this->registerFilterType($name, $filterType);
         }

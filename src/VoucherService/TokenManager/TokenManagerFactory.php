@@ -28,8 +28,10 @@ class TokenManagerFactory implements TokenManagerFactoryInterface
      */
     private array $tokenManagers = [];
 
-    public function __construct(private array $mapping, protected PaginatorInterface $paginator)
-    {
+    public function __construct(
+        private array $mapping,
+        protected PaginatorInterface $paginator
+    ) {
     }
 
     public function getTokenManager(AbstractVoucherTokenType $configuration): TokenManagerInterface

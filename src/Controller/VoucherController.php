@@ -39,8 +39,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/voucher')]
 class VoucherController extends UserAwareController implements KernelControllerEventInterface
 {
-    public function __construct(protected TokenStorageUserResolver $tokenResolver, protected TranslatorInterface $translator)
-    {
+    public function __construct(
+        protected TokenStorageUserResolver $tokenResolver,
+        protected TranslatorInterface $translator
+    ) {
     }
 
     public function onKernelControllerEvent(ControllerEvent $event): void

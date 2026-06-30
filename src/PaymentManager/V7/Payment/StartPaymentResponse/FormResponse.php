@@ -24,8 +24,10 @@ class FormResponse extends AbstractResponse
     /**
      * FormResponse constructor.
      */
-    public function __construct(AbstractOrder $order, protected FormBuilderInterface $form)
-    {
+    public function __construct(
+        AbstractOrder $order,
+        protected FormBuilderInterface $form
+    ) {
         parent::__construct($order);
     }
 

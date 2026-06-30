@@ -23,7 +23,9 @@ abstract class AbstractStep implements CheckoutStepInterface
     /**
      * AbstractStep constructor.
      */
-    public function __construct(protected CartInterface $cart, protected array $options = [])
-    {
+    public function __construct(
+        protected CartInterface $cart,
+        protected array $options = []
+    ) {
     }
 }

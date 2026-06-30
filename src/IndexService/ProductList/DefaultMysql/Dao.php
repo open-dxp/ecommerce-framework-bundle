@@ -30,8 +30,10 @@ class Dao
 
     private int $lastRecordCount;
 
-    public function __construct(private readonly DefaultMysql $model, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        private readonly DefaultMysql $model,
+        protected LoggerInterface $logger
+    ) {
         $this->db = \OpenDxp\Db::get();
     }
 
