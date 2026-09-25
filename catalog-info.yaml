@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+    name: ecommerce-framework-bundle
+    description: Ecommerce Framework bundle provides e-commerce functionality such
+        as product listing and filtering, pricing, carts and checkouts for
+        OpenDXP.
+spec:
+    type: library
+    lifecycle: production
+    owner: team-opendxp
+    system: opendxp
