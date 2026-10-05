@@ -5,7 +5,7 @@ This section describes the installation of the E-Commerce Framework and the firs
 ## Installation
 
 ### Minimum Requirements
-* OpenDXP >= 1.0
+* OpenDXP >= 1.5
 
 ### Install
 
@@ -32,12 +32,18 @@ php bin/console opendxp:bundle:list
 The installer does following tasks:  
 - Install several field collections.
 - Install several object classes. 
-- Install several object bricks. 
 - Create additional tables for carts, pricing rules, vouchers, etc. 
-- Import translations for OpenDxp Admin UI and Order Backend. 
 - Add additional permissions. 
+- Install the Application Logger, Personalization and Google Marketing bundles if they are not installed yet.
 
-If either classes, field collections, object bricks or tables already exist, the installation cannot be started. 
+A field collection, class, table or permission that already exists is skipped.
+
+### Upgrade
+
+After updating the bundle, run its migrations:
+```bash
+php bin/console doctrine:migrations:migrate --prefix 'OpenDxp\Bundle\EcommerceFrameworkBundle\Migrations'
+```
 
 After this installation routine, additional configurations have to be made - most important Product and ProductCategory.
 Please see [Configuration](../04_Configuration/README.md) for further information on available options.

@@ -51,6 +51,21 @@ it is a set of tools and functionality to help building e-commerce applications 
 - Concepts for setting up multi tenant and multi shop solutions
 
 
+## Installation
+
+```json
+    {
+    "require": {
+        "open-dxp/ecommerce-framework-bundle": "^1.1"
+    }
+}
+```
+
+- Execute: `$ bin/console opendxp:bundle:install OpenDxpEcommerceFrameworkBundle`
+
+## Upgrading
+- Execute: `$ bin/console doctrine:migrations:migrate --prefix 'OpenDxp\Bundle\EcommerceFrameworkBundle\Migrations'`
+
 ## Working With E-Commerce Framework
  
 Following aspects are short-cuts into the documentation for start working with the E-Commerce Framework: 
