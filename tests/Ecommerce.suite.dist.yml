@@ -1,6 +1,0 @@
-actor: EcommerceTester
-modules:
-    enabled:
-        - \OpenDxp\Tests\Support\Helper\OpenDxp:
-            connect_db: true
-        - \OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Support\Helper\Ecommerce

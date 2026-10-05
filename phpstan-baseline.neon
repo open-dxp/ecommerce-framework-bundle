@@ -113,3 +113,15 @@ parameters:
 			identifier: new.static
 			count: 9
 			path: src/Type/Decimal.php
+
+		-
+			message: '#^Class OpenDxp\\Model\\DataObject\\Customer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/DependencyInjection/Configuration.php
+
+		-
+			message: '#^Class OpenDxp\\Model\\DataObject\\Customer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/OrderManager/V7/OrderManager.php
