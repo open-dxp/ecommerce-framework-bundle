@@ -16,7 +16,9 @@ it('leaves the config untouched without defaults', function () {
         ],
     ];
 
-    expect((new TenantProcessor())->mergeTenantConfig($input))->toEqual($input);
+    $merged = (new TenantProcessor())->mergeTenantConfig($input);
+
+    expect($merged)->toEqual($input);
 });
 
 it('merges the defaults into every tenant and removes them', function () {
@@ -35,7 +37,9 @@ it('merges the defaults into every tenant and removes them', function () {
         ],
     ];
 
-    expect((new TenantProcessor())->mergeTenantConfig($input))->toEqual([
+    $merged = (new TenantProcessor())->mergeTenantConfig($input);
+
+    expect($merged)->toEqual([
         'default' => [
             'default' => 'value',
             'foo' => 'bar',
@@ -72,7 +76,9 @@ it('removes additional defaults for YAML inheritance without merging them', func
         ],
     ];
 
-    expect((new TenantProcessor())->mergeTenantConfig($input))->toEqual([
+    $merged = (new TenantProcessor())->mergeTenantConfig($input);
+
+    expect($merged)->toEqual([
         'tenant1' => [
             'default' => 'value',
             'foo' => 'bar',
@@ -107,7 +113,9 @@ it('extends associative arrays of the defaults', function () {
         ],
     ];
 
-    expect((new TenantProcessor())->mergeTenantConfig($input))->toEqual([
+    $merged = (new TenantProcessor())->mergeTenantConfig($input);
+
+    expect($merged)->toEqual([
         'tenant1' => [
             'values' => [
                 'A' => 'B1',
@@ -127,22 +135,42 @@ it('extends associative arrays of the defaults', function () {
 it('appends the values of a tenant to sequential arrays of the defaults', function () {
     $input = [
         '_defaults' => [
-            'values' => ['A', 'B', 'C'],
+            'values' => [
+                'A',
+                'B',
+                'C',
+            ],
         ],
         'tenant1' => [
-            'values' => ['D', 'E'],
+            'values' => [
+                'D',
+                'E',
+            ],
         ],
         'tenant2' => [
             'values' => ['F'],
         ],
     ];
 
-    expect((new TenantProcessor())->mergeTenantConfig($input))->toEqual([
+    $merged = (new TenantProcessor())->mergeTenantConfig($input);
+
+    expect($merged)->toEqual([
         'tenant1' => [
-            'values' => ['A', 'B', 'C', 'D', 'E'],
+            'values' => [
+                'A',
+                'B',
+                'C',
+                'D',
+                'E',
+            ],
         ],
         'tenant2' => [
-            'values' => ['A', 'B', 'C', 'F'],
+            'values' => [
+                'A',
+                'B',
+                'C',
+                'F',
+            ],
         ],
     ]);
 });
@@ -169,7 +197,10 @@ it('merges the defaults deeply', function () {
                 ],
             ],
             'level2' => [
-                'foo' => ['bar', 'bazinga'],
+                'foo' => [
+                    'bar',
+                    'bazinga',
+                ],
             ],
         ],
 
@@ -186,7 +217,9 @@ it('merges the defaults deeply', function () {
         ],
     ];
 
-    expect((new TenantProcessor())->mergeTenantConfig($input))->toEqual([
+    $merged = (new TenantProcessor())->mergeTenantConfig($input);
+
+    expect($merged)->toEqual([
         'tenant1' => [
             'level1' => [
                 'level11A' => [
@@ -199,7 +232,10 @@ it('merges the defaults deeply', function () {
                 ],
             ],
             'level2' => [
-                'foo' => ['bar', 'bazinga'],
+                'foo' => [
+                    'bar',
+                    'bazinga',
+                ],
             ],
         ],
 
@@ -226,12 +262,17 @@ it('merges the defaults deeply', function () {
 it('rejects a tenant value whose type does not match the default', function () {
     $input = [
         '_defaults' => [
-            'values' => ['A', 'B', 'C'],
+            'values' => [
+                'A',
+                'B',
+                'C',
+            ],
         ],
         'tenant1' => [
             'values' => 'D;E',
         ],
     ];
 
-    expect(fn () => (new TenantProcessor())->mergeTenantConfig($input))->toThrow(InvalidConfigurationException::class);
+    expect(fn () => (new TenantProcessor())->mergeTenantConfig($input))
+        ->toThrow(InvalidConfigurationException::class);
 });

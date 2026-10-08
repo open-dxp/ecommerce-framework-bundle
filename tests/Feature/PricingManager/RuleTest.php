@@ -2,105 +2,198 @@
 
 declare(strict_types=1);
 
-it('takes a product discount off every product', function () {
-    $pricing = pricingManager(rule(productDiscount(10)));
-    $cart = fn () => pricedBy(cart(product(100, $pricing)), $pricing);
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Feature\PricingManager;
 
-    expect(product(100, $pricing)->getOSPriceInfo(2))
-        ->getPrice()->getAmount()->toBeAmount(90)
-        ->getTotalPrice()->getAmount()->toBeAmount(180)
-        ->and($cart())->toCost(subTotal: 90, grandTotal: 90)
-        ->and(withShipping($cart()))->toCost(subTotal: 90, grandTotal: 100);
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Action\FreeShipping;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Factory\ProductFactory;
+
+describe('a product discount of 10', function () {
+    beforeEach(function () {
+        $this->pricing = pricingManager(rule(productDiscount(10)));
+    });
+
+    it('takes the discount off the price of a product', function () {
+        $product = productsCosting($this->pricing, 100)[0];
+
+        $info = $product->getOSPriceInfo(2);
+
+        expect($info)
+            ->getPrice()
+            ->getAmount()
+            ->toBeAmount(90)
+            ->getTotalPrice()
+            ->getAmount()
+            ->toBeAmount(180);
+    });
+
+    it('takes the discount off the products in a cart', function () {
+        $cart = pricedCart($this->pricing, 100);
+
+        expect($cart)->toCost(subTotal: 90, grandTotal: 90);
+    });
+
+    it('charges the shipping on top', function () {
+        $cart = withShipping(pricedCart($this->pricing, 100));
+
+        expect($cart)->toCost(subTotal: 90, grandTotal: 100);
+    });
 });
 
-it('takes a cart discount off the total of the cart', function () {
-    $pricing = pricingManager(rule(cartDiscount(10)));
-    $cart = fn () => pricedBy(cart(product(100, $pricing), product(40, $pricing)), $pricing);
+describe('a cart discount of 10', function () {
+    beforeEach(function () {
+        $this->pricing = pricingManager(rule(cartDiscount(10)));
+    });
 
-    expect(product(100, $pricing)->getOSPriceInfo(2))
-        ->getPrice()->getAmount()->toBeAmount(100)
-        ->getTotalPrice()->getAmount()->toBeAmount(200)
-        ->and($cart())->toCost(subTotal: 140, grandTotal: 130)
-        ->and(withShipping($cart()))->toCost(subTotal: 140, grandTotal: 140);
+    it('leaves the price of a product alone', function () {
+        $product = productsCosting($this->pricing, 100)[0];
+
+        $info = $product->getOSPriceInfo(2);
+
+        expect($info)
+            ->getPrice()
+            ->getAmount()
+            ->toBeAmount(100)
+            ->getTotalPrice()
+            ->getAmount()
+            ->toBeAmount(200);
+    });
+
+    it('takes the discount off the total of a cart', function () {
+        $cart = pricedCart($this->pricing, 100, 40);
+
+        expect($cart)->toCost(subTotal: 140, grandTotal: 130);
+    });
+
+    it('takes the discount off the shipping as well', function () {
+        $cart = withShipping(pricedCart($this->pricing, 100, 40));
+
+        expect($cart)->toCost(subTotal: 140, grandTotal: 140);
+    });
 });
 
-it('takes no cart discount off a cart below the amount the condition asks for', function () {
-    $pricing = pricingManager(rule(cartDiscount(10), allOf(cartAmountOfAtLeast(200))));
-    $cart = fn () => pricedBy(cart(product(100, $pricing), product(40, $pricing)), $pricing);
+describe('a cart discount of 10 for carts from 200 euros', function () {
+    beforeEach(function () {
+        $this->pricing = pricingManager(ruleWhen(cartAmountOfAtLeast(200), cartDiscount(10)));
+    });
 
-    expect(product(100, $pricing)->getOSPriceInfo(2))
-        ->getPrice()->getAmount()->toBeAmount(100)
-        ->getTotalPrice()->getAmount()->toBeAmount(200)
-        ->and($cart())->toCost(subTotal: 140, grandTotal: 140)
-        ->and(withShipping($cart()))->toCost(subTotal: 140, grandTotal: 150);
+    it('takes nothing off a smaller cart', function () {
+        $cart = withShipping(pricedCart($this->pricing, 100, 40));
+
+        expect($cart)->toCost(subTotal: 140, grandTotal: 150);
+    });
+
+    it('takes the discount off a cart that reaches the amount', function () {
+        $cart = pricedCart($this->pricing, 200, 40);
+
+        expect($cart)->toCost(subTotal: 240, grandTotal: 230);
+    });
+
+    it('takes the discount off the shipping of a cart that reaches the amount', function () {
+        $cart = withShipping(pricedCart($this->pricing, 200, 40));
+
+        expect($cart)->toCost(subTotal: 240, grandTotal: 240);
+    });
 });
 
-it('takes a cart discount off a cart that reaches the amount the condition asks for', function () {
-    $pricing = pricingManager(rule(cartDiscount(10), cartAmountOfAtLeast(200)));
-    $cart = fn () => pricedBy(cart(product(200, $pricing), product(40, $pricing)), $pricing);
+it('checks a condition inside a bracket', function () {
+    $pricing = pricingManager(ruleWhen(allOf(cartAmountOfAtLeast(200)), cartDiscount(10)));
 
-    expect(product(100, $pricing)->getOSPriceInfo(2))
-        ->getPrice()->getAmount()->toBeAmount(100)
-        ->getTotalPrice()->getAmount()->toBeAmount(200)
-        ->and($cart())->toCost(subTotal: 240, grandTotal: 230)
-        ->and(withShipping($cart()))->toCost(subTotal: 240, grandTotal: 240);
+    $cart = pricedCart($pricing, 200, 40);
+
+    expect($cart)->toCost(subTotal: 240, grandTotal: 230);
 });
 
-it('takes a product and a cart discount of the same rule', function () {
-    $pricing = pricingManager(rule([cartDiscount(10), productDiscount(15)]));
-    $cart = fn () => pricedBy(cart(product(100, $pricing), product(40, $pricing)), $pricing);
+describe('a product and a cart discount of the same rule', function () {
+    beforeEach(function () {
+        $this->pricing = pricingManager(rule(cartDiscount(10), productDiscount(15)));
+    });
 
-    expect(product(100, $pricing)->getOSPriceInfo(2))
-        ->getPrice()->getAmount()->toBeAmount(85)
-        ->getTotalPrice()->getAmount()->toBeAmount(170)
-        ->and($cart())->toCost(subTotal: 110, grandTotal: 100)
-        ->and(withShipping($cart()))->toCost(subTotal: 110, grandTotal: 110);
+    it('takes the product discount off the price of a product', function () {
+        $product = productsCosting($this->pricing, 100)[0];
+
+        $info = $product->getOSPriceInfo(2);
+
+        expect($info)
+            ->getPrice()
+            ->getAmount()
+            ->toBeAmount(85)
+            ->getTotalPrice()
+            ->getAmount()
+            ->toBeAmount(170);
+    });
+
+    it('takes both discounts off a cart', function () {
+        $cart = pricedCart($this->pricing, 100, 40);
+
+        expect($cart)->toCost(subTotal: 110, grandTotal: 100);
+    });
+
+    it('takes the cart discount off the shipping', function () {
+        $cart = withShipping(pricedCart($this->pricing, 100, 40));
+
+        expect($cart)->toCost(subTotal: 110, grandTotal: 110);
+    });
 });
 
 describe('a gift for carts from 200 euros', function () {
     beforeEach(function () {
-        $this->pricing = pricingManager(rule(gift(product(100)), cartAmountOfAtLeast(200)));
+        $product = ProductFactory::new()
+            ->costing(100)
+            ->create();
+        $this->pricing = pricingManager(ruleWhen(cartAmountOfAtLeast(200), gift($product)));
     });
 
     it('adds no gift to a smaller cart', function () {
-        $cart = withShipping(pricedBy(cart(product(100, $this->pricing), product(40, $this->pricing)), $this->pricing));
+        $cart = withShipping(pricedCart($this->pricing, 100, 40));
 
-        expect($cart)->toCost(subTotal: 140, grandTotal: 150)
-            ->and($cart->getGiftItems())->toBeEmpty();
+        expect($cart)
+            ->toCost(subTotal: 140, grandTotal: 150)
+            ->getGiftItems()
+            ->toBeEmpty();
     });
 
-    it('adds the gift to a cart that reaches the amount', function () {
-        $cart = withShipping(pricedBy(cart(product(100, $this->pricing), product(40, $this->pricing), product(80, $this->pricing)), $this->pricing));
+    it('adds the gift free of charge to a cart that reaches the amount', function () {
+        $cart = withShipping(pricedCart($this->pricing, 100, 40, 80));
 
-        expect($cart)->toCost(subTotal: 220, grandTotal: 230)
-            ->and($cart->getGiftItems())->toHaveCount(1);
+        expect($cart)
+            ->toCost(subTotal: 220, grandTotal: 230)
+            ->getGiftItems()
+            ->toHaveCount(1);
     });
 });
 
 it('adds every gift of a rule', function () {
-    $pricing = pricingManager(rule([gift(product(100)), gift(product(200))], cartAmountOfAtLeast(200)));
-    $cart = withShipping(pricedBy(cart(product(100, $pricing), product(40, $pricing), product(80, $pricing)), $pricing));
+    $gifts = array_map(gift(...), productsCosting(pricingManager(), 100, 200));
+    $pricing = pricingManager(ruleWhen(cartAmountOfAtLeast(200), ...$gifts));
 
-    expect($cart)->toCost(subTotal: 220, grandTotal: 230)
-        ->and($cart->getGiftItems())->toHaveCount(2);
+    $cart = withShipping(pricedCart($pricing, 100, 40, 80));
+
+    expect($cart)
+        ->toCost(subTotal: 220, grandTotal: 230)
+        ->getGiftItems()
+        ->toHaveCount(2);
 });
 
 describe('free shipping for carts from 200 euros', function () {
     beforeEach(function () {
-        $this->pricing = pricingManager(rule(freeShipping(), cartAmountOfAtLeast(200)));
+        $this->pricing = pricingManager(ruleWhen(cartAmountOfAtLeast(200), new FreeShipping()));
     });
 
     it('charges shipping on a smaller cart', function () {
-        $cart = withShipping(pricedBy(cart(product(100, $this->pricing), product(40, $this->pricing)), $this->pricing));
+        $cart = withShipping(pricedCart($this->pricing, 100, 40));
 
-        expect($cart)->toCost(subTotal: 140, grandTotal: 150)
-            ->and($cart->getPriceCalculator()->getPriceModifications()['shipping']->getAmount())->toBeAmount(10);
+        expect($cart)
+            ->toCost(subTotal: 140, grandTotal: 150)
+            ->and($cart->getPriceCalculator()->getPriceModifications()['shipping']->getAmount())
+            ->toBeAmount(10);
     });
 
     it('charges no shipping on a cart that reaches the amount', function () {
-        $cart = withShipping(pricedBy(cart(product(100, $this->pricing), product(40, $this->pricing), product(80, $this->pricing)), $this->pricing));
+        $cart = withShipping(pricedCart($this->pricing, 100, 40, 80));
 
-        expect($cart)->toCost(subTotal: 220, grandTotal: 220)
-            ->and($cart->getPriceCalculator()->getPriceModifications()['shipping']->getAmount())->toBeAmount(0);
+        expect($cart)
+            ->toCost(subTotal: 220, grandTotal: 220)
+            ->and($cart->getPriceCalculator()->getPriceModifications()['shipping']->getAmount())
+            ->toBeAmount(0);
     });
 });

@@ -2,19 +2,38 @@
 
 declare(strict_types=1);
 
+namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Unit\Type;
+
+use Closure;
+use DateTime;
+use DivisionByZeroError;
+use DomainException;
+use InvalidArgumentException;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Type\Decimal;
+use OverflowException;
+use TypeError;
+use UnderflowException;
 
 describe('creating a value', function () {
     it('represents a value as a raw integer, a number and a string', function () {
         $value = Decimal::create(10.0, 4);
 
-        expect($value->asRawValue())->toEqual(100000)
-            ->and($value->asNumeric())->toEqual(10.0)
-            ->and($value->asString())->toBe('10.0000');
+        expect($value)
+            ->asRawValue()
+            ->toEqual(100000)
+            ->asNumeric()
+            ->toEqual(10.0)
+            ->asString()
+            ->toBe('10.0000');
     });
 
-    it('creates a value with a scale of four from every kind of input', function (float|int|string|Decimal $input, string $expected) {
-        expect(Decimal::create($input)->asString())->toBe($expected);
+    it('creates a value with a scale of four from every kind of input', function (
+        float|int|string|Decimal $input,
+        string $expected,
+    ) {
+        $value = Decimal::create($input);
+
+        expect($value->asString())->toBe($expected);
     })->with([
         'a float' => [15.99, '15.9900'],
         'a string' => ['15.99', '15.9900'],
@@ -36,9 +55,13 @@ describe('creating a value', function () {
     it('rounds every kind of input to an integer when the scale is zero', function (float|int|string|Decimal $input) {
         $value = Decimal::create($input, 0);
 
-        expect($value->asRawValue())->toEqual(16)
-            ->and($value->asNumeric())->toEqual(16.0)
-            ->and($value->asString())->toEqual('16');
+        expect($value)
+            ->asRawValue()
+            ->toEqual(16)
+            ->asNumeric()
+            ->toEqual(16.0)
+            ->asString()
+            ->toEqual('16');
     })->with([
         'a float' => [15.99],
         'a string' => ['15.99'],
@@ -53,7 +76,7 @@ describe('creating a value', function () {
         'a string' => ['10.0'],
     ]);
 
-    it('rejects a value that is neither a number nor a decimal', function ($value) {
+    it('rejects a value that is neither a number nor a decimal', function (mixed $value) {
         expect(fn () => Decimal::create($value))->toThrow(TypeError::class);
     })->with([
         'a date' => [fn () => new DateTime()],
@@ -64,85 +87,98 @@ describe('creating a value', function () {
     it('creates zero', function () {
         $zero = Decimal::zero();
 
-        expect($zero->asRawValue())->toEqual(0)
-            ->and($zero->asNumeric())->toEqual(0)
-            ->and($zero->asString())->toEqual('0.0000')
-            ->and($zero->equals(Decimal::create(0)))->toBeTrue();
+        expect($zero)
+            ->asRawValue()
+            ->toEqual(0)
+            ->asNumeric()
+            ->toEqual(0)
+            ->asString()
+            ->toEqual('0.0000')
+            ->and($zero->equals(Decimal::create(0)))
+            ->toBeTrue();
     });
 
     it('rounds half up by default when it scales down', function () {
-        expect(Decimal::create('15.50', 0)->asRawValue())->toEqual(16);
+        $value = Decimal::create('15.50', 0);
+
+        expect($value->asRawValue())->toEqual(16);
     });
 
     it('rounds with the rounding mode it is given', function (int $roundingMode, int $expected) {
-        expect(Decimal::create('15.50', 0, $roundingMode)->asRawValue())->toEqual($expected);
+        $value = Decimal::create('15.50', 0, $roundingMode);
+
+        expect($value->asRawValue())->toEqual($expected);
     })->with([
         'half up' => [PHP_ROUND_HALF_UP, 16],
         'half down' => [PHP_ROUND_HALF_DOWN, 15],
     ]);
 
-    it('creates a value from a raw integer', function () {
-        $simpleValue = Decimal::fromRawValue(100000, 4);
-        $decimalValue = Decimal::fromRawValue(159900, 4);
+    it('creates a value from a raw integer', function (int $raw, float|int $numeric) {
+        $value = Decimal::fromRawValue($raw, 4);
 
-        expect($simpleValue->asRawValue())->toEqual(100000)
-            ->and($simpleValue->asNumeric())->toEqual(10)
-            ->and($decimalValue->asRawValue())->toEqual(159900)
-            ->and($decimalValue->asNumeric())->toEqual(15.99);
-    });
+        expect($value->asNumeric())->toEqual($numeric);
+    })->with([
+        'a whole number' => [100000, 10],
+        'a fraction' => [159900, 15.99],
+    ]);
 
-    it('creates a value from a number', function () {
-        $simpleValue = Decimal::fromNumeric(10, 4);
-        $decimalValue = Decimal::fromNumeric(15.99, 4);
+    it('creates a value from a number', function (float|int $numeric, int $raw) {
+        $value = Decimal::fromNumeric($numeric, 4);
 
-        expect($simpleValue->asRawValue())->toEqual(100000)
-            ->and($simpleValue->asNumeric())->toEqual(10)
-            ->and($decimalValue->asRawValue())->toEqual(159900)
-            ->and($decimalValue->asNumeric())->toEqual(15.99);
-    });
+        expect($value->asRawValue())->toEqual($raw);
+    })->with([
+        'a whole number' => [10, 100000],
+        'a fraction' => [15.99, 159900],
+    ]);
 
     it('rejects a string that is not numeric as a number', function () {
-        expect(fn () => Decimal::fromNumeric('ABC'))->toThrow(InvalidArgumentException::class);
-    });
+        Decimal::fromNumeric('ABC');
+    })->throws(InvalidArgumentException::class);
 
     it('creates an equal value from a decimal of the same scale', function () {
         $value = Decimal::fromRawValue(100000, 4);
 
-        expect(Decimal::fromDecimal($value, 4))->toEqual($value);
+        $copy = Decimal::fromDecimal($value, 4);
+
+        expect($copy)->toEqual($value);
     });
 
     it('keeps the number when it creates a value from a decimal of another scale', function () {
         $value = Decimal::fromRawValue(100000, 4);
 
-        expect(Decimal::fromDecimal($value, 8)->asNumeric())->toEqual($value->asNumeric());
+        $copy = Decimal::fromDecimal($value, 8);
+
+        expect($copy->asNumeric())->toEqual($value->asNumeric());
     });
 });
 
 describe('formatting a value', function () {
-    it('formats a value with its own scale unless it is given a number of digits', function () {
+    it('formats a value with its own scale', function (int $scale, string $expected) {
+        $value = Decimal::create(15.99, $scale);
+
+        expect((string) $value)->toBe($expected);
+    })->with([
+        'a scale of four' => [4, '15.9900'],
+        'a scale of six' => [6, '15.990000'],
+        'a scale of zero' => [0, '16'],
+    ]);
+
+    it('formats a value with the number of digits it is given', function (int $scale, int $digits, string $expected) {
+        $value = Decimal::create(15.99, $scale);
+
+        expect($value->asString($digits))->toBe($expected);
+    })->with([
+        'two digits of a scale of four' => [4, 2, '15.99'],
+        'no digits of a scale of four' => [4, 0, '15'],
+        'one digit of a scale of six' => [6, 1, '15.9'],
+        'five digits of a scale of zero' => [0, 5, '16.00000'],
+        'two digits of a scale of zero' => [0, 2, '16.00'],
+    ]);
+
+    it('formats a value as a string the same way it casts it', function () {
         $value = Decimal::create(10.0, 4);
-        $otherScale = Decimal::create(15.99, 6);
 
-        expect((string) $value)->toBe('10.0000')
-            ->and($value->asString())->toBe('10.0000')
-            ->and($value->asString(2))->toBe('10.00')
-            ->and($value->asString(0))->toBe('10')
-            ->and((string) $otherScale)->toBe('15.990000')
-            ->and($otherScale->asString())->toBe('15.990000')
-            ->and($otherScale->asString(2))->toBe('15.99')
-            ->and($otherScale->asString(1))->toBe('15.9')
-            ->and($otherScale->asString(0))->toBe('15');
-    });
-
-    it('formats a value without scale as the next integer', function () {
-        $noScale = Decimal::create(15.99, 0);
-
-        expect((string) $noScale)->toBe('16')
-            ->and($noScale->asString())->toBe('16')
-            ->and($noScale->asString(5))->toBe('16.00000')
-            ->and($noScale->asString(2))->toBe('16.00')
-            ->and($noScale->asString(1))->toBe('16.0')
-            ->and($noScale->asString(0))->toBe('16');
+        expect((string) $value)->toBe($value->asString());
     });
 });
 
@@ -153,250 +189,267 @@ describe('changing the scale', function () {
         expect($value->withScale(4))->toBe($value);
     });
 
-    it('keeps a whole number exact through every change of scale', function () {
-        $value = Decimal::create('10', 4);
+    it('keeps a whole number exact through every change of scale', function (array $scales, int $raw) {
+        $value = array_reduce(
+            $scales,
+            static fn (Decimal $value, int $scale): Decimal => $value->withScale($scale),
+            Decimal::create('10', 4),
+        );
 
-        expect($value->asRawValue())->toBe(100000)
-            ->and($value->asNumeric())->toBe(10);
+        expect($value)
+            ->asRawValue()
+            ->toBe($raw)
+            ->asNumeric()
+            ->toBe(10);
+    })->with([
+        'up to six' => [[6], 10000000],
+        'down to two' => [[6, 2], 1000],
+        'back to four' => [[6, 2, 4], 100000],
+    ]);
 
-        $value = $value->withScale(6);
+    it('loses precision when it scales below the digits of the value', function (
+        array $scales,
+        int $raw,
+        float|int $numeric,
+    ) {
+        $value = array_reduce(
+            $scales,
+            static fn (Decimal $value, int $scale): Decimal => $value->withScale($scale),
+            Decimal::create('15.99', 4),
+        );
 
-        expect($value->asRawValue())->toBe(10000000)
-            ->and($value->asNumeric())->toBe(10);
-
-        $value = $value->withScale(2);
-
-        expect($value->asRawValue())->toBe(1000)
-            ->and($value->asNumeric())->toBe(10);
-
-        $value = $value->withScale(4);
-
-        expect($value->asRawValue())->toBe(100000)
-            ->and($value->asNumeric())->toBe(10);
-    });
-
-    it('loses precision when it scales below the digits of the value', function () {
-        $value = Decimal::create('15.99', 4);
-
-        expect($value->asRawValue())->toBe(159900)
-            ->and($value->asNumeric())->toBe(15.99);
-
-        $value = $value->withScale(6);
-
-        expect($value->asRawValue())->toBe(15990000)
-            ->and($value->asNumeric())->toBe(15.99);
-
-        $value = $value->withScale(2);
-
-        expect($value->asRawValue())->toBe(1599)
-            ->and($value->asNumeric())->toBe(15.99);
-
-        $value = $value->withScale(0);
-
-        expect($value->asRawValue())->toBe(16)
-            ->and($value->asNumeric())->toBe(16);
-
-        $value = $value->withScale(4);
-
-        expect($value->asRawValue())->toBe(160000)
-            ->and($value->asNumeric())->toBe(16);
-    });
+        expect($value)
+            ->asRawValue()
+            ->toBe($raw)
+            ->asNumeric()
+            ->toBe($numeric);
+    })->with([
+        'up to six' => [[6], 15990000, 15.99],
+        'down to two' => [[6, 2], 1599, 15.99],
+        'down to zero' => [[6, 2, 0], 16, 16],
+        'back to four after zero' => [[6, 2, 0, 4], 160000, 16],
+    ]);
 });
 
 describe('comparing two values', function () {
-    it('tells whether two values are equal', function () {
-        $a = Decimal::create(5);
-        $b = Decimal::create(10);
+    dataset('pairs of values', [
+        'five and five' => [fn () => Decimal::create(5), fn () => Decimal::create(5), true],
+        'five and five of another scale' => [fn () => Decimal::create(5), fn () => Decimal::create(5, 8), false],
+        'five and ten' => [fn () => Decimal::create(5), fn () => Decimal::create(10), false],
+        'ten and five' => [fn () => Decimal::create(10), fn () => Decimal::create(5), false],
+    ]);
 
-        expect($a->equals($a))->toBeTrue()
-            ->and($b->equals($b))->toBeTrue()
-            ->and($a->equals(Decimal::create(5)))->toBeTrue()
-            ->and($a->equals(Decimal::create(5, 8)))->toBeFalse()
-            ->and($a->equals($b))->toBeFalse()
-            ->and($b->equals($a))->toBeFalse();
-    });
+    it('tells whether two values are equal', function (Decimal $a, Decimal $b, bool $equal) {
+        expect($a->equals($b))->toBe($equal);
+    })->with('pairs of values');
 
-    it('tells whether two values are not equal', function () {
-        $a = Decimal::create(5);
-        $b = Decimal::create(10);
+    it('tells whether two values are not equal', function (Decimal $a, Decimal $b, bool $equal) {
+        expect($a->notEquals($b))->toBe(!$equal);
+    })->with('pairs of values');
 
-        expect($a->notEquals($a))->toBeFalse()
-            ->and($b->notEquals($b))->toBeFalse()
-            ->and($a->notEquals(Decimal::create(5)))->toBeFalse()
-            ->and($a->notEquals(Decimal::create(5, 8)))->toBeTrue()
-            ->and($a->notEquals($b))->toBeTrue()
-            ->and($b->notEquals($a))->toBeTrue();
-    });
+    it('orders two values', function (int $a, int $b, int $order) {
+        $first = Decimal::create($a);
 
-    it('orders two values', function () {
-        $a = Decimal::create(5);
-        $b = Decimal::create(10);
+        expect($first->compare(Decimal::create($b)))->toEqual($order);
+    })->with([
+        'five and ten' => [5, 10, -1],
+        'ten and five' => [10, 5, 1],
+        'five and five' => [5, 5, 0],
+    ]);
 
-        expect($a->compare($b))->toEqual(-1)
-            ->and($b->compare($a))->toEqual(1)
-            ->and($a->compare($a))->toEqual(0)
-            ->and($b->compare($b))->toEqual(0);
-    });
+    it('tells whether a value is less than another', function (int $a, int $b, bool $less, bool $lessOrEqual) {
+        $first = Decimal::create($a);
+        $second = Decimal::create($b);
 
-    it('tells whether a value is less than another', function () {
-        $a = Decimal::create(5);
-        $b = Decimal::create(10);
+        expect($first->lessThan($second))
+            ->toBe($less)
+            ->and($first->lessThanOrEqual($second))
+            ->toBe($lessOrEqual);
+    })->with([
+        'five and ten' => [5, 10, true, true],
+        'five and five' => [5, 5, false, true],
+        'ten and five' => [10, 5, false, false],
+    ]);
 
-        expect($a->lessThan($b))->toBeTrue()
-            ->and($a->lessThan($a))->toBeFalse()
-            ->and($b->lessThan($a))->toBeFalse()
-            ->and($b->lessThan($b))->toBeFalse()
-            ->and($a->lessThanOrEqual($a))->toBeTrue()
-            ->and($a->lessThanOrEqual($b))->toBeTrue()
-            ->and($b->lessThanOrEqual($a))->toBeFalse()
-            ->and($b->lessThanOrEqual($b))->toBeTrue();
-    });
+    it('tells whether a value is greater than another', function (int $a, int $b, bool $greater, bool $greaterOrEqual) {
+        $first = Decimal::create($a);
+        $second = Decimal::create($b);
 
-    it('tells whether a value is greater than another', function () {
-        $a = Decimal::create(5);
-        $b = Decimal::create(10);
+        expect($first->greaterThan($second))
+            ->toBe($greater)
+            ->and($first->greaterThanOrEqual($second))
+            ->toBe($greaterOrEqual);
+    })->with([
+        'ten and five' => [10, 5, true, true],
+        'five and five' => [5, 5, false, true],
+        'five and ten' => [5, 10, false, false],
+    ]);
 
-        expect($a->greaterThan($a))->toBeFalse()
-            ->and($a->greaterThan($b))->toBeFalse()
-            ->and($b->greaterThan($a))->toBeTrue()
-            ->and($b->greaterThan($b))->toBeFalse()
-            ->and($a->greaterThanOrEqual($a))->toBeTrue()
-            ->and($a->greaterThanOrEqual($b))->toBeFalse()
-            ->and($b->greaterThanOrEqual($a))->toBeTrue()
-            ->and($b->greaterThanOrEqual($b))->toBeTrue();
-    });
+    dataset('signs of values', [
+        'ten' => [10, true, false],
+        'one' => [1, true, false],
+        'one tenth' => [0.1, true, false],
+        'minus one tenth' => [-0.1, false, true],
+        'minus one' => [-1, false, true],
+        'minus ten' => [-10, false, true],
+        'zero' => [0, false, false],
+        'a fraction below the scale' => [0.00001, false, false],
+    ]);
 
-    it('tells whether a value is positive', function () {
-        expect(Decimal::create(10)->isPositive())->toBeTrue()
-            ->and(Decimal::create(1)->isPositive())->toBeTrue()
-            ->and(Decimal::create(0.1)->isPositive())->toBeTrue()
-            ->and(Decimal::create(-0.1)->isPositive())->toBeFalse()
-            ->and(Decimal::create(-1)->isPositive())->toBeFalse()
-            ->and(Decimal::create(-10)->isPositive())->toBeFalse()
-            ->and(Decimal::create(0)->isPositive())->toBeFalse()
-            ->and(Decimal::create(0.00001, 4)->isPositive())->toBeFalse();
-    });
+    it('tells whether a value is positive', function (float|int $input, bool $positive, bool $negative) {
+        $value = Decimal::create($input, 4);
 
-    it('tells whether a value is negative', function () {
-        expect(Decimal::create(10)->isNegative())->toBeFalse()
-            ->and(Decimal::create(1)->isNegative())->toBeFalse()
-            ->and(Decimal::create(0.1)->isNegative())->toBeFalse()
-            ->and(Decimal::create(-0.1)->isNegative())->toBeTrue()
-            ->and(Decimal::create(-1)->isNegative())->toBeTrue()
-            ->and(Decimal::create(-10)->isNegative())->toBeTrue()
-            ->and(Decimal::create(0)->isNegative())->toBeFalse()
-            ->and(Decimal::create(0.00001, 4)->isNegative())->toBeFalse();
-    });
+        expect($value->isPositive())->toBe($positive);
+    })->with('signs of values');
 
-    it('tells whether a value is zero', function () {
-        expect(Decimal::create(0)->isZero())->toBeTrue()
-            ->and(Decimal::create(0.0)->isZero())->toBeTrue()
-            ->and(Decimal::create('0')->isZero())->toBeTrue()
-            ->and(Decimal::create('0.00')->isZero())->toBeTrue()
-            ->and(Decimal::fromRawValue(0)->isZero())->toBeTrue()
-            ->and(Decimal::create(0.00001, 4)->isZero())->toBeTrue()
-            ->and(Decimal::create(10)->isZero())->toBeFalse()
-            ->and(Decimal::create(0.1)->isZero())->toBeFalse()
-            ->and(Decimal::create(-0.1)->isZero())->toBeFalse()
-            ->and(Decimal::create(-10)->isZero())->toBeFalse();
-    });
+    it('tells whether a value is negative', function (float|int $input, bool $positive, bool $negative) {
+        $value = Decimal::create($input, 4);
+
+        expect($value->isNegative())->toBe($negative);
+    })->with('signs of values');
+
+    it('tells whether a value is zero', function (float|int|string|Decimal $input, bool $zero) {
+        $value = Decimal::create($input);
+
+        expect($value->isZero())->toBe($zero);
+    })->with([
+        'the integer zero' => [0, true],
+        'the float zero' => [0.0, true],
+        'the string zero' => ['0', true],
+        'the string zero with decimals' => ['0.00', true],
+        'the raw value zero' => [fn () => Decimal::fromRawValue(0), true],
+        'a fraction below the scale' => [0.00001, true],
+        'ten' => [10, false],
+        'one tenth' => [0.1, false],
+        'minus one tenth' => [-0.1, false],
+        'minus ten' => [-10, false],
+    ]);
 });
 
 describe('calculating with values', function () {
-    it('returns a new instance with the result of an operation', function (int $input, int $expected, string $operation, array $arguments) {
+    it('returns a new instance with the result of an operation', function (
+        int $input,
+        Closure $operation,
+        int $expected,
+    ) {
         $value = Decimal::create($input);
-        $result = $value->{$operation}(...$arguments);
 
-        expect($result)->not->toBe($value)
-            ->and($result->asNumeric())->toBe($expected);
+        $result = $operation($value);
+
+        expect($result)
+            ->not->toBe($value)
+            ->asNumeric()
+            ->toBe($expected);
     })->with([
-        'withScale' => [100, 100, 'withScale', [2]],
-        'abs' => [-10, 10, 'abs', []],
-        'add' => [100, 110, 'add', [10]],
-        'sub' => [100, 90, 'sub', [10]],
-        'mul' => [100, 300, 'mul', [3]],
-        'div' => [100, 50, 'div', [2]],
-        'toAdditiveInverse' => [100, -100, 'toAdditiveInverse', []],
-        'toPercentage' => [100, 50, 'toPercentage', [50]],
-        'discount' => [100, 85, 'discount', [15]],
+        'a change of scale' => [100, fn (Decimal $value): Decimal => $value->withScale(2), 100],
+        'the absolute value of a negative value' => [-10, fn (Decimal $value): Decimal => $value->abs(), 10],
+        'an addition' => [100, fn (Decimal $value): Decimal => $value->add(10), 110],
+        'a subtraction' => [100, fn (Decimal $value): Decimal => $value->sub(10), 90],
+        'a multiplication' => [100, fn (Decimal $value): Decimal => $value->mul(3), 300],
+        'a division' => [100, fn (Decimal $value): Decimal => $value->div(2), 50],
+        'the additive inverse' => [100, fn (Decimal $value): Decimal => $value->toAdditiveInverse(), -100],
+        'a percentage' => [100, fn (Decimal $value): Decimal => $value->toPercentage(50), 50],
+        'a discount' => [100, fn (Decimal $value): Decimal => $value->discount(15), 85],
     ]);
 
     it('returns the same instance as the absolute value of a positive value', function () {
-        $a = Decimal::create(5);
-        $b = Decimal::create(-5);
+        $value = Decimal::create(5);
 
-        expect($a->abs())->toBe($a)
-            ->and($a->equals($b))->toBeFalse()
-            ->and($a->equals($b->abs()))->toBeTrue()
-            ->and($b->abs()->asNumeric())->toEqual(5);
+        expect($value->abs())->toBe($value);
+    });
+
+    it('turns a negative value into its absolute value', function () {
+        $value = Decimal::create(-5);
+
+        $absolute = $value->abs();
+
+        expect($absolute->equals(Decimal::create(5)))->toBeTrue();
     });
 
     it('adds every kind of operand', function (float|int|string|Decimal $a, float|int|string|Decimal $b) {
-        expect(Decimal::create($a)->add($b)->asNumeric())->toEqual(30);
+        $sum = Decimal::create($a)->add($b);
+
+        expect($sum->asNumeric())->toEqual(30);
     })->with([
         'a float' => [15.50],
         'a string' => ['15.50'],
         'a decimal' => [fn () => Decimal::fromRawValue(155000)],
     ])->with([
-        'a float' => [14.50],
-        'a string' => ['14.50'],
-        'a decimal' => [fn () => Decimal::fromRawValue(145000)],
+        'to a float' => [14.50],
+        'to a string' => ['14.50'],
+        'to a decimal' => [fn () => Decimal::fromRawValue(145000)],
     ]);
 
     it('subtracts every kind of operand', function (float|int|string|Decimal $a, float|int|string|Decimal $b) {
-        expect(Decimal::create($a)->sub($b)->asNumeric())->toEqual(1);
+        $difference = Decimal::create($a)->sub($b);
+
+        expect($difference->asNumeric())->toEqual(1);
     })->with([
         'a float' => [15.50],
         'a string' => ['15.50'],
         'a decimal' => [fn () => Decimal::fromRawValue(155000)],
     ])->with([
-        'a float' => [14.50],
-        'a string' => ['14.50'],
-        'a decimal' => [fn () => Decimal::fromRawValue(145000)],
+        'from a float' => [14.50],
+        'from a string' => ['14.50'],
+        'from a decimal' => [fn () => Decimal::fromRawValue(145000)],
     ]);
 
     it('multiplies by every kind of operand', function (float|int|string|Decimal $a, float|int|string|Decimal $b) {
-        expect(Decimal::create($a)->mul($b)->asNumeric())->toEqual(30);
+        $product = Decimal::create($a)->mul($b);
+
+        expect($product->asNumeric())->toEqual(30);
     })->with([
         'an integer' => [15],
         'a float' => [15.00],
         'a decimal' => [fn () => Decimal::fromRawValue(150000)],
     ])->with([
-        'an integer' => [2],
-        'a float' => [2.00],
-        'a decimal' => [fn () => Decimal::fromRawValue(20000)],
+        'by an integer' => [2],
+        'by a float' => [2.00],
+        'by a decimal' => [fn () => Decimal::fromRawValue(20000)],
     ]);
 
     it('divides by every kind of operand', function (float|int|string|Decimal $a, float|int|string|Decimal $b) {
-        expect(Decimal::create($a)->div($b)->asNumeric())->toEqual(7.50);
+        $quotient = Decimal::create($a)->div($b);
+
+        expect($quotient->asNumeric())->toEqual(7.50);
     })->with([
         'an integer' => [15],
         'a float' => [15.00],
         'a decimal' => [fn () => Decimal::fromRawValue(150000)],
     ])->with([
-        'an integer' => [2],
-        'a float' => [2.00],
-        'a decimal' => [fn () => Decimal::fromRawValue(20000)],
+        'by an integer' => [2],
+        'by a float' => [2.00],
+        'by a decimal' => [fn () => Decimal::fromRawValue(20000)],
     ]);
 
-    it('adds only values of the same scale', function () {
-        $a = Decimal::create('10', 4);
-        $b = Decimal::create('20', 8);
-        $scaledB = $b->withScale(4);
+    it('adds a value after it took the same scale', function () {
+        $value = Decimal::create('10', 4);
+        $other = Decimal::create('20', 8)->withScale(4);
 
-        expect($scaledB->asNumeric())->toEqual($b->asNumeric())
-            ->and($a->add($scaledB)->asNumeric())->toEqual(30)
-            ->and(fn () => $a->add($b))->toThrow(DomainException::class);
+        $sum = $value->add($other);
+
+        expect($sum->asNumeric())->toEqual(30);
     });
 
-    it('subtracts only values of the same scale', function () {
-        $a = Decimal::create('10', 4);
-        $b = Decimal::create('20', 8);
-        $scaledB = $b->withScale(4);
+    it('adds no value of another scale', function () {
+        $value = Decimal::create('10', 4);
 
-        expect($scaledB->asNumeric())->toEqual($b->asNumeric())
-            ->and($a->sub($scaledB)->asNumeric())->toEqual(-10)
-            ->and(fn () => $a->sub($b))->toThrow(DomainException::class);
+        expect(fn () => $value->add(Decimal::create('20', 8)))->toThrow(DomainException::class);
+    });
+
+    it('subtracts a value after it took the same scale', function () {
+        $value = Decimal::create('10', 4);
+        $other = Decimal::create('20', 8)->withScale(4);
+
+        $difference = $value->sub($other);
+
+        expect($difference->asNumeric())->toEqual(-10);
+    });
+
+    it('subtracts no value of another scale', function () {
+        $value = Decimal::create('10', 4);
+
+        expect(fn () => $value->sub(Decimal::create('20', 8)))->toThrow(DomainException::class);
     });
 
     it('refuses to divide by zero', function (float|int|string|Decimal $divisor) {
@@ -427,57 +480,67 @@ describe('calculating with values', function () {
         expect(fn () => $value->div(0.00001))->toThrow(DivisionByZeroError::class);
     });
 
-    it('turns a value into its additive inverse', function () {
-        expect(Decimal::create('15.50')->toAdditiveInverse()->asString())->toBe('-15.5000')
-            ->and(Decimal::create('-15.50')->toAdditiveInverse()->asString())->toBe('15.5000')
-            ->and(Decimal::create(0)->toAdditiveInverse()->asNumeric())->toBe(0);
-    });
+    it('turns a value into its additive inverse', function (string $input, string $expected) {
+        $inverse = Decimal::create($input)->toAdditiveInverse();
+
+        expect($inverse->asString())->toBe($expected);
+    })->with([
+        'a positive value' => ['15.50', '-15.5000'],
+        'a negative value' => ['-15.50', '15.5000'],
+        'zero' => ['0', '0.0000'],
+    ]);
 });
 
 describe('percentages', function () {
-    it('takes a percentage of a value', function () {
-        expect(Decimal::create(100)->toPercentage(80)->asNumeric())->toEqual(80)
-            ->and(Decimal::create(100)->toPercentage(25)->asNumeric())->toEqual(25)
-            ->and(Decimal::create(50)->toPercentage(50)->asNumeric())->toEqual(25)
-            ->and(Decimal::create(100)->toPercentage(35)->asNumeric())->toEqual(35)
-            ->and(Decimal::create(100)->toPercentage(200)->asNumeric())->toEqual(200);
-    });
+    it('takes a percentage of a value', function (int $value, int $percent, int $expected) {
+        $part = Decimal::create($value)->toPercentage($percent);
 
-    it('discounts a value by a percentage', function () {
-        expect(Decimal::create(100)->discount(15)->asNumeric())->toEqual(85)
-            ->and(Decimal::create(100)->discount(50)->asNumeric())->toEqual(50)
-            ->and(Decimal::create(100)->discount(30)->asNumeric())->toEqual(70);
-    });
+        expect($part->asNumeric())->toEqual($expected);
+    })->with([
+        '80 percent of 100' => [100, 80, 80],
+        '25 percent of 100' => [100, 25, 25],
+        '50 percent of 50' => [50, 50, 25],
+        '200 percent of 100' => [100, 200, 200],
+    ]);
 
-    it('tells which percentage one value is of another', function () {
-        $origPrice = Decimal::create('129.99');
-        $discountedPrice = Decimal::create('88.00');
-        $a = Decimal::create(100);
-        $b = Decimal::create(50);
+    it('discounts a value by a percentage', function (int $percent, int $expected) {
+        $discounted = Decimal::create(100)->discount($percent);
 
-        expect(round($discountedPrice->percentageOf($origPrice), 0))->toEqual(68)
-            ->and(round($origPrice->percentageOf($discountedPrice), 0))->toEqual(148)
-            ->and($a->percentageOf($a))->toEqual(100)
-            ->and($b->percentageOf($b))->toEqual(100)
-            ->and($a->percentageOf($b))->toEqual(200)
-            ->and($b->percentageOf($a))->toEqual(50);
-    });
+        expect($discounted->asNumeric())->toEqual($expected);
+    })->with([
+        '15 percent' => [15, 85],
+        '50 percent' => [50, 50],
+        '30 percent' => [30, 70],
+    ]);
 
-    it('tells by which percentage one value is discounted from another', function () {
-        $origPrice = Decimal::create('129.99');
-        $discountedPrice = Decimal::create('88.00');
-        $a = Decimal::create(100);
-        $b = Decimal::create(50);
-        $c = Decimal::create(30);
+    it('tells which percentage one value is of another', function (string $value, string $base, int $expected) {
+        $percentage = Decimal::create($value)->percentageOf(Decimal::create($base));
 
-        expect(round($discountedPrice->discountPercentageOf($origPrice), 0))->toEqual(32)
-            ->and($a->discountPercentageOf($a))->toEqual(0)
-            ->and($b->discountPercentageOf($b))->toEqual(0)
-            ->and($a->discountPercentageOf($b))->toEqual(-100)
-            ->and($b->discountPercentageOf($a))->toEqual(50)
-            ->and($c->discountPercentageOf($a))->toEqual(70)
-            ->and($c->discountPercentageOf($b))->toEqual(40);
-    });
+        expect(round($percentage))->toEqual($expected);
+    })->with([
+        'a discounted price of the original one' => ['88.00', '129.99', 68],
+        'an original price of the discounted one' => ['129.99', '88.00', 148],
+        'a value of itself' => ['100', '100', 100],
+        'a value of its half' => ['100', '50', 200],
+        'a value of its double' => ['50', '100', 50],
+    ]);
+
+    it('tells by which percentage one value is discounted from another', function (
+        string $value,
+        string $base,
+        int $expected,
+    ) {
+        $percentage = Decimal::create($value)->discountPercentageOf(Decimal::create($base));
+
+        expect(round($percentage))->toEqual($expected);
+    })->with([
+        'a discounted price from the original one' => ['88.00', '129.99', 32],
+        'a value from itself' => ['100', '100', 0],
+        'a value from its half' => ['100', '50', -100],
+        'a value from its double' => ['50', '100', 50],
+        'thirty from a hundred' => ['30', '100', 70],
+        'thirty from fifty' => ['30', '50', 40],
+    ]);
 });
 
 describe('integer bounds', function () {

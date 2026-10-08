@@ -12,47 +12,38 @@ use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\Bracket;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CartAmount;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Condition\CatalogProduct;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\ConditionInterface;
-use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManager;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\Rule;
-use OpenDxp\TestFoundation\Container;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Application\CartManager\MockSessionCart;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Application\Model\MockProduct;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Application\PricingManager\MockPricingManager;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Factory\ProductFactory;
 
-/**
- * A pricing manager that applies the given rules instead of the rules stored in the database.
- */
-function pricingManager(Rule ...$rules): PricingManager
+function pricingManager(Rule ...$rules): MockPricingManager
 {
-    return new class(array_values($rules)) extends PricingManager {
-        /**
-         * @param list<Rule> $givenRules
-         */
-        public function __construct(private readonly array $givenRules)
-        {
-            parent::__construct(
-                Container::parameter('opendxp_ecommerce.pricing_manager.condition_mapping'),
-                Container::parameter('opendxp_ecommerce.pricing_manager.action_mapping'),
-            );
-        }
-
-        public function getValidRules(): array
-        {
-            return $this->givenRules;
-        }
-    };
+    return new MockPricingManager(array_values($rules));
 }
 
 /**
- * An active rule that runs the actions when the condition holds, or always without a condition.
+ * @return Rule an active rule that always runs the actions
  */
-function rule(ActionInterface|array $actions, ?ConditionInterface $condition = null): Rule
+function rule(ActionInterface ...$actions): Rule
 {
     $rule = new Rule();
     $rule->setName(uniqid('rule_'));
     $rule->setActive(true);
-    $rule->setActions(is_array($actions) ? $actions : [$actions]);
+    $rule->setActions(array_values($actions));
 
-    if ($condition !== null) {
-        $rule->setCondition($condition);
-    }
+    return $rule;
+}
+
+/**
+ * @return Rule an active rule that runs the actions when the condition holds
+ */
+function ruleWhen(ConditionInterface $condition, ActionInterface ...$actions): Rule
+{
+    $rule = rule(...$actions);
+    $rule->setCondition($condition);
 
     return $rule;
 }
@@ -73,11 +64,6 @@ function cartDiscount(float $amount): CartDiscount
     return $discount;
 }
 
-function freeShipping(): FreeShipping
-{
-    return new FreeShipping();
-}
-
 function gift(AbstractProduct $product): Gift
 {
     return (new Gift())->setProduct($product);
@@ -89,11 +75,18 @@ function cartAmountOfAtLeast(float $limit): CartAmount
 }
 
 /**
- * A condition that holds for the products with the given ids.
+ * @return CatalogProduct a condition that holds for the products with the given ids
  */
 function catalogProduct(int ...$ids): CatalogProduct
 {
-    return (new CatalogProduct())->setProducts(array_map(static fn (int $id): AbstractProduct => product(0, id: $id), $ids));
+    $products = array_map(
+        static fn (int $id): AbstractProduct => ProductFactory::new()
+            ->withId($id)
+            ->create(),
+        $ids,
+    );
+
+    return (new CatalogProduct())->setProducts($products);
 }
 
 function allOf(ConditionInterface ...$conditions): Bracket
@@ -118,4 +111,23 @@ function bracket(string $operator, array $conditions): Bracket
     }
 
     return $bracket;
+}
+
+/**
+ * @return list<MockProduct> one product per gross price, priced by the pricing manager
+ */
+function productsCosting(PricingManagerInterface $pricing, int ...$grossPrices): array
+{
+    return ProductFactory::new()
+        ->pricedBy($pricing)
+        ->sequence(array_map(static fn (int $price): array => ['grossPrice' => $price], $grossPrices))
+        ->create();
+}
+
+/**
+ * @return MockSessionCart a cart holding one product per gross price, priced by the pricing manager
+ */
+function pricedCart(PricingManagerInterface $pricing, int ...$grossPrices): MockSessionCart
+{
+    return pricedBy(cart(...productsCosting($pricing, ...$grossPrices)), $pricing);
 }

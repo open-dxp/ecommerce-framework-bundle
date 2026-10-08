@@ -4,27 +4,19 @@ declare(strict_types=1);
 
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceCalculator;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\CartPriceModificator\Shipping;
-use OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Environment;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\Model\CheckoutableInterface;
 use OpenDxp\Bundle\EcommerceFrameworkBundle\PricingManager\PricingManagerInterface;
+use OpenDxp\Bundle\EcommerceFrameworkBundle\Tests\Application\CartManager\MockSessionCart;
 use OpenDxp\Localization\LocaleService;
 use OpenDxp\Model\DataObject\OnlineShopTaxClass;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
 /**
- * A cart that lives in no session, holding one of each product.
+ * @return MockSessionCart a cart holding one of each product
  */
-function cart(CheckoutableInterface ...$products): SessionCart
+function cart(CheckoutableInterface ...$products): MockSessionCart
 {
-    $cart = new class extends SessionCart {
-        protected static function getSessionBag(): AttributeBagInterface
-        {
-            return new AttributeBag();
-        }
-    };
-
+    $cart = new MockSessionCart();
     $cart->setPriceCalculator(new CartPriceCalculator(new Environment(new LocaleService()), $cart));
 
     foreach ($products as $product) {
@@ -34,10 +26,7 @@ function cart(CheckoutableInterface ...$products): SessionCart
     return $cart;
 }
 
-/**
- * Lets the pricing manager apply its rules to the cart.
- */
-function pricedBy(SessionCart $cart, PricingManagerInterface $pricing): SessionCart
+function pricedBy(MockSessionCart $cart, PricingManagerInterface $pricing): MockSessionCart
 {
     $cart->getPriceCalculator()->setPricingManager($pricing);
 
@@ -45,16 +34,22 @@ function pricedBy(SessionCart $cart, PricingManagerInterface $pricing): SessionC
 }
 
 /**
- * Adds a shipping charge of 10 euros to the cart.
+ * @return MockSessionCart the cart with a shipping charge of 10 euros
  */
-function withShipping(SessionCart $cart, ?OnlineShopTaxClass $taxClass = null): SessionCart
+function withShipping(MockSessionCart $cart): MockSessionCart
+{
+    $cart->getPriceCalculator()->addModificator(new Shipping(['charge' => 10]));
+
+    return $cart;
+}
+
+/**
+ * @return MockSessionCart the cart with a shipping charge of 10 euros, taxed by the tax class
+ */
+function withTaxedShipping(MockSessionCart $cart, OnlineShopTaxClass $taxClass): MockSessionCart
 {
     $shipping = new Shipping(['charge' => 10]);
-
-    if ($taxClass !== null) {
-        $shipping->setTaxClass($taxClass);
-    }
-
+    $shipping->setTaxClass($taxClass);
     $cart->getPriceCalculator()->addModificator($shipping);
 
     return $cart;
