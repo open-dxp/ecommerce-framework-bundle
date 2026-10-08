@@ -164,9 +164,21 @@ implements the interface `OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\I
   - `bricktype`: Type of Object Brick, e.g. `TentBrick`. 
   - `fieldname`: Field name of attribute in Object Brick, e.g. `height`. 
 - `OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Getter\DefaultBrickGetterSequence`: Same as `DefaultBrickGetter`, 
-   but can use more than one source definition and stores first found value in *Product Index*. 
+   but can use more than one source definition and stores first found value in *Product Index*. The options go under
+   `source`, either as one source or as a list of sources:
+   ```yaml
+   getter_options:
+       source:
+           - brickfield: specificAttributes
+             bricktype: rucksackSpecs
+             fieldname: load
+           - brickfield: specificAttributes
+             bricktype: tentSpecs
+             fieldname: load
+   ```
 - `OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Getter\DefaultBrickGetterSequenceToMultiselect`: Like 
-  `DefaultBrickGetterSequence`, but stores all found values as a multi select in the *Product Index*. 
+  `DefaultBrickGetterSequence`, but stores all found values as a multi select in the *Product Index*. The options go
+  under `source` as well. 
 - `OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Getter\TagsGetter`: Gets [Tags](https://github.com/open-dxp/opendxp/blob/1.x/doc/18_Tools_and_Features/09_Tags.md) 
   of product object and returns them as array. 
 - `OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Getter\DefaultClassificationAttributeGetter`: Gets attribute value
@@ -197,7 +209,7 @@ Could be used for similarity calculation.
 - `OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\ObjectValue`: Get value from an related object. 
 Expects following configuration options: 
      - `['target']['fieldname']`: Field name of value to get. Is used for getter generation which is called on given object. 
-     - `['target']['locale']`: Locale is optionally passed as first parameter to getter. 
+     - `['target']['locale']` (optional): Locale passed as first parameter to the getter. 
 - `OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\Round`: Rounds given value to integer.
 - `OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\Soundex`: Returns soundex of given value. Could be used 
 for similarity calculation.
