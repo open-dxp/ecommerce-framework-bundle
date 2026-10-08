@@ -10,13 +10,14 @@
             "*": "dist"
         },
         "allow-plugins": {
+            "pestphp/pest-plugin": true,
             "php-http/discovery": false,
             "symfony/runtime": true
         }
     },
     "require": {
         "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
-        "open-dxp/opendxp": "^1.0",
+        "open-dxp/opendxp": "^1.5",
         "open-dxp/personalization-bundle": "^1.0",
         "open-dxp/google-marketing-bundle": "^1.0",
         "knplabs/knp-paginator-bundle": "^6.0",
@@ -24,20 +25,16 @@
         "symfony/form": "^7.4"
     },
     "require-dev": {
-        "codeception/codeception": "^5.3.5",
-        "codeception/module-symfony": "^3.8",
-        "codeception/module-asserts": "^3.2",
+        "open-dxp/test-foundation": "^1.1",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-symfony": "^2.0.9",
-        "open-dxp/elasticsearch-client-bundle": "^1.0.0",
-        "open-dxp/opensearch-client-bundle": "^1.0.0",
         "symfony/dotenv": "^7.4",
         "symfony/runtime": "^7.4"
     },
     "suggest": {
-        "elasticsearch/elasticsearch": "Required for Elastic Search service",
-        "open-dxp/elasticsearch-client-bundle": "Required for Open Search service",
-        "webmozarts/console-parallelization": "Required for parallelization of console commands"
+        "open-dxp/elasticsearch-client-bundle": "Required for a product index in Elasticsearch",
+        "open-dxp/opensearch-client-bundle": "Required for a product index in OpenSearch",
+        "webmozarts/console-parallelization": "Required to run the index commands in parallel"
     },
     "autoload": {
         "psr-4": {
@@ -46,18 +43,20 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\Tests\\": "tests",
-            "OpenDxp\\Model\\DataObject\\": "var/classes/DataObject"
-        },
-        "files": [
-            "kernel/Kernel.php"
-        ]
+            "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "opendxp": {
             "bundles": [
                 "OpenDxp\\Bundle\\EcommerceFrameworkBundle\\OpenDxpEcommerceFrameworkBundle"
             ]
+        },
+        "opendxp-test": {
+            "optional": {
+                "open-dxp/elasticsearch-client-bundle": "^1.0.0",
+                "open-dxp/opensearch-client-bundle": "^1.0.0"
+            }
         }
     }
 }

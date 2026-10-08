@@ -16,6 +16,7 @@ services:
             - { name: monolog.logger, channel: update_payment }
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\OrderManager\V7\OrderManager:
+        abstract: true
         arguments:
             - '@opendxp_ecommerce.environment'
             - '@?'

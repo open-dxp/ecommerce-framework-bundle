@@ -18,11 +18,9 @@ namespace OpenDxp\Bundle\EcommerceFrameworkBundle\Tools;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Exception;
 use OpenDxp;
-use OpenDxp\Bundle\EcommerceFrameworkBundle\Migrations\Version20210430124911;
-use OpenDxp\Extension\Bundle\Installer\AbstractInstaller;
 use OpenDxp\Extension\Bundle\Installer\Exception\InstallationException;
+use OpenDxp\Extension\Bundle\Installer\SettingsStoreAwareInstaller;
 use OpenDxp\Model\DataObject\ClassDefinition;
 use OpenDxp\Model\DataObject\ClassDefinition\Service;
 use OpenDxp\Model\DataObject\Fieldcollection;
@@ -35,7 +33,7 @@ use Throwable;
 /**
  * @internal
  */
-class Installer extends AbstractInstaller
+class Installer extends SettingsStoreAwareInstaller
 {
     private readonly string $installSourcesPath;
 
@@ -135,11 +133,11 @@ class Installer extends AbstractInstaller
     protected ?Schema $schema = null;
 
     public function __construct(
-        protected BundleInterface $bundle,
+        BundleInterface $bundle,
         protected Connection $db
     ) {
         $this->installSourcesPath = __DIR__ . '/../Resources/install';
-        parent::__construct();
+        parent::__construct($bundle);
     }
 
     public function installDependentBundles(): void
@@ -170,41 +168,18 @@ class Installer extends AbstractInstaller
         $this->installTables();
         $this->installPermissions();
         $this->installDependentBundles();
+        $this->markMigrationsAsExecuted();
+
+        parent::install();
     }
 
     public function uninstall(): void
     {
         $this->uninstallPermissions();
         $this->uninstallTables();
-    }
+        $this->markMigrationsAsNotExecuted();
 
-    #[Override]
-    public function isInstalled(): bool
-    {
-        $installed = false;
-
-        try {
-            // check if if first permission is installed
-            $installed = $this->db->fetchOne('SELECT `key` FROM users_permission_definitions WHERE `key` = :key', [
-                'key' => $this->permissionsToInstall[0],
-            ]);
-        } catch (Exception) {
-            // nothing to do
-        }
-
-        return (bool) $installed;
-    }
-
-    #[Override]
-    public function canBeInstalled(): bool
-    {
-        return !$this->isInstalled();
-    }
-
-    #[Override]
-    public function canBeUninstalled(): bool
-    {
-        return $this->isInstalled();
+        parent::uninstall();
     }
 
     private function getClassesToInstall(): array
@@ -395,10 +370,5 @@ class Installer extends AbstractInstaller
     protected function getSchema(): Schema
     {
         return $this->schema ??= $this->db->createSchemaManager()->introspectSchema();
-    }
-
-    public function getLastMigrationVersionClassName(): ?string
-    {
-        return Version20210430124911::class;
     }
 }

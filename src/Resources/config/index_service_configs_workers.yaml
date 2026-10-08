@@ -24,24 +24,30 @@ services:
             $attributeFactory: '@OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\AttributeFactory'
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\DefaultMysql:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\AbstractConfig
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\DefaultMysqlSubTenantConfig:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\AbstractConfig
         arguments:
             $environment: '@opendxp_ecommerce.environment'
             $db: '@doctrine.dbal.default_connection'
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\OptimizedMysql:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\AbstractConfig
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\ElasticSearch:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\AbstractConfig
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\DefaultFindologic:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\AbstractConfig
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\OpenSearch:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Config\AbstractConfig
 
     #
@@ -56,16 +62,21 @@ services:
             $db: '@doctrine.dbal.default_connection'
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\DefaultMysql:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\AbstractWorker
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OptimizedMysql:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\AbstractWorker
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\ElasticSearch\DefaultElasticSearch8:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\AbstractWorker
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\DefaultFindologic:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\AbstractWorker
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\OpenSearch\DefaultOpenSearch:
+        abstract: true
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\IndexService\Worker\AbstractWorker

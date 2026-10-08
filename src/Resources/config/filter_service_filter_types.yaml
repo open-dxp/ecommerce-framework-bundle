@@ -17,3 +17,4 @@ services:
     OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\:
         resource: '../../FilterService/FilterType'
         parent: OpenDxp\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\AbstractFilterType
+        abstract: true
