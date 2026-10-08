@@ -6,6 +6,7 @@
 * [BUGFIX] The index configurations and workers, the cart manager, the order manager and the filter types are abstract
   services. The bundle derives a service per tenant from them. A container that makes its services public failed on
   them.
+* [BUGFIX] The `locale` of the interpreter `ObjectValue` is optional, as its documentation says
 * [CHORE] Replace Codeception with Pest and `open-dxp/test-foundation`
 * [CHORE] Require `open-dxp/opendxp` ^1.5
 
