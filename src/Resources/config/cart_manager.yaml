@@ -12,6 +12,7 @@ services:
     #
 
     OpenDxp\Bundle\EcommerceFrameworkBundle\CartManager\MultiCartManager:
+        abstract: true
         arguments:
             - '@opendxp_ecommerce.environment'
             - '@?'
