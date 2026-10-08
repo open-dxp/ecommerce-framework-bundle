@@ -48,12 +48,11 @@ class ObjectValue implements InterpreterInterface
                 ->setDefined('target')
                 ->setAllowedTypes('target', 'array');
         } elseif ('target' === $resolverName) {
-            $fields = ['fieldname', 'locale'];
-
-            $resolver->setRequired($fields);
-            foreach ($fields as $field) {
-                $resolver->setAllowedTypes($field, 'string');
-            }
+            $resolver
+                ->setRequired('fieldname')
+                ->setAllowedTypes('fieldname', 'string')
+                ->setDefault('locale', null)
+                ->setAllowedTypes('locale', ['null', 'string']);
         } else {
             throw new InvalidArgumentException(sprintf('Resolver with name "%s" is not defined', $resolverName));
         }
