@@ -65,6 +65,8 @@ it is a set of tools and functionality to help building e-commerce applications 
 
 ## Upgrading
 - Execute: `$ bin/console doctrine:migrations:migrate --prefix 'OpenDxp\Bundle\EcommerceFrameworkBundle\Migrations'`
+- Read the [changelog](CHANGELOG.md) before you update.
+- Coming from an earlier package? Read [Migrating to OpenDXP](doc/03_Installation/01_Migrating_to_OpenDXP.md).
 
 ## Working With E-Commerce Framework
  
