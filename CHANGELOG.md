@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.1
+- [CHORE] Check dependencies, code and commits for security issues
+
 ## 1.1.0
 - [CHORE] [MIGRATION] The installer keeps its state in the settings store. Run the migrations after the update. They mark an existing
   installation as installed.
