@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="7.13.2">
+  <file src="src/Controller/FindologicController.php">
+    <TaintedHtml>
+      <code>$xml</code>
+    </TaintedHtml>
+    <TaintedSql>
+      <code>sprintf(
+                    'UPDATE %1$s SET last_transmit = now() WHERE id in(%2$s)',
+                    $this-&gt;getExportTableName(),
+                    implode(',', $transmitIds)
+                )</code>
+    </TaintedSql>
+  </file>
+  <file src="src/IndexService/ProductList/DefaultMysql/Dao.php">
+    <TaintedSql>
+      <code>$query</code>
+    </TaintedSql>
+  </file>
+  <file src="src/IndexService/Worker/ProductCentricBatchProcessingWorker.php">
+    <TaintedSql>
+      <code>$updateStatement</code>
+      <code>$updateStatement</code>
+      <code>$updateStatement</code>
+      <code>$updateStatement</code>
+      <code>$updateStatement</code>
+    </TaintedSql>
+  </file>
+</files>
