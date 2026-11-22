@@ -66,10 +66,10 @@ abstract class AbstractSetProduct extends AbstractProduct
                     }
                 }
             }
-            //set is only bookable when price is valid!!! //
-            $priceInfo = $this->getOSPriceInfo($quantityScale, $products);
+            // The price info is never null. A set without a price system throws here instead.
+            $this->getOSPriceInfo($quantityScale, $products);
 
-            return $priceInfo != null;
+            return true;
         }
 
         return false;
