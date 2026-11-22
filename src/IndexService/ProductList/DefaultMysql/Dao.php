@@ -84,16 +84,17 @@ class Dao
         }
 
         if ($countValues) {
+            $column = $this->db->quoteIdentifier($fieldname);
             if ($this->model->getVariantMode() === ProductListInterface::VARIANT_MODE_INCLUDE_PARENT_OBJECT) {
-                $query = "SELECT TRIM(`$fieldname`) as `value`, count(DISTINCT virtualProductId) as `count` FROM "
+                $query = "SELECT TRIM($column) as `value`, count(DISTINCT virtualProductId) as `count` FROM "
                     . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
                     . $this->model->getCurrentTenantConfig()->getJoins()
-                    . $condition . ' GROUP BY TRIM(`' . $fieldname . '`)';
+                    . $condition . ' GROUP BY TRIM(' . $column . ')';
             } else {
-                $query = "SELECT TRIM(`$fieldname`) as `value`, count(*) as `count` FROM "
+                $query = "SELECT TRIM($column) as `value`, count(*) as `count` FROM "
                     . $this->model->getCurrentTenantConfig()->getTablename() . ' a '
                     . $this->model->getCurrentTenantConfig()->getJoins()
-                    . $condition . ' GROUP BY TRIM(`' . $fieldname . '`)';
+                    . $condition . ' GROUP BY TRIM(' . $column . ')';
             }
 
             $this->logger->info('Query: ' . $query);

@@ -1,6 +1,7 @@
 # Changelog
 
 ## 1.1.1
+- [BUGFIX] The MySQL product list quotes the field name when it counts the values of a field
 - [CHORE] Check dependencies, code and commits for security issues
 
 ## 1.1.0
